@@ -1,0 +1,67 @@
+#closeButton {
+  margin: 15px 6px 6px;
+}
+
+.dialogVPanel {
+  margin: 5px;
+}
+
+.gwt-DialogBox {
+  width: 400px;
+  color:blue;
+}
+
+.mainpage-lobal-jobcoach {
+size:24px;
+	font-size: 30px;
+}
+
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+.serverResponseLabelError {
+  color: red;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #777777;
+  margin: 40px 0px 70px;
+  text-align: center;
+}
+.mainpage-label-slogan {
+	font-size: 15px;
+}
+.mainpage-label-userpass {
+	font-size: 15px;
+}
+.mainpage-connect {
+	color: Black;
+	font-size: 14px;
+}
+.mainpage.basdepage {
+	font-size: 12px;
+	color:green;
+}
+mainpage-content {
+	position: relative;
+}
+toto {
+}
+.mainpage-title {
+	font-size: 40px;
+}
+.mainpage-create_account-panel {
+	border: inset;
+	background-color: paleturquoise;
+	border-collapse: collapse;
+
+}
+.mainpage-label-clickable {
+	color: Blue;
+	text-decoration: underline;
+	cursor: pointer;
+}

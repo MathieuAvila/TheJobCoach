@@ -1,0 +1,2 @@
+serviceClass: com.TheJobCoach.webapp.thejobcoach.client.GreetingService
+path: 55690195FC4B2D4CE5BC51EB457954AB.gwt.rpc
