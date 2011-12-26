@@ -16,6 +16,11 @@
     <servlet-class>com.TheJobCoach.webapp.mainpage.server.LoginServiceImpl</servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>userServlet</servlet-name>
+    <servlet-class>com.TheJobCoach.webapp.userpage.server.UserServiceImpl</servlet-class>
+  </servlet>
+  
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
     <url-pattern>/thejobcoach/greet</url-pattern>
@@ -24,6 +29,11 @@
   <servlet-mapping>
     <servlet-name>loginServlet</servlet-name>
     <url-pattern>/thejobcoach/login</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>userServlet</servlet-name>
+    <url-pattern>/thejobcoach/user</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
