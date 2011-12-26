@@ -12,4 +12,30 @@ public interface Lang extends Constants {
 	
 	@ Key("userpassword")
 	String _TextUserPassword();
+	
+	@ Key("useremail")
+	String _TextUserEMail();
+	
+	@ Key("userfirstname")
+	String _TextUserFirstName();
+	
+	@ Key("createaccount")
+	String _TextCreateAccount();
+	
+	@ Key("login")
+	String _TextLogin();
+	
+	@ Key("notyetregistered")
+	String _TextNotYesRegistered();
+	
+	@ Key("whoweare")
+	String _TextWhoWeAre();
+	
+	@ Key("termsofuse")
+	String _TextTermsOfUse();
+	
+	@ Key("confidentiality")
+	String _TextConfidentiality();
+	
+	String panelFooter_html();
 }

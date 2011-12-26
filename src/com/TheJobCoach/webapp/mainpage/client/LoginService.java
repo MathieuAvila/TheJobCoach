@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.mainpage.client;
 
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -10,9 +11,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("login")
 public interface LoginService extends RemoteService {
 	
-	MainPageReturnCode.CreateAccountStatus createAccount(String userName, String name, String firstName, String userPassword, String email);
+	MainPageReturnCode.CreateAccountStatus createAccount(String userName, String name, String firstName, String email, String password, String locale);
 		
-	MainPageReturnCode.ConnectStatus connect(String userName, String userPassword);
+	MainPageReturnLogin connect(String userName, String userPassword);
 
-	MainPageReturnCode.ValidateAccountStatus validateAccount(String userName);
+	MainPageReturnCode.ValidateAccountStatus validateAccount(String userName, String token);
 }

@@ -1,11 +1,17 @@
 package com.TheJobCoach.webapp.mainpage.client;
 
+import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
+import com.TheJobCoach.webapp.userpage.client.UserPage;
+import com.TheJobCoach.webapp.userpage.client.UserService.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
@@ -28,12 +34,14 @@ public class MainPage implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad()
-	{
+	{		
 		Lang lang = GWT.create(Lang.class);
+		System.out.println("Locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 		
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("content");
+		rootPanel.clear();
 		rootPanel.setStyleName("mainpage-content");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 		rootPanel.setSize("100%", "100%");
@@ -52,7 +60,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_1.setHeight("100px");
 		horizontalPanel_1.setStyleName("mainpage-content");
 		
-		Image image = new Image("thejobcoach/gwt/clean/images/jobcoach.gif");
+		Image image = new Image("jobcoach.gif");
 		verticalPanel.add(image);
 		
 		Label lblTheJobCoach = new Label("The Job Coach");
@@ -71,22 +79,22 @@ public class MainPage implements EntryPoint {
 		HorizontalPanel horizontalPanel_12 = new HorizontalPanel();
 		verticalPanel.add(horizontalPanel_12);
 		
-		Image image_1 = new Image("thejobcoach/gwt/clean/images/drapeau_francais.gif");
-		horizontalPanel_12.add(image_1);
-		horizontalPanel_12.setCellHeight(image_1, "20");
-		horizontalPanel_12.setCellWidth(image_1, "20");
-		image_1.setSize("30px", "30px");
+		Image imageFr = new Image("drapeau_francais.gif");
+		horizontalPanel_12.add(imageFr);
+		horizontalPanel_12.setCellHeight(imageFr, "20");
+		horizontalPanel_12.setCellWidth(imageFr, "20");
+		imageFr.setSize("30px", "30px");
 		
 		VerticalPanel verticalPanel_3 = new VerticalPanel();
 		horizontalPanel_12.add(verticalPanel_3);
 		horizontalPanel_12.setCellWidth(verticalPanel_3, "50px");
 		verticalPanel_3.setSize("50px", "");
 		
-		Image image_2 = new Image("thejobcoach/gwt/clean/images/drapeau_anglais.gif");
-		horizontalPanel_12.add(image_2);
-		horizontalPanel_12.setCellHeight(image_2, "20");
-		horizontalPanel_12.setCellWidth(image_2, "20");
-		image_2.setSize("30px", "30px");
+		Image imageEn = new Image("drapeau_anglais.gif");
+		horizontalPanel_12.add(imageEn);
+		horizontalPanel_12.setCellHeight(imageEn, "20");
+		horizontalPanel_12.setCellWidth(imageEn, "20");
+		imageEn.setSize("30px", "30px");
 		
 		HorizontalPanel horizontalPanel_11 = new HorizontalPanel();
 		horizontalPanel_11.setStyleName("mainpage-content");
@@ -99,7 +107,7 @@ public class MainPage implements EntryPoint {
 		verticalPanel.setCellHorizontalAlignment(horizontalPanel, HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel.setSize("", "30px");
 		
-		Label lblNomDutilisateur = new Label("Nom d'utilisateur");
+		Label lblNomDutilisateur = new Label(lang._TextUserName());
 		lblNomDutilisateur.setStyleName("mainpage-label-userpass");
 		horizontalPanel.add(lblNomDutilisateur);
 		horizontalPanel.setCellVerticalAlignment(lblNomDutilisateur, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -109,7 +117,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel.setCellVerticalAlignment(nameField, HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setCellHorizontalAlignment(nameField, HasHorizontalAlignment.ALIGN_CENTER);
 		
-		Label lblMotDePasse = new Label("Mot de passe");
+		Label lblMotDePasse = new Label(lang._TextUserPassword());
 		lblMotDePasse.setStyleName("mainpage-label-userpass");
 		horizontalPanel.add(lblMotDePasse);
 		horizontalPanel.setCellVerticalAlignment(lblMotDePasse, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -123,7 +131,7 @@ public class MainPage implements EntryPoint {
 		
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
-		final Button connectButton = new Button("Se connecter");
+		final Button connectButton = new Button(lang._TextLogin());
 		connectButton.setStyleName("mainpage-connect");
 		horizontalPanel.add(connectButton);
 		verticalPanel.setCellHorizontalAlignment(connectButton, HasHorizontalAlignment.ALIGN_CENTER);
@@ -136,7 +144,7 @@ public class MainPage implements EntryPoint {
 		verticalPanel.setCellHeight(verticalPanel_1, "50px");
 		verticalPanel_1.setHeight("50px");
 
-		Label lblPasEncoreInscrit = new Label("Pas encore inscrit ? Cliquez ici !");
+		Label lblPasEncoreInscrit = new Label(lang._TextNotYesRegistered());
 		verticalPanel.add(lblPasEncoreInscrit);
 		lblPasEncoreInscrit.setStyleName("mainpage-label-clickable");				
 		
@@ -160,25 +168,25 @@ public class MainPage implements EntryPoint {
 		verticalPanelSubscribe.add(horizontalPanel_10);
 		horizontalPanel_10.setWidth("267px");
 		
-		Label lblUserName = new Label("Nom d'utilisateur");
+		Label lblUserName = new Label(lang._TextUserName());
 		horizontalPanel_10.add(lblUserName);
 		
 		final TextBox textBoxUserName = new TextBox();
-		textBoxUserName.setText("mathieu");
+		textBoxUserName.setText("atila");
 		horizontalPanel_10.add(textBoxUserName);
 		horizontalPanel_10.setCellHorizontalAlignment(textBoxUserName, HasHorizontalAlignment.ALIGN_RIGHT);
-		
-				HorizontalPanel horizontalPanel_5 = new HorizontalPanel();
-				verticalPanelSubscribe.add(horizontalPanel_5);
-				horizontalPanel_5.setWidth("267px");
-				
-						Label label = new Label("Email");
-						horizontalPanel_5.add(label);
-						
-								final TextBox textBoxMail = new TextBox();
-								textBoxMail.setText("mathieu.avila@laposte.net");
-								horizontalPanel_5.add(textBoxMail);
-								horizontalPanel_5.setCellHorizontalAlignment(textBoxMail, HasHorizontalAlignment.ALIGN_RIGHT);
+
+		HorizontalPanel horizontalPanel_5 = new HorizontalPanel();
+		verticalPanelSubscribe.add(horizontalPanel_5);
+		horizontalPanel_5.setWidth("267px");
+
+		Label label = new Label(lang._TextUserEMail());
+		horizontalPanel_5.add(label);
+
+		final TextBox textBoxMail = new TextBox();
+		textBoxMail.setText("mathieu.avila@laposte.net");
+		horizontalPanel_5.add(textBoxMail);
+		horizontalPanel_5.setCellHorizontalAlignment(textBoxMail, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		HorizontalPanel horizontalPanel_7 = new HorizontalPanel();
 		verticalPanelSubscribe.add(horizontalPanel_7);
@@ -188,7 +196,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_7.add(label_2);
 
 		final TextBox textBoxCreateName = new TextBox();
-		textBoxCreateName.setText("Mathieu");
+		textBoxCreateName.setText("Avila");
 		horizontalPanel_7.add(textBoxCreateName);
 		horizontalPanel_7.setCellHorizontalAlignment(textBoxCreateName, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -200,7 +208,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_6.add(label_1);
 
 		final TextBox textBoxFirstName = new TextBox();
-		textBoxFirstName.setText("Avila");
+		textBoxFirstName.setText("Mathieu");
 		horizontalPanel_6.add(textBoxFirstName);
 		horizontalPanel_6.setCellHorizontalAlignment(textBoxFirstName, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -216,7 +224,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_4.add(newUserEmailBox);
 		horizontalPanel_4.setCellHorizontalAlignment(newUserEmailBox, HasHorizontalAlignment.ALIGN_RIGHT);
 
-		Button btnCreateAccount = new Button("Créer mon compte");
+		Button btnCreateAccount = new Button(lang._TextCreateAccount());
 		verticalPanelSubscribe.add(btnCreateAccount);
 		verticalPanelSubscribe.setCellHorizontalAlignment(btnCreateAccount, HasHorizontalAlignment.ALIGN_RIGHT);
 		verticalPanelSubscribe.setVisible(false);
@@ -227,36 +235,16 @@ public class MainPage implements EntryPoint {
 		verticalPanel.setCellVerticalAlignment(horizontalPanel_3, HasVerticalAlignment.ALIGN_BOTTOM);
 		horizontalPanel_3.setHeight("100px");
 		
-		HorizontalPanel horizontalPanel_9 = new HorizontalPanel();
-		horizontalPanel_9.setStyleName("mainpage-content");
-		verticalPanel.add(horizontalPanel_9);
-		horizontalPanel_9.setHeight("");
+		VerticalPanel simplePanelCenter = new VerticalPanel();
+		simplePanelCenter.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		Footer footerPanel = new Footer();
+		footerPanel.setRootPanel(simplePanelCenter);
 		
-		Label labelConditions = new Label("Conditions d'utilisation");
-		labelConditions.setStyleName("mainpage-label-clickable");
-		horizontalPanel_9.add(labelConditions);
-		
-		Label label_3 = new Label("  -  ");
-		label_3.setStyleName("toto");
-		horizontalPanel_9.add(label_3);
-		horizontalPanel_9.setCellHorizontalAlignment(label_3, HasHorizontalAlignment.ALIGN_CENTER);
-		label_3.setWidth("20px");
-		
-		Label labelQuiSommesNous = new Label("Qui sommes-nous ?");
-		labelQuiSommesNous.setStyleName("mainpage-label-clickable");
-		horizontalPanel_9.add(labelQuiSommesNous);
-		
-		Label label_4 = new Label("  -  ");
-		label_4.setStyleName("toto");
-		horizontalPanel_9.add(label_4);
-		horizontalPanel_9.setCellHorizontalAlignment(label_4, HasHorizontalAlignment.ALIGN_CENTER);
-		label_4.setWidth("20px");
-
-		Label lblConfidentialite = new Label("Confidentialité des données");
-		horizontalPanel_9.add(lblConfidentialite);
-		lblConfidentialite.setStyleName("mainpage-label-clickable");
-		verticalPanel.setCellVerticalAlignment(lblConfidentialite, HasVerticalAlignment.ALIGN_BOTTOM);
-
+		footerPanel.onModuleLoad();
+		verticalPanel.add(simplePanelCenter);
+		verticalPanel.setCellHorizontalAlignment(simplePanelCenter, HasHorizontalAlignment.ALIGN_CENTER);
+		simplePanelCenter.setStyleName("mainpage-content");	
+		simplePanelCenter.setSize("", "");
 		// Create a handler for the connect button
 		class ConnectHandler implements ClickHandler {
 
@@ -267,18 +255,36 @@ public class MainPage implements EntryPoint {
 			private void sendNameToServer() {						
 				// Then, we send the input to the server.
 				connectButton.setEnabled(false);
-				loginService.connect(nameField.getText(), passwordField.getText(), new AsyncCallback<MainPageReturnCode.ConnectStatus>() {
+				loginService.connect(nameField.getText(), passwordField.getText(), new AsyncCallback<MainPageReturnLogin>() {
 					public void onFailure(Throwable caught) {
-						// Show the RPC error message to the user
-						
-						connectButton.setFocus(true);
+						// Show the RPC error message to the user						
+						connectButton.setEnabled(true);
 					}
 
-					public void onSuccess(MainPageReturnCode.ConnectStatus result) {
+					public void onSuccess(MainPageReturnLogin result)
+					{
 						//dialogBox.setText("Remote Procedure Call");
 						//serverResponseLabel.setHTML(result);
 						//dialogBox.center();
-						connectButton.setFocus(true);
+						connectButton.setEnabled(true);
+						System.out.println("Login returned: " + result.getToken()+ " result is:" + result.getLoginStatus());
+						switch (result.getLoginStatus())
+						{ 
+						case CONNECT_STATUS_UNKNOWN_USER:
+							Window.alert("Error at login: this user is unknown");
+							break;
+						case CONNECT_STATUS_PASSWORD:		
+							Window.alert("Error at login: wrong password");
+							break;
+						case CONNECT_STATUS_NOT_VALIDATED:
+							Window.alert("Error at login: this account has not been validated. Please check your email for validation");
+							break;
+						case CONNECT_STATUS_OK:
+							UserPage uP = new UserPage();
+							uP.setUser(new UserId(nameField.getText(), result.getToken()));
+							uP.onModuleLoad();
+							return;
+						}
 					}
 				});
 			}
@@ -287,10 +293,6 @@ public class MainPage implements EntryPoint {
 		// Add a handler to the connect button clicker.
 		ConnectHandler handler = new ConnectHandler();
 		connectButton.addClickHandler(handler);
-
-
-
-
 
 		// Create a handler for the connect button
 		class CreateAccountHandler implements ClickHandler {
@@ -304,7 +306,8 @@ public class MainPage implements EntryPoint {
 						textBoxCreateName.getText(), 
 						textBoxFirstName.getText(),
 						passwordField.getText(), 
-						textBoxMail.getText(), 
+						textBoxMail.getText(),
+						LocaleInfo.getCurrentLocale().getLocaleName(),
 						new AsyncCallback<MainPageReturnCode.CreateAccountStatus>() {
 					public void onFailure(Throwable caught) {
 						// Show the RPC error message to the user
@@ -324,5 +327,34 @@ public class MainPage implements EntryPoint {
 		// Add a handler to the connect button clicker.
 		CreateAccountHandler createAccountHandler = new CreateAccountHandler();
 		lblPasEncoreInscrit.addClickHandler(createAccountHandler);
+			
+		
+		
+		// Create a handler for the Language click button
+		class CreateLangHandler implements ClickHandler
+		{
+			
+			String langName;
+			
+			public CreateLangHandler(String _langName)
+			{			
+				 langName = _langName;
+			}
+			
+			public void onClick(ClickEvent event)
+			{				
+				System.out.println("Setting is: " + LocaleInfo.getCurrentLocale().getLocaleName());
+				
+				System.out.println("Click on " + langName);
+				String cookie = LocaleInfo.getLocaleCookieName();
+				com.google.gwt.user.client.Cookies.setCookie(cookie, langName);
+				System.out.println("Applied locale "+langName);
+				Window.Location.reload();
+			}
+		}
+		imageFr.addClickHandler(new CreateLangHandler("fr"));
+		imageEn.addClickHandler(new CreateLangHandler("en"));
+		
 	}
+	
 }

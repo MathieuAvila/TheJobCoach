@@ -14,7 +14,7 @@ public class MainPageReturnCode {
 		CREATE_STATUS_ALREADY_EXISTS, 
 		CREATE_STATUS_ERROR, 
 		CREATE_STATUS_INVALID, 
-		CREATE_STATUS_OK	
+		CREATE_STATUS_OK
 	}
 	
 	public static enum ValidateAccountStatus 

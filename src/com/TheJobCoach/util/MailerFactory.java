@@ -9,7 +9,7 @@ public class MailerFactory {
 		return myMailer;
 	}
 	
-	public void setMailer(MailerInterface _mailer)
+	public static void setMailer(MailerInterface _mailer)
 	{
 		myMailer = _mailer;
 	}

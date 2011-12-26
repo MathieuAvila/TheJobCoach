@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.mainpage.server;
 import com.TheJobCoach.webapp.mainpage.client.LoginService;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -14,21 +15,21 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	
 	static com.TheJobCoach.userdata.Account account = new com.TheJobCoach.userdata.Account();
 	
-	public MainPageReturnCode.CreateAccountStatus createAccount(String userName, String name, String firstName, String userPassword, String email) throws IllegalArgumentException {
-		System.out.println("Create account request for: '" + userName + "' with password: '" + userPassword+ "' with EMail:'" + email + "'");
-		return account.createAccount(userName, name, firstName, email, "FR");
+	public MainPageReturnCode.CreateAccountStatus createAccount(String userName, String name, String firstName, String email, String password, String locale) throws IllegalArgumentException {
+		System.out.println("Create account request for: '" + userName + "' with password: '" + password+ "' with EMail:'" + email + "' with locale '" + locale +"'");
+		return account.createAccount(userName, name, firstName, email, password, locale);
 	}
 
 	@Override
-	public MainPageReturnCode.ConnectStatus connect(String userName, String userPassword) {
+	public MainPageReturnLogin connect(String userName, String userPassword) {
 		System.out.println("Connection from: '" + userName + "' with password: '" + userPassword+ "'");
-		return MainPageReturnCode.ConnectStatus.CONNECT_STATUS_OK;
+		return account.loginAccount(userName, userPassword);
 	}
 
 	@Override
-	public ValidateAccountStatus validateAccount(String userName) {
+	public ValidateAccountStatus validateAccount(String userName, String token) {
 		// TODO Auto-generated method stub
-		return account.validateAccount(userName);
+		return account.validateAccount(userName, token);
 	}
 
 }

@@ -2,6 +2,7 @@ package com.TheJobCoach.webapp.thejobcoach.client;
 
 import com.TheJobCoach.webapp.mainpage.client.MainPage;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.i18n.client.LocaleInfo;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -16,8 +17,26 @@ public class TheJobCoach implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
-	public void onModuleLoad() {
-		
+	
+	static int loadCount = 0;
+	
+	public void onModuleLoad()
+	{
+		System.out.println("param toto =" + com.google.gwt.user.client.Window.Location.getParameter("toto"));
+		LocaleInfo.getLocaleCookieName();
+		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+		if ((locale == null) || (locale.equals("default")))
+		{
+			String cookie = LocaleInfo.getLocaleCookieName();
+			String cookieLang = com.google.gwt.user.client.Cookies.getCookie(cookie);
+			if ((cookieLang == null) && (loadCount != 1))
+			{
+				loadCount++;
+				com.google.gwt.user.client.Cookies.setCookie(cookie, "fr");
+				System.out.println("Applied locale fr");
+			}
+		}
+	
 		MainPage main = new MainPage();
 		main.onModuleLoad();
 		//RootPanel.get("nameFieldContainer").add(main);
