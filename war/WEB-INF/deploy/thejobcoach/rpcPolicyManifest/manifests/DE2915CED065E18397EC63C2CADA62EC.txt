@@ -1,2 +1,0 @@
-serviceClass: com.TheJobCoach.webapp.mainpage.client.LoginService
-path: 8B9261F60FF8BFAB12EDA339BD001313.gwt.rpc

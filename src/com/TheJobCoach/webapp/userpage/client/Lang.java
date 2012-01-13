@@ -114,4 +114,10 @@ public interface Lang extends Constants {
 	@Key("save")
 	String _TextSave();
 
+	String verticalPanel_height();
+	String verticalPanel_height_1();
+	String lblNewLabel_text();	
+	String lblDownloadFile_text();
+	String nlnhprlnkDownloadFile_text();
+	String button_text();
 }

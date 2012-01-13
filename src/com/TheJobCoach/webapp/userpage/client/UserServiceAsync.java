@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.TheJobCoach.webapp.userpage.client.UserService.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -17,4 +18,13 @@ public interface UserServiceAsync {
 	void deleteUserSite(UserId id, String siteId, AsyncCallback<Integer> callback) throws CassandraException;
 	void setUserSite(UserId id, UserJobSite data, AsyncCallback<Integer> callback) throws CassandraException;
 	void addUserSite(UserId id, AsyncCallback<String> callback) throws CassandraException;
+	
+	
+
+	public void getUserDocumentList(UserId id, AsyncCallback<List<String>> callback) throws CassandraException;
+	public void deleteUserDocument(UserId id, String documentId, AsyncCallback<Integer> callback) throws CassandraException;
+	public void setUserDocument(UserId id, UserDocument document, AsyncCallback<Integer> callback) throws CassandraException;
+	public void getUserDocument(UserId id, String documentId, AsyncCallback<UserDocument> callback) throws CassandraException;
+	public void addUserDocument(UserId id, AsyncCallback<String> callback) throws CassandraException;
+	
 }

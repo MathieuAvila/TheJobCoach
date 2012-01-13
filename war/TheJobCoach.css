@@ -65,3 +65,29 @@ toto {
 	text-decoration: underline;
 	cursor: pointer;
 }
+.gwt-StackLayoutPanel {
+	border: 10px inset;
+}
+.left-panel-border {
+	margin: 5px;
+}
+.StackPanel-left-panel {
+}
+.gwt-StackLayout {
+}
+.gwt-StackPanel {
+}
+.userpage-label-clickable {
+	color: blue;
+	font-weight: bold;
+	text-decoration: underline;
+	cursor: pointer;
+}
+.userpage-label-normal {
+	color: darkblue;
+	font-weight: bold;
+}
+.userpage-label-clicked {
+	color: dodgerblue;
+	font-weight: bolder;
+}

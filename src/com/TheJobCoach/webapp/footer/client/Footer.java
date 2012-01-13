@@ -3,12 +3,17 @@ package com.TheJobCoach.webapp.footer.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -73,7 +78,55 @@ public class Footer implements EntryPoint {
 		horizontalPanel_9.add(lblConfidentialite);
 		lblConfidentialite.setStyleName("mainpage-label-clickable");
 		horizontalPanel_9.setCellVerticalAlignment(lblConfidentialite, HasVerticalAlignment.ALIGN_BOTTOM);
-				
+
+		// Create the popup dialog box
+        final DialogBox dialogBox = new DialogBox();
+        dialogBox.setText("Remote Procedure Call");
+        dialogBox.setAnimationEnabled(true);
+        Button closeButton = new Button("Close");
+        // We can set the id of a widget by accessing its Element
+        closeButton.getElement().setId("closeButton");
+        final Label textDialog = new Label();
+        VerticalPanel dialogVPanel = new VerticalPanel();
+        dialogVPanel.add(textDialog);
+        dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+        dialogVPanel.add(closeButton);
+        dialogBox.setWidget(dialogVPanel);
+
+        // Add a handler to close the DialogBox
+        closeButton.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                    dialogBox.hide();
+                }
+        });
+
+        // Add a handler to Who We Are the DialogBox
+        labelQuiSommesNous.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                	dialogBox.setText("We are just a bunch of crooks !");
+                	textDialog.setText("Trying to work as closely with you as possible");
+                    dialogBox.center();
+                }
+        });
+
+        // Add a handler to Confidentiality the DialogBox
+        lblConfidentialite.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                	dialogBox.setText("Rules of confidentiality");
+                	textDialog.setText("We won't harm you, little hamster !");
+                    dialogBox.center();
+                }
+        });
+
+        // Add a handler to Confidentiality the DialogBox
+        labelConditions.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                	dialogBox.setText("Conditions of use");
+                	textDialog.setText("Play with it just how you like it, but you may loose data. You've been warned.");
+                    dialogBox.center();
+                }
+        });
+
 	}
 	
 }

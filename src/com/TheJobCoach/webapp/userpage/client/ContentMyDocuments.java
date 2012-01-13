@@ -24,15 +24,25 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
+import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.InlineHyperlink;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -46,7 +56,7 @@ public class ContentMyDocuments implements EntryPoint {
 	TextArea textAreaDescription = new TextArea();
 	DatePicker datePickerLastVisit = new DatePicker();
 	UserDocument currentSite = null;
-	
+
 	private void setUserDocument(UserDocument document)
 	{
 		textBoxName.setValue(document.name);
@@ -54,7 +64,7 @@ public class ContentMyDocuments implements EntryPoint {
 		datePickerLastVisit.setValue(document.lastVisit);
 		currentSite = document;
 	}
-	
+
 	UserDocument getUserDocument()
 	{
 		if (currentSite == null) return null;
@@ -66,7 +76,7 @@ public class ContentMyDocuments implements EntryPoint {
 		return result;
 	}
 
-	
+
 	public void setUserParameters(UserId _user)
 	{
 		user = _user;
@@ -184,7 +194,7 @@ public class ContentMyDocuments implements EntryPoint {
 			}
 		}
 	}
-	
+
 	class SaveHandler implements ClickHandler
 	{
 		public void onClick(ClickEvent event)
@@ -198,31 +208,6 @@ public class ContentMyDocuments implements EntryPoint {
 					}
 					public void onSuccess(Integer result)
 					{
-						getAllContent();
-					}
-				});
-			} 
-			catch (CassandraException e) 
-			{
-				Window.alert(e.toString());
-			}
-		}
-	}
-
-	class NewSiteHandler implements ClickHandler
-	{
-		public void onClick(ClickEvent event)
-		{
-			try {
-				userService.addUserDocument(user, new AsyncCallback<String>() {
-					public void onFailure(Throwable caught) {
-						// Show the RPC error message to the user
-						Window.alert(caught.toString());
-						//connectButton.setEnabled(true);
-					}
-					public void onSuccess(String result)
-					{
-						System.out.println("Created document: " + result);
 						getAllContent();
 					}
 				});
@@ -308,7 +293,7 @@ public class ContentMyDocuments implements EntryPoint {
 				}
 			}
 		});
-		
+
 		dataProvider.addDataDisplay(cellTable);
 		dataProvider.updateRowCount(jobSiteList.size(), true);
 
@@ -320,63 +305,107 @@ public class ContentMyDocuments implements EntryPoint {
 		cellTable.addColumnSortHandler(columnSortHandler);
 		simplePanelCenter.add(cellTable);
 		cellTable.setSize("100%", "");		
-		
+
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
-		
-		Button buttonNewDocument = new Button(lang._TextSave());
-		horizontalPanel.add(buttonNewDocument);
-		buttonNewDocument.setText(lang._TextNewSite());
-		
+
+
+
+
+
+
+		{
+
+			final FormPanel form = new FormPanel();
+			form.setEncoding(FormPanel.ENCODING_MULTIPART);
+			form.setMethod(FormPanel.METHOD_POST);
+			form.addStyleName("table-center");
+			form.addStyleName("demo-panel-padded");
+
+			HorizontalPanel holder = new HorizontalPanel();
+			FileUpload upload = new FileUpload();
+			upload.setName("upload");
+			holder.add(upload);
+
+			HTML uploadHtml = new HTML("<hr />");
+			holder.add(uploadHtml);
+			holder.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
+			Button button = new Button("Submit");
+			button.addClickHandler(new ClickHandler()
+			{			
+				public void onClick(ClickEvent event) {
+					// TODO Auto-generated method stub
+					form.submit();
+				}
+			});
+			button.setText(lang.button_text());
+			holder.add(button);
+
+			form.add(holder);
+			form.setAction("/UploadFileServlet");
+
+			form.addSubmitHandler(new FormPanel.SubmitHandler() 
+			{		
+				@Override
+				public void onSubmit(SubmitEvent event) 
+				{		       
+				}			
+			});
+			form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() 
+			{		      
+				@Override
+				public void onSubmitComplete(SubmitCompleteEvent event)
+				{
+					// TODO Auto-generated method stub
+					Window.alert(event.getResults());
+				}
+			});
+			horizontalPanel.add(form);
+		}
+
 		Button buttonDeleteDocument = new Button("");
 		buttonDeleteDocument.setText(lang._TextDeleteSite());
 		horizontalPanel.add(buttonDeleteDocument);
-		
+
 		SimplePanel simplePanel = new SimplePanel();
 		simplePanelCenter.add(simplePanel);
 		simplePanel.setHeight("40px");
-		
-		Grid grid = new Grid(7, 2);
+
+		Grid grid = new Grid(4, 2);
 		simplePanelCenter.add(grid);
 		simplePanelCenter.setCellHeight(grid, "100%");
 		simplePanelCenter.setCellWidth(grid, "100%");
 		grid.setSize("100%", "");
-		
+
 		Label lblName = new Label(lang._TextName());
 		grid.setWidget(0, 0, lblName);
-		
+
 		grid.setWidget(0, 1, textBoxName);
 		textBoxName.setWidth("100%");
-		
+
 		Label lblDescription = new Label(lang._TextDescription());
 		grid.setWidget(1, 0, lblDescription);
-		
+
 		grid.setWidget(1, 1, textAreaDescription);
 		textAreaDescription.setSize("100%", "50px");
-		
+
 		Label lblLastvisit = new Label(lang._TextLastVisit());
 		grid.setWidget(2, 0, lblLastvisit);
-		
+
 		grid.setWidget(2, 1, datePickerLastVisit);
-		
-		InlineHyperlink nlnhprlnkDownloadFile = new InlineHyperlink(lang.nlnhprlnkDownloadFile_text(), false, "newHistoryToken");
-		grid.setWidget(4, 1, nlnhprlnkDownloadFile);
-		
+
 		Button buttonSave = new Button(lang._TextSave());
-		grid.setWidget(6, 0, buttonSave);
+		grid.setWidget(3, 0, buttonSave);
 		buttonSave.setWidth("150px");
-		grid.getCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_LEFT);
-		
+		//buttonSave.addClickHandler(saveHandler);
+		grid.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_LEFT);
+
 		// Add a handler to the delete button.
 		DeleteHandler deleteHandler = new DeleteHandler();
 		buttonDeleteDocument.addClickHandler(deleteHandler);
-		
+
 		// Add a handler to the save button.
 		SaveHandler saveHandler = new SaveHandler();
-		buttonSave.addClickHandler(saveHandler);
-		
-		NewSiteHandler newHandler = new NewSiteHandler();
-		buttonNewDocument.addClickHandler(newHandler);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.TheJobCoach.userdata.UserJobSiteManager;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -47,5 +48,39 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public String addUserSite(UserId id) throws CassandraException {
 		return jobSiteManager.addUserSite(id);
+	}
+
+	@Override
+	public List<String> getUserDocumentList(UserId id)
+			throws CassandraException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer deleteUserDocument(UserId id, String documentId)
+			throws CassandraException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer setUserDocument(UserId id, UserDocument document)
+			throws CassandraException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserDocument getUserDocument(UserId id, String documentId)
+			throws CassandraException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String addUserDocument(UserId id) throws CassandraException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

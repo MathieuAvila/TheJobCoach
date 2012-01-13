@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 
+import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.userpage.client.UserService.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -18,18 +19,97 @@ import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class UserPage implements EntryPoint {
 		
+	final VerticalPanel simplePanelCenter = new VerticalPanel();
+	Label selectedMenu = null;
 	
 	UserId userId = new UserId("user", "user");
 	
 	public void setUser(UserId _userId)
 	{
 		userId = _userId;
+	}
+	
+	public void changeMenu(String menu)
+	{
+		System.out.println(menu);
+		if (menu.equals("myjobboards"))
+		{
+			ContentUserSite contentUserSite = new ContentUserSite();
+			contentUserSite.setRootPanel(simplePanelCenter);
+			contentUserSite.setUserParameters(userId);
+			contentUserSite.onModuleLoad();
+			
+		}
+		if (menu.equals("news"))
+		{
+			ContentNews contentNews = new ContentNews();
+			contentNews.setRootPanel(simplePanelCenter);
+			contentNews.setUserParameters(userId);
+			contentNews.onModuleLoad();
+		}
+		if (menu.equals("mydocuments"))
+		{
+			ContentMyDocuments contentMyDocuments = new ContentMyDocuments();
+			contentMyDocuments.setRootPanel(simplePanelCenter);
+			contentMyDocuments.setUserParameters(userId);
+			contentMyDocuments.onModuleLoad();
+		}
+	}
+	
+	public void setLabelMenu(final Label label, final String menu)
+	{
+		label.setStyleName("userpage-label-normal");
+		if (
+				!menu.equals("news") &&
+				!menu.equals("myjobboards") &&
+				!menu.equals("mydocuments")
+				)
+		{
+			return;
+		}
+		label.addMouseOutHandler(new MouseOutHandler() {
+			public void onMouseOut(MouseOutEvent event) {
+				if (label == selectedMenu)
+				{
+					label.setStyleName("userpage-label-clicked");
+				}
+				else
+				{
+					label.setStyleName("userpage-label-normal");					
+				}
+			}
+		});
+		label.addMouseOverHandler(new MouseOverHandler() {
+			public void onMouseOver(MouseOverEvent event)
+			{
+				label.setStyleName("userpage-label-clickable");
+			}
+		});
+		label.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event)
+			{
+				label.setStyleName("userpage-label-clicked");
+				if (selectedMenu != null)
+				{
+					selectedMenu.setStyleName("userpage-label-normal");
+				}
+				selectedMenu = label;
+				changeMenu(menu);
+			}
+		});
+		label.setStyleName("userpage-label-normal");
 	}
 	
 	/**
@@ -50,7 +130,7 @@ public class UserPage implements EntryPoint {
 		rootPanel.setSize("100%", "100%");
 				
 		FlexTable flexTable = new FlexTable();
-		rootPanel.add(flexTable, 0, 0);
+		rootPanel.add(flexTable, 0, 10);
 		flexTable.setSize("100%", "100%");
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
@@ -75,10 +155,13 @@ public class UserPage implements EntryPoint {
 		stackPanelAccount.add(verticalPanelAccount, lang._TextAccount(), false);
 		verticalPanelAccount.setSize("100%", "100%");
 		
-		Label label_Profile = new Label(lang._TextMyProfile());
+		final Label label_Profile = new Label(lang._TextMyProfile());
+		setLabelMenu(label_Profile, "profile");
 		verticalPanelAccount.add(label_Profile);
 		
-		Label label_Parameters = new Label(lang._TextMyParameters());
+		final Label label_Parameters = new Label(lang._TextMyParameters());
+		label_Parameters.setStyleName("userpage-label-clicked");
+		setLabelMenu(label_Parameters, "parameters");
 		verticalPanelAccount.add(label_Parameters);
 		
 		SimplePanel simplePanel_4 = new SimplePanel();
@@ -93,7 +176,8 @@ public class UserPage implements EntryPoint {
 		stackPanelGoals.add(verticalPanelGoals, lang._TextGoals(), false);
 		verticalPanelGoals.setSize("100%", "100%");
 		
-		Label lblNewLabel_MyGoals = new Label(lang._TextMyGoals());
+		final Label lblNewLabel_MyGoals = new Label(lang._TextMyGoals());
+		setLabelMenu(lblNewLabel_MyGoals, "goals");
 		verticalPanelGoals.add(lblNewLabel_MyGoals);
 		
 		SimplePanel simplePanel = new SimplePanel();
@@ -107,12 +191,15 @@ public class UserPage implements EntryPoint {
 		VerticalPanel verticalPanelMyTools = new VerticalPanel();
 		stackPanelMyTools.add(verticalPanelMyTools, lang._TextMyTools(), false);
 		verticalPanelMyTools.setSize("100%", "100%");
-		
-		Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
+				
+		final Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
+		setLabelMenu(lblNewLabel_AddressBook, "addressbook");
 		verticalPanelMyTools.add(lblNewLabel_AddressBook);
-		Label lblNewLabel_JobBoards = new Label(lang._TextMyJobBoards());
+		final Label lblNewLabel_JobBoards = new Label(lang._TextMyJobBoards());
+		setLabelMenu(lblNewLabel_JobBoards, "myjobboards");
 		verticalPanelMyTools.add(lblNewLabel_JobBoards);
-		Label lblNewLabel_Documents = new Label(lang._TextMyDocuments());
+		final Label lblNewLabel_Documents = new Label(lang._TextMyDocuments());
+		setLabelMenu(lblNewLabel_Documents, "mydocuments");
 		verticalPanelMyTools.add(lblNewLabel_Documents);
 		
 		SimplePanel simplePanel_1 = new SimplePanel();
@@ -127,19 +214,24 @@ public class UserPage implements EntryPoint {
 		stackPanelMyApplication.add(verticalPanelMyApplication, lang._TextMyApplications(), false);
 		verticalPanelMyApplication.setSize("100%", "100%");
 		
-		Label label_Researches = new Label(lang._TextMyResearches());
+		final Label label_Researches = new Label(lang._TextMyResearches());
+		setLabelMenu(label_Researches, "research");
 		verticalPanelMyApplication.add(label_Researches);
 		
-		Label label_SearchResults = new Label(lang._TextSearchResults());
+		final Label label_SearchResults = new Label(lang._TextSearchResults());
+		setLabelMenu(label_SearchResults, "searchresult");
 		verticalPanelMyApplication.add(label_SearchResults);
 		
-		Label label_MyApplications = new Label(lang._TextApplicationFollowUp());
+		final Label label_MyApplications = new Label(lang._TextApplicationFollowUp());
+		setLabelMenu(label_MyApplications, "applications");
 		verticalPanelMyApplication.add(label_MyApplications);
 		
-		Label label_ActionsAgenda = new Label(lang._TextAgenda());
+		final Label label_ActionsAgenda = new Label(lang._TextAgenda());
+		setLabelMenu(label_ActionsAgenda, "agenda");
 		verticalPanelMyApplication.add(label_ActionsAgenda);
 		
-		Label label_ArchivedApplications = new Label(lang._TextArchivedApplications());
+		final Label label_ArchivedApplications = new Label(lang._TextArchivedApplications());
+		setLabelMenu(label_ArchivedApplications, "applications");
 		verticalPanelMyApplication.add(label_ArchivedApplications);
 		
 		SimplePanel simplePanel_2 = new SimplePanel();
@@ -154,10 +246,12 @@ public class UserPage implements EntryPoint {
 		stackPanelStats.add(verticalPanelStats, lang._TextEvaluations(), false);
 		verticalPanelStats.setSize("100%", "100%");
 		
-		Label label_Bilans = new Label(lang._TextBilans());
+		final Label label_Bilans = new Label(lang._TextBilans());
+		setLabelMenu(label_Bilans, "bilans");
 		verticalPanelStats.add(label_Bilans);
 		
-		Label label_Statistics = new Label(lang._TextStatistiques());
+		final Label label_Statistics = new Label(lang._TextStatistiques());
+		setLabelMenu(label_Statistics, "statistiques");
 		verticalPanelStats.add(label_Statistics);
 		
 		SimplePanel simplePanel_3 = new SimplePanel();
@@ -172,10 +266,12 @@ public class UserPage implements EntryPoint {
 		stackPanelAdvices.add(verticalPanelAdvices, lang._TextLibrary(), false);
 		verticalPanelAdvices.setSize("100%", "100%");
 		
-		Label label_JobBoards = new Label(lang._TextSites());
+		final Label label_JobBoards = new Label(lang._TextSites());
+		setLabelMenu(label_JobBoards, "jobboards");
 		verticalPanelAdvices.add(label_JobBoards);
 		
-		Label label_Advices = new Label(lang._TextAdvices());
+		final Label label_Advices = new Label(lang._TextAdvices());
+		setLabelMenu(label_Advices, "advices");
 		verticalPanelAdvices.add(label_Advices);
 		
 		SimplePanel simplePanel_5 = new SimplePanel();
@@ -190,50 +286,39 @@ public class UserPage implements EntryPoint {
 		stackPanelShares.add(verticalPanelShares, lang._TextCommunity(), false);
 		verticalPanelShares.setSize("100%", "100%");
 		
-		Label label_Forum = new Label(lang._TextForum());
+		final Label label_Forum = new Label(lang._TextForum());
+		setLabelMenu(label_Forum, "forum");
 		verticalPanelShares.add(label_Forum);
 		
-		Label label_News = new Label(lang._TextNews());
+		final Label label_News = new Label(lang._TextNews());
+		setLabelMenu(label_News, "news");
 		verticalPanelShares.add(label_News);
 		
 		HTMLPanel panelCenter = new HTMLPanel("<div id=\"centercontent\">");
 		horizontalPanel_1.add(panelCenter);
 		panelCenter.setSize("100%", "100%");
 		
-		VerticalPanel simplePanelCenter = new VerticalPanel();
 		horizontalPanel_1.add(simplePanelCenter);
 		
 		HTMLPanel panelAds = new HTMLPanel("<div id=\"adframe\">");
 		horizontalPanel_1.add(panelAds);
 		
-		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
-		flexTable.setWidget(2, 0, horizontalPanel_2);
-		flexTable.getCellFormatter().setHeight(2, 0, "10px");
-		
-		Label label_15 = new Label(lang._TextAbout());
-		horizontalPanel_2.add(label_15);
-		
-		Label label_16 = new Label("  -  ");
-		horizontalPanel_2.add(label_16);
-		horizontalPanel_2.setCellHorizontalAlignment(label_16, HasHorizontalAlignment.ALIGN_CENTER);
-		label_16.setWidth("20px");
-		
-		Label label_17 = new Label(lang._TextWhoWeAre());
-		horizontalPanel_2.add(label_17);
-		
-		Label label_18 = new Label("  -  ");
-		horizontalPanel_2.add(label_18);
-		horizontalPanel_2.setCellHorizontalAlignment(label_18, HasHorizontalAlignment.ALIGN_CENTER);
-		label_18.setWidth("20px");
-		
-		Label label_19 = new Label(lang._TextConfidentiality());
-		horizontalPanel_2.add(label_19);
-		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-		
 		ContentUserSite contentUserSite = new ContentUserSite();
 		contentUserSite.setRootPanel(simplePanelCenter);
 		contentUserSite.setUserParameters(userId);
 		contentUserSite.onModuleLoad();
+		
+		VerticalPanel verticalPanel = new VerticalPanel();
+		flexTable.setWidget(2, 0, verticalPanel);
+		flexTable.getCellFormatter().setHeight(2, 0, lang.verticalPanel_height_1());
+		verticalPanel.setStyleName("mainpage-content");
+		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel.setSize("", "30px");
+		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+
+		Footer footerPanel = new Footer();
+		footerPanel.setRootPanel(verticalPanel);	
+		footerPanel.onModuleLoad();
 	}
 }

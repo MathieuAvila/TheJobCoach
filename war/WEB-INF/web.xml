@@ -20,6 +20,13 @@
     <servlet-name>userServlet</servlet-name>
     <servlet-class>com.TheJobCoach.webapp.userpage.server.UserServiceImpl</servlet-class>
   </servlet>
+
+   <servlet> 
+	 <display-name>UploadFileServlet</display-name> 
+         <servlet-name>UploadFileServlet</servlet-name> 
+		 <servlet-class>com.TheJobCoach.webapp.userpage.server.UploadFileServlet</servlet-class> 
+   </servlet> 
+
   
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
@@ -35,7 +42,12 @@
     <servlet-name>userServlet</servlet-name>
     <url-pattern>/thejobcoach/user</url-pattern>
   </servlet-mapping>
-  
+     
+   <servlet-mapping> 
+		<servlet-name>UploadFileServlet</servlet-name> 
+		<url-pattern>/UploadFileServlet</url-pattern> 
+   </servlet-mapping>
+   
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>TheJobCoach.html</welcome-file>
