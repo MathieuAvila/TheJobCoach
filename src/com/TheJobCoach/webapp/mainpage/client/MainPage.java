@@ -3,8 +3,8 @@ package com.TheJobCoach.webapp.mainpage.client;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
-import com.TheJobCoach.webapp.userpage.client.UserService.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
@@ -39,7 +39,7 @@ public class MainPage implements EntryPoint {
 		System.out.println("Locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 		
 		UserPage uP = new UserPage();
-		uP.setUser(new UserId("user", "user"));
+		uP.setUser(new UserId("user", "user", UserId.UserType.USER_TYPE_SEEKER));
 		uP.onModuleLoad();
 		return;
 		/*

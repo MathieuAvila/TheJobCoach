@@ -11,6 +11,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountSt
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
@@ -58,7 +59,29 @@ public class Account implements AccountInterface {
 		return ((token != null)&&(!token.equals("")));
 	}
 
-	public CreateAccountStatus createAccountWithToken(String token, String userName, String name, String firstName, String email, String password, String langStr)
+	protected String userTypeToString(UserId.UserType type)
+	{
+		switch (type)
+		{
+		case USER_TYPE_SEEKER: return "seeker";
+		case USER_TYPE_COACH:  return "coach";
+		case USER_TYPE_ADMIN:  return "admin";
+		}
+		return "";
+	}
+	
+	protected UserId.UserType stringToUserType(String type)
+	{
+		if (type.equals("seeker"))
+			return UserId.UserType.USER_TYPE_SEEKER;
+		if (type.equals("coach"))
+			return UserId.UserType.USER_TYPE_COACH;
+		if (type.equals("admin"))
+			return UserId.UserType.USER_TYPE_ADMIN;
+		return UserId.UserType.USER_TYPE_SEEKER;
+	}
+	
+	public CreateAccountStatus createAccountWithToken(String token, String userName, String name, String firstName, String email, String password, String langStr, UserId.UserType type)
 	{
 		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, 
 				(new ShortMap())
@@ -68,6 +91,7 @@ public class Account implements AccountInterface {
 				.add("firstname", firstName)
 				.add("date", new Date())
 				.add("token", token)
+				.add("type", userTypeToString(type))
 				.get());
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
 		result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_TOKEN, token, 
@@ -81,16 +105,17 @@ public class Account implements AccountInterface {
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 	
-	public CreateAccountStatus createAccount(String userName, String name, String firstName, String email, String password, String langStr)
+	public CreateAccountStatus createAccount(String userName, String name, String firstName, String email, String password, String langStr, UserId.UserType type)
 	{
 		UUID uuid = UUID.randomUUID();
 		String token = userName + "_" + uuid.toString();
-		return createAccountWithToken(token, userName, name, firstName, email, password, langStr);
+		return createAccountWithToken(token, userName, name, firstName, email, password, langStr, type);
 	}
+	
 	public ValidateAccountStatus validateAccount(String userName, String token)
 	{
 		String userNameDB = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_TOKEN, token, "username");
-		if ((userName == null) || (!userNameDB.equals(userName)))
+		if ((userName == null) || (userNameDB == null) || (!userNameDB.equals(userName)))
 			return ValidateAccountStatus.VALIDATE_STATUS_UNKNOWN;
 		boolean result = 
 		 CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_TOKEN, token,
@@ -107,18 +132,19 @@ public class Account implements AccountInterface {
 		System.out.println("Try to login as: " + userName + " with password: " + password);
 		String token = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "token");
 		if (token == null)
-			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER, "");
+			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
 		System.out.println("Token is: " + token);
 		String validatedStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_TOKEN, token, "validated");
 		if (validatedStr == null)
-			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED, "");
+			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
 		boolean validated = ShortMap.getBoolean(validatedStr);
-		if (!validated) return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED, "");
+		if (!validated) return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
 		String passwordStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "password");
 		if (passwordStr == null)
-			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD, "");
+			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
 		if (!passwordStr.equals(password)) 
-			new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD, "");
-		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, token);
+			new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+		String typeStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "type");
+		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, new UserId(userName, token, stringToUserType(typeStr)));
 	}
 }

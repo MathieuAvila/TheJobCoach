@@ -2,7 +2,7 @@ package com.TheJobCoach.webapp.userpage.client;
 
 
 import com.TheJobCoach.webapp.footer.client.Footer;
-import com.TheJobCoach.webapp.userpage.client.UserService.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
@@ -34,7 +34,7 @@ public class UserPage implements EntryPoint {
 	final VerticalPanel simplePanelCenter = new VerticalPanel();
 	Label selectedMenu = null;
 	
-	UserId userId = new UserId("user", "user");
+	UserId userId = new UserId("user", "user", UserId.UserType.USER_TYPE_SEEKER);
 	
 	public void setUser(UserId _userId)
 	{

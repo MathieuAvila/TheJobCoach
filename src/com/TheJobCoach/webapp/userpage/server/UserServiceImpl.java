@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.server;
 import java.util.List;
 
 import com.TheJobCoach.userdata.UserJobSiteManager;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;

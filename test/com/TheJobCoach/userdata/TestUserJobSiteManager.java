@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.userpage.client.UserService.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 
@@ -15,8 +15,8 @@ public class TestUserJobSiteManager {
 	
 	static UserJobSiteManager manager = new UserJobSiteManager();
 	
-	static UserId id = new UserId("user", "token");
-	static UserId id2 = new UserId("user2", "token2");
+	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
+	static UserId id2 = new UserId("user2", "token2", UserId.UserType.USER_TYPE_SEEKER);
 	
 	static String site1;
 	static String site2;

@@ -15,7 +15,7 @@ import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.EasyComposite;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.util.CassandraAccessor.CompositeColumnEntry;
-import com.TheJobCoach.webapp.userpage.client.UserService.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 

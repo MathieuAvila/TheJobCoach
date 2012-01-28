@@ -1,12 +1,14 @@
 package com.TheJobCoach.webapp.mainpage.shared;
 
 import java.io.Serializable;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 
 public class MainPageReturnLogin implements Serializable
 {
-	private static final long serialVersionUID = 100000L;
+	private static final long serialVersionUID = 1001001L;
 	
-	String token;
+	public UserId id = null;
+	
 	
 	public enum LoginStatus 
 	{ 
@@ -18,21 +20,20 @@ public class MainPageReturnLogin implements Serializable
 	
 	LoginStatus loginStatus;
 
-	public MainPageReturnLogin(LoginStatus _loginStatus, String _token)
+	public MainPageReturnLogin(LoginStatus _loginStatus, UserId _id)
 	{
 		loginStatus = _loginStatus;
-		token = _token;
+		id = _id;
+	}
+	
+	public MainPageReturnLogin(LoginStatus status)
+	{
+		loginStatus = status;
 	}
 	
 	public MainPageReturnLogin()
 	{
 		loginStatus = LoginStatus.CONNECT_STATUS_UNKNOWN_USER;
-		token = "";
-	}
-
-	public String getToken() 
-	{
-		return token;
 	}
 
 	public LoginStatus getLoginStatus()
