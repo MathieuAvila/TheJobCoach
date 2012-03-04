@@ -45,8 +45,9 @@
      
    <servlet-mapping> 
 		<servlet-name>UploadFileServlet</servlet-name> 
-		<url-pattern>/UploadFileServlet</url-pattern> 
+		<url-pattern>/thejobcoach/UploadFileServlet</url-pattern> 
    </servlet-mapping>
+     
    
   <!-- Default page to serve -->
   <welcome-file-list>

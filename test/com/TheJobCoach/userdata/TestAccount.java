@@ -12,6 +12,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountSt
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 
 public class TestAccount
 {
@@ -26,7 +27,9 @@ public class TestAccount
 	public void testCreateAccount()
 	{
 		MailerFactory.setMailer(mockMail);
-		CreateAccountStatus status = account.createAccountWithToken("mytoken", id, "nom", "prenom", "toto@toto.com", "password", "en", UserId.UserType.USER_TYPE_SEEKER);
+		CreateAccountStatus status = account.createAccountWithToken(
+				new UserId(id, "mytoken", UserId.UserType.USER_TYPE_SEEKER),
+				new UserInformation("nom", "prenom", "toto@toto.com", "password"), "en");
 		assertEquals( CreateAccountStatus.CREATE_STATUS_OK, status);
 		String mail = mockMail.lastBody;
 		assertEquals(true, mail.contains("token="));
@@ -58,8 +61,11 @@ public class TestAccount
 		{
 			String idAdmin =  "admin" + UUID.randomUUID().hashCode();
 			String tokenAdmin = "tokenAdmin" + UUID.randomUUID().hashCode();
-			MailerFactory.setMailer(mockMail);
-			CreateAccountStatus status = account.createAccountWithToken(tokenAdmin, idAdmin, "nom", "prenom", "toto@toto.com", "password", "en", UserId.UserType.USER_TYPE_ADMIN);
+			MailerFactory.setMailer(mockMail);			
+			CreateAccountStatus status = account.createAccountWithToken(
+					new UserId(idAdmin, tokenAdmin, UserId.UserType.USER_TYPE_ADMIN),
+					new UserInformation("nom", "prenom", "toto@toto.com", "password"), "en");
+			
 			assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 			assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idAdmin, tokenAdmin));
 			MainPageReturnLogin loginCred = account.loginAccount(idAdmin, "password");
@@ -70,7 +76,9 @@ public class TestAccount
 			String idCoach =  "coach" + UUID.randomUUID().hashCode();
 			String tokenCoach = "tokenCoach" + UUID.randomUUID().hashCode();
 			MailerFactory.setMailer(mockMail);
-			CreateAccountStatus status = account.createAccountWithToken(tokenCoach, idCoach, "nom", "prenom", "toto@toto.com", "password", "en", UserId.UserType.USER_TYPE_COACH);
+			CreateAccountStatus status = account.createAccountWithToken(
+					new UserId(idCoach, tokenCoach, UserId.UserType.USER_TYPE_COACH),
+					new UserInformation("nom", "prenom", "toto@toto.com", "password"), "en");
 			assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 			assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idCoach, tokenCoach));
 			MainPageReturnLogin loginCred = account.loginAccount(idCoach, "password");
@@ -81,7 +89,9 @@ public class TestAccount
 			String idSeeker =  "seeker" + UUID.randomUUID().hashCode();
 			String tokenSeeker = "tokenSeeker" + UUID.randomUUID().hashCode();
 			MailerFactory.setMailer(mockMail);
-			CreateAccountStatus status = account.createAccountWithToken(tokenSeeker, idSeeker, "nom", "prenom", "toto@toto.com", "password", "en", UserId.UserType.USER_TYPE_SEEKER);
+			CreateAccountStatus status = account.createAccountWithToken(
+					new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER),
+					new UserInformation("nom", "prenom", "toto@toto.com", "password"), "en");
 			assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 			assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
 			MainPageReturnLogin loginCred = account.loginAccount(idSeeker, "password");
