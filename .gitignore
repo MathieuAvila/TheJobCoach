@@ -32,3 +32,10 @@
 ehthumbs.db
 Icon?
 Thumbs.db
+
+*.cache.html
+*.gwt.rpc
+gwt-unitCache
+*.war
+war/**
+test-classes/**
