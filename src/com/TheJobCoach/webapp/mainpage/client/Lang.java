@@ -37,5 +37,35 @@ public interface Lang extends Constants {
 	@ Key("confidentiality")
 	String _TextConfidentiality();
 	
+	@ Key("login_invalid_user_password")
+	String _TextLoginNoSuchLoginPassword(); 
+	
+	@ Key("login_not_validated")
+	String _TextLoginNotValidated();
+	
+	@ Key("create_login_already_exist")
+	String _TextCreateLoginAlreadyExists(); 
+	
+	@ Key("create_login_unexpected_error")
+	String _TextCreateLoginUnexpectedError();
+	
+	@ Key("create_login_success")
+	String _TextCreateAccountSuccess();
+	
+	@ Key("validate_login_no_such_login")
+	String _TextValidateLoginNoSuchLogin(); 
+	
+	@ Key("validate_login_unexpected_error")
+	String _TextValidateLoginUnexpectedError(); 
+	
+	@ Key("validate_login_wait")
+	String _TextValidateLoginWait(); 
+	
+	@ Key("validate_login_go_to_login")
+	String _TextValidateGoToLogin(); 
+	
+	@ Key("validate_succesfully_validated")
+	String _TextValidateSuccess(); 
+	
 	String panelFooter_html();
 }

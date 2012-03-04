@@ -1,9 +1,12 @@
 package com.TheJobCoach.webapp.mainpage.client;
 
+import com.TheJobCoach.webapp.adminpage.client.AdminPage;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
+import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -14,7 +17,9 @@ import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -27,22 +32,46 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class MainPage implements EntryPoint {
-	
+
 	private final LoginServiceAsync loginService = GWT
 			.create(LoginService.class);
+
+	private void messageLogin(String messageDialog, String messageText)
+	{
+		// Create the popup dialog box
+		final DialogBox dialogBox = new DialogBox();
+		dialogBox.show();
+		dialogBox.setAnimationEnabled(true);
+		Button closeButton = new Button("Close");
+		// We can set the id of a widget by accessing its Element
+		closeButton.getElement().setId("closeButton");
+		final Label textDialog = new Label();
+		VerticalPanel dialogVPanel = new VerticalPanel();
+		dialogVPanel.add(textDialog);
+		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+		dialogVPanel.add(closeButton);
+		dialogBox.setWidget(dialogVPanel);
+
+		// Add a handler to close the DialogBox
+		closeButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				dialogBox.hide();
+			}
+		});
+
+		dialogBox.setText(messageDialog);
+		textDialog.setText(messageText);
+		dialogBox.center();		
+	}
+
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad()
 	{		
-		Lang lang = GWT.create(Lang.class);
+		final Lang lang = GWT.create(Lang.class);
 		System.out.println("Locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-		
-		UserPage uP = new UserPage();
-		uP.setUser(new UserId("user", "user", UserId.UserType.USER_TYPE_SEEKER));
-		uP.onModuleLoad();
-		return;
-		/*
+
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("content");
@@ -50,98 +79,97 @@ public class MainPage implements EntryPoint {
 		rootPanel.setStyleName("mainpage-content");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 		rootPanel.setSize("100%", "100%");
-		
+
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel.setStyleName("mainpage-content");
 		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		rootPanel.add(verticalPanel, 0, 0);
 		verticalPanel.setSize("100%", "100%");
-		
+
 		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
 		verticalPanel.add(horizontalPanel_1);
 		horizontalPanel_1.setHeight("100px");
 		horizontalPanel_1.setStyleName("mainpage-content");
-		
+
 		Image image = new Image("jobcoach.gif");
 		verticalPanel.add(image);
-		
+
 		Label lblTheJobCoach = new Label("The Job Coach");
 		lblTheJobCoach.setStyleName("mainpage-title");
 		verticalPanel.add(lblTheJobCoach);
-		
+
 		Label lblNewLabel = new Label(lang._TextSlogan());
 		lblNewLabel.setStyleName("mainpage-label-slogan");
 		verticalPanel.add(lblNewLabel);
-		
+
 		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
 		horizontalPanel_2.setStyleName("mainpage-content");
 		verticalPanel.add(horizontalPanel_2);
 		horizontalPanel_2.setHeight("10px");
-		
+
 		HorizontalPanel horizontalPanel_12 = new HorizontalPanel();
 		verticalPanel.add(horizontalPanel_12);
-		
+
 		Image imageFr = new Image("drapeau_francais.gif");
 		horizontalPanel_12.add(imageFr);
 		horizontalPanel_12.setCellHeight(imageFr, "20");
 		horizontalPanel_12.setCellWidth(imageFr, "20");
 		imageFr.setSize("30px", "30px");
-		
+
 		VerticalPanel verticalPanel_3 = new VerticalPanel();
 		horizontalPanel_12.add(verticalPanel_3);
 		horizontalPanel_12.setCellWidth(verticalPanel_3, "50px");
 		verticalPanel_3.setSize("50px", "");
-		
+
 		Image imageEn = new Image("drapeau_anglais.gif");
 		horizontalPanel_12.add(imageEn);
 		horizontalPanel_12.setCellHeight(imageEn, "20");
 		horizontalPanel_12.setCellWidth(imageEn, "20");
 		imageEn.setSize("30px", "30px");
-		
+
 		HorizontalPanel horizontalPanel_11 = new HorizontalPanel();
 		horizontalPanel_11.setStyleName("mainpage-content");
 		verticalPanel.add(horizontalPanel_11);
 		horizontalPanel_11.setHeight("10px");
-		
+
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setStyleName("mainpage-content");
 		verticalPanel.add(horizontalPanel);
 		verticalPanel.setCellHorizontalAlignment(horizontalPanel, HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel.setSize("", "30px");
-		
+
 		Label lblNomDutilisateur = new Label(lang._TextUserName());
 		lblNomDutilisateur.setStyleName("mainpage-label-userpass");
 		horizontalPanel.add(lblNomDutilisateur);
 		horizontalPanel.setCellVerticalAlignment(lblNomDutilisateur, HasVerticalAlignment.ALIGN_MIDDLE);
 		final TextBox nameField = new TextBox();
-		nameField.setText("mathieu");
+		//nameField.setText("mathieu");
 		horizontalPanel.add(nameField);
 		horizontalPanel.setCellVerticalAlignment(nameField, HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setCellHorizontalAlignment(nameField, HasHorizontalAlignment.ALIGN_CENTER);
-		
+
 		Label lblMotDePasse = new Label(lang._TextUserPassword());
 		lblMotDePasse.setStyleName("mainpage-label-userpass");
 		horizontalPanel.add(lblMotDePasse);
 		horizontalPanel.setCellVerticalAlignment(lblMotDePasse, HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setCellHorizontalAlignment(lblMotDePasse, HasHorizontalAlignment.ALIGN_CENTER);
-		
-		final TextBox passwordField = new TextBox();
-		passwordField.setText("mathieu");
+
+		final TextBox passwordField = new PasswordTextBox();
 		horizontalPanel.add(passwordField);
 		horizontalPanel.setCellVerticalAlignment(passwordField, HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setCellHorizontalAlignment(passwordField, HasHorizontalAlignment.ALIGN_CENTER);
-		
+
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		final Button connectButton = new Button(lang._TextLogin());
 		connectButton.setStyleName("mainpage-connect");
 		horizontalPanel.add(connectButton);
 		verticalPanel.setCellHorizontalAlignment(connectButton, HasHorizontalAlignment.ALIGN_CENTER);
-		
+
 		// We can add style names to widgets
 		connectButton.addStyleName("sendButton");
-		
+
 		VerticalPanel verticalPanel_1 = new VerticalPanel();
 		verticalPanel.add(verticalPanel_1);
 		verticalPanel.setCellHeight(verticalPanel_1, "50px");
@@ -150,12 +178,12 @@ public class MainPage implements EntryPoint {
 		Label lblPasEncoreInscrit = new Label(lang._TextNotYesRegistered());
 		verticalPanel.add(lblPasEncoreInscrit);
 		lblPasEncoreInscrit.setStyleName("mainpage-label-clickable");				
-		
+
 		VerticalPanel verticalPanel_2 = new VerticalPanel();
 		verticalPanel.add(verticalPanel_2);
 		verticalPanel.setCellHeight(verticalPanel_2, "50px");
 		verticalPanel_2.setHeight("50px");
-		
+
 		HorizontalPanel horizontalPanel_8 = new HorizontalPanel();
 		verticalPanel.add(horizontalPanel_8);
 		verticalPanel.setCellWidth(horizontalPanel_8, "378");
@@ -166,16 +194,26 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_8.add(verticalPanelSubscribe);
 		verticalPanelSubscribe.setStyleName("mainpage-create_account-panel");
 		verticalPanelSubscribe.setSize("267px", "178px");
-		
+
+		// Create a handler for the not subscribed button
+		class NotSubscribedHandler implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				verticalPanelSubscribe.setVisible(!verticalPanelSubscribe.isVisible());
+			}
+		}
+		// Add a handler to the not subscribed button clicker.
+		NotSubscribedHandler notSubscribedHandler = new NotSubscribedHandler();
+		lblPasEncoreInscrit.addClickHandler(notSubscribedHandler);
+
 		HorizontalPanel horizontalPanel_10 = new HorizontalPanel();
 		verticalPanelSubscribe.add(horizontalPanel_10);
 		horizontalPanel_10.setWidth("267px");
-		
+
 		Label lblUserName = new Label(lang._TextUserName());
 		horizontalPanel_10.add(lblUserName);
-		
+
 		final TextBox textBoxUserName = new TextBox();
-		textBoxUserName.setText("atila");
+		//textBoxUserName.setText("atila");
 		horizontalPanel_10.add(textBoxUserName);
 		horizontalPanel_10.setCellHorizontalAlignment(textBoxUserName, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -187,7 +225,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_5.add(label);
 
 		final TextBox textBoxMail = new TextBox();
-		textBoxMail.setText("mathieu.avila@laposte.net");
+		//textBoxMail.setText("mathieu.avila@laposte.net");
 		horizontalPanel_5.add(textBoxMail);
 		horizontalPanel_5.setCellHorizontalAlignment(textBoxMail, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -199,7 +237,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_7.add(label_2);
 
 		final TextBox textBoxCreateName = new TextBox();
-		textBoxCreateName.setText("Avila");
+		//textBoxCreateName.setText("Avila");
 		horizontalPanel_7.add(textBoxCreateName);
 		horizontalPanel_7.setCellHorizontalAlignment(textBoxCreateName, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -211,7 +249,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_6.add(label_1);
 
 		final TextBox textBoxFirstName = new TextBox();
-		textBoxFirstName.setText("Mathieu");
+		//textBoxFirstName.setText("Mathieu");
 		horizontalPanel_6.add(textBoxFirstName);
 		horizontalPanel_6.setCellHorizontalAlignment(textBoxFirstName, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -223,7 +261,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_4.add(lblNewLabel_1);
 
 		final TextBox newUserEmailBox = new TextBox();
-		newUserEmailBox.setText("mathieu");
+		//newUserEmailBox.setText("mathieu");
 		horizontalPanel_4.add(newUserEmailBox);
 		horizontalPanel_4.setCellHorizontalAlignment(newUserEmailBox, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -237,7 +275,7 @@ public class MainPage implements EntryPoint {
 		verticalPanel.add(horizontalPanel_3);
 		verticalPanel.setCellVerticalAlignment(horizontalPanel_3, HasVerticalAlignment.ALIGN_BOTTOM);
 		horizontalPanel_3.setHeight("100px");
-		
+
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		Footer footerPanel = new Footer();
@@ -269,22 +307,37 @@ public class MainPage implements EntryPoint {
 						//serverResponseLabel.setHTML(result);
 						//dialogBox.center();
 						connectButton.setEnabled(true);
-						System.out.println("Login returned: " + result.getToken()+ " result is:" + result.getLoginStatus());
+						//System.out.println("Login returned: " + result.id.token + " result is:" + result.getLoginStatus());
 						switch (result.getLoginStatus())
 						{ 
 						case CONNECT_STATUS_UNKNOWN_USER:
-							Window.alert("Error at login: this user is unknown");
+							Window.alert(lang._TextLoginNoSuchLoginPassword());
 							break;
 						case CONNECT_STATUS_PASSWORD:		
-							Window.alert("Error at login: wrong password");
+							Window.alert(lang._TextLoginNoSuchLoginPassword());
 							break;
 						case CONNECT_STATUS_NOT_VALIDATED:
-							Window.alert("Error at login: this account has not been validated. Please check your email for validation");
+							Window.alert(lang._TextLoginNotValidated());
 							break;
 						case CONNECT_STATUS_OK:
-							UserPage uP = new UserPage();
-							uP.setUser(new UserId(nameField.getText(), result.getToken()));
-							uP.onModuleLoad();
+							switch (result.id.type)
+							{
+							case USER_TYPE_SEEKER:
+								UserPage uP = new UserPage();
+								uP.setUser(result.id);
+								uP.onModuleLoad();
+								break;
+							case USER_TYPE_COACH:
+								UserPage cP = new UserPage();
+								cP.setUser(result.id);
+								cP.onModuleLoad();
+								break;
+							case USER_TYPE_ADMIN:
+								AdminPage aP = new AdminPage();
+								aP.setUser(result.id);
+								aP.onModuleLoad();
+								break;
+							}
 							return;
 						}
 					}
@@ -296,57 +349,71 @@ public class MainPage implements EntryPoint {
 		ConnectHandler handler = new ConnectHandler();
 		connectButton.addClickHandler(handler);
 
-		// Create a handler for the connect button
+		// Create a handler for the create account button.em
 		class CreateAccountHandler implements ClickHandler {
 			public void onClick(ClickEvent event) {
-				verticalPanelSubscribe.setVisible(!verticalPanelSubscribe.isVisible());
 				System.out.println(textBoxUserName.getText());
 				System.out.println(passwordField.getText());
 				System.out.println(textBoxMail.getText());
 				loginService.createAccount(
-						textBoxUserName.getText(), 
-						textBoxCreateName.getText(), 
-						textBoxFirstName.getText(),
-						passwordField.getText(), 
-						textBoxMail.getText(),
+						new UserId(textBoxUserName.getText(), "", UserId.UserType.USER_TYPE_SEEKER),
+						new UserInformation(textBoxCreateName.getText(), textBoxMail.getText(), passwordField.getText(), textBoxFirstName.getText()),
 						LocaleInfo.getCurrentLocale().getLocaleName(),
 						new AsyncCallback<MainPageReturnCode.CreateAccountStatus>() {
-					public void onFailure(Throwable caught) {
-						// Show the RPC error message to the user
-						connectButton.setFocus(true);
-					}
+							public void onFailure(Throwable caught) {
+								// Show the RPC error message to the user
+								messageLogin("Unexpected Error", "An error occured while creating account");
+								connectButton.setFocus(true);
+							}
 
-					public void onSuccess(MainPageReturnCode.CreateAccountStatus result) {
-						//dialogBox.setText("Remote Procedure Call");
-						//serverResponseLabel.setHTML(result);
-						//dialogBox.center();
-						connectButton.setFocus(true);
-					}
-				});
+							public void onSuccess(MainPageReturnCode.CreateAccountStatus result) {
+
+								//dialogBox.setText("Remote Procedure Call");
+								//serverResponseLabel.setHTML(result);
+								//dialogBox.center();
+								switch (result)
+								{
+								case CREATE_STATUS_ALREADY_EXISTS:
+									messageLogin("Error", lang._TextCreateLoginAlreadyExists());
+									break;
+								case CREATE_STATUS_ERROR:
+									messageLogin("Unexpected Error", lang._TextCreateLoginUnexpectedError());
+									break;
+								case CREATE_STATUS_INVALID:
+									messageLogin("Unexpected Error", lang._TextCreateLoginUnexpectedError());
+									break;
+								case CREATE_STATUS_OK:
+									verticalPanelSubscribe.setVisible(!verticalPanelSubscribe.isVisible());
+									messageLogin("Success", lang._TextCreateAccountSuccess());
+									break;
+								}
+								connectButton.setFocus(true);
+							}
+						});
 			}
 		}
 
 		// Add a handler to the connect button clicker.
 		CreateAccountHandler createAccountHandler = new CreateAccountHandler();
-		lblPasEncoreInscrit.addClickHandler(createAccountHandler);
-			
-		
-		
+		btnCreateAccount.addClickHandler(createAccountHandler);
+
+
+
 		// Create a handler for the Language click button
 		class CreateLangHandler implements ClickHandler
 		{
-			
+
 			String langName;
-			
+
 			public CreateLangHandler(String _langName)
 			{			
-				 langName = _langName;
+				langName = _langName;
 			}
-			
+
 			public void onClick(ClickEvent event)
 			{				
 				System.out.println("Setting is: " + LocaleInfo.getCurrentLocale().getLocaleName());
-				
+
 				System.out.println("Click on " + langName);
 				String cookie = LocaleInfo.getLocaleCookieName();
 				com.google.gwt.user.client.Cookies.setCookie(cookie, langName);
@@ -355,8 +422,7 @@ public class MainPage implements EntryPoint {
 			}
 		}
 		imageFr.addClickHandler(new CreateLangHandler("fr"));
-		imageEn.addClickHandler(new CreateLangHandler("en"));
-		*/
+		imageEn.addClickHandler(new CreateLangHandler("en"));		
 	}
-	
+
 }

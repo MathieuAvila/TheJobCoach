@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import me.prettyprint.cassandra.serializers.CompositeSerializer;
 import me.prettyprint.cassandra.serializers.StringSerializer;
+import me.prettyprint.cassandra.service.CassandraHostConfigurator;
 import me.prettyprint.cassandra.service.ThriftCfDef;
 import me.prettyprint.cassandra.service.ThriftKsDef;
 import me.prettyprint.cassandra.service.template.ColumnFamilyTemplate;
@@ -35,19 +37,6 @@ import me.prettyprint.hector.api.query.RangeSlicesQuery;
 import me.prettyprint.hector.api.query.RangeSubSlicesQuery;
 import me.prettyprint.hector.api.query.SliceQuery;
 
-/*
-import java.nio.ByteBuffer;
-import org.apache.cassandra.thrift.Column;
-import org.apache.cassandra.thrift.ColumnParent;
-import org.apache.cassandra.thrift.KeyRange;
-import org.apache.cassandra.thrift.SlicePredicate;
-import me.prettyprint.cassandra.connection.HConnectionManager;
-import me.prettyprint.cassandra.model.QuorumAllConsistencyLevelPolicy;
-import me.prettyprint.cassandra.service.CassandraHostConfigurator;
-import me.prettyprint.cassandra.service.FailoverPolicy;
-import me.prettyprint.cassandra.service.KeyspaceService;
-import me.prettyprint.cassandra.service.KeyspaceServiceImpl;
-*/
 
 public class CassandraAccessor {
 	
@@ -62,52 +51,27 @@ public class CassandraAccessor {
 	private static final StringSerializer se = new StringSerializer();
 	private static final CompositeSerializer ce = new CompositeSerializer();
 	
+	private static String location = "localhost:9160";	
 	
-	/*		
-	private static KeyspaceService keyspaceService = null;
-	private static CassandraHostConfigurator cassandraHostConfigurator = null;
-	private static HConnectionManager connectionManager = null;
-		
-	private static CassandraHostConfigurator getCassandraHostConfigurator()
+	static public void setLocation(String _location)
 	{
-		if (cassandraHostConfigurator == null)
-		{
-			cassandraHostConfigurator = new CassandraHostConfigurator("127.0.0.1:9160");
-		}
-		return cassandraHostConfigurator;
+		location = _location;
+		myKeyspaceDefinition = null;
+		myKeyspace = null;
+		myCluster = null;
 	}
-	
-	private static HConnectionManager getHConnectionManager()
-	{
-		if (connectionManager == null)
-		{	
-			connectionManager = new HConnectionManager(CLUSTERNAME , getCassandraHostConfigurator());
-		}
-		return connectionManager;
-	}
-	
-	static public KeyspaceService getKeyspaceService()
-	{
-		if (keyspaceService == null)
-		{
-			keyspaceService = new KeyspaceServiceImpl(KEYSPACENAME, new QuorumAllConsistencyLevelPolicy(),
-					getHConnectionManager(), FailoverPolicy.ON_FAIL_TRY_ALL_AVAILABLE);
-		}
-		return keyspaceService;
-	}
-
-	*/
 	
 	static public void setCluster(String clusterName)
 	{		
-		myCluster = HFactory.getOrCreateCluster(clusterName, "localhost:9160");
+		myCluster = HFactory.getOrCreateCluster(clusterName, new CassandraHostConfigurator(location));
 	}
 
 	static public Cluster getCluster()
 	{
 		if (myCluster == null)
 		{
-			myCluster = HFactory.getOrCreateCluster(CLUSTERNAME, "localhost:9160");
+			System.out.println("Get cluster from: " + location);
+			myCluster = HFactory.getOrCreateCluster(CLUSTERNAME, location);
 		}
 		return myCluster;
 	}
@@ -460,32 +424,28 @@ public class CassandraAccessor {
 			return false;
 		}
 		return true;
-	}
+	}	
 	
-	/*
-	static public boolean getKeyRange(String CFName, String start, String end, String columnId, Set<String> result)
+	static public boolean getKeyRange(String CFName, String start, int count, Set<String> result, Vector<String> last)
 	{
-		List<ByteBuffer> colNames = new ArrayList<ByteBuffer>();
-		colNames.add(se.toByteBuffer(columnId));
-		SlicePredicate sp = new SlicePredicate();
-		sp.setColumn_names(colNames);
-		ColumnParent cp = new ColumnParent(CFName);
-		
-	    KeyRange range = new KeyRange();
-	    range.setStart_key(se.toBytes(start));
-	    range.setEnd_key(se.toBytes(end));
-	    Map<ByteBuffer, List<Column>> resultRaw = null;
-	    try
-	    {
-	    	resultRaw = getKeyspaceService().getRangeSlices(cp, sp, range);
-	    }
-	    catch (Exception e)
-	    {
-	    	e.printStackTrace();
-	    	return false;
-	    }
-	    Map<String, List<Column>> keySlices = se.fromBytesMap(resultRaw);
-	    result.addAll(keySlices.keySet());
+		RangeSlicesQuery<String, String, String> rangeSlicesQuery =
+                HFactory.createRangeSlicesQuery(CassandraAccessor.getKeyspace(), se, se, se);
+		rangeSlicesQuery.setColumnFamily(CFName);
+        rangeSlicesQuery.setKeys(start, "");
+        rangeSlicesQuery.setRange(start, "", false, count);        
+        rangeSlicesQuery.setRowCount(count);
+        
+        QueryResult<OrderedRows<String, String, String>> resultQuery = rangeSlicesQuery.execute();
+        OrderedRows<String, String, String> orderedRows = resultQuery.get();
+                
+        Row<String,String,String> lastRow = orderedRows.peekLast();
+
+        for (Row<String, String, String> r : orderedRows)
+        {
+            result.add(r.getKey());
+        }
+        if (lastRow != null) last.add(lastRow.getKey());
+        
 	    return true;
-	}*/
+	}
 }

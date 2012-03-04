@@ -1,8 +1,10 @@
 package com.TheJobCoach.webapp.thejobcoach.client;
 
 import com.TheJobCoach.webapp.mainpage.client.MainPage;
+import com.TheJobCoach.webapp.mainpage.client.Validate;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -22,7 +24,6 @@ public class TheJobCoach implements EntryPoint {
 	
 	public void onModuleLoad()
 	{
-		System.out.println("param toto =" + com.google.gwt.user.client.Window.Location.getParameter("toto"));
 		LocaleInfo.getLocaleCookieName();
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		if ((locale == null) || (locale.equals("default")))
@@ -36,117 +37,31 @@ public class TheJobCoach implements EntryPoint {
 				System.out.println("Applied locale fr");
 			}
 		}
-	
+		
+		// Check if we are validating an account
+		String action = com.google.gwt.user.client.Window.Location.getParameter("action");
+		if (action != null)			
+		{	
+			System.out.println("Action is: " + action);
+			if (action.equals("validate"))
+			{					
+				String userName = com.google.gwt.user.client.Window.Location.getParameter("username");
+				String token = com.google.gwt.user.client.Window.Location.getParameter("token");				
+				System.out.println("Trying to validate user: " + userName + " with token " + token);
+				
+				Validate validate = new Validate();
+				validate.setRootPanel(RootPanel.get("content"));
+				validate.onModuleLoad();
+				//RootPanel.get("nameFieldContainer").add(main);
+				System.out.println("Validate an account...");
+				return;
+			}
+		}
+
 		MainPage main = new MainPage();
 		main.onModuleLoad();
 		//RootPanel.get("nameFieldContainer").add(main);
 		System.out.println("Load TheJobCoach...");
 		return;
-		
-		/*
-		final Button sendButton = new Button("Send");
-		final TextBox nameField = new TextBox();
-		nameField.setText("GWT User");
-		final Label errorLabel = new Label();
-
-		// We can add style names to widgets
-		sendButton.addStyleName("sendButton");
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		RootPanel.get("nameFieldContainer").add(nameField);
-		RootPanel.get("sendButtonContainer").add(sendButton);
-		RootPanel.get("errorLabelContainer").add(errorLabel);
-
-		// Focus the cursor on the name field when the app loads
-		nameField.setFocus(true);
-		nameField.selectAll();
-
-		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setText("Remote Procedure Call");
-		dialogBox.setAnimationEnabled(true);
-		final Button closeButton = new Button("Close");
-		// We can set the id of a widget by accessing its Element
-		closeButton.getElement().setId("closeButton");
-		final Label textToServerLabel = new Label();
-		final HTML serverResponseLabel = new HTML();
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
-		dialogVPanel.add(textToServerLabel);
-		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
-		dialogVPanel.add(serverResponseLabel);
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
-
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				dialogBox.hide();
-				sendButton.setEnabled(true);
-				sendButton.setFocus(true);
-			}
-		});
-
-		// Create a handler for the sendButton and nameField
-		class MyHandler implements ClickHandler, KeyUpHandler {
-			
-			public void onClick(ClickEvent event) {
-				sendNameToServer();
-			}
-
-			
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendNameToServer();
-				}
-			}
-
-			
-			private void sendNameToServer() {
-				// First, we validate the input.
-				errorLabel.setText("");
-				String textToServer = nameField.getText();
-				if (!FieldVerifier.isValidName(textToServer)) {
-					errorLabel.setText("Please enter at least four characters");
-					return;
-				}
-
-				// Then, we send the input to the server.
-				sendButton.setEnabled(false);
-				textToServerLabel.setText(textToServer);
-				serverResponseLabel.setText("");
-				greetingService.greetServer(textToServer,
-						new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								dialogBox
-										.setText("Remote Procedure Call - Failure");
-								serverResponseLabel
-										.addStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(SERVER_ERROR);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-
-							public void onSuccess(String result) {
-								dialogBox.setText("Remote Procedure Call");
-								serverResponseLabel
-										.removeStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(result);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-						});
-			}
-		}
-
-		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
-		sendButton.addClickHandler(handler);
-		nameField.addKeyUpHandler(handler);
-		*/
 	}
 }

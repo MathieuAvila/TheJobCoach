@@ -2,7 +2,11 @@ package com.TheJobCoach.userdata;
 
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.Vector;
 
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.MailerFactory;
@@ -10,6 +14,7 @@ import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
+import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 
@@ -21,9 +26,9 @@ import me.prettyprint.hector.api.factory.HFactory;
 public class Account implements AccountInterface {
 
 	static ColumnFamilyDefinition cfDef = null;
-	
+
 	static ColumnFamilyDefinition cfDefToken = null;
-		
+
 	final static String COLUMN_FAMILY_NAME_ACCOUNT = "account";
 	final static String COLUMN_FAMILY_NAME_TOKEN = "token";
 
@@ -69,7 +74,7 @@ public class Account implements AccountInterface {
 		}
 		return "";
 	}
-	
+
 	protected UserId.UserType stringToUserType(String type)
 	{
 		if (type.equals("seeker"))
@@ -80,53 +85,61 @@ public class Account implements AccountInterface {
 			return UserId.UserType.USER_TYPE_ADMIN;
 		return UserId.UserType.USER_TYPE_SEEKER;
 	}
-	
-	public CreateAccountStatus createAccountWithToken(String token, String userName, String name, String firstName, String email, String password, String langStr, UserId.UserType type)
+
+	public boolean updateUserInformation(UserId id, UserInformation info)
 	{
-		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, 
+		return CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
 				(new ShortMap())
-				.add("email", email)
-				.add("name", name)
-				.add("password", password)
-				.add("firstname", firstName)
+				.add("email", info.email)
+				.add("name", info.name)
+				.add("password", info.password)
+				.add("firstname", info.firstName)
 				.add("date", new Date())
-				.add("token", token)
-				.add("type", userTypeToString(type))
+				.add("token", id.token)
+				.add("type", userTypeToString(id.type))
 				.get());
-		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
-		result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_TOKEN, token, 
+	}
+
+	public CreateAccountStatus createAccountWithToken(UserId id, UserInformation info, String langStr)
+	{
+		if (existsAccount(id.userName))
+			return CreateAccountStatus.CREATE_STATUS_ALREADY_EXISTS;
+		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_TOKEN, id.token, 
 				(new ShortMap())
-				.add("username", userName)
+				.add("username", id.userName)
 				.add("validated", false)
 				.get());
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
-		String body = Lang._TextBody(firstName, com.TheJobCoach.util.SiteDef.getAddress(), userName, token, langStr);
-		MailerFactory.getMailer().sendEmail(email, Lang._TextSubject(langStr), body, "noreply@thejobcoach.fr");
+		result = updateUserInformation(id, info);
+		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
+		String body = Lang._TextBody(info.firstName, com.TheJobCoach.util.SiteDef.getAddress(), id.userName, id.token, langStr);
+		MailerFactory.getMailer().sendEmail(info.email, Lang._TextSubject(langStr), body, "noreply@thejobcoach.fr");
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
-	
-	public CreateAccountStatus createAccount(String userName, String name, String firstName, String email, String password, String langStr, UserId.UserType type)
+
+	public CreateAccountStatus createAccount(UserId id, UserInformation info, String langStr)
 	{
 		UUID uuid = UUID.randomUUID();
-		String token = userName + "_" + uuid.toString();
-		return createAccountWithToken(token, userName, name, firstName, email, password, langStr, type);
+		String token = id.userName + "_" + uuid.toString();
+		id.token = token;
+		return createAccountWithToken(id, info, langStr);
 	}
-	
+
 	public ValidateAccountStatus validateAccount(String userName, String token)
 	{
 		String userNameDB = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_TOKEN, token, "username");
 		if ((userName == null) || (userNameDB == null) || (!userNameDB.equals(userName)))
 			return ValidateAccountStatus.VALIDATE_STATUS_UNKNOWN;
 		boolean result = 
-		 CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_TOKEN, token,
-				(new ShortMap())
-				.add("validated", true)
-				.add("date", new Date())
-				.get());
+				CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_TOKEN, token,
+						(new ShortMap())
+						.add("validated", true)
+						.add("date", new Date())
+						.get());
 		if (!result) return ValidateAccountStatus.VALIDATE_STATUS_ERROR;
 		return ValidateAccountStatus.VALIDATE_STATUS_OK;
 	}
-	
+
 	public MainPageReturnLogin loginAccount(String userName, String password)
 	{
 		System.out.println("Try to login as: " + userName + " with password: " + password);
@@ -147,4 +160,73 @@ public class Account implements AccountInterface {
 		String typeStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "type");
 		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, new UserId(userName, token, stringToUserType(typeStr)));
 	}
+
+	public Vector<UserId> listUser()
+	{		
+		Set<String> resultRows = new HashSet<String>();
+		String last = "";
+		do
+		{
+			resultRows = new HashSet<String>();
+			Vector<String> lastRow = new Vector<String>();
+			CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_TOKEN, last, 3, resultRows, lastRow);
+			if (lastRow.size() != 0)
+				last = lastRow.get(0);
+			for (String k: resultRows)
+			{
+				System.out.println("FOUND USER NAME: " + k);
+				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_TOKEN, k);			
+				if (accountTable.containsKey("username"))
+				{
+					String userName = accountTable.get("username");
+					Map<String, String> userNameDB = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);			
+					System.out.println("USER: " + userNameDB + "\nACCOUNT_TABLE: " + accountTable);					
+				}
+			}
+		}
+		while (resultRows.size() > 1);
+		return null;
+	}
+
+	public void purgeAccount()
+	{
+		Set<String> resultRows = new HashSet<String>();
+		String last = "";
+		do
+		{
+			resultRows = new HashSet<String>();
+			Vector<String> lastRow = new Vector<String>();
+			CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 3, resultRows, lastRow);
+			if (lastRow.size() != 0)
+				last = lastRow.get(0);
+			for (String k: resultRows)
+			{
+				System.out.println("CHECK USER NAME: " + k);
+				Map<String, String> userNameDB = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_TOKEN, k);
+				if (userNameDB.containsKey("validated") || userNameDB.containsKey("username") || userNameDB.containsKey("date"))
+				{
+					if (!userNameDB.containsKey("validated") || !userNameDB.containsKey("username") || !userNameDB.containsKey("date"))
+					{
+						// Delete this key.
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_TOKEN, k, "validated"));
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_TOKEN, k, "username"));
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_TOKEN, k, "date"));
+						System.out.println(CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_TOKEN, k));
+
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "token"));
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "email"));
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "name"));
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "password"));
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "firstname"));
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "date"));
+						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "type"));
+						System.out.println(CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, k));
+
+						System.out.println("DELETED TOKEN: " + k);
+					}
+				}
+			}
+		} while (resultRows.size() > 1);
+	}
+
 }
