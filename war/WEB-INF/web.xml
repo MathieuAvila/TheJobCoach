@@ -21,13 +21,11 @@
     <servlet-class>com.TheJobCoach.webapp.userpage.server.UserServiceImpl</servlet-class>
   </servlet>
 
-   <servlet> 
-	 <display-name>UploadFileServlet</display-name> 
-         <servlet-name>UploadFileServlet</servlet-name> 
-		 <servlet-class>com.TheJobCoach.webapp.userpage.server.UploadFileServlet</servlet-class> 
-   </servlet> 
+  <servlet>
+    <servlet-name>adminServlet</servlet-name>
+    <servlet-class>com.TheJobCoach.webapp.adminpage.server.AdminServiceImpl</servlet-class>
+  </servlet>
 
-  
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
     <url-pattern>/thejobcoach/greet</url-pattern>
@@ -42,16 +40,27 @@
     <servlet-name>userServlet</servlet-name>
     <url-pattern>/thejobcoach/user</url-pattern>
   </servlet-mapping>
-     
-   <servlet-mapping> 
-		<servlet-name>UploadFileServlet</servlet-name> 
-		<url-pattern>/thejobcoach/UploadFileServlet</url-pattern> 
-   </servlet-mapping>
-     
-   
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>TheJobCoach.html</welcome-file>
-  </welcome-file-list>
+
+  <servlet-mapping>
+    <servlet-name>adminServlet</servlet-name>
+    <url-pattern>/thejobcoach/admin</url-pattern>
+  </servlet-mapping>
+
+
+
+	<servlet>
+		<servlet-name>uploadFileServlet</servlet-name>
+		<servlet-class>com.TheJobCoach.webapp.userpage.server.UploadFileServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>uploadFileServlet</servlet-name>
+		<url-pattern>/thejobcoach/UploadServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>TheJobCoach.html</welcome-file>
+	</welcome-file-list>
 
 </web-app>

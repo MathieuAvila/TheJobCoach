@@ -120,4 +120,8 @@ public interface Lang extends Constants {
 	String lblDownloadFile_text();
 	String nlnhprlnkDownloadFile_text();
 	String button_text();
+	String simplePanelCenter_width();
+	String simplePanelCenter_height();
+	String verticalPanel_2_width();
+	String simplePanel_6_width();
 }

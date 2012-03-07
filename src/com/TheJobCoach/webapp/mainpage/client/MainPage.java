@@ -79,7 +79,20 @@ public class MainPage implements EntryPoint {
 		rootPanel.setStyleName("mainpage-content");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 		rootPanel.setSize("100%", "100%");
-
+		
+		/*
+		AdminPage cP = new AdminPage();
+		cP.setUser(new UserId("admin", "mytokenadmin", UserId.UserType.USER_TYPE_ADMIN));
+		cP.onModuleLoad();
+		return;
+		*/
+		/*
+		UserPage cP = new UserPage();
+		cP.setUser(new UserId("mathieu", "mytokenuser", UserId.UserType.USER_TYPE_SEEKER));
+		cP.onModuleLoad();
+		return;
+		*/
+		
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel.setStyleName("mainpage-content");
@@ -423,6 +436,7 @@ public class MainPage implements EntryPoint {
 		}
 		imageFr.addClickHandler(new CreateLangHandler("fr"));
 		imageEn.addClickHandler(new CreateLangHandler("en"));		
+		
 	}
 
 }

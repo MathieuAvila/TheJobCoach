@@ -145,7 +145,8 @@ public class UserPage implements EntryPoint {
 		
 		VerticalPanel verticalPanel_2 = new VerticalPanel();
 		horizontalPanel_1.add(verticalPanel_2);
-		verticalPanel_2.setHeight("100%");
+		horizontalPanel_1.setCellWidth(verticalPanel_2, lang.verticalPanel_2_width());
+		verticalPanel_2.setSize("300px", "100%");
 		
 		StackPanel stackPanelAccount = new StackPanel();
 		verticalPanel_2.add(stackPanelAccount);
@@ -294,11 +295,15 @@ public class UserPage implements EntryPoint {
 		setLabelMenu(label_News, "news");
 		verticalPanelShares.add(label_News);
 		
-		HTMLPanel panelCenter = new HTMLPanel("<div id=\"centercontent\">");
-		horizontalPanel_1.add(panelCenter);
-		panelCenter.setSize("100%", "100%");
+		SimplePanel simplePanel_6 = new SimplePanel();
+		horizontalPanel_1.add(simplePanel_6);
+		simplePanel_6.setWidth("50px");
+		horizontalPanel_1.setCellWidth(simplePanel_6, lang.simplePanel_6_width());
 		
 		horizontalPanel_1.add(simplePanelCenter);
+		horizontalPanel_1.setCellHeight(simplePanelCenter, lang.simplePanelCenter_height());
+		horizontalPanel_1.setCellWidth(simplePanelCenter, lang.simplePanelCenter_width());
+		simplePanelCenter.setSize("100%", "100%");
 		
 		HTMLPanel panelAds = new HTMLPanel("<div id=\"adframe\">");
 		horizontalPanel_1.add(panelAds);

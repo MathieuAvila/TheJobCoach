@@ -1,21 +1,27 @@
 package com.TheJobCoach.userdata;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 
 import com.TheJobCoach.util.CassandraAccessor;
+import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.ShortMap;
+import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
+import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
@@ -162,7 +168,8 @@ public class Account implements AccountInterface {
 	}
 
 	public Vector<UserId> listUser()
-	{		
+	{	
+		Vector<UserId> result = new Vector<UserId>();	
 		Set<String> resultRows = new HashSet<String>();
 		String last = "";
 		do
@@ -174,20 +181,48 @@ public class Account implements AccountInterface {
 				last = lastRow.get(0);
 			for (String k: resultRows)
 			{
-				System.out.println("FOUND USER NAME: " + k);
+				//System.out.println("FOUND USER NAME: " + k);
 				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_TOKEN, k);			
 				if (accountTable.containsKey("username"))
 				{
 					String userName = accountTable.get("username");
 					Map<String, String> userNameDB = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);			
-					System.out.println("USER: " + userNameDB + "\nACCOUNT_TABLE: " + accountTable);					
+					//System.out.println("USER: " + userNameDB + "\nACCOUNT_TABLE: " + accountTable);
+					UserId newUserId = new UserId(userName, k, stringToUserType(userNameDB.get("type")));
+					result.add(newUserId);
+					//System.out.println("USER: " + newUserId.userName + " TOKEN: " + newUserId.token + " TYPE:" + userTypeToString(newUserId.type));				
 				}
 			}
 		}
 		while (resultRows.size() > 1);
-		return null;
+		return result;
 	}
 
+	public UserReport getUserReport(UserId id)
+	{		
+		Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
+		Map<String, String> resultToken = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_TOKEN, id.token);
+		return new UserReport(				
+				id.userName, 
+				id.token, 
+				stringToUserType(result.get("type")),
+				Convertor.toDate(result.get("date")),
+				Convertor.toDate(resultToken.get("date")), 
+				ShortMap.getBoolean(resultToken.get("validated"))
+				);
+	}
+	
+	public List<UserReport> getUserReportList()
+	{
+		List<UserReport> report = new ArrayList<UserReport>();
+		Vector<UserId> userList = listUser();
+		for (UserId uId: userList)
+		{
+			report.add(getUserReport(uId));
+		}
+		return report;
+	}
+	
 	public void purgeAccount()
 	{
 		Set<String> resultRows = new HashSet<String>();

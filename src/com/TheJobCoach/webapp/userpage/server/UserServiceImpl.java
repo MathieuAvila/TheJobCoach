@@ -1,11 +1,16 @@
 package com.TheJobCoach.webapp.userpage.server;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import com.TheJobCoach.userdata.UserJobSiteManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -17,6 +22,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class UserServiceImpl extends RemoteServiceServlet implements UserService
 {
 	static private UserJobSiteManager jobSiteManager = new UserJobSiteManager();
+	static com.TheJobCoach.admindata.News news = new com.TheJobCoach.admindata.News();
 
 	@Override
 	public List<String> getUserSiteList(UserId id) throws CassandraException 
@@ -84,4 +90,20 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException
+	{
+		Date first = new Date();
+		Calendar date = Calendar.getInstance();		
+		date.add(Calendar.MONTH, -3);
+		first = date.getTime();
+		
+		date = Calendar.getInstance();		
+		date.add(Calendar.MONTH, 1);
+		Date end = date.getTime();
+		
+		return news.getNews(first, end);
+	}
+
 }

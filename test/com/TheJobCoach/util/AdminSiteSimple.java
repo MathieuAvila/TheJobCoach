@@ -43,7 +43,5 @@ public class AdminSiteSimple {
 		MainPageReturnLogin token = account.loginAccount("avila", "lvveumda");
 		System.out.println("Login account returned: " + token.getLoginStatus() + " with token: " + token.id.token + " with type : " + token.id.type);
 		}
-	
 	}
-	
 }

@@ -3,9 +3,11 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -32,6 +34,7 @@ import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTML;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -39,7 +42,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 public class ContentNews implements EntryPoint {
 
 	UserId user;
-	
+	HTML htmlNews = new HTML("News", true);
+
 	public void setUserParameters(UserId _user)
 	{
 		user = _user;
@@ -52,6 +56,36 @@ public class ContentNews implements EntryPoint {
 	public void setRootPanel(Panel panel)
 	{
 		rootPanel = panel;
+	}
+
+	private void getNews()
+	{
+		AsyncCallback<Vector<NewsInformation>> callback = new AsyncCallback<Vector<NewsInformation>>()	{
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				Window.alert(caught.getMessage());
+			}
+			@Override
+			public void onSuccess(Vector<NewsInformation> result)
+			{
+				System.out.println(result);
+				String html = "";
+				for (NewsInformation news: result)
+				{
+					System.out.println(news.created);
+					int year = news.created.getYear()+1900;
+					html += "<hr/><h2>" + news.created.getDay() + "/" + news.created.getMonth() + "/" + year + " - " + news.title + "</h2></br>" + news.text + "</br></br></br>";
+				}
+				htmlNews.setHTML(html);
+			}
+		};
+		try {
+			userService.getNews(user, callback);
+		} catch (CassandraException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -72,8 +106,12 @@ public class ContentNews implements EntryPoint {
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "100%");
 		rootPanel.add(simplePanelCenter);
-		
-		Label lblLatestNewsFrom = new Label("Latest News from The Job Coach");
-		simplePanelCenter.add(lblLatestNewsFrom);
+
+		simplePanelCenter.add(htmlNews);
+		simplePanelCenter.setCellWidth(htmlNews, "100%");
+		simplePanelCenter.setCellHeight(htmlNews, "100%");
+		htmlNews.setSize("100%", "100%");
+
+		getNews();
 	}
 }
