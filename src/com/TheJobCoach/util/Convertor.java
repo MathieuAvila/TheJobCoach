@@ -20,7 +20,6 @@ public class Convertor {
 	{
 		if (val != null)
 		{			
-			@SuppressWarnings("deprecation")
 			Date d = new Date(new Long(val));
 			return d;
 		}
@@ -38,4 +37,17 @@ public class Convertor {
 		return def;
 	}
 
+	static public int toInt(String string) {
+		if ("".equals(string))
+		{
+			return 0;
+		}
+		return Integer.decode(string);
+	}
+	
+	static public boolean toBoolean(String v)
+	{
+		return "1".equals(v);
+	}
+	
 }

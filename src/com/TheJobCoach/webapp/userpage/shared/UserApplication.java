@@ -25,15 +25,17 @@ public class UserApplication implements Serializable {
 	public Date lastUpdate;
 	public Vector<String> logEntryList;
 	public UserApplicationStatus status;
-	
-	public UserApplication(String _ID, Date _lastUpdate, Vector<String> _logEntryList, UserApplicationStatus _status)
+
+	public UserApplication(String iD, Date lastUpdate,
+			Vector<String> logEntryList, UserApplicationStatus status) 
 	{
-		ID = _ID;
-		lastUpdate = _lastUpdate;
-		logEntryList = _logEntryList;
-		status = _status;
+		super();
+		ID = iD;
+		this.lastUpdate = lastUpdate;
+		this.logEntryList = logEntryList;
+		this.status = status;
 	}
-	
+
 	public UserApplication()
 	{
 	}

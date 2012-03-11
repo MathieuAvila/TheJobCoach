@@ -77,6 +77,7 @@ public class UserPage implements EntryPoint {
 				!menu.equals("mydocuments")
 				)
 		{
+			label.setStyleName("userpage-label-blocked");
 			return;
 		}
 		label.addMouseOutHandler(new MouseOutHandler() {
@@ -215,7 +216,7 @@ public class UserPage implements EntryPoint {
 		stackPanelMyApplication.add(verticalPanelMyApplication, lang._TextMyApplications(), false);
 		verticalPanelMyApplication.setSize("100%", "100%");
 		
-		final Label label_Researches = new Label(lang._TextMyResearches());
+		final Label label_Researches = new Label(lang._TextMyOpportunities());
 		setLabelMenu(label_Researches, "research");
 		verticalPanelMyApplication.add(label_Researches);
 		

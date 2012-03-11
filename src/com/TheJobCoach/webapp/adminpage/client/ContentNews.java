@@ -95,7 +95,11 @@ public class ContentNews implements EntryPoint {
 				cellTable.redraw();
 			}
 		};
-		adminService.getNewsInformationList(user, new Date(), new Date(), callback);
+		Date start = new Date();
+		start.setYear(start.getYear() - 1);
+		Date end = new Date();
+		end.setYear(end.getYear() + 1);
+		adminService.getNewsInformationList(user, start, end, callback);
 	}
 
 	String newsId = "";

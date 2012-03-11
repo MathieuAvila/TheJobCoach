@@ -39,7 +39,7 @@ public class TestNews
 	public void testPurge()
 	{
 		start = getDate(1960, 1, 1);
-		end = getDate(1960, 4, 1);
+		end = getDate(1960, 10, 1);
 
 		Vector<NewsInformation> result = null;
 		try {
@@ -127,4 +127,5 @@ public class TestNews
 		}			
 		assertEquals(3, result.size());
 	}
+	
 }

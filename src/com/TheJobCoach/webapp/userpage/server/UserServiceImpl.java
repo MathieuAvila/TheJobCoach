@@ -94,16 +94,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException
 	{
-		Date first = new Date();
-		Calendar date = Calendar.getInstance();		
-		date.add(Calendar.MONTH, -3);
-		first = date.getTime();
-		
-		date = Calendar.getInstance();		
-		date.add(Calendar.MONTH, 1);
-		Date end = date.getTime();
-		
-		return news.getNews(first, end);
+		return news.getLatestNews();
 	}
 
 }

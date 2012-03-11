@@ -2,6 +2,7 @@ package com.TheJobCoach.admindata;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -137,5 +138,22 @@ public class News {
 		while ((startYear != endYear) || (startMonth != endMonth));
 		return returnResult;		
 	}
-
+	
+	public Vector<NewsInformation> getLatestNews() throws CassandraException
+	{
+		Date first = new Date();
+		Calendar date = Calendar.getInstance();		
+		date.add(Calendar.MONTH, -3);
+		first = date.getTime();
+		
+		date = Calendar.getInstance();		
+		date.add(Calendar.MONTH, 12);
+		date.add(Calendar.DAY_OF_MONTH, 30);
+		Date end = date.getTime();
+		
+		Vector<NewsInformation> result = getNews(first, end);
+		while (result.size() > 10)
+			result.remove(10);
+		return result;
+	}
 }

@@ -75,7 +75,8 @@ public class ContentNews implements EntryPoint {
 				{
 					System.out.println(news.created);
 					int year = news.created.getYear()+1900;
-					html += "<hr/><h2>" + news.created.getDay() + "/" + news.created.getMonth() + "/" + year + " - " + news.title + "</h2></br>" + news.text + "</br></br></br>";
+					int month = news.created.getMonth() + 1;
+					html += "<hr/><h2>" + news.created.getDate() + "/" + month + "/" + year + " - " + news.title + "</h2></br>" + news.text + "</br></br></br>";
 				}
 				htmlNews.setHTML(html);
 			}

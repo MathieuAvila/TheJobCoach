@@ -31,6 +31,12 @@ public class ShortMap {
 		return this;
 	}
 	
+	public ShortMap add(String k, int v)
+	{
+		map.put(k, Integer.toString(v));		
+		return this;
+	}
+	
 	public ShortMap add(String k, Date v)
 	{
 		if (v != null)

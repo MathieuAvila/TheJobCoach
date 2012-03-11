@@ -35,7 +35,7 @@ public interface Lang extends Constants {
 	String _TextMyApplications();
 
 	@Key("myresearches")
-	String _TextMyResearches();
+	String _TextMyOpportunities();
 
 	@Key("researchresults")
 	String _TextSearchResults();

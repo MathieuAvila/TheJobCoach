@@ -70,8 +70,7 @@ public class MainPage implements EntryPoint {
 	public void onModuleLoad()
 	{		
 		final Lang lang = GWT.create(Lang.class);
-		System.out.println("Locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
+		
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("content");
@@ -86,12 +85,12 @@ public class MainPage implements EntryPoint {
 		cP.onModuleLoad();
 		return;
 		*/
-		/*
+		
 		UserPage cP = new UserPage();
 		cP.setUser(new UserId("mathieu", "mytokenuser", UserId.UserType.USER_TYPE_SEEKER));
 		cP.onModuleLoad();
 		return;
-		*/
+		/*
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -436,7 +435,7 @@ public class MainPage implements EntryPoint {
 		}
 		imageFr.addClickHandler(new CreateLangHandler("fr"));
 		imageEn.addClickHandler(new CreateLangHandler("en"));		
-		
+		*/
 	}
 
 }

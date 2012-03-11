@@ -15,7 +15,7 @@ public class AdminSiteSimple {
 	@Test
 	public void testCreateAccount()
 	{
-		//CassandraAccessor.setLocation("192.168.0.50:9160");
+		CassandraAccessor.setLocation("192.168.0.50:9160");
 		
 		Account account = new Account();
 		/*
@@ -25,7 +25,7 @@ public class AdminSiteSimple {
 		{
 		CreateAccountStatus status = account.createAccountWithToken(
 				new UserId("admin","mytokenadmin", UserType.USER_TYPE_ADMIN),
-				new UserInformation("nom", "prenom", "toto@toto.com", "lvveumda"), "en");
+				new UserInformation("nom", "prenom", "lvveumda", "toto@toto.com"), "en");
 		System.out.println("Created account returned: " + status.toString());
 		ValidateAccountStatus validate = account.validateAccount("admin", "mytokenadmin");
 		System.out.println("Validate account returned: " + validate.toString());
@@ -36,7 +36,7 @@ public class AdminSiteSimple {
 		{
 		CreateAccountStatus status = account.createAccountWithToken(
 				new UserId("avila","mytokenuser", UserType.USER_TYPE_SEEKER),
-				new UserInformation("nom", "prenom", "toto@toto.com", "lvveumda"), "en");
+				new UserInformation("nom", "prenom", "lvveumda", "toto@toto.com"), "en");
 		System.out.println("Created account returned: " + status.toString());
 		ValidateAccountStatus validate = account.validateAccount("avila", "mytokenuser");
 		System.out.println("Validate account returned: " + validate.toString());
