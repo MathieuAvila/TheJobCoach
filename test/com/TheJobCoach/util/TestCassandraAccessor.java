@@ -18,6 +18,7 @@ import me.prettyprint.hector.api.factory.HFactory;
 import org.junit.Test;
 
 import com.TheJobCoach.util.CassandraAccessor.CompositeColumnEntry;
+import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 
 public class TestCassandraAccessor {
 	
@@ -40,7 +41,7 @@ public class TestCassandraAccessor {
 	}
 
 	@Test
-	public void testUpdateColumn() {
+	public void testUpdateColumn() throws CassandraException {
 		ColumnFamilyDefinition cfDef = HFactory.createColumnFamilyDefinition(
 				CassandraAccessor.KEYSPACENAME,                              
 				"TestColumnFamily", 
@@ -71,7 +72,7 @@ public class TestCassandraAccessor {
 	}
 
 	@Test
-	public void testDeleteRow() 
+	public void testDeleteRow() throws CassandraException 
 	{
 		ColumnFamilyDefinition cfDef = HFactory.createColumnFamilyDefinition(
 				CassandraAccessor.KEYSPACENAME,                              
@@ -98,7 +99,13 @@ public class TestCassandraAccessor {
 	@Test
 	public void testGetRow()
 	{
-		Map<String, String> map = CassandraAccessor.getRow("TestColumnFamily", "myobject");
+		Map<String, String> map = null;
+		try {
+			map = CassandraAccessor.getRow("TestColumnFamily", "myobject");
+		} catch (CassandraException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(map.size());
 		assertEquals(map.size(), 3);
 		assertEquals(map.get("k1"), "v11");
@@ -106,102 +113,7 @@ public class TestCassandraAccessor {
 		assertEquals(map.get("k3"), "v31");
 		assertNull(map.get("toto"));
 	}
-	
-	@Test 
-	public void testCreateSuperColumnFamily()
-	{
-		CassandraAccessor.deleteColumnFamily("TESTSCF");
-		boolean result = CassandraAccessor.createSuperColumnFamily("TESTSCF", ComparatorType.ASCIITYPE);
-		assertEquals(result, true);
-		result = CassandraAccessor.deleteColumnFamily("TESTSCF");	
-		assertEquals(result, true);
-		CassandraAccessor.createSuperColumnFamily("TESTSCF", ComparatorType.ASCIITYPE);
-		assertEquals(result, true);
-	}
-	
-	@Test 
-	public void testUpdateSuperColumn()
-	{
-		assertEquals(true, CassandraAccessor.updateSuperColumn("TESTSCF", "SC1", "SUB1", (new ShortMap()).add("k11", "v11").add("k2", "v21").add("k3", "v31").get()));
-		assertEquals(true, CassandraAccessor.updateSuperColumn("TESTSCF", "SC1", "SUB2", (new ShortMap()).add("k21", "v11").add("k2", "v21").add("k3", "v31").get()));
-		assertEquals(true, CassandraAccessor.updateSuperColumn("TESTSCF", "SC1", "SUB3", (new ShortMap()).add("k31", "v11").add("k2", "v21").add("k3", "v31").get()));
-		assertEquals(true, CassandraAccessor.updateSuperColumn("TESTSCF", "SC2", "SUB1", (new ShortMap()).add("k1", "v11").add("k2", "v21").add("k3", "v31").get()));
-		assertEquals(true, CassandraAccessor.updateSuperColumn("TESTSCF", "SC2", "SUB2", (new ShortMap()).add("k1", "v11").add("k2", "v21").add("k3", "v31").get()));
-	}
-	
-	
-	@Test 
-	public void testGetColumnsRange()
-	{
-		Map<String, Map<String, String>> result = new HashMap<String, Map<String, String>>();
-		boolean resultExec = CassandraAccessor.getColumnsRange("TESTSCF", "SC1", "SUB1", "SUB3", result);
-		assertEquals(true, resultExec);
-	}	
-	/*
-	@Test
-	public void testRangeSubSlicesQuery()
-	{
-		Mutator<String> m = HFactory.createMutator(CassandraAccessor.getKeyspace(), se);
-		Keyspace ko = CassandraAccessor.getKeyspace();
-		int rowCount = 5;
-		int scCount = 5;
-		String scPrefix = "SCPREFIX";
-		String rowPrefix = "ROWPREFIX";
-		String cf = "TESTSC";
-
-		try
-		{
-			CassandraAccessor.createSuperColumnFamily(cf, ComparatorType.ASCIITYPE);
-		}
-		catch(Exception e) 
-		{} // Assume it already exists.
-				
-		for (int i = 0; i < rowCount; ++i) {
-			for (int j = 0; j < scCount; ++j) {
-				@SuppressWarnings("unchecked")
-				HSuperColumn<String, String, String> sc = HFactory.createSuperColumn(
-						scPrefix + j,
-						Arrays.asList(HFactory.createColumn("c0" + i + j, "v0" + i + j, se, se),
-								HFactory.createColumn("c1" + 1 + j, "v1" + i + j, se, se)), se, se, se);
-				m.addInsertion(rowPrefix + i, cf, sc);
-			}
-		}
-		try
-		{
-			m.execute();
-		}
-		catch(Exception e) 
-		{
-			System.out.println("Error creating SC");
-			e.printStackTrace();
-		} // Assume it already exists.
-
-	    // get value
-	    RangeSubSlicesQuery<String, String,String, String> q = HFactory.createRangeSubSlicesQuery(ko, se, se, se, se);
-	    q.setColumnFamily(cf);
-	    q.setKeys("ROWPREFIX3", "ROWPREFIX5");
-	    // try with column name first
-	    q.setSuperColumn("SCPREFIX1");
-	    q.setColumnNames("c041", "c111", "c031");
-	    QueryResult<OrderedRows<String, String, String>> r = q.execute();
-	    assertNotNull(r);
-	    OrderedRows<String, String, String> rows = r.get();
-	    assertNotNull(rows);
-	    assertEquals(2, rows.getCount());
-	    Row<String, String, String> row = rows.getList().get(0);
-	    assertNotNull(row);
-	    assertEquals("ROWPREFIX3", row.getKey());
-	    ColumnSlice<String, String> slice = row.getColumnSlice();
-	    System.out.println(row.toString());
-	    System.out.println(slice.toString());
-	    System.out.println(rows.toString());
-	    assertNotNull(slice);
-	    // Test slice.getColumnByName
-	    assertEquals("v031", slice.getColumnByName("c031").getValue());
-	    assertEquals("v131", slice.getColumnByName("c111").getValue());
-	    assertNull(slice.getColumnByName("c033"));
-	  }
-*/
+		
 	/*
 	@Test 
 	public void testCompositeColumnFamily()

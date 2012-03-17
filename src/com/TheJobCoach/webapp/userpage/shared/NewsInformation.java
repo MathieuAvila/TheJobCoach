@@ -2,7 +2,6 @@ package com.TheJobCoach.webapp.userpage.shared;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Vector;
 
 public class NewsInformation implements Serializable {
 

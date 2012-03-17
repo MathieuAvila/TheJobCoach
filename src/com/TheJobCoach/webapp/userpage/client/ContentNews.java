@@ -1,39 +1,17 @@
 package com.TheJobCoach.webapp.userpage.client;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
-import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
-import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.datepicker.client.DatePicker;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 /**
@@ -66,6 +44,7 @@ public class ContentNews implements EntryPoint {
 			{
 				Window.alert(caught.getMessage());
 			}
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onSuccess(Vector<NewsInformation> result)
 			{
@@ -95,7 +74,6 @@ public class ContentNews implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{		
-		Lang lang = GWT.create(Lang.class);
 		System.out.println("Load News, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 
 		// Add the nameField and sendButton to the RootPanel

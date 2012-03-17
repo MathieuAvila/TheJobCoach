@@ -1,23 +1,18 @@
 package com.TheJobCoach.userdata;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import me.prettyprint.hector.api.beans.Composite;
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.factory.HFactory;
 
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
-import com.TheJobCoach.util.EasyComposite;
 import com.TheJobCoach.util.ShortMap;
-import com.TheJobCoach.util.CassandraAccessor.CompositeColumnEntry;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
-import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 
 public class UserOpportunityManager {
@@ -64,13 +59,13 @@ public class UserOpportunityManager {
 		return new ArrayList<String>(resultReq.keySet());
 	}
 
-	public UserOpportunity getOpportunity(UserId id, String ID) throws CassandraException 
+	public UserOpportunity getOpportunityShort(UserId id, String ID) throws CassandraException 
 	{
 		String reqId = ID;
 		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
 		if (resultReq == null)
 		{
-			throw new CassandraException(); 
+			return null;  // this means it was deleted.
 		}
 		return new UserOpportunity(
 				ID,

@@ -1,33 +1,17 @@
 package com.TheJobCoach.admindata;
 
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.Vector;
 
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
-import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.ShortMap;
-import com.TheJobCoach.webapp.adminpage.shared.UserReport;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
-import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
-import com.sun.xml.internal.bind.v2.model.core.ID;
-
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.factory.HFactory;
@@ -73,6 +57,7 @@ public class News {
 		System.out.println(info);
 		System.out.println("date "+ info.created);
 		
+		@SuppressWarnings("deprecation")
 		String colDate = info.created.getYear() + "-" + info.created.getMonth();
 		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_NEWS_DATE, colDate, 
 				(new ShortMap())
@@ -89,6 +74,7 @@ public class News {
 		return info.ID;
 	}
 
+	@SuppressWarnings("deprecation")
 	public String deleteNews(NewsInformation info) throws CassandraException
 	{
 		String colDate = info.created.getYear() + "-" + info.created.getMonth();
@@ -97,6 +83,7 @@ public class News {
 		return info.ID;		
 	}
 
+	@SuppressWarnings("deprecation")
 	public Vector<NewsInformation> getNews(Date start, Date end) throws CassandraException
 	{
 		int startYear = start.getYear();

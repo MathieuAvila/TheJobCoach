@@ -1,75 +1,23 @@
 package com.TheJobCoach.webapp.mainpage.client;
 
-import com.TheJobCoach.webapp.adminpage.client.AdminPage;
-import com.TheJobCoach.webapp.footer.client.Footer;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
-import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class MainPage implements EntryPoint {
 
-	private final LoginServiceAsync loginService = GWT
-			.create(LoginService.class);
-
-	private void messageLogin(String messageDialog, String messageText)
-	{
-		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.show();
-		dialogBox.setAnimationEnabled(true);
-		Button closeButton = new Button("Close");
-		// We can set the id of a widget by accessing its Element
-		closeButton.getElement().setId("closeButton");
-		final Label textDialog = new Label();
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.add(textDialog);
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
-
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				dialogBox.hide();
-			}
-		});
-
-		dialogBox.setText(messageDialog);
-		textDialog.setText(messageText);
-		dialogBox.center();		
-	}
-
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad()
 	{		
-		final Lang lang = GWT.create(Lang.class);
+		GWT.create(Lang.class);
 		
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element

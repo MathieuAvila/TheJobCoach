@@ -1,13 +1,12 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.client.EditUserSite.EditLogEntryResult;
+import com.TheJobCoach.webapp.userpage.client.EditOpportunity.EditOpportunityResult;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
-import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
+import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,6 +14,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -26,20 +26,20 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.InlineHTML;
-import com.google.gwt.user.client.ui.Label;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class ContentUserSite implements EntryPoint {
+public class ContentUserOpportunity implements EntryPoint {
 
 	UserId user;
 
-	final CellTable<UserJobSite> cellTable = new CellTable<UserJobSite>();
-	UserJobSite currentSite = null;
+	final CellTable<UserOpportunity> cellTable = new CellTable<UserOpportunity>();
+	UserOpportunity currentSite = null;
 	
-	private void setUserJobSite(UserJobSite site)
+	final Lang lang = GWT.create(Lang.class);
+	
+	private void setUserOpportunity(UserOpportunity site)
 	{
 		currentSite = site;
 	}
@@ -59,58 +59,53 @@ public class ContentUserSite implements EntryPoint {
 	}
 
 	// The list of data to display.
-	private List<UserJobSite> jobSiteList = new ArrayList<UserJobSite>();
+	private List<UserOpportunity> userOpportunityList = new ArrayList<UserOpportunity>();
 
 	// Create a data provider.
-	AsyncDataProvider<UserJobSite> dataProvider = new AsyncDataProvider<UserJobSite>() {
+	AsyncDataProvider<UserOpportunity> dataProvider = new AsyncDataProvider<UserOpportunity>() {
 		@Override
-		protected void onRangeChanged(HasData<UserJobSite> display) 
+		protected void onRangeChanged(HasData<UserOpportunity> display) 
 		{
 			final com.google.gwt.view.client.Range range = display.getVisibleRange();
 			int start = range.getStart();
 			int end = start + range.getLength();
-			if (end >= jobSiteList.size() ) end = jobSiteList.size();
-			if (jobSiteList.size() != 0)
+			if (end >= userOpportunityList.size() ) end = userOpportunityList.size();
+			if (userOpportunityList.size() != 0)
 			{
-				List<UserJobSite> dataInRange = jobSiteList.subList(start, end);
+				List<UserOpportunity> dataInRange = userOpportunityList.subList(start, end);
 				// Push the data back into the list.
 				cellTable.setRowData(start, dataInRange);
 			}
 		}
 	};
 
-	void getOneSite(String siteId)
+	void getOneOpportunity(String opportunityId)
 	{
-		AsyncCallback<UserJobSite> callback = new AsyncCallback<UserJobSite>()	{
+		AsyncCallback<UserOpportunity> callback = new AsyncCallback<UserOpportunity>()	{
 			@Override
 			public void onFailure(Throwable caught)
 			{
 				Window.alert(caught.getMessage());
 			}
 			@Override
-			public void onSuccess(UserJobSite result)
+			public void onSuccess(UserOpportunity result)
 			{
 				System.out.println(result);
 				// Find position.
-				for (int count=0; count != jobSiteList.size(); count++) {
-					if (jobSiteList.get(count).ID.equals(result.ID))
+				for (int count=0; count != userOpportunityList.size(); count++) {
+					if (userOpportunityList.get(count).ID.equals(result.ID))
 					{
-						jobSiteList.set(count, result);
+						userOpportunityList.set(count, result);
 					}
 				}
-				dataProvider.updateRowData(0, jobSiteList);
+				dataProvider.updateRowData(0, userOpportunityList);
 			}
 		};
-		try {
-			userService.getUserSite(user, siteId, callback);
-		} catch (CassandraException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	void getAllContent()
-	{		
+	{
+		/*
 		AsyncCallback<List<String>> callback = new AsyncCallback<List<String>>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -119,13 +114,13 @@ public class ContentUserSite implements EntryPoint {
 			@Override
 			public void onSuccess(List<String> result) {
 				System.out.println(result);
-				jobSiteList.clear();
+				userOpportunityList.clear();
 				for (String idRes: result)
 				{
-					jobSiteList.add(new UserJobSite(idRes,"", "", "", "", "" , new Date()));
+					userOpportunityList.add(new UserOpportunity(idRes,"", "", "", "", "" , new Date()));
 					getOneSite(idRes);
 				}
-				dataProvider.updateRowCount(jobSiteList.size(), true);
+				dataProvider.updateRowCount(userOpportunityList.size(), true);
 				cellTable.redraw();
 			}
 		};
@@ -135,6 +130,7 @@ public class ContentUserSite implements EntryPoint {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 	}
 
 
@@ -162,16 +158,16 @@ public class ContentUserSite implements EntryPoint {
 		}
 	}
 
-	class NewSiteHandler implements ClickHandler
+	class NewOpportunityHandler implements ClickHandler
 	{
 		public void onClick(ClickEvent event)
 		{
-			EditUserSite eus = new EditUserSite();
-			UserJobSite ujb = new UserJobSite();
-			eus.setRootPanel(rootPanel, ujb, new EditLogEntryResult() {
+			EditOpportunity eus = new EditOpportunity();
+			UserOpportunity ujb = new UserOpportunity();
+			eus.setRootPanel(rootPanel, ujb, new EditOpportunityResult() {
 
 				@Override
-				public void setResult(UserJobSite result) {
+				public void setResult(UserOpportunity result) {
 					// TODO Auto-generated method stub
 					try 
 					{
@@ -194,22 +190,23 @@ public class ContentUserSite implements EntryPoint {
 						System.out.println(e);
 					}
 			}
-			});
+			}, lang._TextNewOpportunity());
 			eus.onModuleLoad();
 		}
 	}
 
 
-	class UpdateSiteHandler implements ClickHandler
+	class UpdateOpportunity implements ClickHandler
 	{
 		public void onClick(ClickEvent event)
 		{
-			EditUserSite eus = new EditUserSite();			
-			eus.setRootPanel(rootPanel, currentSite, new EditLogEntryResult() {
-
+			EditOpportunity eus = new EditOpportunity();
+			eus.setRootPanel(rootPanel, currentSite, new EditOpportunityResult() {			
+			
 				@Override
-				public void setResult(UserJobSite result) {
+				public void setResult(UserOpportunity result) {
 					// TODO Auto-generated method stub
+					/*
 					try 
 					{
 						if (result != null)
@@ -229,9 +226,9 @@ public class ContentUserSite implements EntryPoint {
 					catch (CassandraException e)
 					{
 						System.out.println(e);
-					}
+					}*/
 			}
-			});
+			}, lang._TextUpdateOpportunity());
 			eus.onModuleLoad();
 		}
 	}
@@ -242,10 +239,7 @@ public class ContentUserSite implements EntryPoint {
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad()
-	{		
-		Lang lang = GWT.create(Lang.class);
-		System.out.println("Load Content User Site, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
+	{			
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		//RootPanel rootPanel = RootPanel.get("centercontent");
@@ -255,108 +249,116 @@ public class ContentUserSite implements EntryPoint {
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
-		//cellTable
-		//cellTable.setRowCount(5);
-		//cellTable.setVisibleRange(0, 3);
-
-		// Create name column.
-		TextColumn<UserJobSite> nameColumn = new TextColumn<UserJobSite>() 	{
+		
+		InlineHTML lblOpportunities = new InlineHTML();
+		lblOpportunities.setHTML("<h2>" + lang.lblOpportunities_text() + "</h2>" );
+		simplePanelCenter.add(lblOpportunities);
+		
+		// Create title column.
+		TextColumn<UserOpportunity> titleColumn = new TextColumn<UserOpportunity>() 	{
 			@Override
-			public String getValue(UserJobSite site) 
+			public String getValue(UserOpportunity site) 
 			{
-				return site.name;
+				return site.title;
 			}
 		};
 
 		// Create description column.
-		TextColumn<UserJobSite> descriptionColumn = new TextColumn<UserJobSite>() {
+		TextColumn<UserOpportunity> companyColumn = new TextColumn<UserOpportunity>() {
 			@Override
-			public String getValue(UserJobSite site) 
+			public String getValue(UserOpportunity site) 
 			{
-				return site.description;
+				return site.companyId;
 			}
 		};
 
-		// Create URL column.
-		TextColumn<UserJobSite> URLColumn = new TextColumn<UserJobSite>() {
+		// Create status column.
+		TextColumn<UserOpportunity> statusColumn = new TextColumn<UserOpportunity>() {
 			@Override
-			public String getValue(UserJobSite site) 
+			public String getValue(UserOpportunity site) 
 			{
-				return site.URL;
+				return UserOpportunity.applicationStatusToString(site.status);
 			}
 		};
 
-		// Create login column.
-		TextColumn<UserJobSite> loginColumn = new TextColumn<UserJobSite>() {
+		// Create location column.
+		TextColumn<UserOpportunity> locationColumn = new TextColumn<UserOpportunity>() {
 			@Override
-			public String getValue(UserJobSite site) 
+			public String getValue(UserOpportunity site) 
 			{
-				return site.login;
+				return site.location;
 			}
 		};
 
-		// Create password column.
-		TextColumn<UserJobSite> passwordColumn = new TextColumn<UserJobSite>() {
+		// Create salary column.
+		TextColumn<UserOpportunity> salaryColumn = new TextColumn<UserOpportunity>() {
 			@Override
-			public String getValue(UserJobSite site) 
+			public String getValue(UserOpportunity site) 
 			{
-				return site.password;
+				return Integer.toString(site.salary);
 			}
 		};
 
-		// Create lastVisit column.
-		TextColumn<UserJobSite> lastVisitColumn = new TextColumn<UserJobSite>() {
+		// Create contract type column.
+		TextColumn<UserOpportunity> contractTypeColumn = new TextColumn<UserOpportunity>() {
+			@Override
+			public String getValue(UserOpportunity site) 
+			{
+				return site.contractType;
+			}
+		};
+
+		// Create last visit column.
+		TextColumn<UserOpportunity> firstSeenColumn = new TextColumn<UserOpportunity>() {
 			@SuppressWarnings("deprecation")
 			@Override
-			public String getValue(UserJobSite site) 
+			public String getValue(UserOpportunity site) 
 			{
-				return site.lastVisit.toLocaleString();
+				return site.firstSeen.toLocaleString();
 			}
 		};
 
-		nameColumn.setSortable(true);
-		descriptionColumn.setSortable(true);
-		URLColumn.setSortable(true);
-		loginColumn.setSortable(true);
-		passwordColumn.setSortable(true);
-		lastVisitColumn.setSortable(true);
-		cellTable.addColumn(nameColumn, lang._TextName());
-		cellTable.addColumn(descriptionColumn, lang._TextDescription());
-		cellTable.addColumn(URLColumn, lang._TextURL());
-		cellTable.addColumn(loginColumn, lang._TextLogin());
-		cellTable.addColumn(passwordColumn, lang._TextPassword());
-		cellTable.addColumn(lastVisitColumn, lang._TextLastVisit());
-		cellTable.getColumnSortList().push(nameColumn);	
+		titleColumn.setSortable(true);
+		companyColumn.setSortable(true);
+		locationColumn.setSortable(true);
+		salaryColumn.setSortable(true);
+		contractTypeColumn.setSortable(true);
+		firstSeenColumn.setSortable(true);
+		cellTable.addColumn(titleColumn, lang._TextName());
+		cellTable.addColumn(companyColumn, lang._TextCompany());
+		cellTable.addColumn(statusColumn, lang._TextStatus());
+		cellTable.addColumn(locationColumn, lang._TextLocation());
+		cellTable.addColumn(salaryColumn, lang._TextSalary());
+		cellTable.addColumn(contractTypeColumn, lang._TextContractType());
+		cellTable.addColumn(firstSeenColumn, lang._TextFirstSeen());
+		cellTable.getColumnSortList().push(titleColumn);	
 
 		// Add a selection model to handle user selection.
-		final SingleSelectionModel<UserJobSite> selectionModel = new SingleSelectionModel<UserJobSite>();
+		final SingleSelectionModel<UserOpportunity> selectionModel = new SingleSelectionModel<UserOpportunity>();
 		cellTable.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler()
 		{
 			public void onSelectionChange(SelectionChangeEvent event) 
 			{
-				UserJobSite selected = selectionModel.getSelectedObject();
+				UserOpportunity selected = selectionModel.getSelectedObject();
 				if (selected != null) 
 				{
-					setUserJobSite(selected);
+					setUserOpportunity(selected);
 					//Window.alert("You selected: " + selected.name);
 				}
 			}
 		});
 		
 		dataProvider.addDataDisplay(cellTable);
-		dataProvider.updateRowCount(jobSiteList.size(), true);
+		dataProvider.updateRowCount(userOpportunityList.size(), true);
 
 		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
 		getAllContent();
-		cellTable.setRowData(0, jobSiteList);
-		cellTable.setRowCount(jobSiteList.size(), true);
+		cellTable.setRowData(0, userOpportunityList);
+		cellTable.setRowCount(userOpportunityList.size(), true);
 		cellTable.setVisibleRange(0, 5);
 		cellTable.addColumnSortHandler(columnSortHandler);
 		
-		InlineHTML lblJobSites = new InlineHTML();
-		lblJobSites.setHTML("<h2>" + lang.lblJobSites_text() + "</h2>" );
-		simplePanelCenter.add(lblJobSites);
 		simplePanelCenter.add(cellTable);
 		cellTable.setSize("100%", "");		
 		
@@ -366,14 +368,14 @@ public class ContentUserSite implements EntryPoint {
 		
 		Button buttonNewSite = new Button();
 		horizontalPanel.add(buttonNewSite);
-		buttonNewSite.setText(lang._TextNewSite());
+		buttonNewSite.setText(lang._TextNewOpportunity());
 		
 		Button buttonUpdateSite = new Button();
 		horizontalPanel.add(buttonUpdateSite);
-		buttonUpdateSite.setText(lang._TextUpdateSite());
+		buttonUpdateSite.setText(lang._TextUpdateOpportunity());
 		
 		Button buttonDeleteSite = new Button();
-		buttonDeleteSite.setText(lang._TextDeleteSite());
+		buttonDeleteSite.setText(lang._TextDeleteOpportunity());
 		horizontalPanel.add(buttonDeleteSite);
 		
 		// Add a handler to the delete button.
@@ -381,11 +383,11 @@ public class ContentUserSite implements EntryPoint {
 		buttonDeleteSite.addClickHandler(deleteHandler);
 		
 		// Add a handler to the update button.
-		UpdateSiteHandler updateHandler = new UpdateSiteHandler();
+		UpdateOpportunity updateHandler = new UpdateOpportunity();
 		buttonUpdateSite.addClickHandler(updateHandler);
 		
 		// Add a handler to the new button.
-		NewSiteHandler newHandler = new NewSiteHandler();
+		NewOpportunityHandler newHandler = new NewOpportunityHandler();
 		buttonNewSite.addClickHandler(newHandler);
 	}
 }

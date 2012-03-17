@@ -4,6 +4,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -14,9 +15,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface LoginService extends RemoteService {
 	
 	MainPageReturnCode.CreateAccountStatus createAccount(UserId id,
-			UserInformation info, String locale);
+			UserInformation info, String locale) throws IllegalArgumentException, CassandraException;
 		
 	MainPageReturnLogin connect(String userName, String userPassword);
 
-	MainPageReturnCode.ValidateAccountStatus validateAccount(String userName, String token);
+	MainPageReturnCode.ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException;
 }

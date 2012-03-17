@@ -3,7 +3,6 @@ package com.TheJobCoach.userdata;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +20,8 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccount
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
@@ -92,7 +91,7 @@ public class Account implements AccountInterface {
 		return UserId.UserType.USER_TYPE_SEEKER;
 	}
 
-	public boolean updateUserInformation(UserId id, UserInformation info)
+	public boolean updateUserInformation(UserId id, UserInformation info) throws CassandraException
 	{
 		return CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
 				(new ShortMap())
@@ -106,7 +105,7 @@ public class Account implements AccountInterface {
 				.get());
 	}
 
-	public CreateAccountStatus createAccountWithToken(UserId id, UserInformation info, String langStr)
+	public CreateAccountStatus createAccountWithToken(UserId id, UserInformation info, String langStr) throws CassandraException
 	{
 		if (existsAccount(id.userName))
 			return CreateAccountStatus.CREATE_STATUS_ALREADY_EXISTS;
@@ -123,7 +122,7 @@ public class Account implements AccountInterface {
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 
-	public CreateAccountStatus createAccount(UserId id, UserInformation info, String langStr)
+	public CreateAccountStatus createAccount(UserId id, UserInformation info, String langStr) throws CassandraException
 	{
 		UUID uuid = UUID.randomUUID();
 		String token = id.userName + "_" + uuid.toString();
@@ -131,7 +130,7 @@ public class Account implements AccountInterface {
 		return createAccountWithToken(id, info, langStr);
 	}
 
-	public ValidateAccountStatus validateAccount(String userName, String token)
+	public ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException
 	{
 		String userNameDB = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_TOKEN, token, "username");
 		if ((userName == null) || (userNameDB == null) || (!userNameDB.equals(userName)))
@@ -167,7 +166,7 @@ public class Account implements AccountInterface {
 		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, new UserId(userName, token, stringToUserType(typeStr)));
 	}
 
-	public Vector<UserId> listUser()
+	public Vector<UserId> listUser() throws CassandraException
 	{	
 		Vector<UserId> result = new Vector<UserId>();	
 		Set<String> resultRows = new HashSet<String>();
@@ -198,7 +197,7 @@ public class Account implements AccountInterface {
 		return result;
 	}
 
-	public UserReport getUserReport(UserId id)
+	public UserReport getUserReport(UserId id) throws CassandraException
 	{		
 		Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
 		Map<String, String> resultToken = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_TOKEN, id.token);
@@ -212,7 +211,7 @@ public class Account implements AccountInterface {
 				);
 	}
 	
-	public List<UserReport> getUserReportList()
+	public List<UserReport> getUserReportList() throws CassandraException
 	{
 		List<UserReport> report = new ArrayList<UserReport>();
 		Vector<UserId> userList = listUser();
@@ -223,7 +222,7 @@ public class Account implements AccountInterface {
 		return report;
 	}
 	
-	public void purgeAccount()
+	public void purgeAccount() throws CassandraException
 	{
 		Set<String> resultRows = new HashSet<String>();
 		String last = "";

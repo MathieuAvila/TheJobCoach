@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
@@ -78,6 +77,7 @@ public class ContentNews implements EntryPoint {
 		}
 	};
 
+	@SuppressWarnings("deprecation")
 	void getAllContent()
 	{		
 		AsyncCallback<Vector<NewsInformation>> callback = new AsyncCallback<Vector<NewsInformation>>() {
@@ -115,7 +115,6 @@ public class ContentNews implements EntryPoint {
 	void setNewsInformation(NewsInformation news)
 	{
 		newsId = news.ID;
-		Date d = new Date();
 		datePicker.setValue(news.created);
 		titleTextBox.setValue(news.title);
 		richTextArea.setHTML(news.text);
@@ -159,6 +158,7 @@ public class ContentNews implements EntryPoint {
 
 	class NewSiteHandler implements ClickHandler
 	{
+		@SuppressWarnings({ "deprecation" })
 		public void onClick(ClickEvent event)
 		{
 			NewsInformation news = getNewsInformation();
@@ -229,6 +229,7 @@ public class ContentNews implements EntryPoint {
 
 		// Create created date column.
 		TextColumn<NewsInformation> createdColumn = new TextColumn<NewsInformation>() 	{
+			@SuppressWarnings("deprecation")
 			@Override
 			public String getValue(NewsInformation report) 
 			{

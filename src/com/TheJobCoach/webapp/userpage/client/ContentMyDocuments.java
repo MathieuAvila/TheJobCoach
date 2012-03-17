@@ -24,21 +24,16 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
-import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -339,7 +334,7 @@ public class ContentMyDocuments implements EntryPoint {
 					form.submit();
 				}
 			});
-			button.setText(lang.button_text());
+			button.setText("mon boutton");
 			holder.add(button);
 
 			form.add(holder);
@@ -395,7 +390,7 @@ public class ContentMyDocuments implements EntryPoint {
 
 		grid.setWidget(2, 1, datePickerLastVisit);
 
-		Button buttonSave = new Button(lang._TextSave());
+		Button buttonSave = new Button();
 		grid.setWidget(3, 0, buttonSave);
 		buttonSave.setWidth("150px");
 		//buttonSave.addClickHandler(saveHandler);
@@ -404,8 +399,5 @@ public class ContentMyDocuments implements EntryPoint {
 		// Add a handler to the delete button.
 		DeleteHandler deleteHandler = new DeleteHandler();
 		buttonDeleteDocument.addClickHandler(deleteHandler);
-
-		// Add a handler to the save button.
-		SaveHandler saveHandler = new SaveHandler();
 	}
 }

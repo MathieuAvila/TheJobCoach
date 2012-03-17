@@ -1,26 +1,22 @@
 package com.TheJobCoach.userdata;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
-import me.prettyprint.hector.api.beans.Composite;
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.factory.HFactory;
 
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
-import com.TheJobCoach.util.EasyComposite;
 import com.TheJobCoach.util.ShortMap;
-import com.TheJobCoach.util.CassandraAccessor.CompositeColumnEntry;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
-import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
-import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.userpage.shared.UserApplication;
 
-public class UserOpportunityManager {
+public class UserApplicationManager {
 
 	final static String COLUMN_FAMILY_NAME_LIST = "opportunitieslist";
 	final static String COLUMN_FAMILY_NAME_DATA = "opportunitiesdata";
@@ -28,7 +24,7 @@ public class UserOpportunityManager {
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
 	
-	public UserOpportunityManager()
+	public UserApplicationManager()
 	{
 		if (cfDefList == null)
 		{
@@ -64,52 +60,40 @@ public class UserOpportunityManager {
 		return new ArrayList<String>(resultReq.keySet());
 	}
 
-	public UserOpportunity getOpportunity(UserId id, String ID) throws CassandraException 
+	public UserApplication getApplication(UserId id, String ID) throws CassandraException 
 	{
 		String reqId = ID;
 		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
 		if (resultReq == null)
 		{
 			throw new CassandraException(); 
+		}		
+		Vector<String> list = new Vector<String>();
+		for (String k:resultReq.keySet())
+		{
+			if (k.contains("l-"))
+			{
+				list.add(resultReq.get(k));
+			}
 		}
-		return new UserOpportunity(
+		return new UserApplication();
+		/*
 				ID,
-				Convertor.toDate(resultReq.get("firstseen")),
 				Convertor.toDate(resultReq.get("lastupdate")),
-				Convertor.toString(resultReq.get("title")),
-				Convertor.toString(resultReq.get("description")),
-				Convertor.toString(resultReq.get("companyid")),
-				Convertor.toString(resultReq.get("contracttype")),
-				Convertor.toInt(resultReq.get("salary")),
-				Convertor.toDate(resultReq.get("startdate")),
-				Convertor.toDate(resultReq.get("enddate")),
-				Convertor.toBoolean(resultReq.get("systemsource")),
-				Convertor.toString(resultReq.get("source")),
-				Convertor.toString(resultReq.get("url")),
-				Convertor.toString(resultReq.get("location"))
-				);
+				list,
+				statusFromString(resultReq.get("status")));*/
 	}
 
-	public void setUserOpportunity(UserId id, UserOpportunity result) throws CassandraException 
+	public void setUserApplication(UserId id, UserApplication result) throws CassandraException 
 	{
+		ShortMap keyValues = (new ShortMap())
+		.add("lastupdate", result.lastUpdate
+		//.add("status", statusToString(result.status)
+				);
 		boolean resultReq = CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_DATA, 
-				result.ID, 
-				(new ShortMap())
-				.add("firstseen", result.firstSeen)
-				.add("lastupdate", result.lastUpdate)
-				.add("title", result.title)
-				.add("description", result.description)
-				.add("companyid", result.companyId)
-				.add("contracttype", result.contractType)
-				.add("salary", result.salary)
-				.add("startdate", result.startDate)
-				.add("enddate", result.endDate)
-				.add("systemsource", result.systemSource)
-				.add("source", result.source)
-				.add("url", result.url)
-				.add("location", result.location)
-				.get());	
+				result.ID,				
+				keyValues.get());	
 		if (resultReq == false)
 		{
 			throw new CassandraException(); 
@@ -124,7 +108,7 @@ public class UserOpportunityManager {
 		}
 	}
 	
-	public void deleteUserOpportunity(UserId id, String ID) throws CassandraException 
+	public void deleteUserApplication(UserId id, String ID) throws CassandraException 
 	{
 		boolean resultReq = CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, ID);	
 		if (resultReq == false)

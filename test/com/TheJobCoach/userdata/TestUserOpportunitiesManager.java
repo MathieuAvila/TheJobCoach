@@ -18,6 +18,7 @@ public class TestUserOpportunitiesManager {
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	static UserId id2 = new UserId("user2", "token2", UserId.UserType.USER_TYPE_SEEKER);
 	
+	@SuppressWarnings("deprecation")
 	static Date getDate(int year, int month, int day)
 	{
 		Date result = new Date();

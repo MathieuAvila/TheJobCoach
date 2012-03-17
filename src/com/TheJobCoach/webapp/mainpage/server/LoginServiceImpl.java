@@ -6,6 +6,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccount
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -21,7 +22,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 			UserId id,
 			UserInformation info,
 			String locale)
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, CassandraException {
 		System.out.println("Create account request for: '" + id.userName + "' with password: '" + info.password+ "' with EMail:'" + info.email + "' with locale '" + locale +"'");		
 		return account.createAccount(id, info, locale);
 	}
@@ -33,7 +34,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public ValidateAccountStatus validateAccount(String userName, String token) {
+	public ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException {
 		// TODO Auto-generated method stub
 		return account.validateAccount(userName, token);
 	}

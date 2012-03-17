@@ -14,7 +14,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -135,6 +134,7 @@ public class ContentUsers implements EntryPoint {
 		
 		// Create created date column.
 		TextColumn<UserReport> createdColumn = new TextColumn<UserReport>() 	{
+			@SuppressWarnings("deprecation")
 			@Override
 			public String getValue(UserReport report) 
 			{

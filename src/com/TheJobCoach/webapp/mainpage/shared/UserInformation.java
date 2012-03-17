@@ -1,8 +1,6 @@
 package com.TheJobCoach.webapp.mainpage.shared;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Vector;
 
 public class UserInformation implements Serializable {
 	

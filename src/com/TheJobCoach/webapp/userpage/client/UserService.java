@@ -10,7 +10,6 @@ import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 
 /**
  * The client side stub for the RPC service.

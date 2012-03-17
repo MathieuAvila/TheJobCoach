@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
@@ -66,6 +67,13 @@ public class UserPage implements EntryPoint {
 			contentMyDocuments.setUserParameters(userId);
 			contentMyDocuments.onModuleLoad();
 		}
+		if (menu.equals("applications"))
+		{
+			ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity();
+			contentUserOpportunity.setRootPanel(simplePanelCenter);
+			contentUserOpportunity.setUserParameters(userId);
+			contentUserOpportunity.onModuleLoad();
+		}
 	}
 	
 	public void setLabelMenu(final Label label, final String menu)
@@ -74,7 +82,8 @@ public class UserPage implements EntryPoint {
 		if (
 				!menu.equals("news") &&
 				!menu.equals("myjobboards") &&
-				!menu.equals("mydocuments")
+				!menu.equals("mydocuments") &&
+				!menu.equals("applications")
 				)
 		{
 			label.setStyleName("userpage-label-blocked");
@@ -233,7 +242,7 @@ public class UserPage implements EntryPoint {
 		verticalPanelMyApplication.add(label_ActionsAgenda);
 		
 		final Label label_ArchivedApplications = new Label(lang._TextArchivedApplications());
-		setLabelMenu(label_ArchivedApplications, "applications");
+		setLabelMenu(label_ArchivedApplications, "archivedapplications");
 		verticalPanelMyApplication.add(label_ArchivedApplications);
 		
 		SimplePanel simplePanel_2 = new SimplePanel();
@@ -308,12 +317,7 @@ public class UserPage implements EntryPoint {
 		
 		HTMLPanel panelAds = new HTMLPanel("<div id=\"adframe\">");
 		horizontalPanel_1.add(panelAds);
-		
-		ContentUserSite contentUserSite = new ContentUserSite();
-		contentUserSite.setRootPanel(simplePanelCenter);
-		contentUserSite.setUserParameters(userId);
-		contentUserSite.onModuleLoad();
-		
+				
 		VerticalPanel verticalPanel = new VerticalPanel();
 		flexTable.setWidget(2, 0, verticalPanel);
 		flexTable.getCellFormatter().setHeight(2, 0, lang.verticalPanel_height_1());
@@ -326,5 +330,17 @@ public class UserPage implements EntryPoint {
 		Footer footerPanel = new Footer();
 		footerPanel.setRootPanel(verticalPanel);	
 		footerPanel.onModuleLoad();
+		
+		/*
+		ContentUserSite contentUserSite = new ContentUserSite();
+		contentUserSite.setRootPanel(simplePanelCenter);
+		contentUserSite.setUserParameters(userId);
+		contentUserSite.onModuleLoad();
+		*/
+		ContentUserOpportunity contentUserSite = new ContentUserOpportunity();
+		contentUserSite.setRootPanel(simplePanelCenter);
+		contentUserSite.setUserParameters(userId);
+		contentUserSite.onModuleLoad();
+		
 	}
 }

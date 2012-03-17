@@ -1,13 +1,10 @@
 package com.TheJobCoach.webapp.userpage.server;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.userdata.UserJobSiteManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;

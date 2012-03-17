@@ -14,13 +14,11 @@ import me.prettyprint.hector.api.factory.HFactory;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.EasyComposite;
-import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.util.CassandraAccessor.CompositeColumnEntry;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserApplication;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
-import com.TheJobCoach.webapp.userpage.shared.UserApplication.UserApplicationStatus;
 
 public class ApplicationManager {
 
@@ -78,14 +76,15 @@ public class ApplicationManager {
 		{
 			throw new CassandraException(); 
 		}
+		return null;
 		
 		//public UserApplication(String _ID, Date _lastUpdate, Vector<String> _logEntryList, UserApplicationStatus _status)
 		
-		return new UserApplication(
+		/*return new UserApplication(
 				ID,
 				Convertor.toDate(resultReq.get("lastvisit")),
 				new Vector<String>(),
-				UserApplicationStatus.NEW);
+				UserApplicationStatus.NEW);*/
 	}
 /*
 	public void setApplication(UserId id, UserApplication result) throws CassandraException 

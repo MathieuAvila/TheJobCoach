@@ -3,18 +3,10 @@ package com.TheJobCoach.admindata;
 import static org.junit.Assert.*;
 
 import java.util.Date;
-import java.util.UUID;
 import java.util.Vector;
 
 import org.junit.Test;
 
-import com.TheJobCoach.util.MailerFactory;
-import com.TheJobCoach.util.MockMailer;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 
@@ -26,6 +18,7 @@ public class TestNews
 	static Date start = new Date();
 	static Date end = new Date();
 
+	@SuppressWarnings("deprecation")
 	Date getDate(int year, int month, int day)
 	{
 		Date result = new Date();
@@ -72,6 +65,7 @@ public class TestNews
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void checkDate(Date d1, Date d2)
 	{
 		assertEquals(d1.getYear(), d2.getYear());

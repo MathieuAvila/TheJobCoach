@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+
 import me.prettyprint.cassandra.serializers.CompositeSerializer;
 import me.prettyprint.cassandra.serializers.StringSerializer;
 import me.prettyprint.cassandra.service.CassandraHostConfigurator;
@@ -29,7 +31,6 @@ import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
 import me.prettyprint.hector.api.exceptions.HectorException;
 import me.prettyprint.hector.api.factory.HFactory;
-import me.prettyprint.hector.api.mutation.MutationResult;
 import me.prettyprint.hector.api.mutation.Mutator;
 import me.prettyprint.hector.api.query.ColumnQuery;
 import me.prettyprint.hector.api.query.QueryResult;
@@ -104,7 +105,7 @@ public class CassandraAccessor {
 		return myKeyspace;
 	}
 
-	static public boolean updateColumn(ColumnFamilyTemplate<String, String> cfTemplate, String key, Map<String, String> mapUpdate)
+	static public boolean updateColumn(ColumnFamilyTemplate<String, String> cfTemplate, String key, Map<String, String> mapUpdate) throws CassandraException
 	{	
 		ColumnFamilyUpdater<String, String> updater = cfTemplate.createUpdater(key);
 		for(Map.Entry<String, String> e : mapUpdate.entrySet())
@@ -123,42 +124,18 @@ public class CassandraAccessor {
 			// do something ...
 			System.out.println("Updater error");
 			e.printStackTrace();
-			return false;
+			throw new CassandraException();
 		}
 		return true;
 	}
 
-	static public boolean updateColumn(String CF, String key, Map<String, String> mapUpdate)
+	static public boolean updateColumn(String CF, String key, Map<String, String> mapUpdate) throws CassandraException
 	{
 		ColumnFamilyTemplate<String, String> cfTemplate = new ThriftColumnFamilyTemplate<String, String>(CassandraAccessor.getKeyspace(),
 				CF, 
 				se,        
 				se);
 		return updateColumn(cfTemplate, key, mapUpdate);
-	}
-
-	static public boolean updateSuperColumn(String CF, String SCkey, String key, Map<String, String> mapUpdate)
-	{
-		Mutator<String> m = HFactory.createMutator(CassandraAccessor.getKeyspace(), se);
-		List<HColumn<String, String>> cols =  new ArrayList<HColumn<String, String>>();
-		for(Map.Entry<String, String> e : mapUpdate.entrySet())
-		{
-			cols.add(HFactory.createColumn(e.getKey(), e.getValue(), se, se));
-			System.out.println("SC Update from key:" + key  + " column: " + e.getKey() + " value " + e.getValue());
-		}		
-		HSuperColumn<String, String, String> sc = HFactory.createSuperColumn(key,cols, se, se, se);
-		m.addInsertion(SCkey, CF, sc);		
-		try
-		{
-			m.execute();
-		}
-		catch(Exception e) 
-		{
-			System.out.println("Error updating SCF");
-			e.printStackTrace();
-			return false;
-		} // Assume it already exists.
-		return true;
 	}
 
 	static public String getColumn(String CF, String key, String columnName)
@@ -179,7 +156,7 @@ public class CassandraAccessor {
 		return  c.getValue();
 	}
 
-	static public Map<String, String> getRow(String CF, String key)
+	static public Map<String, String> getRow(String CF, String key) throws CassandraException
 	{
 		SliceQuery<String, String, String> cQ = HFactory.createSliceQuery(getKeyspace(), se, se, se);
 		QueryResult<ColumnSlice<String, String>> r;
@@ -188,8 +165,8 @@ public class CassandraAccessor {
 		}
 		catch (Exception e){
 			System.out.println("getRow CF:" + CF + " key: " + key);
-			e.printStackTrace();			
-			return null;
+			e.printStackTrace();
+			throw new CassandraException();
 		}
 		if (r == null) return null;
 		ColumnSlice<String, String> c = r.get();
@@ -236,74 +213,6 @@ public class CassandraAccessor {
 		catch (Exception e)
 		{
 			return false;
-		}
-		return true;
-	}
-
-	public static boolean createSuperColumnFamily(String SCFName, ComparatorType ct) {
-
-		//logger.debug("Creating "+(isSuper ? "Super" : "Standard")+" column family '" + columnFamily + "'");
-
-		ColumnFamilyDefinition cfDef = HFactory.createColumnFamilyDefinition(
-				getKeyspace().getKeyspaceName(),
-				SCFName, ct);
-		ThriftCfDef thriftCfDef = new ThriftCfDef(cfDef);
-		thriftCfDef.setColumnType(ColumnType.SUPER);
-		thriftCfDef.setComparatorType(ct);
-		thriftCfDef.setSubComparatorType(ct);
-		try 
-		{
-			getCluster().addColumnFamily(thriftCfDef);
-		}
-		catch (Exception e)
-		{			
-			return false;
-		}
-		return true;
-	}
-
-	public static boolean getColumnsRange(String SCFName, String Skey, String firstKey, String lastKey, Map<String, Map<String, String>> result)
-	{
-		// get value
-		RangeSubSlicesQuery<String, String,String, String> q = HFactory.createRangeSubSlicesQuery(getKeyspace(), se, se, se, se);
-		q.setColumnFamily(SCFName);
-		q.setKeys(firstKey, lastKey);
-		// try with column name first
-		q.setSuperColumn(Skey);
-		q.setRange("", "", false, 100);
-		QueryResult<OrderedRows<String, String, String>> r = null;
-		try
-		{
-			r = q.execute();
-		}
-		catch (Exception e)
-		{
-			System.out.println("Error to get columns in SCF");
-			e.printStackTrace();
-			return false;
-		}	    
-		OrderedRows<String, String, String> rows = r.get();
-		if (rows == null)
-			return false;
-		List<Row<String, String, String>> rowsList = rows.getList();
-		if (rowsList == null)
-			return false;
-		for (Row<String, String, String> row: rowsList)
-		{
-			String mapName = row.getKey();
-			Map<String, String> subMap = new HashMap<String, String>();
-			ColumnSlice<String, String> slice = row.getColumnSlice();
-			System.out.println("Found row with key: " + mapName);
-			if (slice == null)
-				return false;
-			List<HColumn<String, String>> cols = slice.getColumns();
-			for (HColumn<String, String> l: cols)
-			{
-				subMap.put(l.getName(), l.getValue());
-				//System.out.println("Found column key: " + l.getName() + " value: " + l.getValue());
-
-			}
-			result.put(mapName, subMap);
 		}
 		return true;
 	}
@@ -416,8 +325,7 @@ public class CassandraAccessor {
 		mutator.delete(key, CF, col, ce);
 		try
 		{
-			MutationResult r = mutator.execute();
-			//System.out.println(r);
+			mutator.execute();			
 		}
 		catch (Exception e)
 		{
