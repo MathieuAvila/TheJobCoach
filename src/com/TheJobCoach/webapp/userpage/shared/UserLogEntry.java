@@ -7,55 +7,42 @@ import java.util.Vector;
 public class UserLogEntry implements Serializable {
 
 
-	private static final long serialVersionUID = 1115255124501443730L;
+	private static final long serialVersionUID = 1115255124501443735L;
 
 	public enum LogEntryType 
 	{
-		NEW,
 		INFO,
 		APPLICATION,
-		INTERVIEW,
-		PHONE_INFO,
-		SUCCESS,
-		FAILURE,
-		OTHER
+		INTERVIEW,	
 	};
 
 	public String opportunityId;
 	public String ID;
 	public String title;
-	public String text;
-	public Date update;
+	public String description;
+	public Date creation;
 	public Date expectedFollowUp;
 	public LogEntryType type;
 	public Vector<String> contactId;
 	public Vector<String> attachedDocumentId;
-
+	
 	static public String entryTypeToString(LogEntryType t)
 	{
 		switch (t)
 		{
-		case NEW: return "NEW";
 		case INFO: return "INFO";
 		case APPLICATION: return "APPLICATION";
 		case INTERVIEW: return "INTERVIEW";
-		case SUCCESS: return "SUCCESS";
-		case FAILURE: return "FAILURE";
-		case OTHER: return "OTHER";
 		}
-		return "NEW";
+		return "INFO";
 	}
 	
 	static public LogEntryType entryTypeToString(String t)
 	{
-		if ("NEW".equals(t)) return LogEntryType.NEW;
 		if ("INFO".equals(t)) return LogEntryType.INFO;
 		if ("APPLICATION".equals(t)) return LogEntryType.APPLICATION;
 		if ("INTERVIEW".equals(t))return LogEntryType.INTERVIEW;
-		if ("SUCCESS".equals(t)) return LogEntryType.SUCCESS;
-		if ("FAILURE".equals(t)) return LogEntryType.FAILURE;
-		if ("OTHER".equals(t)) return LogEntryType.OTHER;
-		return LogEntryType.NEW;
+		return LogEntryType.INFO;
 	}
 
 	public UserLogEntry()
@@ -63,14 +50,14 @@ public class UserLogEntry implements Serializable {
 	}
 
 	public UserLogEntry(String opportunityId, String iD, String title,
-			String text, Date update, Date expectedFollowUp, LogEntryType type,
+			String description, Date creation, Date expectedFollowUp, LogEntryType type,
 			Vector<String> contactId, Vector<String> attachedDocumentId) {
 		super();
 		this.opportunityId = opportunityId;
 		ID = iD;
 		this.title = title;
-		this.text = text;
-		this.update = update;
+		this.description = description;
+		this.creation = creation;
 		this.expectedFollowUp = expectedFollowUp;
 		this.type = type;
 		this.contactId = contactId;

@@ -31,6 +31,7 @@ import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
 import me.prettyprint.hector.api.exceptions.HectorException;
 import me.prettyprint.hector.api.factory.HFactory;
+import me.prettyprint.hector.api.mutation.MutationResult;
 import me.prettyprint.hector.api.mutation.Mutator;
 import me.prettyprint.hector.api.query.ColumnQuery;
 import me.prettyprint.hector.api.query.QueryResult;
@@ -168,10 +169,11 @@ public class CassandraAccessor {
 			e.printStackTrace();
 			throw new CassandraException();
 		}
-		if (r == null) return null;
+		if (r == null) throw new CassandraException();
 		ColumnSlice<String, String> c = r.get();
-		if (c == null) return null;
+		if (c == null) throw new CassandraException();
 		List<HColumn<String, String>> l = c.getColumns();
+		if (l.size() == 0) return null;
 		HashMap<String, String> map = new HashMap<String, String>();
 		for (HColumn<String, String> i: l)
 		{
@@ -182,13 +184,12 @@ public class CassandraAccessor {
 
 
 
-	static public boolean deleteKey(String CF, String key)
+	static public void deleteKey(String CF, String key)
 	{
 		Mutator<String> mutator = HFactory.createMutator(getKeyspace(), se);
 		mutator.delete(key, CF, null, se);
 		mutator.execute();
-		mutator.discardPendingMutations();
-		return true;
+		mutator.discardPendingMutations();		
 	}
    
 	static public Set<String> getColumnRange(String CF, String keyFirst, String keyLast, int number)
@@ -303,21 +304,20 @@ public class CassandraAccessor {
 		return true;
 	}
 
-	static public boolean deleteColumn(String CF, String key, String col)
+	static public void deleteColumn(String CF, String key, String col) throws CassandraException
 	{
 		Mutator<String> mutator = HFactory.createMutator(CassandraAccessor.getKeyspace(), se);		
 		mutator.delete(key, CF, col, se);
-		try
+		try 
 		{
-			mutator.execute();
+			MutationResult mr = mutator.execute();			
 		}
 		catch (Exception e)
 		{
-			return false;
-		}
-		return true;
+			throw new CassandraException();
+		}		
 	}
-	
+
 	static public boolean deleteCompositeColumn(String CF, String key, Composite col)
 	{
 		Mutator<String> mutator = HFactory.createMutator(CassandraAccessor.getKeyspace(), se);

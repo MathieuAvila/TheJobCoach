@@ -7,13 +7,14 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
+import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 
 import org.junit.Test;
 
 public class AdminSiteSimple {
 	
 	@Test
-	public void testCreateAccount()
+	public void testCreateAccount() throws CassandraException
 	{
 		CassandraAccessor.setLocation("192.168.0.50:9160");
 		

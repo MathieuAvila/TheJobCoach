@@ -107,7 +107,8 @@ public class UserOpportunity implements Serializable {
 	public UserOpportunity(String iD, Date firstSeen, Date lastUpdate,
 			String title, String description, String companyId,
 			String contractType, int salary, Date startDate, Date endDate,
-			boolean systemSource, String source, String url, String location) 
+			boolean systemSource, String source, String url, String location,
+			ApplicationStatus status) 
 	{
 		super();
 		ID = iD;
@@ -124,6 +125,7 @@ public class UserOpportunity implements Serializable {
 		this.source = source;
 		this.url = url;
 		this.location = location;
+		this.status = status;
 	}
 
 	public UserOpportunity()

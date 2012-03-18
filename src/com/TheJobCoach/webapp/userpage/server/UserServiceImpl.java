@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.userdata.UserJobSiteManager;
+import com.TheJobCoach.userdata.UserOpportunityManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
+import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -19,7 +21,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class UserServiceImpl extends RemoteServiceServlet implements UserService
 {
 	static private UserJobSiteManager jobSiteManager = new UserJobSiteManager();
-	static com.TheJobCoach.admindata.News news = new com.TheJobCoach.admindata.News();
+	static private com.TheJobCoach.admindata.News news = new com.TheJobCoach.admindata.News();
+	static private UserOpportunityManager userOpportunityManager = new UserOpportunityManager();
 
 	@Override
 	public List<String> getUserSiteList(UserId id) throws CassandraException 
@@ -92,6 +95,30 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException
 	{
 		return news.getLatestNews();
+	}
+
+	@Override
+	public Vector<UserOpportunity> getUserOpportunityShortList(UserId id,
+			String list) throws CassandraException {
+		return userOpportunityManager.getOpportunitiesShortList(id, list);
+	}
+
+	@Override
+	public UserOpportunity getUserOpportunity(UserId id, String oppId)
+			throws CassandraException {
+		return userOpportunityManager.getOpportunityLong(id, oppId);
+	}
+
+	@Override
+	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException {
+		userOpportunityManager.setUserOpportunity(id, opp, list);
+		return opp.ID;
+	}
+
+	@Override
+	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException {
+		userOpportunityManager.deleteUserOpportunity(id, oppId);
+		return oppId;
 	}
 
 }

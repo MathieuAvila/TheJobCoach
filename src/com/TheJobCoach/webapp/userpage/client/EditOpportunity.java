@@ -1,11 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.Date;
-import java.util.Vector;
-
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
-import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
 import com.google.gwt.core.client.EntryPoint;
@@ -13,15 +9,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -29,8 +20,6 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.datepicker.client.DateBox.Format;
-import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 /**
@@ -53,6 +42,7 @@ public class EditOpportunity implements EntryPoint {
 	TextBox txtbxSource = new TextBox();
 	TextBox txtbxUrl = new TextBox();
 	TextBox txtbxLocation = new TextBox();
+	ListBox comboBoxStatus = new ListBox();
 	String id;
 	
 	public void setUserParameters(UserId _user)
@@ -91,7 +81,8 @@ public class EditOpportunity implements EntryPoint {
 		return new UserOpportunity(id, new Date(), new Date(),
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), txtbxCompany.getValue(),
 				txtbxContractType.getText(), txtbxSalary.getValue(), new Date(), new Date(),
-				false, txtbxSource.getText(), txtbxUrl.getText(), txtbxLocation.getText());
+				false, txtbxSource.getText(), txtbxUrl.getText(), txtbxLocation.getText(), 
+				UserOpportunity.applicationStatusToString(comboBoxStatus.getValue(comboBoxStatus.getTabIndex())));
 	}
 	
 	/**
@@ -122,7 +113,6 @@ public class EditOpportunity implements EntryPoint {
 		Label lblStatus = new Label(lang._TextStatus());
 		grid.setWidget(1, 0, lblStatus);
 		
-		ListBox comboBoxStatus = new ListBox();
 		grid.setWidget(1, 1, comboBoxStatus);
 		for (ApplicationStatus e : UserOpportunity.getApplicationStatusTable())
 		{

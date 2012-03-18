@@ -7,6 +7,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class CreateTestDefault {
 	static Account account = new Account();
 
 	@Test
-	public void testCreateAccount()
+	public void testCreateAccount() throws CassandraException
 	{
 		{
 			MockMailer mockMail = new MockMailer();

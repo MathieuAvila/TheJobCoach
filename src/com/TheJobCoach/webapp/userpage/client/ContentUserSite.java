@@ -27,7 +27,6 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
-import com.google.gwt.user.client.ui.Label;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -339,7 +338,6 @@ public class ContentUserSite implements EntryPoint {
 				if (selected != null) 
 				{
 					setUserJobSite(selected);
-					//Window.alert("You selected: " + selected.name);
 				}
 			}
 		});
@@ -351,7 +349,7 @@ public class ContentUserSite implements EntryPoint {
 		getAllContent();
 		cellTable.setRowData(0, jobSiteList);
 		cellTable.setRowCount(jobSiteList.size(), true);
-		cellTable.setVisibleRange(0, 5);
+		cellTable.setVisibleRange(0, 20);
 		cellTable.addColumnSortHandler(columnSortHandler);
 		
 		InlineHTML lblJobSites = new InlineHTML();

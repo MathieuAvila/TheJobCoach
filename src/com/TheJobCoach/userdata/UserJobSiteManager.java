@@ -110,16 +110,8 @@ public class UserJobSiteManager {
 	{
 		// TODO: Perform the 2 updates in a single command...
 		String reqId = id.userName + "_" + ID;
-		boolean resultReq = CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, reqId);	
-		if (resultReq == false)
-		{
-			throw new CassandraException();
-		}
-		resultReq = CassandraAccessor.deleteCompositeColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (Composite)(new EasyComposite().easyAdd(ID)));	
-		if (resultReq == false)
-		{
-			throw new CassandraException();
-		}
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, reqId);	
+		CassandraAccessor.deleteCompositeColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (Composite)(new EasyComposite().easyAdd(ID)));		
 	}
 
 	public String addUserSite(UserId id) throws CassandraException 

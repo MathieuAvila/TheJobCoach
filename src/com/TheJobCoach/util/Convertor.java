@@ -42,6 +42,7 @@ public class Convertor {
 		{
 			return 0;
 		}
+		if (string == null) return 0;
 		return Integer.decode(string);
 	}
 	

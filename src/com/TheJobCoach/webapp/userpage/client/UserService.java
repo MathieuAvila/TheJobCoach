@@ -7,6 +7,7 @@ import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
+import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
@@ -29,5 +30,10 @@ public interface UserService extends RemoteService
 	public UserDocument getUserDocument(UserId id, String documentId) throws CassandraException;
 	public String addUserDocument(UserId id) throws CassandraException;
 
-	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException;	
+	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException;
+	
+	public Vector<UserOpportunity> getUserOpportunityShortList(UserId id, String list) throws CassandraException;
+	public UserOpportunity getUserOpportunity(UserId id, String oppId) throws CassandraException;
+	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException;
+	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException;
 }

@@ -242,19 +242,9 @@ public class Account implements AccountInterface {
 					if (!userNameDB.containsKey("validated") || !userNameDB.containsKey("username") || !userNameDB.containsKey("date"))
 					{
 						// Delete this key.
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_TOKEN, k, "validated"));
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_TOKEN, k, "username"));
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_TOKEN, k, "date"));
-						System.out.println(CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_TOKEN, k));
+						CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_TOKEN, k);
 
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "token"));
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "email"));
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "name"));
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "password"));
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "firstname"));
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "date"));
-						System.out.println(CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, k, "type"));
-						System.out.println(CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, k));
+						CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, k);
 
 						System.out.println("DELETED TOKEN: " + k);
 					}

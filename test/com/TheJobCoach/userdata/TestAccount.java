@@ -13,6 +13,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccount
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 
 public class TestAccount
 {
@@ -24,7 +25,7 @@ public class TestAccount
 	static String token;
 
 	@Test
-	public void testCreateAccount()
+	public void testCreateAccount() throws CassandraException
 	{
 		MailerFactory.setMailer(mockMail);
 		CreateAccountStatus status = account.createAccountWithToken(
@@ -47,7 +48,7 @@ public class TestAccount
 	}
 
 	@Test
-	public void testValidateAccount()
+	public void testValidateAccount() throws CassandraException
 	{	
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_NOT_VALIDATED, account.loginAccount(id, "password").getLoginStatus());
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(id, token));
@@ -56,7 +57,7 @@ public class TestAccount
 	}
 
 	@Test
-	public void testCreateAccountType()
+	public void testCreateAccountType() throws CassandraException
 	{
 		{
 			String idAdmin =  "admin" + UUID.randomUUID().hashCode();

@@ -3,7 +3,6 @@ package com.TheJobCoach.util;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import me.prettyprint.cassandra.serializers.StringSerializer;
@@ -88,8 +87,8 @@ public class TestCassandraAccessor {
 
 		assertNotNull(CassandraAccessor.getColumn("TestColumnFamily2", "myobject2", "2k1"));
 		assertNotNull(CassandraAccessor.getColumn("TestColumnFamily2", "myobject", "k1"));
-		assertEquals(CassandraAccessor.deleteKey("TestColumnFamily2", "fail"), true);
-		assertEquals(CassandraAccessor.deleteKey("TestColumnFamily2", "myobject"), true);
+		CassandraAccessor.deleteKey("TestColumnFamily2", "fail");
+		CassandraAccessor.deleteKey("TestColumnFamily2", "myobject");
 		
 		System.out.println(CassandraAccessor.getColumn("TestColumnFamily2", "myobject2", "2k1"));		
 		assertNull(CassandraAccessor.getColumn("TestColumnFamily2", "myobject", "k1"));
@@ -97,15 +96,10 @@ public class TestCassandraAccessor {
 	}
 	
 	@Test
-	public void testGetRow()
+	public void testGetRow() throws CassandraException
 	{
 		Map<String, String> map = null;
-		try {
 			map = CassandraAccessor.getRow("TestColumnFamily", "myobject");
-		} catch (CassandraException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		System.out.println(map.size());
 		assertEquals(map.size(), 3);
 		assertEquals(map.get("k1"), "v11");

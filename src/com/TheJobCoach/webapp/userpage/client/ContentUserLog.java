@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.Label;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class ContentUserOpportunity implements EntryPoint {
+public class ContentUserLog implements EntryPoint {
 
 	UserId user;
 
