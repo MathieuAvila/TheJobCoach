@@ -13,7 +13,6 @@ import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import me.prettyprint.cassandra.serializers.CompositeSerializer;
 import me.prettyprint.cassandra.serializers.StringSerializer;
 import me.prettyprint.cassandra.service.CassandraHostConfigurator;
-import me.prettyprint.cassandra.service.ThriftCfDef;
 import me.prettyprint.cassandra.service.ThriftKsDef;
 import me.prettyprint.cassandra.service.template.ColumnFamilyTemplate;
 import me.prettyprint.cassandra.service.template.ColumnFamilyUpdater;
@@ -22,11 +21,9 @@ import me.prettyprint.hector.api.*;
 import me.prettyprint.hector.api.beans.ColumnSlice;
 import me.prettyprint.hector.api.beans.Composite;
 import me.prettyprint.hector.api.beans.HColumn;
-import me.prettyprint.hector.api.beans.HSuperColumn;
 import me.prettyprint.hector.api.beans.OrderedRows;
 import me.prettyprint.hector.api.beans.Row;
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
-import me.prettyprint.hector.api.ddl.ColumnType;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
 import me.prettyprint.hector.api.exceptions.HectorException;
@@ -36,7 +33,6 @@ import me.prettyprint.hector.api.mutation.Mutator;
 import me.prettyprint.hector.api.query.ColumnQuery;
 import me.prettyprint.hector.api.query.QueryResult;
 import me.prettyprint.hector.api.query.RangeSlicesQuery;
-import me.prettyprint.hector.api.query.RangeSubSlicesQuery;
 import me.prettyprint.hector.api.query.SliceQuery;
 
 
@@ -166,7 +162,7 @@ public class CassandraAccessor {
 		}
 		catch (Exception e){
 			System.out.println("getRow CF:" + CF + " key: " + key);
-			e.printStackTrace();
+			//e.printStackTrace();
 			throw new CassandraException();
 		}
 		if (r == null) throw new CassandraException();
@@ -355,5 +351,21 @@ public class CassandraAccessor {
         if (lastRow != null) last.add(lastRow.getKey());
         
 	    return true;
+	}
+	
+	public static ColumnFamilyDefinition checkColumnFamilyAscii(String CFName, ColumnFamilyDefinition cfDefList)
+	{		
+		if (cfDefList == null)
+		{
+			cfDefList = HFactory.createColumnFamilyDefinition(
+					CassandraAccessor.KEYSPACENAME,                              
+					CFName, 
+					ComparatorType.ASCIITYPE);
+			try{
+				CassandraAccessor.getCluster().addColumnFamily(cfDefList);
+			}
+			catch(Exception e) {} // Assume it already exists.
+		}
+		return cfDefList;
 	}
 }

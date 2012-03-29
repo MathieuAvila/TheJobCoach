@@ -17,6 +17,15 @@ public class ShortMap {
 		return this;
 	}
 	
+	public ShortMap add(String k, byte[] v)
+	{
+		if (v != null)
+			map.put(k, String.valueOf(v));
+		else
+			map.put(k, "");
+		return this;
+	}
+		
 	public Map<String, String> get()
 	{
 		return map;

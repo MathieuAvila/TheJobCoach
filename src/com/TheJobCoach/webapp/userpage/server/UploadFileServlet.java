@@ -13,15 +13,26 @@ import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import com.TheJobCoach.userdata.UserDocumentManager;
+
 public class UploadFileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -2947803123194402987L;
 
-	public void service(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException{
+	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
 		if (!ServletFileUpload.isMultipartContent(request)) 
 			return; 
 
+		UserDocumentManager cm = new UserDocumentManager();
+		String docId = request.getParameter("docid");
+		if (docId == null)
+		{
+			System.out.println("No DOC ID provided");
+			return;
+		}
+		//ServletOutputStream out = response.getOutputStream();
+		
 		FileItemFactory factory = new DiskFileItemFactory(); 
 		ServletFileUpload upload = new ServletFileUpload(factory); 
 
@@ -52,6 +63,8 @@ public class UploadFileServlet extends HttpServlet {
 			try {
 				//	File uploadedFile = new File(DB.PATH_UPLOAD+ fileName);
 				//	item.write(uploadedFile);
+				System.out.println("Upload FILE : "+ fileName + " size " + item.getSize() + item.get());
+				cm.setUserDocumentContent(null, docId, fileName, item.get());
 			}
 			catch (Exception e) {
 				e.printStackTrace();

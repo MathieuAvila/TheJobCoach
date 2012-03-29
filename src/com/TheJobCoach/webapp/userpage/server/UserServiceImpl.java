@@ -1,9 +1,12 @@
 package com.TheJobCoach.webapp.userpage.server;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.userdata.UserJobSiteManager;
+import com.TheJobCoach.userdata.UserLogManager;
 import com.TheJobCoach.userdata.UserOpportunityManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserService;
@@ -11,6 +14,7 @@ import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
+import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -23,6 +27,8 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	static private UserJobSiteManager jobSiteManager = new UserJobSiteManager();
 	static private com.TheJobCoach.admindata.News news = new com.TheJobCoach.admindata.News();
 	static private UserOpportunityManager userOpportunityManager = new UserOpportunityManager();
+	static private UserLogManager userLogManager = new UserLogManager();
+	static private UserDocumentManager userDocumentManager = new UserDocumentManager();
 
 	@Override
 	public List<String> getUserSiteList(UserId id) throws CassandraException 
@@ -58,39 +64,25 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 
 	@Override
-	public List<String> getUserDocumentList(UserId id)
+	public Vector<UserDocument> getUserDocumentList(UserId id)
 			throws CassandraException {
-		// TODO Auto-generated method stub
-		return null;
+		return userDocumentManager.getUserDocumentList(id);
 	}
 
 	@Override
-	public Integer deleteUserDocument(UserId id, String documentId)
+	public String deleteUserDocument(UserId id, String documentId)
 			throws CassandraException {
-		// TODO Auto-generated method stub
-		return null;
+		userDocumentManager.deleteUserDocument(id, documentId);
+		return documentId;
 	}
 
 	@Override
-	public Integer setUserDocument(UserId id, UserDocument document)
+	public String setUserDocument(UserId id, UserDocument document)
 			throws CassandraException {
-		// TODO Auto-generated method stub
-		return null;
+		userDocumentManager.setUserDocument(id, document);
+		return document.ID;
 	}
 
-	@Override
-	public UserDocument getUserDocument(UserId id, String documentId)
-			throws CassandraException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String addUserDocument(UserId id) throws CassandraException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	@Override
 	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException
 	{
@@ -119,6 +111,32 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException {
 		userOpportunityManager.deleteUserOpportunity(id, oppId);
 		return oppId;
+	}
+
+	@Override
+	public Vector<UserLogEntry> getUserLogEntryShortList(UserId id, String oppId)
+			throws CassandraException {
+		return userLogManager.getLogShortList(id, oppId);
+	}
+
+	@Override
+	public UserLogEntry getUserLogEntry(UserId id, String logId)
+			throws CassandraException {
+		return userLogManager.getLogEntryLong(id, logId);
+	}
+
+	@Override
+	public String setUserLogEntry(UserId id, UserLogEntry log)
+			throws CassandraException {
+		userLogManager.setUserLogEntry(id, log);
+		return log.ID;
+	}
+
+	@Override
+	public String deleteUserLogEntry(UserId id, String logId)
+			throws CassandraException {
+		userLogManager.deleteUserLogEntry(id, logId);
+		return logId;
 	}
 
 }

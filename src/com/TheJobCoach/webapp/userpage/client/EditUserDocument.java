@@ -1,10 +1,11 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.Date;
+import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
-import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
+import com.TheJobCoach.webapp.userpage.shared.UserDocument;
+import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -18,16 +19,15 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.datepicker.client.DateBox;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class EditLogEntry implements EntryPoint {
+public class EditUserDocument implements EntryPoint {
 
-	public interface EditLogEntryResult
+	public interface EditUserDocumentResult
 	{
-		public void setResult(UserLogEntry result);
+		public void setResult(UserDocument result);
 	}
 	
 	UserId user;
@@ -42,25 +42,26 @@ public class EditLogEntry implements EntryPoint {
 	}
 
 	Panel rootPanel;
-	EditLogEntryResult result;
-	UserLogEntry currentLogEntry;
+	EditUserDocumentResult result;
+	UserDocument currentUserDocument;
 	
-	public void setRootPanel(Panel panel, UserLogEntry _currentLogEntry, EditLogEntryResult _result, String text)
+	public void setRootPanel(Panel panel, UserDocument _currentUserDocument, EditUserDocumentResult _result, String text)
 	{
 		rootPanel = panel;
-		currentLogEntry = _currentLogEntry;
+		currentUserDocument = _currentUserDocument;
 		result = _result;
-		txtbxTitle.setText(currentLogEntry.title);
-		richTextAreaDescription.setHTML(currentLogEntry.description);		
+		txtbxTitle.setText(currentUserDocument.name);
+		richTextAreaDescription.setHTML(currentUserDocument.description);		
 	}
 
-	public UserLogEntry getLogEntry()
+	public UserDocument getUserDocument()
 	{
-		return new UserLogEntry(currentLogEntry.ID, currentLogEntry.opportunityId,
-				txtbxTitle.getText(), richTextAreaDescription.getHTML(), 
-				new Date(), new Date(),
-				UserLogEntry.entryTypeToString("NEW"),
-				null, null);
+		return new UserDocument(currentUserDocument.ID,
+				txtbxTitle.getText(), 
+				richTextAreaDescription.getHTML(),
+				new Date(),
+				currentUserDocument.fileName,
+				UserDocument.documentStatusToString("NEW"));
 	}
 	
 	/**
@@ -70,7 +71,7 @@ public class EditLogEntry implements EntryPoint {
 	public void onModuleLoad()
 	{	
 		final DialogBox dBox = new DialogBox();
-		dBox.setText("Edit LogEntry");
+		dBox.setText("Edit UserDocument");
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 		
@@ -91,9 +92,11 @@ public class EditLogEntry implements EntryPoint {
 		
 		ListBox comboBoxStatus = new ListBox();
 		grid.setWidget(1, 1, comboBoxStatus);
-		for (LogEntryType e : UserLogEntry.getLogTypeTable())
+		Vector<UserDocument.DocumentStatus> tDocStatus = new Vector<UserDocument.DocumentStatus>();
+		tDocStatus.copyInto(UserDocument.DocumentStatus.values());
+		for (DocumentStatus e : tDocStatus)
 		{
-			comboBoxStatus.addItem(UserLogEntry.entryTypeToString(e), UserLogEntry.entryTypeToString(e));
+			comboBoxStatus.addItem(UserDocument.documentStatusToString(e), UserDocument.documentStatusToString(e));
 		}
 		
 		Label lblDescription = new Label("Description");
@@ -101,18 +104,6 @@ public class EditLogEntry implements EntryPoint {
 		grid.setWidget(2, 1, richTextAreaDescription);
 		grid.getCellFormatter().setWidth(2, 1, "100%");
 		richTextAreaDescription.setWidth("100%");
-		
-		Label lblEventDate = new Label("Start date");
-		grid.setWidget(3, 0, lblEventDate);
-		
-		DateBox dateBoxStart = new DateBox();
-		grid.setWidget(3, 1, dateBoxStart);
-		
-		Label lblEndDate = new Label("End Date");
-		grid.setWidget(4, 0, lblEndDate);
-		
-		DateBox dateBoxEndDate = new DateBox();
-		grid.setWidget(4, 1, dateBoxEndDate);
 		
 		grid.getCellFormatter().setHorizontalAlignment(6, 1, HasHorizontalAlignment.ALIGN_RIGHT);
 		
@@ -126,7 +117,7 @@ public class EditLogEntry implements EntryPoint {
 		btnOk.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
-				result.setResult(getLogEntry());
+				result.setResult(getUserDocument());
 				dBox.hide();
 			}
 		});

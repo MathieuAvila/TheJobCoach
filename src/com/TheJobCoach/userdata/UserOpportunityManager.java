@@ -4,9 +4,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
-import me.prettyprint.hector.api.ddl.ComparatorType;
-import me.prettyprint.hector.api.factory.HFactory;
-
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
@@ -24,28 +21,8 @@ public class UserOpportunityManager {
 
 	public UserOpportunityManager()
 	{
-		if (cfDefList == null)
-		{
-			cfDefList = HFactory.createColumnFamilyDefinition(
-					CassandraAccessor.KEYSPACENAME,                              
-					COLUMN_FAMILY_NAME_LIST, 
-					ComparatorType.ASCIITYPE);
-			try{
-				CassandraAccessor.getCluster().addColumnFamily(cfDefList);
-			}
-			catch(Exception e) {} // Assume it already exists.
-		}
-		if (cfDefData == null)
-		{
-			cfDefData = HFactory.createColumnFamilyDefinition(
-					CassandraAccessor.KEYSPACENAME,                              
-					COLUMN_FAMILY_NAME_DATA, 
-					ComparatorType.ASCIITYPE);
-			try{
-				CassandraAccessor.getCluster().addColumnFamily(cfDefData);
-			}
-			catch(Exception e) {} // Assume it already exists.
-		}
+		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
+		cfDefData = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_DATA, cfDefData);
 	}
 
 	public Vector<UserOpportunity> getOpportunitiesShortList(UserId id, String listName) throws CassandraException 

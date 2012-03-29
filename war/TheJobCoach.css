@@ -91,3 +91,20 @@ toto {
 	color: dodgerblue;
 	font-weight: bolder;
 }
+.summary-text {
+	color: darkblue;
+	font-weight: bold;
+	font-size: 15px;
+}
+.summary-title {
+	color: gray;
+	font-weight: bold;
+	font-size: 15px;
+}
+.filecelltable {
+line-height:30px
+}
+.clickableText {
+	cursor: pointer;
+ colorr:red;
+}

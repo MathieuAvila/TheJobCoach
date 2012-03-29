@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -39,12 +40,32 @@ public class ContentUserOpportunity implements EntryPoint {
 
 	final CellTable<UserOpportunity> cellTable = new CellTable<UserOpportunity>();
 	UserOpportunity currentOpportunity = null;
+	final HTML panelDescriptionContent = new HTML("");
 	
 	final Lang lang = GWT.create(Lang.class);
 	
 	private void setUserOpportunity(UserOpportunity opp)
 	{
-		currentOpportunity = opp;
+		AsyncCallback<UserOpportunity> callback = new AsyncCallback<UserOpportunity>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+			@Override
+			public void onSuccess(UserOpportunity result) {
+				System.out.println(result);
+				currentOpportunity = result;
+				panelDescriptionContent.setHTML(currentOpportunity.description);
+				cellTable.redraw();				
+			}
+		};
+		try {
+			userService.getUserOpportunity(user, opp.ID, callback);
+		}
+		catch (CassandraException e) 
+		{
+			e.printStackTrace();
+		}		
 	}
 		
 	public void setUserParameters(UserId _user)
@@ -81,30 +102,6 @@ public class ContentUserOpportunity implements EntryPoint {
 			}
 		}
 	};
-
-	void getOneOpportunity(String opportunityId)
-	{
-		AsyncCallback<UserOpportunity> callback = new AsyncCallback<UserOpportunity>()	{
-			@Override
-			public void onFailure(Throwable caught)
-			{
-				Window.alert(caught.getMessage());
-			}
-			@Override
-			public void onSuccess(UserOpportunity result)
-			{
-				System.out.println(result);
-				// Find position.
-				for (int count=0; count != userOpportunityList.size(); count++) {
-					if (userOpportunityList.get(count).ID.equals(result.ID))
-					{
-						userOpportunityList.set(count, result);
-					}
-				}
-				dataProvider.updateRowData(0, userOpportunityList);
-			}
-		};
-	}
 
 	void getAllContent()
 	{		
@@ -146,6 +143,8 @@ public class ContentUserOpportunity implements EntryPoint {
 					}
 					public void onSuccess(String result)
 					{
+						currentOpportunity = null;
+						panelDescriptionContent.setHTML("");
 						getAllContent();
 					}
 				});
@@ -233,6 +232,18 @@ public class ContentUserOpportunity implements EntryPoint {
 		}
 	}
 
+	class UserLogEntryEdit implements ClickHandler
+	{
+		public void onClick(ClickEvent event)
+		{
+			ContentUserLog cul = new ContentUserLog();
+			cul.setRootPanel(rootPanel);
+			cul.setUserParameters(user);
+			cul.setOpportunity(currentOpportunity);	
+			cul.onModuleLoad();
+		}
+	}
+
 
 	/**
 	 * This is the entry point method.
@@ -247,7 +258,7 @@ public class ContentUserOpportunity implements EntryPoint {
 		rootPanel.clear();
 
 		VerticalPanel simplePanelCenter = new VerticalPanel();
-		simplePanelCenter.setSize("100%", "");
+		simplePanelCenter.setSize("100%", "100%");
 		rootPanel.add(simplePanelCenter);
 		
 		InlineHTML lblOpportunities = new InlineHTML();
@@ -378,18 +389,41 @@ public class ContentUserOpportunity implements EntryPoint {
 		Button buttonEditlogs = new Button(lang._TextEditLogs());
 		horizontalPanel.add(buttonEditlogs);
 				
-		HTML htmlDescriptionhtml = new HTML(lang.htmlDescriptionhtml_html(), true);
+		HTML htmlDescriptionhtml = new HTML("", true);
 		simplePanelCenter.add(htmlDescriptionhtml);
 		htmlDescriptionhtml.setSize("100%", "100%");
-				
-		Grid grid = new Grid(2, 1);
-		simplePanelCenter.add(grid);
-		grid.setWidth("100%");
+		
+		SimplePanel simplePanel = new SimplePanel();
+		simplePanelCenter.add(simplePanel);
+		simplePanel.setHeight("10px");
+		
+		Grid grid_1 = new Grid(2, 2);
+		simplePanelCenter.add(grid_1);
+		grid_1.setWidth("100%");
 		
 		Label lblSource = new Label(lang._TextSource());
-		grid.setWidget(0, 0, lblSource);
+		lblSource.setStyleName("summary-title");
+		grid_1.setWidget(0, 0, lblSource);
 		
+		Label label_1 = new Label((String) null);
+		label_1.setStyleName("summary-text");
+		grid_1.setWidget(0, 1, label_1);
+		label_1.setWidth("100%");
 		
+		Label labelCreated = new Label(lang._TextCreated());
+		labelCreated.setStyleName("summary-title");
+		grid_1.setWidget(1, 0, labelCreated);
+		
+		Label labelCreatedContent = new Label((String) null);
+		labelCreatedContent.setStyleName("summary-text");
+		grid_1.setWidget(1, 1, labelCreatedContent);
+		
+		Label labelDescription = new Label(lang._TextDescription());
+		labelDescription.setStyleName("summary-title");
+		simplePanelCenter.add(labelDescription);
+		
+		simplePanelCenter.add(panelDescriptionContent);
+				
 		// Add a handler to the delete button.
 		DeleteHandler deleteHandler = new DeleteHandler();
 		buttonDeleteSite.addClickHandler(deleteHandler);
@@ -401,6 +435,10 @@ public class ContentUserOpportunity implements EntryPoint {
 		// Add a handler to the new button.
 		NewOpportunityHandler newHandler = new NewOpportunityHandler();
 		buttonNewSite.addClickHandler(newHandler);
+		
+		// Add a handler to the edit UserLog button.
+		UserLogEntryEdit userLog = new UserLogEntryEdit();
+		buttonEditlogs.addClickHandler(userLog);
 		
 		getAllContent();		
 	}

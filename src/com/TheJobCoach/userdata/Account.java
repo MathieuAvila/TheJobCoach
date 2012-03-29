@@ -24,14 +24,11 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
-import me.prettyprint.hector.api.ddl.ComparatorType;
-import me.prettyprint.hector.api.factory.HFactory;
 
 
 public class Account implements AccountInterface {
 
 	static ColumnFamilyDefinition cfDef = null;
-
 	static ColumnFamilyDefinition cfDefToken = null;
 
 	final static String COLUMN_FAMILY_NAME_ACCOUNT = "account";
@@ -39,28 +36,8 @@ public class Account implements AccountInterface {
 
 	public Account()
 	{
-		if (cfDef == null)
-		{
-			cfDef = HFactory.createColumnFamilyDefinition(
-					CassandraAccessor.KEYSPACENAME,                              
-					COLUMN_FAMILY_NAME_ACCOUNT, 
-					ComparatorType.ASCIITYPE);
-			try{
-				CassandraAccessor.getCluster().addColumnFamily(cfDef);
-			}
-			catch(Exception e) {} // Assume it already exists.
-		}
-		if (cfDefToken == null)
-		{
-			cfDefToken = HFactory.createColumnFamilyDefinition(
-					CassandraAccessor.KEYSPACENAME,                              
-					COLUMN_FAMILY_NAME_TOKEN, 
-					ComparatorType.ASCIITYPE);
-			try{
-				CassandraAccessor.getCluster().addColumnFamily(cfDefToken);
-			}
-			catch(Exception e) {} // Assume it already exists.
-		}
+		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_ACCOUNT, cfDef);
+		cfDefToken = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_TOKEN, cfDefToken);
 	}
 
 	public boolean existsAccount(String userName)

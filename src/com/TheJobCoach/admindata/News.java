@@ -100,10 +100,15 @@ public class News {
 			startYear = nextYear;			
 			String colDate = startYear + "-" + startMonth;
 			Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATE, colDate);
+			if (result == null)
+			{
+				return returnResult;
+			}
 			Set<String> keySet = result.keySet();
 			for (String key: keySet)
 			{				
 				Map<String, String> resultInfo = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATA, key);
+				if (resultInfo == null) continue;
 				Date d = Convertor.toDate(resultInfo.get("date"));
 				if (d.after(start) && d.before(end))
 				{

@@ -116,19 +116,9 @@ public interface Lang extends Constants {
 	@Key("updatesite")
 	String _TextUpdateSite();
 
-	String verticalPanel_height();
-	String verticalPanel_height_1();
-	String lblNewLabel_text();	
-	String lblDownloadFile_text();
-	
 	@Key("downloadfile")
 	String _TextDownloadFile();
-	
-	String simplePanelCenter_width();
-	String simplePanelCenter_height();
-	String verticalPanel_2_width();
-	String simplePanel_6_width();
-	
+		
 	@Key("applicationStatusMap")	
 	Map<String, String> applicationStatusMap();
 
@@ -180,8 +170,27 @@ public interface Lang extends Constants {
 	@Key("positionname")
 	String _TextPositionName();
 
-	String htmlDescriptionhtml_html();
-	
 	@Key("editlogs")	
 	String _TextEditLogs();
+
+	@Key("updatelogentry")
+	String _TextUpdateLogEntry();
+
+	@Key("newlogentry")
+	String _TextNewLogEntry();
+
+	@Key("deletelogentry")
+	String _TextDeleteLogEntry();
+
+	@Key("created")
+	String _TextCreated();
+
+	@Key("expectedfollowup")
+	String _TextExpectedFollowUp();
+	
+	@Key("editlogtitle")
+	String _Text_EditLog();
+
+	@Key("backtoopportunitylist")
+	String _Text_BackToOpportunityList();
 }

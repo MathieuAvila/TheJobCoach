@@ -124,6 +124,7 @@ public class EditOpportunity implements EntryPoint {
 		grid.setWidget(2, 1, richTextAreaDescription);
 		grid.getCellFormatter().setWidth(2, 1, "100%");
 		richTextAreaDescription.setWidth("95%");
+		richTextAreaDescription.setHTML("<bold></bold>");
 		
 		Label lblCompany = new Label(lang._TextCompany());
 		grid.setWidget(3, 0, lblCompany);		

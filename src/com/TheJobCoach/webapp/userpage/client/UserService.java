@@ -7,6 +7,7 @@ import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
+import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -24,11 +25,9 @@ public interface UserService extends RemoteService
 	public UserJobSite getUserSite(UserId id, String siteId) throws CassandraException;
 	public String addUserSite(UserId id) throws CassandraException;
 
-	public List<String> getUserDocumentList(UserId id) throws CassandraException;
-	public Integer deleteUserDocument(UserId id, String documentId) throws CassandraException;
-	public Integer setUserDocument(UserId id, UserDocument document) throws CassandraException;
-	public UserDocument getUserDocument(UserId id, String documentId) throws CassandraException;
-	public String addUserDocument(UserId id) throws CassandraException;
+	public Vector<UserDocument> getUserDocumentList(UserId id) throws CassandraException;
+	public String deleteUserDocument(UserId id, String documentId) throws CassandraException;
+	public String setUserDocument(UserId id, UserDocument document) throws CassandraException;
 
 	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException;
 	
@@ -36,4 +35,9 @@ public interface UserService extends RemoteService
 	public UserOpportunity getUserOpportunity(UserId id, String oppId) throws CassandraException;
 	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException;
 	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException;
+	
+	public Vector<UserLogEntry> getUserLogEntryShortList(UserId id, String oppId) throws CassandraException;
+	public UserLogEntry getUserLogEntry(UserId id, String logId) throws CassandraException;
+	public String setUserLogEntry(UserId id, UserLogEntry opp) throws CassandraException;
+	public String deleteUserLogEntry(UserId id, String logId) throws CassandraException;
 }

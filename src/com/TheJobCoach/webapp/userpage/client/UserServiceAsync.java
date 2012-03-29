@@ -8,6 +8,7 @@ import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
+import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -22,16 +23,19 @@ public interface UserServiceAsync {
 	void setUserSite(UserId id, UserJobSite data, AsyncCallback<Integer> callback) throws CassandraException;
 	void addUserSite(UserId id, AsyncCallback<String> callback) throws CassandraException;
 
-	public void getUserDocumentList(UserId id, AsyncCallback<List<String>> callback) throws CassandraException;
-	public void deleteUserDocument(UserId id, String documentId, AsyncCallback<Integer> callback) throws CassandraException;
-	public void setUserDocument(UserId id, UserDocument document, AsyncCallback<Integer> callback) throws CassandraException;
-	public void getUserDocument(UserId id, String documentId, AsyncCallback<UserDocument> callback) throws CassandraException;
-	public void addUserDocument(UserId id, AsyncCallback<String> callback) throws CassandraException;
-	
+	public void getUserDocumentList(UserId id, AsyncCallback<Vector<UserDocument>> callback) throws CassandraException;
+	public void deleteUserDocument(UserId id, String documentId, AsyncCallback<String> callback) throws CassandraException;
+	public void setUserDocument(UserId id, UserDocument document, AsyncCallback<String> callback) throws CassandraException;
+
 	public void getNews(UserId id, AsyncCallback<Vector<NewsInformation>> callback) throws CassandraException;
 	
 	public void getUserOpportunityShortList(UserId id, String list, AsyncCallback<Vector<UserOpportunity>> callback) throws CassandraException;
 	public void getUserOpportunity(UserId id, String oppId, AsyncCallback<UserOpportunity> callback) throws CassandraException;
 	public void setUserOpportunity(UserId id, String list, UserOpportunity opp, AsyncCallback<String> callback) throws CassandraException;
 	public void deleteUserOpportunity(UserId id, String oppId, AsyncCallback<String> callback) throws CassandraException;
+		
+	public void getUserLogEntryShortList(UserId id, String oppId, AsyncCallback<Vector<UserLogEntry>> callback) throws CassandraException;
+	public void getUserLogEntry(UserId id, String logId, AsyncCallback<UserLogEntry> callback) throws CassandraException;
+	public void setUserLogEntry(UserId id, UserLogEntry opp, AsyncCallback<String> callback) throws CassandraException;
+	public void deleteUserLogEntry(UserId id, String logId, AsyncCallback<String> callback) throws CassandraException;
 }
