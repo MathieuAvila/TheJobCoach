@@ -37,5 +37,6 @@ Thumbs.db
 *.gwt.rpc
 gwt-unitCache
 *.war
-war/**
+war/WEB-INF/classes/**
+war/thejobcoach/**
 test-classes/**
