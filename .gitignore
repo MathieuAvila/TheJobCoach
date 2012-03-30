@@ -42,3 +42,4 @@ war/thejobcoach/**
 test-classes/**
 war/WEB-INF/deploy/**
 .settings/org.eclipse.ltk.core.refactoring.prefs
+.gwt/**
