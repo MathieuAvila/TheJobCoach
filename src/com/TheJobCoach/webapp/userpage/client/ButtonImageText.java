@@ -11,19 +11,26 @@ public class ButtonImageText extends Button
 
 	private String text;
 
-	enum Type { NEW };
+	enum Type { NEW, OK, CANCEL };
 
 	Type type;
 
 	static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
 	static ImageResource newIcon = wpImageBundle.createNew();
+	static ImageResource okIcon = wpImageBundle.createOk();
+	static ImageResource cancelIcon = wpImageBundle.createCancel();
 
 	public ButtonImageText(Type type, String text)
 	{
 		super();
 		this.type = type;	
 		setText(text);
-		setResource(newIcon);
+		switch (type)
+		{
+		case OK: setResource(okIcon); break;
+		case NEW: setResource(newIcon); break;
+		case CANCEL: setResource(cancelIcon); break;
+		}
 	}
 
 	public void setResource(ImageResource imageResource)
@@ -40,7 +47,7 @@ public class ButtonImageText extends Button
 		this.text = text;
 		Element span = DOM.createElement("span");
 		span.setInnerText(text);
-		span.setAttribute("style", "padding-left:3px; vertical-align:middle;");
+		span.setAttribute("style", "padding-left:10px; vertical-align:middle;");
 
 		DOM.insertChild(getElement(), span, 0);
 	}

@@ -6,6 +6,7 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -69,6 +70,7 @@ public class EditLogEntry implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{	
+		Lang lang = GWT.create(Lang.class);
 		final DialogBox dBox = new DialogBox();
 		dBox.setText("Edit LogEntry");
 		dBox.setGlassEnabled(true);
@@ -120,7 +122,7 @@ public class EditLogEntry implements EntryPoint {
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		grid.setWidget(6, 1, horizontalPanel);
 		
-		Button btnOk = new Button("OK");
+		Button btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
 		horizontalPanel.add(btnOk);
 		
 		btnOk.addClickHandler(new ClickHandler() {
@@ -131,7 +133,7 @@ public class EditLogEntry implements EntryPoint {
 			}
 		});
 		
-		Button btnCancel = new Button("Cancel");
+		Button btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
 		horizontalPanel.add(btnCancel);
 		
 		btnCancel.addClickHandler(new ClickHandler() {

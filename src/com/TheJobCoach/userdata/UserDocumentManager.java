@@ -69,7 +69,11 @@ public class UserDocumentManager {
 
 	public void setUserDocument(UserId id, UserDocument result) throws CassandraException 
 	{
-		String key = id.userName;		
+		String key = id.userName;
+		System.out.println(result.name);
+		System.out.println(result.ID);
+		System.out.println(result.description);
+		System.out.println(result.fileName);
 		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_LIST, 
 				key, 
@@ -94,25 +98,25 @@ public class UserDocumentManager {
 	
 	public void setUserDocumentContent(UserId id, String docId, String fileName, byte[] result) throws CassandraException 
 	{
-		UserDocument userDoc = getUserDocument(id, docId);
-		if (userDoc == null) throw new CassandraException();
-		userDoc.fileName = fileName;
-		setUserDocument(id, userDoc);		
-		CassandraAccessor.updateColumn(
+		//UserDocument userDoc = getUserDocument(id, docId);
+		//if (userDoc == null) throw new CassandraException();
+		//userDoc.fileName = fileName;
+		//setUserDocument(id, userDoc);
+		CassandraAccessor.updateColumnByte(
 				COLUMN_FAMILY_NAME_CONTENT, 
-				docId, 
-				(new ShortMap())
-				.add("content", result).get());
+				docId,
+				"content",
+				result);
 	}
 	
 	public byte[] getUserDocumentContent(UserId id, String docId) throws CassandraException 
 	{
-		String resultReq = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_CONTENT, docId, "content");
+		byte[] resultReq = CassandraAccessor.getColumnByte(COLUMN_FAMILY_NAME_CONTENT, docId, "content");
 		if (resultReq == null)
 		{
 			return new byte[0];  // this means it was deleted.
 		}
-		return resultReq.getBytes();
+		return resultReq;
 	}
 	
 	

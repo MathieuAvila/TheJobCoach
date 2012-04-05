@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 
+import me.prettyprint.cassandra.serializers.BytesArraySerializer;
 import me.prettyprint.cassandra.serializers.CompositeSerializer;
 import me.prettyprint.cassandra.serializers.StringSerializer;
 import me.prettyprint.cassandra.service.CassandraHostConfigurator;
@@ -47,6 +48,7 @@ public class CassandraAccessor {
 	static KeyspaceDefinition myKeyspaceDefinition = null;
 	static Keyspace myKeyspace = null;
 	private static final StringSerializer se = new StringSerializer();
+	private static final BytesArraySerializer bse = new BytesArraySerializer();
 	private static final CompositeSerializer ce = new CompositeSerializer();
 	
 	private static String location = "localhost:9160";	
@@ -213,7 +215,7 @@ public class CassandraAccessor {
 		}
 		return true;
 	}
-
+/*
 	public static boolean createCompositeColumnFamily(String name, String type)
 	{
 		ColumnFamilyDefinition cfDef = null;		
@@ -300,20 +302,6 @@ public class CassandraAccessor {
 		return true;
 	}
 
-	static public void deleteColumn(String CF, String key, String col) throws CassandraException
-	{
-		Mutator<String> mutator = HFactory.createMutator(CassandraAccessor.getKeyspace(), se);		
-		mutator.delete(key, CF, col, se);
-		try 
-		{
-			MutationResult mr = mutator.execute();			
-		}
-		catch (Exception e)
-		{
-			throw new CassandraException();
-		}		
-	}
-
 	static public boolean deleteCompositeColumn(String CF, String key, Composite col)
 	{
 		Mutator<String> mutator = HFactory.createMutator(CassandraAccessor.getKeyspace(), se);
@@ -329,7 +317,22 @@ public class CassandraAccessor {
 		}
 		return true;
 	}	
+	*/
 	
+	static public void deleteColumn(String CF, String key, String col) throws CassandraException
+	{
+		Mutator<String> mutator = HFactory.createMutator(CassandraAccessor.getKeyspace(), se);		
+		mutator.delete(key, CF, col, se);
+		try 
+		{
+			MutationResult mr = mutator.execute();			
+		}
+		catch (Exception e)
+		{
+			throw new CassandraException();
+		}		
+	}
+
 	static public boolean getKeyRange(String CFName, String start, int count, Set<String> result, Vector<String> last)
 	{
 		RangeSlicesQuery<String, String, String> rangeSlicesQuery =
@@ -367,5 +370,47 @@ public class CassandraAccessor {
 			catch(Exception e) {} // Assume it already exists.
 		}
 		return cfDefList;
+	}
+	
+	
+	static public void updateColumnByte(String CF, String key, String column, byte[] data) throws CassandraException
+	{
+		ColumnFamilyTemplate<String, String> cfTemplate = new ThriftColumnFamilyTemplate<String, String>(CassandraAccessor.getKeyspace(),
+				CF, 
+				se,
+				se        
+				);
+		ColumnFamilyUpdater<String, String> updater = cfTemplate.createUpdater(key);		
+		updater.setByteArray(column, data);
+		
+		try 
+		{
+			cfTemplate.update(updater);
+		} 
+		catch (HectorException e) 
+		{
+			// do something ...
+			System.out.println("Updater error");
+			e.printStackTrace();
+			throw new CassandraException();
+		}
+	}
+
+	static public byte[] getColumnByte(String CF, String key, String columnName)
+	{
+		ColumnQuery<String, String, byte[]> cQ = HFactory.createColumnQuery(getKeyspace(), se, se, bse);
+		QueryResult<HColumn<String, byte[]>> r;
+		try {
+			r = cQ.setKey(key).setName(columnName).setColumnFamily(CF).execute();
+		}
+		catch (Exception e){
+			System.out.println(e);
+			return null;
+		}
+		if (r == null) return null;
+		System.out.println("CF=" + CF + " KEY=" + key +" COL=" + columnName + " RESULT=" + r.get());
+		HColumn<String, byte[]> c = r.get();
+		if (c == null) return null;
+		return c.getValue();
 	}
 }

@@ -45,6 +45,7 @@ public class DownloadFileServlet extends HttpServlet {
 		try 
 		{
 			doc = cm.getUserDocumentContent(null, docId);
+			System.out.println("Document has length :" + doc.length);
 		} 
 		catch (CassandraException e) 
 		{

@@ -20,7 +20,7 @@ public class ShortMap {
 	public ShortMap add(String k, byte[] v)
 	{
 		if (v != null)
-			map.put(k, String.valueOf(v));
+			map.put(k, v.toString());
 		else
 			map.put(k, "");
 		return this;

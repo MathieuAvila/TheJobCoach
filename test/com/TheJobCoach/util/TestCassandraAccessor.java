@@ -2,13 +2,10 @@ package com.TheJobCoach.util;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Map;
 
-import me.prettyprint.cassandra.serializers.StringSerializer;
 import me.prettyprint.hector.api.Cluster;
 import me.prettyprint.hector.api.Keyspace;
-import me.prettyprint.hector.api.beans.Composite;
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
@@ -16,7 +13,6 @@ import me.prettyprint.hector.api.factory.HFactory;
 
 import org.junit.Test;
 
-import com.TheJobCoach.util.CassandraAccessor.CompositeColumnEntry;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 
 public class TestCassandraAccessor {
@@ -107,118 +103,52 @@ public class TestCassandraAccessor {
 		assertEquals(map.get("k3"), "v31");
 		assertNull(map.get("toto"));
 	}
-		
-	/*
-	@Test 
-	public void testCompositeColumnFamily()
+	
+	static private void checkByteArray(byte[] b1, byte[] b2)
 	{
-		CassandraAccessor.deleteColumnFamily("TESTCOMPOSITE");
-		assertEquals(true, CassandraAccessor.createCompositeColumnFamily("TESTCOMPOSITE", "(UTF8Type)"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("firstkey")), "mydata"));
-		assertEquals(false, CassandraAccessor.createCompositeColumnFamily("TESTCOMPOSITE", "(UTF8Type)"));
-		assertEquals(true, CassandraAccessor.deleteColumnFamily("TESTCOMPOSITE"));
-	}	
-	*/
-	@Test 
-	public void testGetCompositeColumnRange()
-	{
-		CassandraAccessor.deleteColumnFamily("TESTCOMPOSITE");
-		assertEquals(true, CassandraAccessor.createCompositeColumnFamily("TESTCOMPOSITE", "(UTF8Type)"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("keyZ")), "mydata0"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key0")), "mydata0"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key0")), "mydata0u"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key1")), "mydata1"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key2")), "mydata2"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key3")), "mydata3"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key4")), "mydata4"));
-		ArrayList<CompositeColumnEntry> result = new ArrayList<CompositeColumnEntry>();
-		CassandraAccessor.getCompositeColumnsRange(
-				"TESTCOMPOSITE", 
-				"TOTO", 
-				(Composite)(new EasyComposite().easyAdd("key0")), 
-				(Composite)(new EasyComposite().easyAdd("key2Z")), 
-				result);
-		assertEquals(3, result.size());	
-		CompositeColumnEntry key = result.get(0);
-		assertEquals("key0", key.key.get(0, new StringSerializer()));
-		assertEquals("mydata0u", key.value);
-
-		key = result.get(1);
-		assertEquals("key1", key.key.get(0, new StringSerializer()));
-		assertEquals("mydata1", key.value);
-		
-		key = result.get(2);
-		assertEquals("key2", key.key.get(0, new StringSerializer()));		
-		assertEquals("mydata2", key.value);
-		
-		/*
-		assertTrue(keySet.contains((Composite)new EasyComposite().easyAdd("key0")));
-		assertTrue(keySet.contains(new EasyComposite().easyAdd("key1")));
-		assertTrue(keySet.contains(new EasyComposite().easyAdd("key2")));
-		assertEquals(result.get(new EasyComposite().easyAdd("key0")), "mydata0u");
-		assertEquals(result.get(new EasyComposite().easyAdd("key1")), "mydata1");
-		assertEquals(result.get(new EasyComposite().easyAdd("key2")), "mydata2");*/
-	/*
-		CassandraAccessor.deleteColumnFamily("TESTCOMPOSITE");
-		assertEquals(true, CassandraAccessor.createCompositeColumnFamily("TESTCOMPOSITE", "(UTF8Type,UTF8Type)"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key0").easyAdd("key0")), "mydata0"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key0").easyAdd("key1")), "mydata1"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key0").easyAdd("key1")), "mydata1u"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key1").easyAdd("key0")), "mydata0"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key1").easyAdd("key1")), "mydata1"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO", (Composite)(new EasyComposite().easyAdd("key1").easyAdd("key2")), "mydata2"));
-
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO2", (Composite)(new EasyComposite().easyAdd("key0").easyAdd("key0")), "2mydata0"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO2", (Composite)(new EasyComposite().easyAdd("key0").easyAdd("key1")), "2mydata1"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO2", (Composite)(new EasyComposite().easyAdd("key0").easyAdd("key1")), "2mydata1u"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO2", (Composite)(new EasyComposite().easyAdd("key1").easyAdd("key0")), "2mydata0"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO2", (Composite)(new EasyComposite().easyAdd("key1").easyAdd("key1")), "2mydata1"));
-		assertEquals(true, CassandraAccessor.updateCompositeColumn("TESTCOMPOSITE", "TOTO2", (Composite)(new EasyComposite().easyAdd("key1").easyAdd("key2")), "2mydata2"));
-
-		Map<Composite, String> result = new HashMap<Composite, String>();
-		CassandraAccessor.getCompositeColumnsRange(
-				"TESTCOMPOSITE", 
-				"TOTO", 
-				(Composite)(new EasyComposite().easyAdd("key0")), 
-				(Composite)(new EasyComposite().easyAdd("key0")), 
-				result);
-		*/
-		assertEquals(true, CassandraAccessor.deleteColumnFamily("TESTCOMPOSITE"));
-	}
-	/*
-	@Test 
-	public void testGetKeyRange()
-	{
-		CassandraAccessor.deleteColumnFamily("TestRange");
-		ColumnFamilyDefinition cfDef = HFactory.createColumnFamilyDefinition(
-				CassandraAccessor.KEYSPACENAME,                              
-				"TestRange", 
-				ComparatorType.ASCIITYPE);
-		try
+		assertEquals(b1.length, b2.length);
+		for (int i = 0; i != b1.length; i++)
 		{
-			CassandraAccessor.getCluster().addColumnFamily(cfDef);
+			assertEquals(b1[i], b2[i]);
 		}
-		catch(Exception e) {} // Assume it already exists.
-		
-		CassandraAccessor.updateColumn("TestRange", "1", (new ShortMap()).add("id", "").get());	
-		CassandraAccessor.updateColumn("TestRange", "2", (new ShortMap()).add("id", "tata#0").get());	
-		CassandraAccessor.updateColumn("TestRange", "3", (new ShortMap()).add("id", "tata#1").get());	
-		CassandraAccessor.updateColumn("TestRange", "4", (new ShortMap()).add("id", "tata#2").get());	
-		CassandraAccessor.updateColumn("TestRange", "5", (new ShortMap()).add("id", "tata#3").get());	
-		CassandraAccessor.updateColumn("TestRange", "6", (new ShortMap()).add("id", "tata#4").get());	
-		CassandraAccessor.updateColumn("TestRange", "7", (new ShortMap()).add("id", "tata#5").get());	
-		CassandraAccessor.updateColumn("TestRange", "8", (new ShortMap()).add("id", "tata#6").get());	
-		CassandraAccessor.updateColumn("TestRange", "9", (new ShortMap()).add("id", "tata#7").get());	
-		CassandraAccessor.updateColumn("TestRange", "10", (new ShortMap()).add("id", "titi#8").get());
-		Set<String> result = new HashSet<String>();
-		CassandraAccessor.getKeyRange("TestRange", "1", "3", "id", result);
-		//assertEquals(5, result.size());
-		System.out.println(result);
-		assertTrue(result.contains("tata#1"));
-		assertTrue(result.contains("tata#2"));
-		assertTrue(result.contains("tata#3"));
-		assertTrue(result.contains("tata#4"));
-		assertTrue(result.contains("tata#5"));
 	}
-	*/
+	
+	@Test
+	public void testSetGetByteColumn() throws CassandraException
+	{
+		CassandraAccessor.checkColumnFamilyAscii("TestByteRow", null);
+		byte[] toto11 = { 1,2,3,4};
+		byte[] toto12 = { 10,20,30,40};
+		byte[] toto21 = { 11,21,31,41};
+		byte[] toto22 = { 12,22,32,42};
+		CassandraAccessor.updateColumnByte(
+				"TestByteRow", 
+				"binary1",
+				"content1",
+				toto11);
+		CassandraAccessor.updateColumnByte(
+				"TestByteRow", 
+				"binary1",
+				"content2",
+				toto12);
+		CassandraAccessor.updateColumnByte(
+				"TestByteRow", 
+				"binary2",
+				"content1",
+				toto21);
+		CassandraAccessor.updateColumnByte(
+				"TestByteRow", 
+				"binary2",
+				"content2",
+				toto22);
+		byte[] resultReq11 = CassandraAccessor.getColumnByte("TestByteRow", "binary1", "content1");
+		byte[] resultReq12 = CassandraAccessor.getColumnByte("TestByteRow", "binary1", "content2");
+		byte[] resultReq21 = CassandraAccessor.getColumnByte("TestByteRow", "binary2", "content1");
+		byte[] resultReq22 = CassandraAccessor.getColumnByte("TestByteRow", "binary2", "content2");
+		checkByteArray(resultReq11, toto11);				
+		checkByteArray(resultReq12, toto12);				
+		checkByteArray(resultReq21, toto21);				
+		checkByteArray(resultReq22, toto22);				
+	}
+	
 }

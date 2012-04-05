@@ -180,10 +180,10 @@ public class EditOpportunity implements EntryPoint {
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		grid.setWidget(11, 1, horizontalPanel);
 		
-		Button btnOk = new Button("OK");
+		Button btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
 		horizontalPanel.add(btnOk);
 		
-		Button btnCancel = new Button("Cancel");
+		Button btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
 		horizontalPanel.add(btnCancel);
 		grid.getCellFormatter().setHorizontalAlignment(11, 1, HasHorizontalAlignment.ALIGN_RIGHT);
 		

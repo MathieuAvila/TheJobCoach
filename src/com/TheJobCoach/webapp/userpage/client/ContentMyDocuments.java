@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.client.EditUserDocument.EditUserDocumentResult;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.google.gwt.cell.client.Cell;
@@ -100,7 +99,29 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		dataProvider.updateRowCount(userDocumentList.size(), true);
 		cellTable.redraw();
 	}
-
+	
+	void deleteDoc(String ID)
+	{
+		AsyncCallback<String> callback = new AsyncCallback<String>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+			@Override
+			public void onSuccess(String result) {
+				System.out.println(result);						
+				getAllContent();
+			}
+		};
+		try {
+			userService.deleteUserDocument(user, ID, callback);
+		} catch (CassandraException e) {
+			e.printStackTrace();
+		}		
+		dataProvider.updateRowCount(userDocumentList.size(), true);
+		cellTable.redraw();
+	}
+	
 	private <C> Column<UserDocument, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserDocument, C> fieldUpdater) 
 	{
 		Column<UserDocument, C> column = new Column<UserDocument, C>(cell) 
@@ -197,7 +218,7 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		new FieldUpdater<UserDocument, String>() {
 			public void update(int index, UserDocument object, String value) {
 				Window.alert("You clicked " + object.name);
-				String copyURL = "http://127.0.0.1:8888/thejobcoach/DownloadServlet?ID=" + URL.encode(object.ID);
+				String copyURL = "http://127.0.0.1:8888/thejobcoach/DownloadServlet?docid=" + URL.encode(object.ID);
 				DownloadIFrame iframe = new DownloadIFrame(copyURL);
 				simplePanelCenter.add(iframe);
 				}
@@ -212,7 +233,8 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		},
 		new FieldUpdater<UserDocument, String>() {
 			public void update(int index, UserDocument object, String value) {
-				Window.alert("You delete " + object.name);				
+				Window.alert("You delete " + object.name);
+				deleteDoc(object.ID);
 			}
 		}), "Delete");
 		
@@ -253,7 +275,6 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
-
 /*
 		{
 
@@ -308,23 +329,13 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 			button.addClickHandler(new ClickHandler()
 			{			
 				public void onClick(ClickEvent event) {
-						EditUserDocument eud = new EditUserDocument();						
-						eud.setRootPanel(rootPanel, new UserDocument(), 
-								new EditUserDocumentResult() {
-
-									@Override
-									public void setResult(UserDocument result) {
-										
-									}
-
-						}, 
-						"Create new user document");
-						eud.setUserParameters(user);
-						eud.onModuleLoad();
+					EditUserDocument eud = new EditUserDocument();
+					eud.setRootPanel(rootPanel, null, "Create new user document");
+					eud.setUserParameters(user);
+					eud.onModuleLoad();
 				}
 			});
 			simplePanelCenter.add(button);
-			
 	}
 
 	@Override

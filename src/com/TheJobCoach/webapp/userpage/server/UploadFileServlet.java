@@ -21,6 +21,8 @@ public class UploadFileServlet extends HttpServlet {
 
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		System.out.println("Upload FILE : " + request.toString());
+	
 		if (!ServletFileUpload.isMultipartContent(request)) 
 			return; 
 
@@ -31,6 +33,8 @@ public class UploadFileServlet extends HttpServlet {
 			System.out.println("No DOC ID provided");
 			return;
 		}
+		System.out.println("Upload for DOC ID:" + docId);
+		
 		//ServletOutputStream out = response.getOutputStream();
 		
 		FileItemFactory factory = new DiskFileItemFactory(); 
@@ -44,10 +48,17 @@ public class UploadFileServlet extends HttpServlet {
 			e.printStackTrace();
 			return;
 		}
-
-		for (Iterator<?> i = items.iterator(); i.hasNext();) { 
+		System.out.println("Upload FILE items: " + items.size());
+		
+		for (Iterator<?> i = items.iterator(); i.hasNext();) {
+			
+			
 			FileItem item = (FileItem) i.next();
-
+			System.out.println("New item");
+			System.out.println("Upload FILE item: " + item.getContentType());
+			System.out.println("Upload FILE item: " + item.getName());
+			System.out.println("Upload FILE item: " + item.getSize());
+			
 			if (item.isFormField()) 
 				continue;
 
@@ -63,7 +74,7 @@ public class UploadFileServlet extends HttpServlet {
 			try {
 				//	File uploadedFile = new File(DB.PATH_UPLOAD+ fileName);
 				//	item.write(uploadedFile);
-				System.out.println("Upload FILE : "+ fileName + " size " + item.getSize() + item.get());
+				System.out.println("Upload FILE : "+ fileName + " size " + item.getSize());
 				cm.setUserDocumentContent(null, docId, fileName, item.get());
 			}
 			catch (Exception e) {

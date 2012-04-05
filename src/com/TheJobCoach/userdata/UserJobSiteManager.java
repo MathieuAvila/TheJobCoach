@@ -14,57 +14,32 @@ import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.EasyComposite;
 import com.TheJobCoach.util.ShortMap;
-import com.TheJobCoach.util.CassandraAccessor.CompositeColumnEntry;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 
 public class UserJobSiteManager {
 
-	final static String COLUMN_FAMILY_NAME_LIST = "jobsitelist";
-	final static String COLUMN_FAMILY_NAME_DATA = "jobsitedata";
+	final static String COLUMN_FAMILY_NAME_LIST = "userjobsitelist";
+	final static String COLUMN_FAMILY_NAME_DATA = "userjobsitedata";
 	
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
 	
 	public UserJobSiteManager()
 	{
-		if (cfDefList == null)
-		{
-			CassandraAccessor.createCompositeColumnFamily(COLUMN_FAMILY_NAME_LIST, "(UTF8Type)");
-		}
-		if (cfDefData == null)
-		{
-			cfDefData = HFactory.createColumnFamilyDefinition(
-					CassandraAccessor.KEYSPACENAME,                              
-					COLUMN_FAMILY_NAME_DATA, 
-					ComparatorType.ASCIITYPE);
-			try{
-				CassandraAccessor.getCluster().addColumnFamily(cfDefData);
-			}
-			catch(Exception e) {} // Assume it already exists.
-		}
+		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
+		cfDefData = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_DATA, cfDefData);
 	}
 
 	public List<String> getUserSiteList(UserId id) throws CassandraException 
 	{	
-		ArrayList<CompositeColumnEntry> resultReq = new ArrayList<CompositeColumnEntry>();
-		if (!CassandraAccessor.getCompositeColumnsRange(
+		Map<String,String> resultReq = null;
+		resultReq = CassandraAccessor.getRow(
 				COLUMN_FAMILY_NAME_LIST, 
-				id.userName,
-				(Composite)(new EasyComposite().easyAdd("0000000000000000000")), 
-				(Composite)(new EasyComposite().easyAdd("9999999999999999999")), 
-				resultReq))
-		{
-			throw new CassandraException();
-		}
-		List<String> idList = new ArrayList<String>();
-		for (CompositeColumnEntry col: resultReq)
-			{
-			idList.add(col.value);
-			//System.out.println("Found new ID : " + col.value);
-			}
-		return idList;
+				id.userName);
+		if (resultReq == null) return new ArrayList<String>();
+		return new ArrayList<String>(resultReq.keySet());
 	}
 
 	public UserJobSite getUserSite(UserId id, String ID) throws CassandraException 
@@ -111,14 +86,14 @@ public class UserJobSiteManager {
 		// TODO: Perform the 2 updates in a single command...
 		String reqId = id.userName + "_" + ID;
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, reqId);	
-		CassandraAccessor.deleteCompositeColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (Composite)(new EasyComposite().easyAdd(ID)));		
+		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_LIST, id.userName, ID);		
 	}
 
 	public String addUserSite(UserId id) throws CassandraException 
 	{
 		long d = new Date().getTime();
 		String val = String.valueOf(d);
-		CassandraAccessor.updateCompositeColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (Composite)(new EasyComposite().easyAdd(val)), val);
+		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (new ShortMap()).add(val, val).get());
 		UserJobSite ujs = new UserJobSite();
 		ujs.ID = val;
 	    setUserSite(id, ujs);

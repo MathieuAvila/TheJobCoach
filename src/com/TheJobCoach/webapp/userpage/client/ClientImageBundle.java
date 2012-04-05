@@ -35,4 +35,10 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("elementNew.png")
 	ImageResource createNew();
+
+	@Source("button_cancel_32.png")
+	ImageResource createCancel();
+
+	@Source("button_ok_32.png")
+	ImageResource createOk();
 }
