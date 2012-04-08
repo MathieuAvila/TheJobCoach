@@ -21,8 +21,7 @@ public interface UserServiceAsync {
 	void getUserSite(UserId id, String siteId, AsyncCallback<UserJobSite> callback) throws CassandraException;
 	void deleteUserSite(UserId id, String siteId, AsyncCallback<Integer> callback) throws CassandraException;
 	void setUserSite(UserId id, UserJobSite data, AsyncCallback<Integer> callback) throws CassandraException;
-	void addUserSite(UserId id, AsyncCallback<String> callback) throws CassandraException;
-
+	
 	public void getUserDocumentList(UserId id, AsyncCallback<Vector<UserDocument>> callback) throws CassandraException;
 	public void deleteUserDocument(UserId id, String documentId, AsyncCallback<String> callback) throws CassandraException;
 	public void setUserDocument(UserId id, UserDocument document, AsyncCallback<String> callback) throws CassandraException;

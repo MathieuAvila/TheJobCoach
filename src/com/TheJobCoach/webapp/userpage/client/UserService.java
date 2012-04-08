@@ -23,8 +23,7 @@ public interface UserService extends RemoteService
 	public Integer deleteUserSite(UserId id, String siteId) throws CassandraException;
 	public Integer setUserSite(UserId id, UserJobSite site) throws CassandraException;
 	public UserJobSite getUserSite(UserId id, String siteId) throws CassandraException;
-	public String addUserSite(UserId id) throws CassandraException;
-
+	
 	public Vector<UserDocument> getUserDocumentList(UserId id) throws CassandraException;
 	public String deleteUserDocument(UserId id, String documentId) throws CassandraException;
 	public String setUserDocument(UserId id, UserDocument document) throws CassandraException;

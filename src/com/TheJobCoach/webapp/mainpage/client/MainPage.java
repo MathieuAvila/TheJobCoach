@@ -1,7 +1,10 @@
 package com.TheJobCoach.webapp.mainpage.client;
 
+import javax.sound.sampled.AudioFileFormat.Type;
+
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
@@ -38,8 +41,20 @@ public class MainPage implements EntryPoint {
 		cP.setUser(new UserId("mathieu", "mytokenuser", UserId.UserType.USER_TYPE_SEEKER));
 		cP.onModuleLoad();
 		return;
-		/*
 		
+		/*
+		MessageBox mb = new MessageBox(rootPanel, true, true, MessageBox.TYPE.WAIT, "Message à caractère info", "This is a f**** message <font color=black/>with ddlsfkjkld. ",
+				new MessageBox.ICallback() {
+
+					@Override
+					public void complete(boolean ok) {
+						// TODO Auto-generated method stub
+						
+					}});
+		mb.onModuleLoad();
+		*/
+		
+		/*
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel.setStyleName("mainpage-content");

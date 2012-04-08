@@ -36,7 +36,9 @@ public class IconCellFile extends IconCellDecorator<String>
 
 	protected SafeHtml getIconHtml(String value) 
 	{
-		String ext4 = value.substring(value.length() - 4 ).toLowerCase();
+		String ext4 = "";
+		if (value.length() > 4)
+			ext4 = value.substring(value.length() - 4 ).toLowerCase();
 		ImageResource res = wpImageBundle.unkFile();
 		if (".doc".equals(ext4)) res = wpImageBundle.docFile();
 		if (".pdf".equals(ext4)) res = wpImageBundle.pdfFile();

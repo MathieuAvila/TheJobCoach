@@ -1,6 +1,5 @@
 package com.TheJobCoach.webapp.userpage.server;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -56,11 +55,6 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	public UserJobSite getUserSite(UserId id, String siteId) throws CassandraException
 	{
 		return jobSiteManager.getUserSite(id, siteId);
-	}
-
-	@Override
-	public String addUserSite(UserId id) throws CassandraException {
-		return jobSiteManager.addUserSite(id);
 	}
 
 	@Override

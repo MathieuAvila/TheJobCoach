@@ -4,6 +4,7 @@ import java.util.Date;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
+import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

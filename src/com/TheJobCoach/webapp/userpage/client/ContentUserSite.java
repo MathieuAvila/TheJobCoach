@@ -166,8 +166,7 @@ public class ContentUserSite implements EntryPoint {
 		public void onClick(ClickEvent event)
 		{
 			EditUserSite eus = new EditUserSite();
-			UserJobSite ujb = new UserJobSite();
-			eus.setRootPanel(rootPanel, ujb, new EditLogEntryResult() {
+			eus.setRootPanel(rootPanel, null, new EditLogEntryResult() {
 
 				@Override
 				public void setResult(UserJobSite result) {
@@ -175,13 +174,13 @@ public class ContentUserSite implements EntryPoint {
 					try 
 					{
 						if (result != null)
-						userService.addUserSite(user, new AsyncCallback<String>() {
+						userService.setUserSite(user, result, new AsyncCallback<Integer>() {
 							public void onFailure(Throwable caught) {
 								// Show the RPC error message to the user
 								Window.alert(caught.toString());
 								//connectButton.setEnabled(true);
 							}
-							public void onSuccess(String result)
+							public void onSuccess(Integer result)
 							{
 								System.out.println("Created site: " + result);
 								getAllContent();

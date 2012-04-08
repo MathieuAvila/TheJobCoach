@@ -1,5 +1,0 @@
-# Module thejobcoach
-# RPC service class, partial path of RPC policy file
-com.TheJobCoach.webapp.userpage.client.UserService, 79C2AD2861BE9A34741242279A5D5FBE.gwt.rpc
-com.TheJobCoach.webapp.mainpage.client.LoginService, 2B1AF79AC08A261B67DC9D6A3FA94E3B.gwt.rpc
-com.TheJobCoach.webapp.adminpage.client.AdminService, BC1F294D7F4F3E0792001CE3E42A7EF5.gwt.rpc

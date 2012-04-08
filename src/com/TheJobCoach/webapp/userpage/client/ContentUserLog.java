@@ -90,30 +90,6 @@ public class ContentUserLog implements EntryPoint {
 		}
 	};
 
-	void getOneLogEntry(String LogEntryId)
-	{
-		AsyncCallback<UserLogEntry> callback = new AsyncCallback<UserLogEntry>()	{
-			@Override
-			public void onFailure(Throwable caught)
-			{
-				Window.alert(caught.getMessage());
-			}
-			@Override
-			public void onSuccess(UserLogEntry result)
-			{
-				System.out.println(result);
-				// Find position.
-				for (int count=0; count != UserLogEntryList.size(); count++) {
-					if (UserLogEntryList.get(count).ID.equals(result.ID))
-					{
-						UserLogEntryList.set(count, result);
-					}
-				}
-				dataProvider.updateRowData(0, UserLogEntryList);
-			}
-		};
-	}
-
 	void getAllContent()
 	{		
 		AsyncCallback<Vector<UserLogEntry>> callback = new AsyncCallback<Vector<UserLogEntry>>() {
@@ -350,7 +326,7 @@ public class ContentUserLog implements EntryPoint {
 		labelStatus.setStyleName("summary-title");
 		grid_1.setWidget(1, 0, labelStatus);
 		
-		Label label_1 = new Label(editedOpportunity.applicationStatusToString(editedOpportunity.status));
+		Label label_1 = new Label(UserOpportunity.applicationStatusToString(editedOpportunity.status));
 		label_1.setStyleName("summary-text");
 		grid_1.setWidget(1, 1, label_1);
 		

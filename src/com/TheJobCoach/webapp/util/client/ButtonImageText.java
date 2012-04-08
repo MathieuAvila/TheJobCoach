@@ -1,4 +1,4 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.util.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
@@ -7,11 +7,8 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
 
 public class ButtonImageText extends Button
-{
-
-	private String text;
-
-	enum Type { NEW, OK, CANCEL };
+{	
+	public enum Type { NEW, OK, CANCEL };
 
 	Type type;
 
@@ -44,7 +41,6 @@ public class ButtonImageText extends Button
 	@Override
 	public void setText(String text)
 	{
-		this.text = text;
 		Element span = DOM.createElement("span");
 		span.setInnerText(text);
 		span.setAttribute("style", "padding-left:10px; vertical-align:middle;");

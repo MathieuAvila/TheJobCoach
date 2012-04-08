@@ -18,20 +18,24 @@ public class TestUserJobSiteManager {
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	static UserId id2 = new UserId("user2", "token2", UserId.UserType.USER_TYPE_SEEKER);
 	
-	static String site1;
-	static String site2;
-	static String site3;
+	static String site1 = "site1";
+	static String site2 = "site2";
+	static String site3 = "site3";
 		
-	static String site12;
-	static String site22;
-	static String site32;
+	static String site12 = "site1";
+	static String site22 = "site2";
+	static String site32 = "site3";
 		
 	static UserJobSite ujs1 = new UserJobSite(site1, "site1", "URL1", "description1", "login1", "password1", new Date(1));
 	static UserJobSite ujs2 = new UserJobSite(site2, "site2", "URL2", "description2", "login2", "password2", new Date(2));
 	static UserJobSite ujs3 = new UserJobSite(site3, "site3", "URL3", "description3", "login3", "password3", new Date(3));
 	
+	static UserJobSite ujs21 = new UserJobSite(site12, "site21", "URL1", "description1", "login1", "password1", new Date(1));
+	static UserJobSite ujs22 = new UserJobSite(site22, "site22", "URL2", "description2", "login2", "password2", new Date(2));
+	static UserJobSite ujs23 = new UserJobSite(site32, "site23", "URL3", "description3", "login3", "password3", new Date(3));
+	
 	@Test
-	public void testAddUserSite() throws CassandraException
+	public void testCleanUserSite() throws CassandraException
 	{
 		List<String> result = manager.getUserSiteList(id);
 		for (String site: result)
@@ -45,13 +49,13 @@ public class TestUserJobSiteManager {
 			//System.out.println("Try delete previous site2: " + site);
 			manager.deleteUserSite(id2, site);
 		}
-		site1 = manager.addUserSite(id);
-		site2 = manager.addUserSite(id);
-		site3 = manager.addUserSite(id);
+		manager.setUserSite(id, ujs1);
+		manager.setUserSite(id, ujs2);
+		manager.setUserSite(id, ujs3);
 
-		site12 = manager.addUserSite(id2);
-		site22 = manager.addUserSite(id2);
-		site32 = manager.addUserSite(id2);
+		manager.setUserSite(id2, ujs21);
+		manager.setUserSite(id2, ujs22);
+		manager.setUserSite(id2, ujs23);	
 	}
 	
 	@Test

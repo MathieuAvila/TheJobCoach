@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.EditUserDocument.EditUserDocumentResult;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
+import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -34,7 +37,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument> {
+public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument>, EditUserDocumentResult {
 
 	UserId user;
 
@@ -72,6 +75,7 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 				List<UserDocument> dataInRange = userDocumentList.subList(start, end);
 				// Push the data back into the list.
 				cellTable.setRowData(start, dataInRange);
+				cellTable.redraw();				
 			}
 		}
 	};
@@ -86,9 +90,11 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 			@Override
 			public void onSuccess(Vector<UserDocument> result) {
 				System.out.println(result);
-				userDocumentList = result;				
+				userDocumentList.clear();
+				userDocumentList.addAll(result);				
 				dataProvider.updateRowCount(userDocumentList.size(), true);
-				cellTable.redraw();
+				dataProvider.updateRowData(0, userDocumentList.subList(0, userDocumentList.size()));
+				cellTable.redraw();				
 			}
 		};
 		try {
@@ -100,28 +106,55 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		cellTable.redraw();
 	}
 	
-	void deleteDoc(String ID)
+	void updateDoc(final UserDocument object)
 	{
-		AsyncCallback<String> callback = new AsyncCallback<String>() {
+		EditUserDocument eud = new EditUserDocument();
+		eud.setRootPanel(rootPanel, object, "Update user document", new EditUserDocument.EditUserDocumentResult() {
+
 			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-			}
-			@Override
-			public void onSuccess(String result) {
-				System.out.println(result);						
+			public void setResult() {							
 				getAllContent();
 			}
-		};
-		try {
-			userService.deleteUserDocument(user, ID, callback);
-		} catch (CassandraException e) {
-			e.printStackTrace();
-		}		
-		dataProvider.updateRowCount(userDocumentList.size(), true);
-		cellTable.redraw();
+
+		});
+		eud.setUserParameters(user);
+		eud.onModuleLoad();
 	}
 	
+	void deleteDoc(final UserDocument object)
+	{
+		MessageBox mb = new MessageBox(
+				rootPanel, true, true, MessageBox.TYPE.QUESTION, "Delete document ?", 
+				"Are you sure you wish to delete file " + object.fileName, new MessageBox.ICallback() {
+					
+					@Override
+					public void complete(boolean ok) {
+						if (ok == true)
+						{
+							AsyncCallback<String> callback = new AsyncCallback<String>() {
+								@Override
+								public void onFailure(Throwable caught) {
+									Window.alert(caught.getMessage());
+								}
+								@Override
+								public void onSuccess(String result) {
+									System.out.println(result);						
+									getAllContent();
+								}
+							};
+							try {
+								userService.deleteUserDocument(user, object.ID, callback);
+							} catch (CassandraException e) {
+								e.printStackTrace();
+							}		
+							dataProvider.updateRowCount(userDocumentList.size(), true);
+							cellTable.redraw();							
+						}
+					}
+				});
+		mb.onModuleLoad();
+	}
+
 	private <C> Column<UserDocument, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserDocument, C> fieldUpdater) 
 	{
 		Column<UserDocument, C> column = new Column<UserDocument, C>(cell) 
@@ -150,7 +183,7 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 	 */
 	public void onModuleLoad()
 	{		
-		Lang lang = GWT.create(Lang.class);
+		final Lang lang = GWT.create(Lang.class);
 		System.out.println("Load Content User Site, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 
 		// Add the nameField and sendButton to the RootPanel
@@ -175,6 +208,16 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 			}
 		};
 
+		// Create status column.
+		TextColumn<UserDocument> statusColumn = new TextColumn<UserDocument>() 	{
+			@Override
+			public String getValue(UserDocument document) 
+			{
+				//return UserDocument.documentStatusToString(document.status);
+				return lang.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(document.status));
+			}
+		};
+
 		// Create description column.
 		TextColumn<UserDocument> descriptionColumn = new TextColumn<UserDocument>() {
 			@Override
@@ -196,35 +239,18 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 
 		ClickableTextCell anchorcolumn = new ClickableTextCell()
 		{
-	     @Override
-	      protected void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
-	        if (value != null) {
-	          sb.appendHtmlConstant(
-	        		  "<div class=\"clickableText\">" + 
-	        		  "<a style=\"clickableText\">");
-	          sb.append(value);
-	          sb.appendHtmlConstant("</a></div>");
-	        }
-	      }
-		};
-		
-		IconCellFile iconCell = new IconCellFile(anchorcolumn);
-
-		cellTable.addColumn(addColumn(iconCell, new GetValue<String>() {
-			public String getValue(UserDocument contact) {
-				return contact.fileName;
-			}
-		},
-		new FieldUpdater<UserDocument, String>() {
-			public void update(int index, UserDocument object, String value) {
-				Window.alert("You clicked " + object.name);
-				String copyURL = "http://127.0.0.1:8888/thejobcoach/DownloadServlet?docid=" + URL.encode(object.ID);
-				DownloadIFrame iframe = new DownloadIFrame(copyURL);
-				simplePanelCenter.add(iframe);
+			@Override
+			protected void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
+				if (value != null) {
+					sb.appendHtmlConstant(
+							"<div class=\"clickableText\">" + 
+							"<a style=\"clickableText\">");
+					sb.append(value);
+					sb.appendHtmlConstant("</a></div>");
 				}
-		}), "File name");
-		
-		
+			}
+		};
+
 		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
 		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
 			public String getValue(UserDocument contact) {
@@ -232,12 +258,11 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 			}
 		},
 		new FieldUpdater<UserDocument, String>() {
-			public void update(int index, UserDocument object, String value) {
-				Window.alert("You delete " + object.name);
-				deleteDoc(object.ID);
+			public void update(int index, UserDocument object, String value) {				
+				deleteDoc(object);
 			}
 		}), "Delete");
-		
+
 		IconCellSingle updateCell =	new IconCellSingle(IconCellSingle.IconType.UPDATE);		
 		cellTable.addColumn(addColumn(updateCell, new GetValue<String>() {
 			public String getValue(UserDocument contact) {
@@ -246,11 +271,27 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		},
 		new FieldUpdater<UserDocument, String>() {
 			public void update(int index, UserDocument object, String value) {
-				Window.alert("You update " + object.name);
+				updateDoc(object);
 			}
 		}), "Update");
 		
+		statusColumn.setSortable(true);
+		cellTable.addColumn(statusColumn, lang._TextStatus());
 		
+		IconCellFile iconCellFile = new IconCellFile(anchorcolumn);
+		cellTable.addColumn(addColumn(iconCellFile, new GetValue<String>() {
+			public String getValue(UserDocument contact) {
+				return contact.fileName;
+			}
+		},
+		new FieldUpdater<UserDocument, String>() {
+			public void update(int index, UserDocument object, String value) {
+				String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.ID);
+				DownloadIFrame iframe = new DownloadIFrame(copyURL);
+				simplePanelCenter.add(iframe);
+			}
+		}), "File name");
+
 		nameColumn.setSortable(true);
 		descriptionColumn.setSortable(true);
 		downloadLastUpdate.setSortable(true);
@@ -263,10 +304,10 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		dataProvider.updateRowCount(userDocumentList.size(), true);
 
 		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
-		getAllContent();
+
 		cellTable.setRowData(0, userDocumentList);
 		cellTable.setRowCount(userDocumentList.size(), true);
-		cellTable.setVisibleRange(0, 5);
+		cellTable.setVisibleRange(0, 20);
 		cellTable.setStyleName("filecelltable");
 		cellTable.addColumnSortHandler(columnSortHandler);
 		simplePanelCenter.add(cellTable);
@@ -275,71 +316,35 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
-/*
-		{
 
-			final FormPanel form = new FormPanel();
-			form.setEncoding(FormPanel.ENCODING_MULTIPART);
-			form.setMethod(FormPanel.METHOD_POST);
-			form.addStyleName("table-center");
-			form.addStyleName("demo-panel-padded");
+		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, "Add new document");
+		button.addClickHandler(new ClickHandler()
+		{			
+			public void onClick(ClickEvent event) {
+				EditUserDocument eud = new EditUserDocument();
+				eud.setRootPanel(rootPanel, null, "Create new user document", new EditUserDocument.EditUserDocumentResult() {
 
-			HorizontalPanel holder = new HorizontalPanel();
-			FileUpload upload = new FileUpload();
-			upload.setName("upload");
-			holder.add(upload);
+					@Override
+					public void setResult() {							
+						getAllContent();
+					}
 
-			HTML uploadHtml = new HTML("<hr />");
-			holder.add(uploadHtml);
-			holder.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
-			ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, "Add new document");
-			button.addClickHandler(new ClickHandler()
-			{			
-				public void onClick(ClickEvent event) {
-					form.submit();
-				}
-			});
-			holder.add(button);
-
-			form.add(holder);
-			String copyURL = "http://127.0.0.1:8888/thejobcoach/UploadServlet?docid=" + URL.encode("toto.xml");
-			form.setAction(copyURL);
-
-			form.addSubmitHandler(new FormPanel.SubmitHandler() 
-			{		
-				@Override
-				public void onSubmit(SubmitEvent event) 
-				{		       
-				}			
-			});
-			form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() 
-			{		      
-				@Override
-				public void onSubmitComplete(SubmitCompleteEvent event)
-				{
-					Window.alert(event.getResults());
-				}
-			});
-			horizontalPanel.add(form);
-			
+				});
+				eud.setUserParameters(user);
+				eud.onModuleLoad();
 			}
-			*/
+		});
+		simplePanelCenter.add(button);
 
-			ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, "Add new document");
-			button.addClickHandler(new ClickHandler()
-			{			
-				public void onClick(ClickEvent event) {
-					EditUserDocument eud = new EditUserDocument();
-					eud.setRootPanel(rootPanel, null, "Create new user document");
-					eud.setUserParameters(user);
-					eud.onModuleLoad();
-				}
-			});
-			simplePanelCenter.add(button);
+		getAllContent();
 	}
 
 	@Override
 	public void update(UserDocument value) {
 		System.out.println("Something happened in " + value.fileName);
+	}
+
+	@Override
+	public void setResult() {
 	}
 }

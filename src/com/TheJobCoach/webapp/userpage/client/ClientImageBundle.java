@@ -1,11 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
-import com.google.gwt.user.client.ui.ImageBundle;
-import com.google.gwt.user.client.ui.impl.ClippedImagePrototype;
 
 public interface ClientImageBundle extends ClientBundle 
 {

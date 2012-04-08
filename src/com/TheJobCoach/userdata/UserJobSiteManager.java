@@ -5,14 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import me.prettyprint.hector.api.beans.Composite;
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
-import me.prettyprint.hector.api.ddl.ComparatorType;
-import me.prettyprint.hector.api.factory.HFactory;
-
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
-import com.TheJobCoach.util.EasyComposite;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
@@ -63,6 +58,7 @@ public class UserJobSiteManager {
 
 	public void setUserSite(UserId id, UserJobSite result) throws CassandraException 
 	{
+		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (new ShortMap()).add(result.ID, result.ID).get());
 		String reqId = id.userName + "_" + result.ID;
 		boolean resultReq = CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_DATA, 
@@ -89,15 +85,4 @@ public class UserJobSiteManager {
 		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_LIST, id.userName, ID);		
 	}
 
-	public String addUserSite(UserId id) throws CassandraException 
-	{
-		long d = new Date().getTime();
-		String val = String.valueOf(d);
-		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (new ShortMap()).add(val, val).get());
-		UserJobSite ujs = new UserJobSite();
-		ujs.ID = val;
-	    setUserSite(id, ujs);
-		return val;
-	}
-	
 }
