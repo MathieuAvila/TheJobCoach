@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -162,8 +163,8 @@ public class ContentNews implements EntryPoint {
 		public void onClick(ClickEvent event)
 		{
 			NewsInformation news = getNewsInformation();
-			news.ID = new Date().toGMTString();
-			System.out.println(news);
+			news.ID = SiteUUID.getDateUuid();
+			System.out.println("My ID" + news.ID);
 			adminService.createNewsInformation(user, news, new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
 					// Show the RPC error message to the user

@@ -110,6 +110,39 @@ public class ContentUsers implements EntryPoint {
 		nameColumn.setSortable(true);
 		cellTable.addColumn(nameColumn, "Name");
 		
+		// Create password column.
+		TextColumn<UserReport> passwordColumn = new TextColumn<UserReport>() 	{
+			@Override
+			public String getValue(UserReport report) 
+			{
+				return report.password;
+			}
+		};
+		passwordColumn.setSortable(true);
+		cellTable.addColumn(passwordColumn, "Password");
+		
+		// Create mail column.
+				TextColumn<UserReport> mailColumn = new TextColumn<UserReport>() 	{
+					@Override
+					public String getValue(UserReport report) 
+					{
+						return report.mail;
+					}
+				};
+				mailColumn.setSortable(true);
+				cellTable.addColumn(mailColumn, "email");
+				
+		// Create type column.
+		TextColumn<UserReport> typeColumn = new TextColumn<UserReport>() 	{
+			@Override
+			public String getValue(UserReport report) 
+			{
+				return report.type.toString();
+			}
+		};
+		typeColumn.setSortable(true);
+		cellTable.addColumn(typeColumn, "Type");
+
 		// Create token column.
 		TextColumn<UserReport> tokenColumn = new TextColumn<UserReport>() 	{
 			@Override

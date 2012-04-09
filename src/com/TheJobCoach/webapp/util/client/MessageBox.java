@@ -74,7 +74,7 @@ public class MessageBox implements EntryPoint {
 		flexTable.setSize("100%", "100%");
 		
 		HorizontalPanel horizontalPanelSpaceUp = new HorizontalPanel();
-		horizontalPanelSpaceUp.setHeight("20px");
+		horizontalPanelSpaceUp.setHeight("10px");
 		horizontalPanelSpaceUp.setWidth("100px");
 		flexTable.setWidget(0, 0, horizontalPanelSpaceUp);
 		
@@ -91,7 +91,7 @@ public class MessageBox implements EntryPoint {
 		flexTable.setWidget(1, 0, imageIcon);
 		
 		HorizontalPanel horizontalPanelSpaceText = new HorizontalPanel();
-		horizontalPanelSpaceText.setWidth("20px");
+		horizontalPanelSpaceText.setWidth("10px");
 		flexTable.setWidget(1, 1, horizontalPanelSpaceText);
 		
 		HTML htmlMessage = new HTML(message, true);

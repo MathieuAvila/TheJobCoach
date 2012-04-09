@@ -30,7 +30,7 @@ public class TestAccount
 		MailerFactory.setMailer(mockMail);
 		CreateAccountStatus status = account.createAccountWithToken(
 				new UserId(id, "mytoken", UserId.UserType.USER_TYPE_SEEKER),
-				new UserInformation("nom", "prenom", "toto@toto.com", "password"), "en");
+				new UserInformation("nom", "toto@toto.com", "password","prenom"), "en");
 		assertEquals( CreateAccountStatus.CREATE_STATUS_OK, status);
 		String mail = mockMail.lastBody;
 		assertEquals(true, mail.contains("token="));
@@ -53,6 +53,7 @@ public class TestAccount
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_NOT_VALIDATED, account.loginAccount(id, "password").getLoginStatus());
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(id, token));
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_UNKNOWN, account.validateAccount("nop", token));
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_PASSWORD, account.loginAccount(id, "passworderror").getLoginStatus());
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, account.loginAccount(id, "password").getLoginStatus());
 	}
 
@@ -65,7 +66,7 @@ public class TestAccount
 			MailerFactory.setMailer(mockMail);			
 			CreateAccountStatus status = account.createAccountWithToken(
 					new UserId(idAdmin, tokenAdmin, UserId.UserType.USER_TYPE_ADMIN),
-					new UserInformation("nom", "prenom", "toto@toto.com", "password"), "en");
+					new UserInformation("nom", "toto@toto.com", "password", "prenom"), "en");
 			
 			assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 			assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idAdmin, tokenAdmin));
@@ -79,7 +80,7 @@ public class TestAccount
 			MailerFactory.setMailer(mockMail);
 			CreateAccountStatus status = account.createAccountWithToken(
 					new UserId(idCoach, tokenCoach, UserId.UserType.USER_TYPE_COACH),
-					new UserInformation("nom", "prenom", "toto@toto.com", "password"), "en");
+					new UserInformation("nom", "toto@toto.com", "password", "prenom"), "en");
 			assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 			assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idCoach, tokenCoach));
 			MainPageReturnLogin loginCred = account.loginAccount(idCoach, "password");
@@ -92,7 +93,7 @@ public class TestAccount
 			MailerFactory.setMailer(mockMail);
 			CreateAccountStatus status = account.createAccountWithToken(
 					new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER),
-					new UserInformation("nom", "prenom", "toto@toto.com", "password"), "en");
+					new UserInformation("nom", "toto@toto.com", "password", "prenom"), "en");
 			assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 			assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
 			MainPageReturnLogin loginCred = account.loginAccount(idSeeker, "password");

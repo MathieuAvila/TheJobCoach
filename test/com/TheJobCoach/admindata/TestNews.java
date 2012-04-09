@@ -99,6 +99,21 @@ public class TestNews
 		assertEquals("MyText3", n1.text);		
 		checkDate(getDate(1960, 2, 5), n1.created);
 	}
+		
+	@Test
+	public void testGetNewsYears()
+	{	
+		Vector<NewsInformation> result = null;
+		try 
+		{
+			result = news.getNews(getDate(1958, 10, 11), getDate(1962, 1, 6));
+		} 
+		catch (CassandraException e) 
+		{
+			e.printStackTrace();
+		}			
+		assertEquals(4, result.size());
+	}
 
 	@Test
 	public void testDeleteNews()
@@ -118,7 +133,11 @@ public class TestNews
 		catch (CassandraException e) 
 		{
 			e.printStackTrace();
-		}			
+		}
+		for (NewsInformation ni: result)
+		{
+			System.out.println(ni.ID + "  " + ni.created);			
+		}
 		assertEquals(3, result.size());
 	}
 	

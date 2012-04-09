@@ -26,7 +26,7 @@ public class AdminSiteSimple {
 		{
 		CreateAccountStatus status = account.createAccountWithToken(
 				new UserId("admin","mytokenadmin", UserType.USER_TYPE_ADMIN),
-				new UserInformation("nom", "prenom", "lvveumda", "toto@toto.com"), "en");
+				new UserInformation("nom", "toto@toto.com", "lvveumda", "prenom"), "en");
 		System.out.println("Created account returned: " + status.toString());
 		ValidateAccountStatus validate = account.validateAccount("admin", "mytokenadmin");
 		System.out.println("Validate account returned: " + validate.toString());
@@ -37,7 +37,7 @@ public class AdminSiteSimple {
 		{
 		CreateAccountStatus status = account.createAccountWithToken(
 				new UserId("avila","mytokenuser", UserType.USER_TYPE_SEEKER),
-				new UserInformation("nom", "prenom", "lvveumda", "toto@toto.com"), "en");
+				new UserInformation("nom", "toto@toto.com", "lvveumda", "prenom"), "en");
 		System.out.println("Created account returned: " + status.toString());
 		ValidateAccountStatus validate = account.validateAccount("avila", "mytokenuser");
 		System.out.println("Validate account returned: " + validate.toString());

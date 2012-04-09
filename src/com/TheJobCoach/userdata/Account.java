@@ -137,9 +137,11 @@ public class Account implements AccountInterface {
 		String passwordStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "password");
 		if (passwordStr == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+		System.out.println(passwordStr  + " COMP "+ password);
 		if (!passwordStr.equals(password)) 
-			new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
 		String typeStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "type");
+		System.out.println("TYPE "+ typeStr);
 		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, new UserId(userName, token, stringToUserType(typeStr)));
 	}
 
@@ -180,6 +182,8 @@ public class Account implements AccountInterface {
 		Map<String, String> resultToken = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_TOKEN, id.token);
 		return new UserReport(				
 				id.userName, 
+				result.get("password"),
+				result.get("email"),
 				id.token, 
 				stringToUserType(result.get("type")),
 				Convertor.toDate(result.get("date")),

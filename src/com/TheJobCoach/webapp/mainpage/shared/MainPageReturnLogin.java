@@ -5,8 +5,8 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 
 public class MainPageReturnLogin implements Serializable
 {
-	private static final long serialVersionUID = 1001001L;
 	
+	private static final long serialVersionUID = 4727338895383986568L;
 	public UserId id = null;
 	
 	

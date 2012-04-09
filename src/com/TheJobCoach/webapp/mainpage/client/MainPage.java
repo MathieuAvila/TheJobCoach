@@ -1,30 +1,60 @@
 package com.TheJobCoach.webapp.mainpage.client;
 
-import javax.sound.sampled.AudioFileFormat.Type;
-
+import com.TheJobCoach.webapp.adminpage.client.AdminPage;
+import com.TheJobCoach.webapp.footer.client.Footer;
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class MainPage implements EntryPoint {
-
+	
+	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
+	
+	RootPanel rootPanel = null;
+	
+	void messageLogin(String title, String message)
+	{
+		MessageBox mb = new MessageBox(rootPanel, true, false, MessageBox.TYPE.ERROR, 
+				title, 
+				message,
+				null);
+		mb.onModuleLoad();
+	}
+	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad()
 	{		
-		GWT.create(Lang.class);
+		final Lang lang = GWT.create(Lang.class);
 		
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
-		RootPanel rootPanel = RootPanel.get("content");
+		rootPanel = RootPanel.get("content");
 		rootPanel.clear();
 		rootPanel.setStyleName("mainpage-content");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -36,25 +66,13 @@ public class MainPage implements EntryPoint {
 		cP.onModuleLoad();
 		return;
 		*/
-		
+		/*
 		UserPage cP = new UserPage();
 		cP.setUser(new UserId("mathieu", "mytokenuser", UserId.UserType.USER_TYPE_SEEKER));
 		cP.onModuleLoad();
 		return;
-		
-		/*
-		MessageBox mb = new MessageBox(rootPanel, true, true, MessageBox.TYPE.WAIT, "Message à caractère info", "This is a f**** message <font color=black/>with ddlsfkjkld. ",
-				new MessageBox.ICallback() {
-
-					@Override
-					public void complete(boolean ok) {
-						// TODO Auto-generated method stub
-						
-					}});
-		mb.onModuleLoad();
 		*/
 		
-		/*
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel.setStyleName("mainpage-content");
@@ -278,21 +296,20 @@ public class MainPage implements EntryPoint {
 
 					public void onSuccess(MainPageReturnLogin result)
 					{
-						//dialogBox.setText("Remote Procedure Call");
-						//serverResponseLabel.setHTML(result);
-						//dialogBox.center();
 						connectButton.setEnabled(true);
-						//System.out.println("Login returned: " + result.id.token + " result is:" + result.getLoginStatus());
+						System.out.println("Login returned result is:" + result.getLoginStatus());
+						if (result.id != null)
+							System.out.println("Login returned: " + result.id.token + " result is:" + result.getLoginStatus());
 						switch (result.getLoginStatus())
 						{ 
 						case CONNECT_STATUS_UNKNOWN_USER:
-							Window.alert(lang._TextLoginNoSuchLoginPassword());
+							messageLogin("Error", lang._TextLoginNoSuchLoginPassword());
 							break;
 						case CONNECT_STATUS_PASSWORD:		
-							Window.alert(lang._TextLoginNoSuchLoginPassword());
+							messageLogin("Error", lang._TextLoginNoSuchLoginPassword());
 							break;
 						case CONNECT_STATUS_NOT_VALIDATED:
-							Window.alert(lang._TextLoginNotValidated());
+							messageLogin("Error", lang._TextLoginNotValidated());
 							break;
 						case CONNECT_STATUS_OK:
 							switch (result.id.type)
@@ -398,7 +415,7 @@ public class MainPage implements EntryPoint {
 		}
 		imageFr.addClickHandler(new CreateLangHandler("fr"));
 		imageEn.addClickHandler(new CreateLangHandler("en"));		
-		*/
+		
 	}
 
 }

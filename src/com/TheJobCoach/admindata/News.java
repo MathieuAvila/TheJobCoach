@@ -59,6 +59,7 @@ public class News {
 		
 		@SuppressWarnings("deprecation")
 		String colDate = info.created.getYear() + "-" + info.created.getMonth();
+		System.out.println("COLDATE CREATE: " + colDate);
 		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_NEWS_DATE, colDate, 
 				(new ShortMap())
 				.add(info.ID, info.ID)
@@ -98,34 +99,39 @@ public class News {
 		{
 			startMonth = nextMonth; 
 			startYear = nextYear;			
+			System.out.println("YEAR " + startYear + " MONTH " + startMonth + " EYEAR " + endYear + " EMONTH " + endMonth);
 			String colDate = startYear + "-" + startMonth;
+			System.out.println("COLDATE: " + colDate);
+			
 			Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATE, colDate);
-			if (result == null)
-			{
-				return returnResult;
-			}
-			Set<String> keySet = result.keySet();
-			for (String key: keySet)
+			if (result != null)
 			{				
-				Map<String, String> resultInfo = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATA, key);
-				if (resultInfo == null) continue;
-				Date d = Convertor.toDate(resultInfo.get("date"));
-				if (d.after(start) && d.before(end))
-				{
-					returnResult.add(new NewsInformation(
-							key,
-							Convertor.toDate(resultInfo.get("date")),
-							resultInfo.get("title"),
-							resultInfo.get("text")
-							));
+				Set<String> keySet = result.keySet();
+				for (String key: keySet)
+				{				
+					Map<String, String> resultInfo = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATA, key);
+					if (resultInfo == null) continue;
+					Date d = Convertor.toDate(resultInfo.get("date"));
+					System.out.println("FOUND ... " + d + " compare : " + start + " _____ " + end);
+					if (d.after(start) && d.before(end))
+					{
+						System.out.println("Insert !");
+						returnResult.add(new NewsInformation(
+								key,
+								Convertor.toDate(resultInfo.get("date")),
+								resultInfo.get("title"),
+								resultInfo.get("text")
+								));
+					}
 				}
 			}
 			nextMonth++;
-			if (nextMonth == 13)
+			if (nextMonth == 12)
 			{
-				nextMonth = 1;
+				nextMonth = 0;
 				nextYear++;
 			}			
+			System.out.println("CONDITION " + ((startYear != endYear) || (startMonth != endMonth)));
 		}
 		while ((startYear != endYear) || (startMonth != endMonth));
 		return returnResult;		

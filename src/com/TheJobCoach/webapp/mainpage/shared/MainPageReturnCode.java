@@ -1,7 +1,11 @@
 package com.TheJobCoach.webapp.mainpage.shared;
 
-public class MainPageReturnCode {
+import java.io.Serializable;
 
+public class MainPageReturnCode implements Serializable {
+
+	private static final long serialVersionUID = 7528193994912150674L;
+	
 	public static enum ConnectStatus 
 	{ 
 		CONNECT_STATUS_ERROR, 
@@ -23,5 +27,7 @@ public class MainPageReturnCode {
 		VALIDATE_STATUS_UNKNOWN, 
 		VALIDATE_STATUS_OK	
 	}
-
+	
+	public MainPageReturnCode() {}
+	
 }
