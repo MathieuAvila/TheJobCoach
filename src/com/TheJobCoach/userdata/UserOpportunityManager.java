@@ -67,7 +67,7 @@ public class UserOpportunityManager {
 				Convertor.toDate(resultReq.get("enddate")),
 				true,
 				"",
-				"",
+				Convertor.toString(resultReq.get("url")),
 				Convertor.toString(resultReq.get("location")),
 				UserOpportunity.applicationStatusToString(resultReq.get("status"))
 				);

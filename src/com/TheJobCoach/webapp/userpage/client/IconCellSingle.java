@@ -17,10 +17,11 @@ public class IconCellSingle extends IconCellDecorator<String>
 	
 	static ImageResource deleteIcon = wpImageBundle.deleteFile();
 	static ImageResource updateIcon = wpImageBundle.updateFile();
+	static ImageResource rightIcon = wpImageBundle.right();
 	
 	IconType type;
 	
-	enum IconType { DELETE, UPDATE };
+	enum IconType { DELETE, UPDATE, RIGHT };
 	
 	IconCellSingle(IconType type)
 	{			
@@ -40,7 +41,13 @@ public class IconCellSingle extends IconCellDecorator<String>
 	protected SafeHtml getIconHtml(String value) 
 	{		
 		SafeHtml html = SafeHtmlUtils.fromSafeConstant("");
-		ImageResource ic = (type == IconType.DELETE) ? deleteIcon : updateIcon;
+		ImageResource ic = deleteIcon;
+		switch (type)
+		{
+		case DELETE: ic = deleteIcon; break;
+		case UPDATE: ic = updateIcon; break;
+		case RIGHT:  ic = rightIcon; break;
+		}
 		html = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(ic).getHTML());
 
 		// Create the wrapper based on the vertical alignment.

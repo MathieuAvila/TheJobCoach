@@ -3,6 +3,8 @@ package com.TheJobCoach.webapp.userpage.server;
 import java.util.List;
 import java.util.Vector;
 
+import com.TheJobCoach.userdata.Account;
+import com.TheJobCoach.userdata.AccountInterface;
 import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.userdata.UserJobSiteManager;
 import com.TheJobCoach.userdata.UserLogManager;
@@ -23,6 +25,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class UserServiceImpl extends RemoteServiceServlet implements UserService
 {
+	static private AccountInterface account = new Account();
 	static private UserJobSiteManager jobSiteManager = new UserJobSiteManager();
 	static private com.TheJobCoach.admindata.News news = new com.TheJobCoach.admindata.News();
 	static private UserOpportunityManager userOpportunityManager = new UserOpportunityManager();
@@ -131,6 +134,14 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 			throws CassandraException {
 		userLogManager.deleteUserLogEntry(id, logId);
 		return logId;
+	}
+
+	@Override
+	public String sendComment(UserId user, String value) throws CassandraException 
+	{
+		System.out.println("send comment '" + value + "' to trash");
+		account.sendComment(user, value);
+		return null;
 	}
 
 }

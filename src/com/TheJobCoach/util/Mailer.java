@@ -36,8 +36,12 @@ public class Mailer implements MailerInterface {
 			message.setSubject(_subject);
 			message.setContent(_body, "text/plain");
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(_dstMail));
-			message.setFrom(new InternetAddress("contact@thejobcoach.fr"));
-			message.setSender(new InternetAddress("contact@thejobcoach.fr"));
+			
+			/*message.setFrom(new InternetAddress("contact@wwwthejobcoach.fr"));
+			message.setSender(new InternetAddress("contact@wwwthejobcoach.fr"));
+			*/
+			message.setFrom(new InternetAddress(_src));
+			message.setSender(new InternetAddress(_src));			
 			
 			transport.connect();
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));

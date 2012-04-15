@@ -1,11 +1,7 @@
 package com.TheJobCoach.webapp.util.client;
 
 import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
-import com.google.gwt.user.client.ui.ImageBundle;
-import com.google.gwt.user.client.ui.impl.ClippedImagePrototype;
 
 public interface ClientImageBundle extends ClientBundle 
 {
@@ -41,5 +37,11 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("wait_64.png")
 	ImageResource createWait();
+
+	@Source("left_32.png")
+	ImageResource backIcon();
+
+	@Source("email_32.png")
+	ImageResource emailIcon();
 
 }

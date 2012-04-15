@@ -95,7 +95,7 @@ public class Account implements AccountInterface {
 		result = updateUserInformation(id, info);
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
 		String body = Lang._TextBody(info.firstName, com.TheJobCoach.util.SiteDef.getAddress(), id.userName, id.token, langStr);
-		MailerFactory.getMailer().sendEmail(info.email, Lang._TextSubject(langStr), body, "noreply@thejobcoach.fr");
+		MailerFactory.getMailer().sendEmail(info.email, Lang._TextSubject(langStr), body, "noreply@www.thejobcoach.fr");
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 
@@ -232,6 +232,19 @@ public class Account implements AccountInterface {
 				}
 			}
 		} while (resultRows.size() > 1);
+	}
+
+	@Override
+	public void sendComment(UserId id, String comment) throws CassandraException
+	{
+		UserReport report = getUserReport(id);
+		System.out.println("Comment from " + report.mail);
+		MailerFactory.getMailer().sendEmail("mathieu.avila@laposte.net", 
+				"Comment on TheJobCoach from '" + report.mail + "' user '" + report.userName + "'", 
+				report.mail + "\n" + comment, 
+				"noreply@www.thejobcoach.fr");
+		System.out.println("Comment sent.");
+		
 	}
 
 }

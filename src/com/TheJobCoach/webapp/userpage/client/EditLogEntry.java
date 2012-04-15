@@ -38,22 +38,16 @@ public class EditLogEntry implements EntryPoint {
 	TextBox txtbxTitle = new TextBox();
 	String id;
 	
-	public void setUserParameters(UserId _user)
-	{
-		user = _user;
-	}
-
 	Panel rootPanel;
 	EditLogEntryResult result;
 	UserLogEntry currentLogEntry;
 	
-	public void setRootPanel(Panel panel, UserLogEntry _currentLogEntry, EditLogEntryResult _result, String text)
+	public EditLogEntry(Panel panel, UserLogEntry _currentLogEntry, UserId _user, EditLogEntryResult _result, String text)
 	{
+		user = _user;
 		rootPanel = panel;
 		currentLogEntry = _currentLogEntry;
 		result = _result;
-		txtbxTitle.setText(currentLogEntry.title);
-		richTextAreaDescription.setHTML(currentLogEntry.description);		
 	}
 
 	public UserLogEntry getLogEntry()
@@ -144,7 +138,11 @@ public class EditLogEntry implements EntryPoint {
 				dBox.hide();
 			}
 		});
-		
+		if (currentLogEntry != null)
+		{
+			txtbxTitle.setText(currentLogEntry.title);
+			richTextAreaDescription.setHTML(currentLogEntry.description);
+		}
 		dBox.center();
 	}
 }

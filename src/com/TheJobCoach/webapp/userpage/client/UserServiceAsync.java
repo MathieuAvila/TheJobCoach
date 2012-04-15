@@ -37,4 +37,6 @@ public interface UserServiceAsync {
 	public void getUserLogEntry(UserId id, String logId, AsyncCallback<UserLogEntry> callback) throws CassandraException;
 	public void setUserLogEntry(UserId id, UserLogEntry opp, AsyncCallback<String> callback) throws CassandraException;
 	public void deleteUserLogEntry(UserId id, String logId, AsyncCallback<String> callback) throws CassandraException;
+	
+	public void sendComment(UserId user, String value, AsyncCallback<String> callback);
 }

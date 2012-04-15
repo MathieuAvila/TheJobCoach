@@ -31,11 +31,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class MainPage implements EntryPoint {
-	
+
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
-	
+
 	RootPanel rootPanel = null;
-	
+
 	void messageLogin(String title, String message)
 	{
 		MessageBox mb = new MessageBox(rootPanel, true, false, MessageBox.TYPE.ERROR, 
@@ -44,35 +44,17 @@ public class MainPage implements EntryPoint {
 				null);
 		mb.onModuleLoad();
 	}
-	
-	/**
-	 * This is the entry point method.
-	 */
+
 	public void onModuleLoad()
-	{		
+	{	
 		final Lang lang = GWT.create(Lang.class);
 		
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
 		rootPanel = RootPanel.get("content");
 		rootPanel.clear();
 		rootPanel.setStyleName("mainpage-content");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 		rootPanel.setSize("100%", "100%");
-		
-		/*
-		AdminPage cP = new AdminPage();
-		cP.setUser(new UserId("admin", "mytokenadmin", UserId.UserType.USER_TYPE_ADMIN));
-		cP.onModuleLoad();
-		return;
-		*/
-		/*
-		UserPage cP = new UserPage();
-		cP.setUser(new UserId("mathieu", "mytokenuser", UserId.UserType.USER_TYPE_SEEKER));
-		cP.onModuleLoad();
-		return;
-		*/
-		
+
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel.setStyleName("mainpage-content");
@@ -415,7 +397,7 @@ public class MainPage implements EntryPoint {
 		}
 		imageFr.addClickHandler(new CreateLangHandler("fr"));
 		imageEn.addClickHandler(new CreateLangHandler("en"));		
-		
+
 	}
 
 }

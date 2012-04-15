@@ -60,8 +60,7 @@ public class TheJobCoach implements EntryPoint {
 
 		MainPage main = new MainPage();
 		main.onModuleLoad();
-		//RootPanel.get("nameFieldContainer").add(main);
-		System.out.println("Load TheJobCoach...");
-		return;
+				
+		return;	
 	}
 }

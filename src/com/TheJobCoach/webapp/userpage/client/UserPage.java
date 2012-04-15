@@ -2,6 +2,7 @@ package com.TheJobCoach.webapp.userpage.client;
 
 
 import com.TheJobCoach.webapp.footer.client.Footer;
+import com.TheJobCoach.webapp.mainpage.client.MainPage;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -30,7 +31,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class UserPage implements EntryPoint {
-
+		
 	final VerticalPanel simplePanelContent = new VerticalPanel();
 	Label selectedMenu = null;
 
@@ -73,6 +74,13 @@ public class UserPage implements EntryPoint {
 			contentUserOpportunity.setUserParameters(userId);
 			contentUserOpportunity.onModuleLoad();
 		}
+		if (menu.equals("report"))
+		{
+			ContentReport contentReport = new ContentReport();
+			contentReport.setRootPanel(simplePanelContent);
+			contentReport.setUserParameters(userId);
+			contentReport.onModuleLoad();
+		}
 	}
 
 	public void setLabelMenu(final Label label, final String menu)
@@ -82,6 +90,7 @@ public class UserPage implements EntryPoint {
 				!menu.equals("news") &&
 				!menu.equals("myjobboards") &&
 				!menu.equals("mydocuments") &&
+				!menu.equals("report") &&
 				!menu.equals("applications")
 				)
 		{
@@ -144,10 +153,35 @@ public class UserPage implements EntryPoint {
 
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		flexTable.setWidget(0, 0, horizontalPanel);		
+		horizontalPanel.setWidth("100%");
 		Image image = new Image("jobcoach.gif");
 
 		horizontalPanel.add(image);
-
+		
+		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
+		horizontalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		horizontalPanel.add(horizontalPanel_2);
+		horizontalPanel.setCellHorizontalAlignment(horizontalPanel_2, HasHorizontalAlignment.ALIGN_RIGHT);
+		
+		Label labelUserName = new Label(userId.userName);
+		horizontalPanel_2.add(labelUserName);
+		horizontalPanel_2.setCellVerticalAlignment(labelUserName, HasVerticalAlignment.ALIGN_MIDDLE);
+		
+		SimplePanel simplePanel_6 = new SimplePanel();
+		horizontalPanel_2.add(simplePanel_6);
+		simplePanel_6.setWidth("30px");
+		
+		Image imageLogout = new Image(ClientImageBundle.INSTANCE.urlLogout());
+		horizontalPanel_2.add(imageLogout);
+		imageLogout.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				MainPage main = new MainPage();
+				main.onModuleLoad();				
+			}			
+		});
+		imageLogout.setStyleName("mainpage-label-clickable");
+		
 		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
 		horizontalPanel_1.setWidth("100%");
 		flexTable.setWidget(1, 0, horizontalPanel_1);
@@ -300,6 +334,10 @@ public class UserPage implements EntryPoint {
 		setLabelMenu(label_Forum, "forum");
 		verticalPanelShares.add(label_Forum);
 
+		final Label label_Report = new Label(lang._TextReport());
+		setLabelMenu(label_Report, "report");
+		verticalPanelShares.add(label_Report);
+
 		final Label label_News = new Label(lang._TextNews());
 		setLabelMenu(label_News, "news");
 		verticalPanelShares.add(label_News);
@@ -329,20 +367,10 @@ public class UserPage implements EntryPoint {
 		Footer footerPanel = new Footer();
 		footerPanel.setRootPanel(verticalPanel);	
 		footerPanel.onModuleLoad();
-/*
-		ContentUserOpportunity contentUserSite = new ContentUserOpportunity();
-		contentUserSite.setRootPanel(simplePanelContent);
-		flexTable.getCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
-		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_LEFT);
-		contentUserSite.setUserParameters(userId);
-		contentUserSite.onModuleLoad();
-*/
-		ContentMyDocuments contentUserSite = new ContentMyDocuments();
-		contentUserSite.setRootPanel(simplePanelContent);
-		flexTable.getCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
-		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_LEFT);
-		contentUserSite.setUserParameters(userId);
-		contentUserSite.onModuleLoad();
-		
+
+		ContentNews contentNews = new ContentNews();
+		contentNews.setRootPanel(simplePanelContent);
+		contentNews.setUserParameters(userId);
+		contentNews.onModuleLoad();		
 	}
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.4.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.4.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to='thejobcoach'>
+
+	<inherits name="com.TheJobCoach.webapp.util.Util" />
+	<inherits name="com.TheJobCoach.webapp.userpage.UserPage" />
+	<inherits name="com.TheJobCoach.webapp.mainpage.MainPage" />
+	
+	<inherits name="com.google.gwt.user.User" />	
+	<inherits name="com.google.gwt.i18n.I18N"/>
+	<extend-property name="locale" values="fr"/>
+	<extend-property name="locale" values="en"/>
+	 
+	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxUI'/>
+	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditLogEntry'/>
+	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserOpportunity" />
+	
+	<source path="util/client"/>	
+	<source path="userpage/client"/>	
+	
+	<set-configuration-property name="locale.cookie" value="gwtlang"/>
+</module>

@@ -9,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.client.EditLogEntry.EditLogEntryResult;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -145,9 +146,8 @@ public class ContentUserLog implements EntryPoint {
 	{
 		public void onClick(ClickEvent event)
 		{
-			EditLogEntry eus = new EditLogEntry();
 			UserLogEntry ujb = new UserLogEntry();
-			eus.setRootPanel(rootPanel, ujb, new EditLogEntryResult() {
+			EditLogEntry eus = new EditLogEntry(rootPanel, ujb, user, new EditLogEntryResult() {
 
 				@Override
 				public void setResult(UserLogEntry result) {
@@ -185,8 +185,7 @@ public class ContentUserLog implements EntryPoint {
 	{
 		public void onClick(ClickEvent event)
 		{
-			EditLogEntry eus = new EditLogEntry();
-			eus.setRootPanel(rootPanel, currentLogEntry, new EditLogEntryResult() {
+			EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, user, new EditLogEntryResult() {
 				@Override
 				public void setResult(UserLogEntry result) {
 					try 
@@ -342,8 +341,7 @@ public class ContentUserLog implements EntryPoint {
 		simplePanelCenter.add(simplePanel);
 		simplePanel.setHeight("20px");
 		
-		Button buttonBack = new Button();
-		buttonBack.setText(lang._Text_BackToOpportunityList());
+		ButtonImageText buttonBack = new ButtonImageText(ButtonImageText.Type.BACK, lang._Text_BackToOpportunityList());
 		simplePanelCenter.add(buttonBack);
 		
 		SimplePanel simplePanel_2 = new SimplePanel();

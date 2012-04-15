@@ -1,11 +1,13 @@
 package com.TheJobCoach.webapp.userpage.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 public interface ClientImageBundle extends ClientBundle 
 {
-
+	public static final ClientImageBundle INSTANCE = GWT.create(ClientImageBundle.class);
+	 
 	/**
 	 * Would match the file 'open_file_icon.gif' located in the same
 	 * package as this type.
@@ -37,4 +39,16 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("button_ok_32.png")
 	ImageResource createOk();
+
+	@Source("right_32.png")
+	ImageResource right();
+
+	@Source("web_32.png")
+	ImageResource urlLink();
+
+	@Source("logout_32.png")
+	ImageResource urlLogout();
+
+	@Source("comment_64.jpeg")
+	ImageResource sendComment();
 }

@@ -20,6 +20,8 @@ public interface AccountInterface
 	public MainPageReturnLogin loginAccount(String userName, String password);
 	
 	public Vector<UserId> listUser() throws CassandraException;
+
+	public void sendComment(UserId id, String comment) throws CassandraException;
 	
 	public void purgeAccount() throws CassandraException;
 }

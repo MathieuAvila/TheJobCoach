@@ -84,6 +84,9 @@ public interface Lang extends Constants {
 	@Key("news")
 	String _TextNews();
 
+	@Key("report")
+	String _TextReport();
+	
 	@Key("about")
 	String _TextAbout();
 
@@ -202,5 +205,20 @@ public interface Lang extends Constants {
 	
 	@Key("documentStatusMap")	
 	Map<String, String> documentStatusMap();
+
+	@Key("comment")
+	String _TextComment();	
+
+	@Key("makecomment")
+	String _TextMakeComment();	
+
+	@Key("aboutcomment")
+	String _TextAboutComment();	
+
+	@Key("sendcomment")
+	String _TextSendComment();	
+
+	@Key("replycomment")
+	String _TextReplyComment();	
 
 }

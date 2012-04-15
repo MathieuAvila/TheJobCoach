@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <!-- Servlets -->
+  <servlet>
+    <servlet-name>greetServlet</servlet-name>
+    <servlet-class>com.TheJobCoach.webapp.thejobcoach.server.GreetingServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>loginServlet</servlet-name>
+    <servlet-class>com.TheJobCoach.webapp.mainpage.server.LoginServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>userServlet</servlet-name>
+    <servlet-class>com.TheJobCoach.webapp.userpage.server.UserServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>adminServlet</servlet-name>
+    <servlet-class>com.TheJobCoach.webapp.adminpage.server.AdminServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>greetServlet</servlet-name>
+    <url-pattern>/thejobcoach/greet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>loginServlet</servlet-name>
+    <url-pattern>/thejobcoach/login</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>userServlet</servlet-name>
+    <url-pattern>/com.TheJobCoach.webapp.Test/user</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>adminServlet</servlet-name>
+    <url-pattern>/thejobcoach/admin</url-pattern>
+  </servlet-mapping>
+
+
+
+	<servlet>
+		<servlet-name>uploadFileServlet</servlet-name>
+		<servlet-class>com.TheJobCoach.webapp.userpage.server.UploadFileServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>uploadFileServlet</servlet-name>
+		<url-pattern>/thejobcoach/UploadServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>downloadFileServlet</servlet-name>
+		<servlet-class>com.TheJobCoach.webapp.userpage.server.DownloadFileServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>downloadFileServlet</servlet-name>
+		<url-pattern>/thejobcoach/DownloadServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>TheJobCoach.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>
