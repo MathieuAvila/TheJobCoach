@@ -62,7 +62,7 @@ public class UserPage implements EntryPoint {
 		}
 		if (menu.equals("mydocuments"))
 		{
-			ContentMyDocuments contentMyDocuments = new ContentMyDocuments();
+			ContentUserDocument contentMyDocuments = new ContentUserDocument();
 			contentMyDocuments.setRootPanel(simplePanelContent);
 			contentMyDocuments.setUserParameters(userId);
 			contentMyDocuments.onModuleLoad();

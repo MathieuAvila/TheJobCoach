@@ -11,9 +11,11 @@
 	<extend-property name="locale" values="fr"/>
 	<extend-property name="locale" values="en"/>
 	 
+	<entry-point class='com.TheJobCoach.webapp.util.client.TestSetLang'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxUI'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditLogEntry'/>
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserOpportunity" />
+	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserDocument" />
 	
 	<source path="util/client"/>	
 	<source path="userpage/client"/>	

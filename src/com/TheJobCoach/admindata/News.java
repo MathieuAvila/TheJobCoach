@@ -99,9 +99,9 @@ public class News {
 		{
 			startMonth = nextMonth; 
 			startYear = nextYear;			
-			System.out.println("YEAR " + startYear + " MONTH " + startMonth + " EYEAR " + endYear + " EMONTH " + endMonth);
+			//System.out.println("YEAR " + startYear + " MONTH " + startMonth + " EYEAR " + endYear + " EMONTH " + endMonth);
 			String colDate = startYear + "-" + startMonth;
-			System.out.println("COLDATE: " + colDate);
+			//System.out.println("COLDATE: " + colDate);
 			
 			Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATE, colDate);
 			if (result != null)
@@ -112,10 +112,10 @@ public class News {
 					Map<String, String> resultInfo = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATA, key);
 					if (resultInfo == null) continue;
 					Date d = Convertor.toDate(resultInfo.get("date"));
-					System.out.println("FOUND ... " + d + " compare : " + start + " _____ " + end);
+					//System.out.println("FOUND ... " + d + " compare : " + start + " _____ " + end);
 					if (d.after(start) && d.before(end))
 					{
-						System.out.println("Insert !");
+						//System.out.println("Insert !");
 						returnResult.add(new NewsInformation(
 								key,
 								Convertor.toDate(resultInfo.get("date")),

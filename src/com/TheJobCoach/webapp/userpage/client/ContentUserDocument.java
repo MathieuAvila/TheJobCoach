@@ -13,7 +13,6 @@ import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -24,6 +23,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -37,8 +37,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument>, EditUserDocumentResult {
-
+public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
+	
+	final static Lang lang = GWT.create(Lang.class);
+	
 	UserId user;
 
 	final CellTable<UserDocument> cellTable = new CellTable<UserDocument>();
@@ -109,7 +111,7 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 	void updateDoc(final UserDocument object)
 	{
 		EditUserDocument eud = new EditUserDocument();
-		eud.setRootPanel(rootPanel, object, "Update user document", new EditUserDocument.EditUserDocumentResult() {
+		eud.setRootPanel(rootPanel, object, lang._TextUpdateANewUserDocument(), new EditUserDocument.EditUserDocumentResult() {
 
 			@Override
 			public void setResult() {							
@@ -124,8 +126,8 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 	void deleteDoc(final UserDocument object)
 	{
 		MessageBox mb = new MessageBox(
-				rootPanel, true, true, MessageBox.TYPE.QUESTION, "Delete document ?", 
-				"Are you sure you wish to delete file " + object.fileName, new MessageBox.ICallback() {
+				rootPanel, true, true, MessageBox.TYPE.QUESTION, lang._TextConfirmDeleteUserDocumentTitle(), 
+				lang._TextConfirmDeleteUserDocument() + object.fileName, new MessageBox.ICallback() {
 					
 					@Override
 					public void complete(boolean ok) {
@@ -183,8 +185,7 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 	 */
 	public void onModuleLoad()
 	{		
-		final Lang lang = GWT.create(Lang.class);
-		System.out.println("Load Content User Site, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
+		System.out.println("Load Content User Document, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
@@ -198,7 +199,11 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		//cellTable
 		//cellTable.setRowCount(5);
 		//cellTable.setVisibleRange(0, 3);
-
+		
+		Label lblUserDocument = new Label(lang._TextUserDocument());
+		lblUserDocument.setStyleName("label-content" );
+		simplePanelCenter.add(lblUserDocument);
+		
 		// Create name column.
 		TextColumn<UserDocument> nameColumn = new TextColumn<UserDocument>() 	{
 			@Override
@@ -261,7 +266,7 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 			public void update(int index, UserDocument object, String value) {				
 				deleteDoc(object);
 			}
-		}), "Delete");
+		}), lang._TextDeleteUserDocument());
 
 		IconCellSingle updateCell =	new IconCellSingle(IconCellSingle.IconType.UPDATE);		
 		cellTable.addColumn(addColumn(updateCell, new GetValue<String>() {
@@ -273,7 +278,7 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 			public void update(int index, UserDocument object, String value) {
 				updateDoc(object);
 			}
-		}), "Update");
+		}), lang._TextUpdateUserDocument());
 		
 		statusColumn.setSortable(true);
 		cellTable.addColumn(statusColumn, lang._TextStatus());
@@ -290,14 +295,14 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 				DownloadIFrame iframe = new DownloadIFrame(copyURL);
 				simplePanelCenter.add(iframe);
 			}
-		}), "File name");
+		}), lang._TextFilename());
 
 		nameColumn.setSortable(true);
 		descriptionColumn.setSortable(true);
 		downloadLastUpdate.setSortable(true);
 		cellTable.addColumn(nameColumn, lang._TextName());
 		cellTable.addColumn(descriptionColumn, lang._TextDescription());
-		cellTable.addColumn(downloadLastUpdate, "Last update");
+		cellTable.addColumn(downloadLastUpdate, lang._TextLastUpdate());
 		cellTable.getColumnSortList().push(nameColumn);		
 
 		dataProvider.addDataDisplay(cellTable);
@@ -317,12 +322,12 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
 
-		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, "Add new document");
+		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewUserDocument());
 		button.addClickHandler(new ClickHandler()
 		{			
 			public void onClick(ClickEvent event) {
 				EditUserDocument eud = new EditUserDocument();
-				eud.setRootPanel(rootPanel, null, "Create new user document", new EditUserDocument.EditUserDocumentResult() {
+				eud.setRootPanel(rootPanel, null, lang._TextCreateANewUserDocument(), new EditUserDocument.EditUserDocumentResult() {
 
 					@Override
 					public void setResult() {							
@@ -337,11 +342,6 @@ public class ContentMyDocuments implements EntryPoint, ValueUpdater<UserDocument
 		simplePanelCenter.add(button);
 
 		getAllContent();
-	}
-
-	@Override
-	public void update(UserDocument value) {
-		System.out.println("Something happened in " + value.fileName);
 	}
 
 	@Override

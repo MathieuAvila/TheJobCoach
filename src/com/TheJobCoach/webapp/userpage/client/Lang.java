@@ -221,4 +221,40 @@ public interface Lang extends Constants {
 	@Key("replycomment")
 	String _TextReplyComment();	
 
+	
+	
+	@Key("mydocuments")
+	String _TextUserDocument();
+
+	@Key("editdocument")	
+	String _TextEditUserDocument();
+
+	@Key("updatedocument")
+	String _TextUpdateUserDocument();
+
+	@Key("newdocument")
+	String _TextNewUserDocument();
+
+	@Key("deletedocument")
+	String _TextDeleteUserDocument();
+
+	@Key("filename")
+	String _TextFilename();
+
+	@Key("lastupdate")
+	String _TextLastUpdate();
+	
+	@Key("createanewdocument")
+	String _TextCreateANewUserDocument();
+	
+	@Key("updateadocument")
+	String _TextUpdateANewUserDocument();
+
+	@Key("confirmdeletedocumenttitle")
+	String _TextConfirmDeleteUserDocumentTitle();
+
+	@Key("confirmdeletedocument")
+	String _TextConfirmDeleteUserDocument();
+
+
 }
