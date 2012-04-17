@@ -6,6 +6,7 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -52,7 +53,16 @@ public class EditLogEntry implements EntryPoint {
 
 	public UserLogEntry getLogEntry()
 	{
-		return new UserLogEntry(currentLogEntry.ID, currentLogEntry.opportunityId,
+		String id = SiteUUID.getDateUuid();
+		String oppId = "";
+		if (currentLogEntry != null)
+		{
+			id = currentLogEntry.ID;
+			oppId = currentLogEntry.opportunityId;
+		}
+		return new UserLogEntry(
+				oppId,
+				id, 
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), 
 				new Date(), new Date(),
 				UserLogEntry.entryTypeToString("NEW"),

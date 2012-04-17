@@ -114,8 +114,10 @@ public class UserDocumentManager {
 		byte[] resultReq = CassandraAccessor.getColumnByte(COLUMN_FAMILY_NAME_CONTENT, docId, "content");
 		if (resultReq == null)
 		{
+			System.out.println("Fetched document: " + docId + " has 0 length. Deleted ?");		
 			return new byte[0];  // this means it was deleted.
 		}
+		System.out.println("Fetched document: " + docId + " has length " + resultReq.length);		
 		return resultReq;
 	}
 	

@@ -13,9 +13,13 @@
 	 
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestSetLang'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxUI'/>
+	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxError'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditLogEntry'/>
+	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditUserSite'/>
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserOpportunity" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserDocument" />
+	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserSite" />
+	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserLog" />
 	
 	<source path="util/client"/>	
 	<source path="userpage/client"/>	

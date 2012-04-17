@@ -18,14 +18,13 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.datepicker.client.DatePicker;
-
+import com.google.gwt.user.datepicker.client.DateBox;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class EditUserSite implements EntryPoint {
 
-	public interface EditLogEntryResult
+	public interface EditUserSiteResult
 	{
 		public void setResult(UserJobSite result);
 	}
@@ -37,22 +36,18 @@ public class EditUserSite implements EntryPoint {
 	TextBox textBoxUrl = new TextBox();
 	TextBox textBoxLogin = new TextBox();
 	TextBox textBoxPassword = new TextBox();
-	DatePicker datePickerLastVisit = new DatePicker();
-
-	public void setUserParameters(UserId _user)
-	{
-		user = _user;
-	}
+	DateBox datePickerLastVisit = new DateBox();
 
 	Panel rootPanel;
-	EditLogEntryResult result;
+	EditUserSiteResult result;
 	UserJobSite currentUserSite;
 
-	public void setRootPanel(Panel panel, UserJobSite _currentLogEntry, EditLogEntryResult _result)
+	public EditUserSite(Panel panel, UserJobSite _currentUserSite, UserId _user, EditUserSiteResult _result)
 	{
 		rootPanel = panel;
-		currentUserSite = _currentLogEntry;
+		currentUserSite = _currentUserSite;
 		result = _result;
+		user = _user;
 	}
 
 	private void setUserJobSite(UserJobSite opp)
@@ -73,7 +68,7 @@ public class EditUserSite implements EntryPoint {
 	{
 		String ID = new Date().toString();
 		if (currentUserSite != null) ID = currentUserSite.ID;
-		System.out.println("getUserJobSite -" + ID + "-" + textBoxName.getText()+ textBoxUrl.getText()+ textAreaDescription.getHTML()+ textBoxLogin.getValue());
+		//System.out.println("getUserJobSite -" + ID + "-" + textBoxName.getText()+ textBoxUrl.getText()+ textAreaDescription.getHTML()+ textBoxLogin.getValue());
 		return new UserJobSite(ID,
 				textBoxName.getText(), textBoxUrl.getText(), textAreaDescription.getHTML(), textBoxLogin.getValue(),
 				textBoxPassword.getText(), datePickerLastVisit.getValue());
@@ -88,11 +83,11 @@ public class EditUserSite implements EntryPoint {
 		Lang lang = GWT.create(Lang.class);
 
 		final DialogBox dBox = new DialogBox();
-		dBox.setText("Edit LogEntry");
+		dBox.setText(currentUserSite == null ? lang._TextCreateUserSiteTitle() : lang._TextEditUserSiteTitle());
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		Grid grid = new Grid(12, 2);
+		Grid grid = new Grid(7, 2);
 		grid.setBorderWidth(0);
 		dBox.setWidget(grid);		
 
@@ -131,14 +126,14 @@ public class EditUserSite implements EntryPoint {
 
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid.setWidget(11, 1, horizontalPanel);
+		grid.setWidget(6, 1, horizontalPanel);
 
 		Button btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
 		horizontalPanel.add(btnOk);
 
 		Button btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
 		horizontalPanel.add(btnCancel);
-		grid.getCellFormatter().setHorizontalAlignment(11, 1, HasHorizontalAlignment.ALIGN_RIGHT);
+		grid.getCellFormatter().setHorizontalAlignment(6, 1, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		setUserJobSite(currentUserSite);
 

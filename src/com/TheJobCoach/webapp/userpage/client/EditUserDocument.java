@@ -8,6 +8,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -86,7 +87,7 @@ public class EditUserDocument implements EntryPoint {
 
 	private UserDocument getDocument()
 	{
-		String iD = new Date().toString();
+		String iD = SiteUUID.getDateUuid();
 		Date d = new Date();
 		String stripUserName = "";
 		if (currentUserDocument != null)

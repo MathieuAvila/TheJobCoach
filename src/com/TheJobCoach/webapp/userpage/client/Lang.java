@@ -125,9 +125,15 @@ public interface Lang extends Constants {
 	@Key("updatesite")
 	String _TextUpdateSite();
 
-	@Key("downloadfile")
-	String _TextDownloadFile();
-		
+	@Key("confirmdeletesitetitle")
+	String _TextConfirmDeleteSiteTitle();
+	
+	@Key("confirmdeletesite")
+	String _TextConfirmDeleteSite();
+	
+	
+	// Opportunity
+	
 	@Key("applicationStatusMap")	
 	Map<String, String> applicationStatusMap();
 
@@ -203,9 +209,6 @@ public interface Lang extends Constants {
 	@Key("backtoopportunitylist")
 	String _Text_BackToOpportunityList();
 	
-	@Key("documentStatusMap")	
-	Map<String, String> documentStatusMap();
-
 	@Key("comment")
 	String _TextComment();	
 
@@ -222,7 +225,14 @@ public interface Lang extends Constants {
 	String _TextReplyComment();	
 
 	
+	// Document
 	
+	@Key("documentStatusMap")	
+	Map<String, String> documentStatusMap();
+
+	@Key("downloadfile")
+	String _TextDownloadFile();
+
 	@Key("mydocuments")
 	String _TextUserDocument();
 
@@ -256,5 +266,14 @@ public interface Lang extends Constants {
 	@Key("confirmdeletedocument")
 	String _TextConfirmDeleteUserDocument();
 
+	// Edit user site
+
+	@Key("editusersitetitle")
+	String _TextEditUserSiteTitle();
+
+	@Key("createusersitetitle")
+	String _TextCreateUserSiteTitle();
+
+	
 
 }

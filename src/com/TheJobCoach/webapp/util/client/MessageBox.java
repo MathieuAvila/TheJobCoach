@@ -134,4 +134,16 @@ public class MessageBox implements EntryPoint {
 		dBox.center();		
 	}
 	
+	public static void messageBox(Panel rootPanel, TYPE type, String title, String message)
+	{
+		MessageBox mb = new MessageBox(rootPanel, true, false, type, title, message, null);
+		mb.onModuleLoad();
+		
+	}
+	
+	public static void messageBoxException(Panel rootPanel, String exception)
+	{
+		messageBox(rootPanel, TYPE.ERROR, "Unexpected system error.", "An unexpected system error occured. Please try again later. Details: " + exception);
+		
+	}
 }

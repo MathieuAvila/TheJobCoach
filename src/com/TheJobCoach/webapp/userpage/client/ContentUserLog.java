@@ -10,6 +10,9 @@ import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.shared.SiteUUID;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -20,6 +23,7 @@ import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -41,35 +45,27 @@ public class ContentUserLog implements EntryPoint {
 	UserId user;
 
 	final CellTable<UserLogEntry> cellTable = new CellTable<UserLogEntry>();
-	
+
 	final Lang lang = GWT.create(Lang.class);
 	UserOpportunity editedOpportunity;
 	UserLogEntry currentLogEntry;
-	
-	void setOpportunity(UserOpportunity opp)
+
+	public ContentUserLog(Panel panel, UserId _user, UserOpportunity opp)
 	{
+		rootPanel = panel;
 		editedOpportunity = opp;
-	}
-		
-	public void setUserParameters(UserId _user)
-	{
 		user = _user;
 	}
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
-	
-	public void setRootPanel(Panel panel)
-	{
-		rootPanel = panel;
-	}
-	
+
 	private void setUserLogEntry(UserLogEntry selected)
 	{
 		currentLogEntry = selected;
 	}
-		
+
 	// The list of data to display.
 	private Vector<UserLogEntry> UserLogEntryList = new Vector<UserLogEntry>();
 
@@ -109,7 +105,7 @@ public class ContentUserLog implements EntryPoint {
 			}
 		};
 		try {
-			userService.getUserLogEntryShortList(user, "managed", callback);
+			userService.getUserLogEntryShortList(user, editedOpportunity.ID, callback);
 		}
 		catch (CassandraException e) 
 		{
@@ -118,36 +114,33 @@ public class ContentUserLog implements EntryPoint {
 	}
 
 
-	class DeleteHandler implements ClickHandler
+	void deleteLogEntry(UserLogEntry currentLogEntry)
 	{
-		public void onClick(ClickEvent event)
+		try {
+			userService.deleteUserLogEntry(user, currentLogEntry.ID, new AsyncCallback<String>() {
+				public void onFailure(Throwable caught) {
+					// Show the RPC error message to the user
+					Window.alert(caught.toString());
+					//connectButton.setEnabled(true);
+				}
+				public void onSuccess(String result)
+				{
+					getAllContent();
+				}
+			});
+		} 
+		catch (CassandraException e) 
 		{
-			try {
-				userService.deleteUserLogEntry(user, currentLogEntry.ID, new AsyncCallback<String>() {
-					public void onFailure(Throwable caught) {
-						// Show the RPC error message to the user
-						Window.alert(caught.toString());
-						//connectButton.setEnabled(true);
-					}
-					public void onSuccess(String result)
-					{
-						getAllContent();
-					}
-				});
-			} 
-			catch (CassandraException e) 
-			{
-				Window.alert(e.toString());
-			}
+			Window.alert(e.toString());
 		}
 	}
+
 
 	class NewLogEntryHandler implements ClickHandler
 	{
 		public void onClick(ClickEvent event)
 		{
-			UserLogEntry ujb = new UserLogEntry();
-			EditLogEntry eus = new EditLogEntry(rootPanel, ujb, user, new EditLogEntryResult() {
+			EditLogEntry eus = new EditLogEntry(rootPanel, null, user, new EditLogEntryResult() {
 
 				@Override
 				public void setResult(UserLogEntry result) {
@@ -155,7 +148,8 @@ public class ContentUserLog implements EntryPoint {
 					{
 						if (result != null)
 						{
-							result.ID = new Date().toString();
+							result.ID = SiteUUID.getDateUuid();
+							result.opportunityId = editedOpportunity.ID;
 							userService.setUserLogEntry(user, result, new AsyncCallback<String>() {
 								public void onFailure(Throwable caught) {
 									// Show the RPC error message to the user
@@ -164,7 +158,7 @@ public class ContentUserLog implements EntryPoint {
 								}
 								public void onSuccess(String result)
 								{
-									System.out.println("Created opp: " + result);
+									System.out.println("Created user log entry: " + result);
 									getAllContent();
 								}
 							});
@@ -174,46 +168,64 @@ public class ContentUserLog implements EntryPoint {
 					{
 						System.out.println(e);
 					}
-			}
+				}
 			}, lang._TextNewLogEntry());
 			eus.onModuleLoad();
 		}
 	}
 
 
-	class UpdateLogEntry implements ClickHandler
+	void updateLogEntry(UserLogEntry currentLogEntry)
 	{
-		public void onClick(ClickEvent event)
-		{
-			EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, user, new EditLogEntryResult() {
-				@Override
-				public void setResult(UserLogEntry result) {
-					try 
+		EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, user, new EditLogEntryResult() {
+			@Override
+			public void setResult(UserLogEntry result) {
+				try 
+				{
+					if (result != null)
 					{
-						if (result != null)
-						{
-							userService.setUserLogEntry(user, result, new AsyncCallback<String>() {
-								public void onFailure(Throwable caught) {
-									// Show the RPC error message to the user
-									Window.alert(caught.toString());
-									//connectButton.setEnabled(true);
-								}
-								public void onSuccess(String result)
-								{
-									System.out.println("Updated opp: " + result);
-									getAllContent();
-								}
-							});
-						}
+						userService.setUserLogEntry(user, result, new AsyncCallback<String>() {
+							public void onFailure(Throwable caught) {
+								// Show the RPC error message to the user
+								Window.alert(caught.toString());
+								//connectButton.setEnabled(true);
+							}
+							public void onSuccess(String result)
+							{
+								System.out.println("Updated opp: " + result);
+								getAllContent();
+							}
+						});
 					}
-					catch (CassandraException e)
-					{
-						System.out.println(e);
-					}
+				}
+				catch (CassandraException e)
+				{
+					System.out.println(e);
+				}
 			}
-			}, lang._TextUpdateLogEntry());
-			eus.onModuleLoad();
-		}
+		}, lang._TextUpdateLogEntry());
+		eus.onModuleLoad();
+	}
+
+	private <C> Column<UserLogEntry, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserLogEntry, C> fieldUpdater) 
+	{
+		Column<UserLogEntry, C> column = new Column<UserLogEntry, C>(cell) 
+				{
+
+			@Override
+			public C getValue(UserLogEntry object) 
+			{
+				return getter.getValue(object);
+			}
+				};
+				column.setFieldUpdater(fieldUpdater);
+
+				return column;
+	}
+
+
+	private static interface GetValue<C> {
+		C getValue(UserLogEntry contact);
 	}
 
 
@@ -232,11 +244,11 @@ public class ContentUserLog implements EntryPoint {
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
-		
+
 		InlineHTML lblOpportunities = new InlineHTML();
 		lblOpportunities.setHTML("<h2>" + lang._Text_EditLog() + "</h2>" );
 		simplePanelCenter.add(lblOpportunities);
-		
+
 		// Create title column.
 		TextColumn<UserLogEntry> titleColumn = new TextColumn<UserLogEntry>() 	{
 			@Override
@@ -273,15 +285,41 @@ public class ContentUserLog implements EntryPoint {
 			}
 		};
 
+		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
+		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
+			public String getValue(UserLogEntry contact) {
+				return "&nbsp;";//contact.fileName;
+			}
+		},
+		new FieldUpdater<UserLogEntry, String>() {
+			public void update(int index, UserLogEntry object, String value) {				
+				deleteLogEntry(object);
+			}
+		}), lang._TextDeleteUserDocument());
+
+		IconCellSingle updateCell =	new IconCellSingle(IconCellSingle.IconType.UPDATE);		
+		cellTable.addColumn(addColumn(updateCell, new GetValue<String>() {
+			public String getValue(UserLogEntry contact) {
+				return "&nbsp;";//contact.fileName;
+			}
+		},
+		new FieldUpdater<UserLogEntry, String>() {
+			public void update(int index, UserLogEntry object, String value) {
+				updateLogEntry(object);
+			}
+		}), lang._TextUpdateUserDocument());
+
+
 		titleColumn.setSortable(true);
 		statusColumn.setSortable(true);
 		createdColumn.setSortable(true);
 		expectedFollowUpColumn.setSortable(true);
+		cellTable.setStyleName("filecelltable");
 		cellTable.addColumn(titleColumn, lang._TextName());
 		cellTable.addColumn(statusColumn, lang._TextStatus());
 		cellTable.addColumn(createdColumn, lang._TextCreated());
 		cellTable.addColumn(expectedFollowUpColumn, lang._TextExpectedFollowUp());
-		
+
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<UserLogEntry> selectionModel = new SingleSelectionModel<UserLogEntry>();
 		cellTable.setSelectionModel(selectionModel);
@@ -296,101 +334,83 @@ public class ContentUserLog implements EntryPoint {
 				}
 			}
 		});
-		
+
 		dataProvider.addDataDisplay(cellTable);
-		
+
 		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
 		cellTable.setRowData(0, UserLogEntryList);
 		cellTable.setRowCount(UserLogEntryList.size(), true);
 		cellTable.setVisibleRange(0, 20);
 		cellTable.addColumnSortHandler(columnSortHandler);
-		
+
 		SimplePanel simplePanel_1 = new SimplePanel();
 		simplePanel_1.setStyleName("#closeButton");
 		simplePanelCenter.add(simplePanel_1);
 		simplePanel_1.setHeight("10px");
-		
+
 		Grid grid_1 = new Grid(3, 2);
 		simplePanelCenter.add(grid_1);
-		
+
 		Label lblTitle = new Label(lang._TextName());
 		lblTitle.setStyleName("summary-title");
 		grid_1.setWidget(0, 0, lblTitle);
-		
+
 		Label lblTitleContent = new Label(editedOpportunity.title);
 		lblTitleContent.setStyleName("summary-text");
 		grid_1.setWidget(0, 1, lblTitleContent);
-		
+
 		Label labelStatus = new Label(lang._TextStatus());
 		labelStatus.setStyleName("summary-title");
 		grid_1.setWidget(1, 0, labelStatus);
-		
+
 		Label label_1 = new Label(UserOpportunity.applicationStatusToString(editedOpportunity.status));
 		label_1.setStyleName("summary-text");
 		grid_1.setWidget(1, 1, label_1);
-		
+
 		Label labelCompany = new Label(lang._TextCompany());
 		labelCompany.setStyleName("summary-title");
 		grid_1.setWidget(2, 0, labelCompany);
-		
+
 		Label labelCompanyContent = new Label(editedOpportunity.companyId);
 		labelCompanyContent.setStyleName("summary-text");
 		grid_1.setWidget(2, 1, labelCompanyContent);
-		
+
 		SimplePanel simplePanel = new SimplePanel();
 		simplePanelCenter.add(simplePanel);
 		simplePanel.setHeight("20px");
-		
+
 		ButtonImageText buttonBack = new ButtonImageText(ButtonImageText.Type.BACK, lang._Text_BackToOpportunityList());
 		simplePanelCenter.add(buttonBack);
-		
+
 		SimplePanel simplePanel_2 = new SimplePanel();
 		simplePanelCenter.add(simplePanel_2);
 		simplePanel_2.setHeight("20px");
-		
+
 		simplePanelCenter.add(cellTable);
 		cellTable.setSize("100%", "");		
-		
+
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
-		
-		Button buttonNewSite = new Button();
-		horizontalPanel.add(buttonNewSite);
-		buttonNewSite.setText(lang._TextNewLogEntry());
-		
-		Button buttonUpdateSite = new Button();
-		horizontalPanel.add(buttonUpdateSite);
-		buttonUpdateSite.setText(lang._TextUpdateLogEntry());
-		
-		Button buttonDeleteSite = new Button();
-		buttonDeleteSite.setText(lang._TextDeleteLogEntry());
-		horizontalPanel.add(buttonDeleteSite);
-				
+
+		Button buttonNewLogEntry = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewLogEntry());	
+		horizontalPanel.add(buttonNewLogEntry);
+
 		HTML htmlDescriptionhtml = new HTML("", true);
 		simplePanelCenter.add(htmlDescriptionhtml);
 		htmlDescriptionhtml.setSize("100%", "100%");
-				
+
 		Grid grid = new Grid(2, 1);
 		simplePanelCenter.add(grid);
 		grid.setWidth("100%");
-		
+
 		Label lblSource = new Label(lang._TextSource());
 		grid.setWidget(0, 0, lblSource);
-		
-		
-		// Add a handler to the delete button.
-		DeleteHandler deleteHandler = new DeleteHandler();
-		buttonDeleteSite.addClickHandler(deleteHandler);
-		
-		// Add a handler to the update button.
-		UpdateLogEntry updateHandler = new UpdateLogEntry();
-		buttonUpdateSite.addClickHandler(updateHandler);
-		
+
 		// Add a handler to the new button.
 		NewLogEntryHandler newHandler = new NewLogEntryHandler();
-		buttonNewSite.addClickHandler(newHandler);
-		
+		buttonNewLogEntry.addClickHandler(newHandler);
+
 		getAllContent();		
 	}
 }

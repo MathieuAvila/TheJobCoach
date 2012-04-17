@@ -50,7 +50,6 @@ public class ContentReport implements EntryPoint {
 			{
 				Window.alert(caught.getMessage());
 			}
-			@SuppressWarnings("deprecation")
 			@Override
 			public void onSuccess(String result)
 			{

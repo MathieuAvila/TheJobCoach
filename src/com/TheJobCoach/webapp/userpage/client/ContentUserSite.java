@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.client.EditUserSite.EditLogEntryResult;
+import com.TheJobCoach.webapp.userpage.client.EditUserSite.EditUserSiteResult;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
+import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -28,25 +30,26 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.InlineHTML;
+import com.google.gwt.user.client.ui.Label;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ContentUserSite implements EntryPoint {
 
+	final Lang lang = GWT.create(Lang.class);
+	
 	UserId user;
 
 	final CellTable<UserJobSite> cellTable = new CellTable<UserJobSite>();
 	UserJobSite currentSite = null;
-	
+
 	private void setUserJobSite(UserJobSite site)
 	{
 		currentSite = site;
 	}
-		
+	
 	public void setUserParameters(UserId _user)
 	{
 		user = _user;
@@ -93,8 +96,6 @@ public class ContentUserSite implements EntryPoint {
 			@Override
 			public void onSuccess(UserJobSite result)
 			{
-				System.out.println(result);
-				// Find position.
 				for (int count=0; count != jobSiteList.size(); count++) {
 					if (jobSiteList.get(count).ID.equals(result.ID))
 					{
@@ -107,8 +108,7 @@ public class ContentUserSite implements EntryPoint {
 		try {
 			userService.getUserSite(user, siteId, callback);
 		} catch (CassandraException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			MessageBox.messageBoxException(rootPanel, e.toString());
 		}
 	}
 
@@ -135,49 +135,49 @@ public class ContentUserSite implements EntryPoint {
 		try {
 			userService.getUserSiteList(user, callback);
 		} catch (CassandraException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			MessageBox.messageBoxException(rootPanel, e.toString());
 		}
 	}
 
 
-	class DeleteHandler implements ClickHandler
+	void deleteSite(final UserJobSite currentSite)
 	{
-		public void onClick(ClickEvent event)
-		{
-			try {
-				userService.deleteUserSite(user, currentSite.ID, new AsyncCallback<Integer>() {
-					public void onFailure(Throwable caught) {
-						// Show the RPC error message to the user
-						Window.alert(caught.toString());
-						//connectButton.setEnabled(true);
-					}
-					public void onSuccess(Integer result)
-					{
-						getAllContent();
+		MessageBox mb = new MessageBox(rootPanel, true, true, MessageBox.TYPE.QUESTION, 
+				lang._TextConfirmDeleteSiteTitle(), lang._TextConfirmDeleteSite(), new MessageBox.ICallback() {
+					
+					public void complete(boolean ok) {
+						if(ok)
+						{
+							try {
+								userService.deleteUserSite(user, currentSite.ID, new AsyncCallback<Integer>() {
+									public void onFailure(Throwable caught) {
+										// Show the RPC error message to the user
+										MessageBox.messageBoxException(rootPanel, caught.toString());										
+									}
+									public void onSuccess(Integer result)
+									{
+										getAllContent();
+									}
+								});
+							} 
+							catch (CassandraException e) 
+							{
+								MessageBox.messageBoxException(rootPanel, e.toString());
+							}
+						}
 					}
 				});
-			} 
-			catch (CassandraException e) 
-			{
-				Window.alert(e.toString());
-			}
-		}
+	mb.onModuleLoad();
 	}
 
-	class NewSiteHandler implements ClickHandler
+	public void newSite()
 	{
-		public void onClick(ClickEvent event)
-		{
-			EditUserSite eus = new EditUserSite();
-			eus.setRootPanel(rootPanel, null, new EditLogEntryResult() {
-
-				@Override
-				public void setResult(UserJobSite result) {
-					// TODO Auto-generated method stub
-					try 
-					{
-						if (result != null)
+		EditUserSite eus = new EditUserSite(rootPanel, null, user, new EditUserSiteResult() {
+			@Override
+			public void setResult(UserJobSite result) {
+				try 
+				{
+					if (result != null)
 						userService.setUserSite(user, result, new AsyncCallback<Integer>() {
 							public void onFailure(Throwable caught) {
 								// Show the RPC error message to the user
@@ -190,31 +190,26 @@ public class ContentUserSite implements EntryPoint {
 								getAllContent();
 							}
 						});
-					}
-					catch (CassandraException e)
-					{
-						System.out.println(e);
-					}
+				}
+				catch (CassandraException e)
+				{
+					MessageBox.messageBoxException(rootPanel, e.toString());
+				}
 			}
-			});
-			eus.onModuleLoad();
-		}
+		});
+		eus.onModuleLoad();
 	}
 
-
-	class UpdateSiteHandler implements ClickHandler
+	void updateSite(UserJobSite currentSite)
 	{
-		public void onClick(ClickEvent event)
-		{
-			EditUserSite eus = new EditUserSite();			
-			eus.setRootPanel(rootPanel, currentSite, new EditLogEntryResult() {
 
-				@Override
-				public void setResult(UserJobSite result) {
-					// TODO Auto-generated method stub
-					try 
-					{
-						if (result != null)
+		EditUserSite eus = new EditUserSite(rootPanel, currentSite, user, new EditUserSiteResult() {
+
+			@Override
+			public void setResult(UserJobSite result) {
+				try 
+				{
+					if (result != null)
 						userService.setUserSite(user, result, new AsyncCallback<Integer>() {
 							public void onFailure(Throwable caught) {
 								// Show the RPC error message to the user
@@ -227,17 +222,16 @@ public class ContentUserSite implements EntryPoint {
 								getAllContent();
 							}
 						});
-					}
-					catch (CassandraException e)
-					{
-						System.out.println(e);
-					}
+				}
+				catch (CassandraException e)
+				{
+					MessageBox.messageBoxException(rootPanel, e.toString());
+				}
 			}
-			});
-			eus.onModuleLoad();
-		}
+		});
+		eus.onModuleLoad();
 	}
-	
+
 	private <C> Column<UserJobSite, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserJobSite, C> fieldUpdater) 
 	{
 		Column<UserJobSite, C> column = new Column<UserJobSite, C>(cell) 
@@ -265,7 +259,6 @@ public class ContentUserSite implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{		
-		Lang lang = GWT.create(Lang.class);
 		System.out.println("Load Content User Site, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 
 		// Add the nameField and sendButton to the RootPanel
@@ -277,9 +270,32 @@ public class ContentUserSite implements EntryPoint {
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
-		//cellTable
-		//cellTable.setRowCount(5);
-		//cellTable.setVisibleRange(0, 3);
+
+		// Delet column
+		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
+		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
+			public String getValue(UserJobSite contact) {
+				return "&nbsp;";//contact.fileName;
+			}
+		},
+		new FieldUpdater<UserJobSite, String>() {
+			public void update(int index, UserJobSite object, String value) {				
+				deleteSite(object);
+			}
+		}), lang._TextDeleteUserDocument());
+
+		IconCellSingle updateCell =	new IconCellSingle(IconCellSingle.IconType.UPDATE);		
+		cellTable.addColumn(addColumn(updateCell, new GetValue<String>() {
+			public String getValue(UserJobSite contact) {
+				return "&nbsp;";//contact.fileName;
+			}
+		},
+		new FieldUpdater<UserJobSite, String>() {
+			public void update(int index, UserJobSite object, String value) {
+				updateSite(object);
+			}
+		}), lang._TextUpdateUserDocument());
+
 
 		// Create name column.
 		TextColumn<UserJobSite> nameColumn = new TextColumn<UserJobSite>() 	{
@@ -298,7 +314,7 @@ public class ContentUserSite implements EntryPoint {
 				return site.description;
 			}
 		};
-		
+
 		// Create URL column.
 		ClickableTextCell anchorcolumn = new ClickableTextCell()
 		{			
@@ -315,7 +331,7 @@ public class ContentUserSite implements EntryPoint {
 		});
 		cellTable.addColumn(columnUrl, "URL");
 		cellTable.setColumnWidth(columnUrl, "30px");
-		
+
 		// Create login column.
 		TextColumn<UserJobSite> loginColumn = new TextColumn<UserJobSite>() {
 			@Override
@@ -370,7 +386,7 @@ public class ContentUserSite implements EntryPoint {
 				}
 			}
 		});
-		
+
 		dataProvider.addDataDisplay(cellTable);
 		dataProvider.updateRowCount(jobSiteList.size(), true);
 
@@ -381,39 +397,24 @@ public class ContentUserSite implements EntryPoint {
 		cellTable.setVisibleRange(0, 20);
 		cellTable.addColumnSortHandler(columnSortHandler);
 		cellTable.setStyleName("filecelltable");
-		
-		InlineHTML lblJobSites = new InlineHTML();
-		lblJobSites.setHTML("<h2>" + lang.lblJobSites_text() + "</h2>" );
+
+		Label lblJobSites = new Label(lang.lblJobSites_text());
+		lblJobSites.setStyleName("label-content");
 		simplePanelCenter.add(lblJobSites);
 		simplePanelCenter.add(cellTable);
 		cellTable.setSize("100%", "");		
-		
+
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
-		
-		Button buttonNewSite = new Button();
-		horizontalPanel.add(buttonNewSite);
-		buttonNewSite.setText(lang._TextNewSite());
-		
-		Button buttonUpdateSite = new Button();
-		horizontalPanel.add(buttonUpdateSite);
-		buttonUpdateSite.setText(lang._TextUpdateSite());
-		
-		Button buttonDeleteSite = new Button();
-		buttonDeleteSite.setText(lang._TextDeleteSite());
-		horizontalPanel.add(buttonDeleteSite);
-		
-		// Add a handler to the delete button.
-		DeleteHandler deleteHandler = new DeleteHandler();
-		buttonDeleteSite.addClickHandler(deleteHandler);
-		
-		// Add a handler to the update button.
-		UpdateSiteHandler updateHandler = new UpdateSiteHandler();
-		buttonUpdateSite.addClickHandler(updateHandler);
-		
-		// Add a handler to the new button.
-		NewSiteHandler newHandler = new NewSiteHandler();
-		buttonNewSite.addClickHandler(newHandler);
+
+		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewSite());
+		button.addClickHandler(new ClickHandler()
+		{			
+			public void onClick(ClickEvent event) {
+				newSite();
+			}
+		});
+		simplePanelCenter.add(button);
 	}
 }

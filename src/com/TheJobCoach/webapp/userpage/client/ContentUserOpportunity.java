@@ -240,10 +240,7 @@ public class ContentUserOpportunity implements EntryPoint {
 
 	void editLog(UserOpportunity opp)
 	{
-		ContentUserLog cul = new ContentUserLog();
-		cul.setRootPanel(rootPanel);
-		cul.setUserParameters(user);
-		cul.setOpportunity(opp);	
+		ContentUserLog cul = new ContentUserLog(rootPanel, user, opp);		
 		cul.onModuleLoad();		
 	}
 
@@ -284,8 +281,8 @@ public class ContentUserOpportunity implements EntryPoint {
 		simplePanelCenter.setSize("100%", "100%");
 		rootPanel.add(simplePanelCenter);
 
-		InlineHTML lblOpportunities = new InlineHTML();
-		lblOpportunities.setHTML("<h2>" + lang.lblOpportunities_text() + "</h2>" );
+		Label lblOpportunities = new Label(lang.lblOpportunities_text());
+		lblOpportunities.setStyleName("label-content" );
 		simplePanelCenter.add(lblOpportunities);
 
 		// Create title column.
