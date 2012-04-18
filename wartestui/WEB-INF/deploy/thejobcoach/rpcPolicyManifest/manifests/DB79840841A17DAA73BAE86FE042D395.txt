@@ -1,0 +1,2 @@
+serviceClass: com.TheJobCoach.webapp.adminpage.client.AdminService
+path: 98B916CE9C88E632569E5941D8CA66D1.gwt.rpc

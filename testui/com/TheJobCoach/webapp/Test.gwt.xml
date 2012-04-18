@@ -5,6 +5,7 @@
 	<inherits name="com.TheJobCoach.webapp.util.Util" />
 	<inherits name="com.TheJobCoach.webapp.userpage.UserPage" />
 	<inherits name="com.TheJobCoach.webapp.mainpage.MainPage" />
+	<inherits name="com.TheJobCoach.webapp.adminpage.AdminPage" />
 	
 	<inherits name="com.google.gwt.user.User" />	
 	<inherits name="com.google.gwt.i18n.I18N"/>
@@ -14,12 +15,15 @@
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestSetLang'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxUI'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxError'/>
+	<entry-point class='com.TheJobCoach.webapp.mainpage.client.TestCreateAccount'/>
+	<entry-point class='com.TheJobCoach.webapp.mainpage.client.TestMainPage'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditLogEntry'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditUserSite'/>
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserOpportunity" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserDocument" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserSite" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserLog" />
+	<entry-point class='com.TheJobCoach.webapp.adminpage.client.TestContentUsers'/>
 	
 	<source path="util/client"/>	
 	<source path="userpage/client"/>	

@@ -19,5 +19,7 @@ public interface AdminServiceAsync {
 	public void getNewsInformationList(UserId id, Date start, Date end, AsyncCallback<Vector<NewsInformation>> callback);
 	public void createNewsInformation(UserId id, NewsInformation news, AsyncCallback<String> callback);
 	public void deleteNewsInformation(UserId id, NewsInformation newsId, AsyncCallback<String> callback);
+
+	public void deleteUser(UserId user, String userName, AsyncCallback<String> callback);
 	
 }

@@ -19,6 +19,9 @@ public interface Lang extends Constants {
 	@ Key("userfirstname")
 	String _TextUserFirstName();
 	
+	@ Key("userlastname")
+	String _TextUserLastName();
+	
 	@ Key("createaccount")
 	String _TextCreateAccount();
 	
@@ -67,5 +70,16 @@ public interface Lang extends Constants {
 	@ Key("validate_succesfully_validated")
 	String _TextValidateSuccess(); 
 	
-	String panelFooter_html();
+	@Key("createaccounttitle")
+	String _TextCreateAccountTitle(); 
+	
+	@Key("createaccountok")
+	String _TextCreateAccountOk(); 
+	
+	@Key("createaccountcancel")
+	String _TextCreateCancel();
+
+	@Key("createaccountpasswordcheck")
+	String _TextUserPasswordCheck();
+
 }

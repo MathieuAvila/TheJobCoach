@@ -130,8 +130,7 @@ public class News {
 			{
 				nextMonth = 0;
 				nextYear++;
-			}			
-			System.out.println("CONDITION " + ((startYear != endYear) || (startMonth != endMonth)));
+			}						
 		}
 		while ((startYear != endYear) || (startMonth != endMonth));
 		return returnResult;		

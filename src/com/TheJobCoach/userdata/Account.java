@@ -32,12 +32,12 @@ public class Account implements AccountInterface {
 	static ColumnFamilyDefinition cfDefToken = null;
 
 	final static String COLUMN_FAMILY_NAME_ACCOUNT = "account";
-	final static String COLUMN_FAMILY_NAME_TOKEN = "token";
+	//final static String COLUMN_FAMILY_NAME_TOKEN = "token";
 
 	public Account()
 	{
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_ACCOUNT, cfDef);
-		cfDefToken = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_TOKEN, cfDefToken);
+		//cfDefToken = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_TOKEN, cfDefToken);
 	}
 
 	public boolean existsAccount(String userName)
@@ -86,7 +86,7 @@ public class Account implements AccountInterface {
 	{
 		if (existsAccount(id.userName))
 			return CreateAccountStatus.CREATE_STATUS_ALREADY_EXISTS;
-		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_TOKEN, id.token, 
+		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
 				(new ShortMap())
 				.add("username", id.userName)
 				.add("validated", false)
@@ -108,12 +108,12 @@ public class Account implements AccountInterface {
 	}
 
 	public ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException
-	{
-		String userNameDB = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_TOKEN, token, "username");
-		if ((userName == null) || (userNameDB == null) || (!userNameDB.equals(userName)))
+	{		
+		String tokenDB = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "token");
+		if ((userName == null) || (token == null) || (tokenDB == null) || (!tokenDB.equals(token)))
 			return ValidateAccountStatus.VALIDATE_STATUS_UNKNOWN;
 		boolean result = 
-				CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_TOKEN, token,
+				CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName,
 						(new ShortMap())
 						.add("validated", true)
 						.add("date", new Date())
@@ -129,7 +129,7 @@ public class Account implements AccountInterface {
 		if (token == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
 		System.out.println("Token is: " + token);
-		String validatedStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_TOKEN, token, "validated");
+		String validatedStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "validated");
 		if (validatedStr == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
 		boolean validated = ShortMap.getBoolean(validatedStr);
@@ -154,21 +154,19 @@ public class Account implements AccountInterface {
 		{
 			resultRows = new HashSet<String>();
 			Vector<String> lastRow = new Vector<String>();
-			CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_TOKEN, last, 3, resultRows, lastRow);
+			CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 3, resultRows, lastRow);
 			if (lastRow.size() != 0)
 				last = lastRow.get(0);
-			for (String k: resultRows)
+			for (String userName: resultRows)
 			{
-				//System.out.println("FOUND USER NAME: " + k);
-				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_TOKEN, k);			
-				if (accountTable.containsKey("username"))
+				System.out.println("FOUND USER NAME: " + userName);
+				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);			
+				if (accountTable != null && accountTable.containsKey("token"))
 				{
-					String userName = accountTable.get("username");
-					Map<String, String> userNameDB = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);			
-					//System.out.println("USER: " + userNameDB + "\nACCOUNT_TABLE: " + accountTable);
-					UserId newUserId = new UserId(userName, k, stringToUserType(userNameDB.get("type")));
+					System.out.println("USER: " + userName + "\nACCOUNT_TABLE: " + accountTable);
+					UserId newUserId = new UserId(userName, accountTable.get("token"), stringToUserType(accountTable.get("type")));
 					result.add(newUserId);
-					//System.out.println("USER: " + newUserId.userName + " TOKEN: " + newUserId.token + " TYPE:" + userTypeToString(newUserId.type));				
+					System.out.println("USER: " + newUserId.userName + " TOKEN: " + newUserId.token + " TYPE:" + userTypeToString(newUserId.type));				
 				}
 			}
 		}
@@ -179,7 +177,6 @@ public class Account implements AccountInterface {
 	public UserReport getUserReport(UserId id) throws CassandraException
 	{		
 		Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
-		Map<String, String> resultToken = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_TOKEN, id.token);
 		return new UserReport(				
 				id.userName, 
 				result.get("password"),
@@ -187,8 +184,8 @@ public class Account implements AccountInterface {
 				id.token, 
 				stringToUserType(result.get("type")),
 				Convertor.toDate(result.get("date")),
-				Convertor.toDate(resultToken.get("date")), 
-				ShortMap.getBoolean(resultToken.get("validated"))
+				Convertor.toDate(result.get("date")), 
+				ShortMap.getBoolean(result.get("validated"), true)
 				);
 	}
 	
@@ -201,6 +198,12 @@ public class Account implements AccountInterface {
 			report.add(getUserReport(uId));
 		}
 		return report;
+	}
+	
+	public void deleteAccount(String userName) throws CassandraException
+	{
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, userName);
+		System.out.println("DELETED ACCOUNT: " + userName);
 	}
 	
 	public void purgeAccount() throws CassandraException
@@ -217,14 +220,13 @@ public class Account implements AccountInterface {
 			for (String k: resultRows)
 			{
 				System.out.println("CHECK USER NAME: " + k);
-				Map<String, String> userNameDB = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_TOKEN, k);
+				Map<String, String> userNameDB = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, k);
 				if (userNameDB.containsKey("validated") || userNameDB.containsKey("username") || userNameDB.containsKey("date"))
 				{
 					if (!userNameDB.containsKey("validated") || !userNameDB.containsKey("username") || !userNameDB.containsKey("date"))
 					{
-						// Delete this key.
-						CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_TOKEN, k);
-
+						// Delete this account.
+						deleteAccount(k);
 						CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, k);
 
 						System.out.println("DELETED TOKEN: " + k);
@@ -244,7 +246,6 @@ public class Account implements AccountInterface {
 				report.mail + "\n" + comment, 
 				"noreply@www.thejobcoach.fr");
 		System.out.println("Comment sent.");
-		
 	}
 
 }

@@ -5,9 +5,15 @@ import java.util.List;
 
 import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+import com.TheJobCoach.webapp.util.client.IconCellSingle;
+import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
@@ -25,22 +31,18 @@ public class ContentUsers implements EntryPoint {
 
 	UserId user;
 	
-	public void setUserParameters(UserId _user)
-	{
-		user = _user;
-	}
-
 	private final AdminServiceAsync adminService = GWT.create(AdminService.class);
 
 	Panel rootPanel;
 
-	public void setRootPanel(Panel panel)
+	public ContentUsers(Panel panel, UserId _user)
 	{
 		rootPanel = panel;
+		user = _user;
 	}
 
 	// The list of data to display.
-	private List<UserReport> jobSiteList = new ArrayList<UserReport>();
+	private List<UserReport> userList = new ArrayList<UserReport>();
 	
 	final CellTable<UserReport> cellTable = new CellTable<UserReport>();
 	
@@ -52,10 +54,10 @@ public class ContentUsers implements EntryPoint {
 			final com.google.gwt.view.client.Range range = display.getVisibleRange();
 			int start = range.getStart();
 			int end = start + range.getLength();
-			if (end >= jobSiteList.size() ) end = jobSiteList.size();
-			if (jobSiteList.size() != 0)
+			if (end >= userList.size() ) end = userList.size();
+			if (userList.size() != 0)
 			{
-				List<UserReport> dataInRange = jobSiteList.subList(start, end);
+				List<UserReport> dataInRange = userList.subList(start, end);
 				// Push the data back into the list.
 				cellTable.setRowData(start, dataInRange);
 			}
@@ -72,14 +74,36 @@ public class ContentUsers implements EntryPoint {
 			@Override
 			public void onSuccess(List<UserReport> result) {
 				System.out.println(result);
-				jobSiteList = result;
-				cellTable.setVisibleRange(0, jobSiteList.size());
-				dataProvider.updateRowData(0, jobSiteList);
-				dataProvider.updateRowCount(jobSiteList.size(), true);
+				userList = result;
+				cellTable.setVisibleRange(0, userList.size());
+				dataProvider.updateRowData(0, userList);
+				dataProvider.updateRowCount(userList.size(), true);
 				cellTable.redraw();
 			}
 		};
 		adminService.getUserReportList(user, callback);
+	}
+
+
+	private <C> Column<UserReport, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserReport, C> fieldUpdater) 
+	{
+		Column<UserReport, C> column = new Column<UserReport, C>(cell) 
+				{
+
+			@Override
+			public C getValue(UserReport object) 
+			{
+				return getter.getValue(object);
+			}
+				};
+				column.setFieldUpdater(fieldUpdater);
+
+				return column;
+	}
+
+
+	private static interface GetValue<C> {
+		C getValue(UserReport contact);
 	}
 
 
@@ -177,22 +201,65 @@ public class ContentUsers implements EntryPoint {
 		createdColumn.setSortable(true);
 		cellTable.addColumn(createdColumn, "Created on");
 		
+
+		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
+		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
+			public String getValue(UserReport contact) {
+				return "&nbsp;";//contact.fileName;
+			}
+		},
+		new FieldUpdater<UserReport, String>() {
+			public void update(int index, UserReport object, String value) {				
+				deleteUser(object);
+			}
+		}), "Delete user");
+
 		
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<UserReport> selectionModel = new SingleSelectionModel<UserReport>();
 		cellTable.setSelectionModel(selectionModel);		
 		
 		dataProvider.addDataDisplay(cellTable);
-		dataProvider.updateRowCount(jobSiteList.size(), true);
+		dataProvider.updateRowCount(userList.size(), true);
 
 		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
 		getAllContent();
-		cellTable.setRowData(0, jobSiteList);
-		cellTable.setRowCount(jobSiteList.size(), true);
-		cellTable.setVisibleRange(0, jobSiteList.size());
+		cellTable.setRowData(0, userList);
+		cellTable.setRowCount(userList.size(), true);
+		cellTable.setVisibleRange(0, userList.size());
 		cellTable.addColumnSortHandler(columnSortHandler);
+		cellTable.setStyleName("filecelltable");		
 		simplePanelCenter.add(cellTable);
 		cellTable.setSize("100%", "");		
 		
+	}
+
+
+	protected void deleteUser(final UserReport object) {
+		MessageBox mb = new MessageBox(
+				rootPanel, true, true, MessageBox.TYPE.QUESTION, "delete", 
+				"Confirm delete user: " + object.userName, new MessageBox.ICallback() {
+					
+					@Override
+					public void complete(boolean ok) {
+						if (ok == true)
+						{
+							AsyncCallback<String> callback = new AsyncCallback<String>() {
+								@Override
+								public void onFailure(Throwable caught) {
+									Window.alert(caught.getMessage());
+								}
+								@Override
+								public void onSuccess(String result) {
+									getAllContent();
+								}
+							};
+							adminService.deleteUser(user,  object.userName, callback);		
+							dataProvider.updateRowCount(userList.size(), true);
+							cellTable.redraw();							
+						}
+					}
+				});
+		mb.onModuleLoad();
 	}
 }

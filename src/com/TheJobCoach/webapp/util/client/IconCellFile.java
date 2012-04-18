@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.util.client;
 
+import com.TheJobCoach.webapp.userpage.client.ClientImageBundle;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.IconCellDecorator;
 import com.google.gwt.core.client.GWT;
@@ -28,7 +29,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 public class IconCellFile extends IconCellDecorator<String> 
 {
 	static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
-	IconCellFile(Cell<String> cell)
+	public IconCellFile(Cell<String> cell)
 	{				
 		super(wpImageBundle.deleteFile(), cell, HasVerticalAlignment.ALIGN_MIDDLE, 10);
 	}

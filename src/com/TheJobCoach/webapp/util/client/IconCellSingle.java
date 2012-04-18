@@ -1,5 +1,6 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.util.client;
 
+import com.TheJobCoach.webapp.userpage.client.ClientImageBundle;
 import com.google.gwt.cell.client.IconCellDecorator;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
@@ -21,9 +22,9 @@ public class IconCellSingle extends IconCellDecorator<String>
 	
 	IconType type;
 	
-	enum IconType { DELETE, UPDATE, RIGHT };
+	public enum IconType { DELETE, UPDATE, RIGHT };
 	
-	IconCellSingle(IconType type)
+	public IconCellSingle(IconType type)
 	{			
 		super(deleteIcon, new ClickableTextCell() {
 		     @Override

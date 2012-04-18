@@ -39,9 +39,7 @@ public class AdminPage implements EntryPoint {
 		
 		if (menu.equals("users"))
 		{
-			ContentUsers contentUsers = new ContentUsers();
-			contentUsers.setRootPanel(simplePanelCenter);
-			contentUsers.setUserParameters(userId);
+			ContentUsers contentUsers = new ContentUsers(simplePanelCenter, userId);
 			contentUsers.onModuleLoad();
 		}
 		if (menu.equals("news"))

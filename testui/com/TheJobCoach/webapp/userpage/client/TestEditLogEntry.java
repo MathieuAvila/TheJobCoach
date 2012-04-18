@@ -18,7 +18,6 @@ public class TestEditLogEntry implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{		
-		System.out.println("Loading...");
 		RootPanel root = RootPanel.get("edituserlog");
 		if (root != null)
 		{

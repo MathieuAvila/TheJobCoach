@@ -1,0 +1,227 @@
+package com.TheJobCoach.webapp.mainpage.client;
+
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.TextBox;
+/**
+ * Entry point classes define <code>onModuleLoad()</code>.
+ */
+public class CreateAccount implements EntryPoint {
+
+	Panel rootPanel;
+
+
+	private final TextBox textBoxUserName = new TextBox();
+	private final TextBox newUserPassword = new PasswordTextBox();
+	private final TextBox newUserPasswordCheck = new PasswordTextBox();
+	private final TextBox textBoxMail = new TextBox();
+	private final TextBox textBoxCreateName = new TextBox();
+	private final TextBox textBoxFirstName = new TextBox();
+	private final DialogBox dBox = new DialogBox();
+	private Label labelPasswordCheck = new Label();
+	private Label labelPassword = new Label();
+	private Label lblUserName = new Label();
+	private Label labelMail = new Label();
+	private ButtonImageText btnCreateAccount = null;
+
+	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
+
+	public CreateAccount(Panel panel)
+	{
+		rootPanel = panel;
+	}
+
+	final Lang lang = GWT.create(Lang.class);
+
+
+	// Create a handler for the create account button.em
+	class CreateAccountHandler implements ClickHandler {
+		public void onClick(ClickEvent event) {
+			System.out.println(textBoxUserName.getText());
+			System.out.println(newUserPassword.getText());
+			System.out.println(textBoxMail.getText());
+			loginService.createAccount(
+					new UserId(textBoxUserName.getText(), "", UserId.UserType.USER_TYPE_SEEKER),
+					new UserInformation(textBoxCreateName.getText(), textBoxMail.getText(), newUserPassword.getText(), textBoxFirstName.getText()),
+					LocaleInfo.getCurrentLocale().getLocaleName(),
+					new AsyncCallback<MainPageReturnCode.CreateAccountStatus>() {
+						public void onFailure(Throwable caught) {
+							// Show the RPC error message to the user
+							MessageBox.messageBoxException(rootPanel, "An error occured while creating account: " + caught);
+						}
+
+						public void onSuccess(MainPageReturnCode.CreateAccountStatus result) 
+						{							
+							switch (result)
+							{
+							case CREATE_STATUS_ALREADY_EXISTS:
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextCreateLoginAlreadyExists());
+								break;
+							case CREATE_STATUS_ERROR:
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Unexpected Error", lang._TextCreateLoginUnexpectedError());
+								break;
+							case CREATE_STATUS_INVALID:
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Unexpected Error", lang._TextCreateLoginUnexpectedError());
+								break;
+							case CREATE_STATUS_OK:
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Success", lang._TextCreateAccountSuccess());
+								dBox.hide();
+								break;
+							}							
+						}
+					});
+		}
+	}
+
+	public void checkUserValues()
+	{		
+		btnCreateAccount.setEnabled(false);
+		// Check the username.
+		if ("".equals(textBoxUserName.getValue())) 
+		{
+			textBoxUserName.setStyleName("label-create-account-error");
+			lblUserName.setStyleName("label-create-account-error");
+			return;
+		}
+		textBoxUserName.setStyleName("label-create-account-ok");
+		lblUserName.setStyleName("label-create-account-ok");
+
+		if (!UserInformation.checkEmail(textBoxMail.getValue())) 
+		{
+			labelMail.setStyleName("label-create-account-error");
+			return;
+		}
+		labelMail.setStyleName("label-create-account-ok");
+
+		if (!UserId.checkUserName(newUserPasswordCheck.getValue()) || !newUserPasswordCheck.getValue().equals(newUserPassword.getValue())) 
+		{
+			newUserPasswordCheck.setStyleName("label-create-account-error");		
+			newUserPassword.setStyleName("label-create-account-error");
+			labelPasswordCheck.setStyleName("label-create-account-error");
+			labelPassword.setStyleName("label-create-account-error");
+			return;
+		}		
+		newUserPasswordCheck.setStyleName("label-create-account-ok");		
+		newUserPassword.setStyleName("label-create-account-ok");	
+		labelPasswordCheck.setStyleName("label-create-account-ok");
+		labelPassword.setStyleName("label-create-account-ok");
+		btnCreateAccount.setEnabled(true);
+	}
+
+	/**
+	 * This is the entry point method.
+	 * @wbp.parser.entryPoint
+	 */
+	public void onModuleLoad()
+	{			
+		dBox.setStylePrimaryName("common-form-dialog");
+		dBox.setText(lang._TextCreateAccountTitle());
+		dBox.setGlassEnabled(true);
+		dBox.setAnimationEnabled(true);
+
+		Grid grid = new Grid(7, 2);
+		grid.setBorderWidth(0);
+		dBox.setWidget(grid);
+
+		lblUserName.setText(lang._TextUserName());
+		grid.setWidget(0, 0, lblUserName);
+
+		grid.setWidget(0, 1, textBoxUserName);
+
+		labelMail.setText(lang._TextUserEMail());
+		grid.setWidget(1, 0, labelMail);
+
+		grid.setWidget(1, 1, textBoxMail);
+
+		Label label_2 = new Label(lang._TextUserLastName());
+		grid.setWidget(2, 0, label_2);
+
+		grid.setWidget(2, 1, textBoxCreateName);
+
+		Label label_1 = new Label(lang._TextUserFirstName());
+		grid.setWidget(3, 0, label_1);
+
+		grid.setWidget(3, 1, textBoxFirstName);
+
+		labelPassword.setText(lang._TextUserPassword());
+		grid.setWidget(4, 0, labelPassword);
+
+		grid.setWidget(4, 1, newUserPassword);
+
+		labelPasswordCheck.setText(lang._TextUserPasswordCheck());
+		grid.setWidget(5, 0, labelPasswordCheck);
+
+		grid.setWidget(5, 1, newUserPasswordCheck);	
+
+		ValueChangeHandler<String> changeH = new ValueChangeHandler<String>()
+				{
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				checkUserValues();
+			}
+				};
+
+				KeyUpHandler changeKey = new KeyUpHandler()
+				{
+					@Override
+					public void onKeyUp(KeyUpEvent event) {
+						checkUserValues();
+					}
+				};
+
+				newUserPasswordCheck.addValueChangeHandler(changeH);
+				newUserPassword.addValueChangeHandler(changeH);
+				textBoxUserName.addValueChangeHandler(changeH);
+				textBoxMail.addValueChangeHandler(changeH);
+				
+				newUserPasswordCheck.addKeyUpHandler(changeKey);
+				newUserPassword.addKeyUpHandler(changeKey);
+				textBoxUserName.addKeyUpHandler(changeKey);
+				textBoxMail.addKeyUpHandler(changeKey);
+				
+				btnCreateAccount = new ButtonImageText(ButtonImageText.Type.OK, lang._TextCreateAccountOk());
+				ButtonImageText btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCreateCancel());
+
+				// Add a handler to the connect button clicker.
+				CreateAccountHandler createAccountHandler = new CreateAccountHandler();
+				btnCreateAccount.addClickHandler(createAccountHandler);
+
+				// Add a handler to the connect button clicker.
+				btnCancel.addClickHandler(new ClickHandler() {
+
+					@Override
+					public void onClick(ClickEvent event) {
+						dBox.hide();
+					}});
+
+				HorizontalPanel hpButton = new HorizontalPanel();
+				hpButton.add(btnCreateAccount);
+				hpButton.add(btnCancel);
+
+				grid.setWidget(6, 1, hpButton);
+
+				checkUserValues();
+
+				rootPanel.add(dBox);
+				dBox.center();	
+	}
+}

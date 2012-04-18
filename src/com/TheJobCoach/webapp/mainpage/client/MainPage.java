@@ -2,10 +2,7 @@ package com.TheJobCoach.webapp.mainpage.client;
 
 import com.TheJobCoach.webapp.adminpage.client.AdminPage;
 import com.TheJobCoach.webapp.footer.client.Footer;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
@@ -119,7 +116,6 @@ public class MainPage implements EntryPoint {
 		horizontalPanel.add(lblNomDutilisateur);
 		horizontalPanel.setCellVerticalAlignment(lblNomDutilisateur, HasVerticalAlignment.ALIGN_MIDDLE);
 		final TextBox nameField = new TextBox();
-		//nameField.setText("mathieu");
 		horizontalPanel.add(nameField);
 		horizontalPanel.setCellVerticalAlignment(nameField, HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setCellHorizontalAlignment(nameField, HasHorizontalAlignment.ALIGN_CENTER);
@@ -165,85 +161,16 @@ public class MainPage implements EntryPoint {
 		verticalPanel.setCellHeight(horizontalPanel_8, "178");
 		horizontalPanel_8.setSize("378", "178");
 
-		final VerticalPanel verticalPanelSubscribe = new VerticalPanel();
-		horizontalPanel_8.add(verticalPanelSubscribe);
-		verticalPanelSubscribe.setStyleName("mainpage-create_account-panel");
-		verticalPanelSubscribe.setSize("267px", "178px");
-
 		// Create a handler for the not subscribed button
 		class NotSubscribedHandler implements ClickHandler {
 			public void onClick(ClickEvent event) {
-				verticalPanelSubscribe.setVisible(!verticalPanelSubscribe.isVisible());
+				CreateAccount ca = new CreateAccount(rootPanel);
+				ca.onModuleLoad();
 			}
 		}
 		// Add a handler to the not subscribed button clicker.
 		NotSubscribedHandler notSubscribedHandler = new NotSubscribedHandler();
 		lblPasEncoreInscrit.addClickHandler(notSubscribedHandler);
-
-		HorizontalPanel horizontalPanel_10 = new HorizontalPanel();
-		verticalPanelSubscribe.add(horizontalPanel_10);
-		horizontalPanel_10.setWidth("267px");
-
-		Label lblUserName = new Label(lang._TextUserName());
-		horizontalPanel_10.add(lblUserName);
-
-		final TextBox textBoxUserName = new TextBox();
-		//textBoxUserName.setText("atila");
-		horizontalPanel_10.add(textBoxUserName);
-		horizontalPanel_10.setCellHorizontalAlignment(textBoxUserName, HasHorizontalAlignment.ALIGN_RIGHT);
-
-		HorizontalPanel horizontalPanel_5 = new HorizontalPanel();
-		verticalPanelSubscribe.add(horizontalPanel_5);
-		horizontalPanel_5.setWidth("267px");
-
-		Label label = new Label(lang._TextUserEMail());
-		horizontalPanel_5.add(label);
-
-		final TextBox textBoxMail = new TextBox();
-		//textBoxMail.setText("mathieu.avila@laposte.net");
-		horizontalPanel_5.add(textBoxMail);
-		horizontalPanel_5.setCellHorizontalAlignment(textBoxMail, HasHorizontalAlignment.ALIGN_RIGHT);
-
-		HorizontalPanel horizontalPanel_7 = new HorizontalPanel();
-		verticalPanelSubscribe.add(horizontalPanel_7);
-		horizontalPanel_7.setWidth("267px");
-
-		Label label_2 = new Label("Nom");
-		horizontalPanel_7.add(label_2);
-
-		final TextBox textBoxCreateName = new TextBox();
-		//textBoxCreateName.setText("Avila");
-		horizontalPanel_7.add(textBoxCreateName);
-		horizontalPanel_7.setCellHorizontalAlignment(textBoxCreateName, HasHorizontalAlignment.ALIGN_RIGHT);
-
-		HorizontalPanel horizontalPanel_6 = new HorizontalPanel();
-		verticalPanelSubscribe.add(horizontalPanel_6);
-		horizontalPanel_6.setWidth("267px");
-
-		Label label_1 = new Label("Prénom");
-		horizontalPanel_6.add(label_1);
-
-		final TextBox textBoxFirstName = new TextBox();
-		//textBoxFirstName.setText("Mathieu");
-		horizontalPanel_6.add(textBoxFirstName);
-		horizontalPanel_6.setCellHorizontalAlignment(textBoxFirstName, HasHorizontalAlignment.ALIGN_RIGHT);
-
-		HorizontalPanel horizontalPanel_4 = new HorizontalPanel();
-		verticalPanelSubscribe.add(horizontalPanel_4);
-		horizontalPanel_4.setWidth("267px");
-
-		Label lblNewLabel_1 = new Label("Mot de passe");
-		horizontalPanel_4.add(lblNewLabel_1);
-
-		final TextBox newUserEmailBox = new TextBox();
-		//newUserEmailBox.setText("mathieu");
-		horizontalPanel_4.add(newUserEmailBox);
-		horizontalPanel_4.setCellHorizontalAlignment(newUserEmailBox, HasHorizontalAlignment.ALIGN_RIGHT);
-
-		Button btnCreateAccount = new Button(lang._TextCreateAccount());
-		verticalPanelSubscribe.add(btnCreateAccount);
-		verticalPanelSubscribe.setCellHorizontalAlignment(btnCreateAccount, HasHorizontalAlignment.ALIGN_RIGHT);
-		verticalPanelSubscribe.setVisible(false);
 
 		HorizontalPanel horizontalPanel_3 = new HorizontalPanel();
 		horizontalPanel_3.setStyleName("mainpage-content");
@@ -260,7 +187,6 @@ public class MainPage implements EntryPoint {
 		verticalPanel.setCellHorizontalAlignment(simplePanelCenter, HasHorizontalAlignment.ALIGN_CENTER);
 		simplePanelCenter.setStyleName("mainpage-content");	
 		simplePanelCenter.setSize("", "");
-		// Create a handler for the connect button
 		class ConnectHandler implements ClickHandler {
 
 			public void onClick(ClickEvent event) {
@@ -285,13 +211,13 @@ public class MainPage implements EntryPoint {
 						switch (result.getLoginStatus())
 						{ 
 						case CONNECT_STATUS_UNKNOWN_USER:
-							messageLogin("Error", lang._TextLoginNoSuchLoginPassword());
+							MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNoSuchLoginPassword());
 							break;
 						case CONNECT_STATUS_PASSWORD:		
-							messageLogin("Error", lang._TextLoginNoSuchLoginPassword());
+							MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNoSuchLoginPassword());
 							break;
 						case CONNECT_STATUS_NOT_VALIDATED:
-							messageLogin("Error", lang._TextLoginNotValidated());
+							MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNotValidated());
 							break;
 						case CONNECT_STATUS_OK:
 							switch (result.id.type)
@@ -322,56 +248,6 @@ public class MainPage implements EntryPoint {
 		// Add a handler to the connect button clicker.
 		ConnectHandler handler = new ConnectHandler();
 		connectButton.addClickHandler(handler);
-
-		// Create a handler for the create account button.em
-		class CreateAccountHandler implements ClickHandler {
-			public void onClick(ClickEvent event) {
-				System.out.println(textBoxUserName.getText());
-				System.out.println(passwordField.getText());
-				System.out.println(textBoxMail.getText());
-				loginService.createAccount(
-						new UserId(textBoxUserName.getText(), "", UserId.UserType.USER_TYPE_SEEKER),
-						new UserInformation(textBoxCreateName.getText(), textBoxMail.getText(), passwordField.getText(), textBoxFirstName.getText()),
-						LocaleInfo.getCurrentLocale().getLocaleName(),
-						new AsyncCallback<MainPageReturnCode.CreateAccountStatus>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								messageLogin("Unexpected Error", "An error occured while creating account");
-								connectButton.setFocus(true);
-							}
-
-							public void onSuccess(MainPageReturnCode.CreateAccountStatus result) {
-
-								//dialogBox.setText("Remote Procedure Call");
-								//serverResponseLabel.setHTML(result);
-								//dialogBox.center();
-								switch (result)
-								{
-								case CREATE_STATUS_ALREADY_EXISTS:
-									messageLogin("Error", lang._TextCreateLoginAlreadyExists());
-									break;
-								case CREATE_STATUS_ERROR:
-									messageLogin("Unexpected Error", lang._TextCreateLoginUnexpectedError());
-									break;
-								case CREATE_STATUS_INVALID:
-									messageLogin("Unexpected Error", lang._TextCreateLoginUnexpectedError());
-									break;
-								case CREATE_STATUS_OK:
-									verticalPanelSubscribe.setVisible(!verticalPanelSubscribe.isVisible());
-									messageLogin("Success", lang._TextCreateAccountSuccess());
-									break;
-								}
-								connectButton.setFocus(true);
-							}
-						});
-			}
-		}
-
-		// Add a handler to the connect button clicker.
-		CreateAccountHandler createAccountHandler = new CreateAccountHandler();
-		btnCreateAccount.addClickHandler(createAccountHandler);
-
-
 
 		// Create a handler for the Language click button
 		class CreateLangHandler implements ClickHandler

@@ -43,4 +43,11 @@ public class AdminServiceImpl extends RemoteServiceServlet implements AdminServi
 	{
 		return news.deleteNews(newsId);
 	}
+
+	@Override
+	public String deleteUser(UserId user, String userName)
+			throws CassandraException {
+		account.deleteAccount(userName);
+		return "";
+	}
 }

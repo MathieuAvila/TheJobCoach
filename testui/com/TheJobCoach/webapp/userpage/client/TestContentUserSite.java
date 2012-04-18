@@ -15,7 +15,6 @@ public class TestContentUserSite implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{
-		System.out.println("Loading...");
 		RootPanel root = RootPanel.get("contentusersite");
 		if (root != null)
 		{

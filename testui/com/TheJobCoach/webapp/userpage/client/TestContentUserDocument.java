@@ -15,7 +15,6 @@ public class TestContentUserDocument implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{
-		System.out.println("Loading...");
 		RootPanel root = RootPanel.get("contentuserdocument");
 		if (root != null)
 		{

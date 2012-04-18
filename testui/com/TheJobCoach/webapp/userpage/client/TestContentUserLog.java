@@ -27,7 +27,6 @@ public class TestContentUserLog implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{
-		System.out.println("Loading...");
 		RootPanel root = RootPanel.get("contentuserlog");
 		if (root != null)
 		{

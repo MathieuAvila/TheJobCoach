@@ -159,7 +159,6 @@ public class ContentNews implements EntryPoint {
 
 	class NewSiteHandler implements ClickHandler
 	{
-		@SuppressWarnings({ "deprecation" })
 		public void onClick(ClickEvent event)
 		{
 			NewsInformation news = getNewsInformation();

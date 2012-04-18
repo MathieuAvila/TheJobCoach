@@ -20,4 +20,11 @@ public class UserId implements Serializable {
 		type = _type;
 	}
 	public UserId() {}
+	
+	public static boolean checkUserName(String userName)
+	{
+		if (userName == null) return false;
+		if (userName.equals("")) return false;
+		return userName.matches("[a-zA-Z0-9_.]+");
+	}
 };

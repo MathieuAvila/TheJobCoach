@@ -60,6 +60,12 @@ public class ShortMap {
 		return v.equals("1");
 	}
 	
+	public static boolean getBoolean(String v, boolean def)
+	{
+		if (v == null) return def;
+		return v.equals("1");
+	}
+	
 	public static Date getDate(String v)
 	{
 		Date d = new Date(Long.decode(v));

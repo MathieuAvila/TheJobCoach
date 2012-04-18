@@ -1,6 +1,5 @@
 package com.TheJobCoach.webapp.userpage.client;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -10,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
