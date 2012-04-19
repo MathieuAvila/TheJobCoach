@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -50,7 +51,7 @@ public class ContentReport implements EntryPoint {
 			@Override
 			public void onFailure(Throwable caught)
 			{
-				Window.alert(caught.getMessage());
+				MessageBox.messageBoxException(rootPanel, caught.getMessage());
 			}
 			@Override
 			public void onSuccess(String result)
@@ -59,7 +60,6 @@ public class ContentReport implements EntryPoint {
 				simplePanelCenter.add(new Label(lang._TextReplyComment()));
 			}
 		};
-		System.out.println("comment is :" + textArea.getValue());
 		userService.sendComment(user, textArea.getValue(), callback);
 	}
 
@@ -68,9 +68,7 @@ public class ContentReport implements EntryPoint {
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad()
-	{	
-		System.out.println("Load Report, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
+	{			
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		//RootPanel rootPanel = RootPanel.get("centercontent");
