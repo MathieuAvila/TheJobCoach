@@ -154,7 +154,7 @@ public class Account implements AccountInterface {
 		{
 			resultRows = new HashSet<String>();
 			Vector<String> lastRow = new Vector<String>();
-			CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 3, resultRows, lastRow);
+			CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 100, resultRows, lastRow);
 			if (lastRow.size() != 0)
 				last = lastRow.get(0);
 			for (String userName: resultRows)

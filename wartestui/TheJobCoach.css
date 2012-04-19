@@ -167,12 +167,13 @@ mainpage-content {
 }
 .filecelltable {
 	font-size: 20px;	
-	line-height:30px;
+	line-height:40px;
 	border:10px solid #FFFFFF;
 	-moz-border-radius: 30px;
 	border-radius: 30px;
 	background-color: #EEE;
 	padding: 10px;
+	/*display:block; */
 }
 .clickableText {
 	cursor: pointer;

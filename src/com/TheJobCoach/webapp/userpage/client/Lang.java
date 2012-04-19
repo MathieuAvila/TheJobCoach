@@ -197,6 +197,11 @@ public interface Lang extends Constants {
 	@Key("deletelogentry")
 	String _TextDeleteLogEntry();
 
+	/// Log entry
+
+	@Key("userlogtitle")
+	String _TextUserLogTitle();
+
 	@Key("created")
 	String _TextCreated();
 
@@ -208,6 +213,12 @@ public interface Lang extends Constants {
 
 	@Key("backtoopportunitylist")
 	String _Text_BackToOpportunityList();
+	
+	@Key("logEntryStatusMap")	
+	Map<String, String> logEntryStatusMap();
+
+	
+	/// Content Comment
 	
 	@Key("comment")
 	String _TextComment();	
@@ -273,7 +284,6 @@ public interface Lang extends Constants {
 
 	@Key("createusersitetitle")
 	String _TextCreateUserSiteTitle();
-
 	
 
 }

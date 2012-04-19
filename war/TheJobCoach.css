@@ -27,6 +27,7 @@
   border-radius: 30px;
   background-color: #EEE;
   padding: 10px;
+  font-family: "Trebuchet MS", sans-serif;
 }
 
 .gwt-DialogBox .Caption
@@ -39,6 +40,40 @@
 	text-align					:	center;
 	cursor						:	move;
 }
+
+.label-create-account-ok
+{
+	color:black;
+}
+
+.label-create-account-error
+{
+	color:red;
+}
+
+.common-form-dialog {
+  color:black;
+  margin: 5px;
+  border: 5px solid #AAAAAA;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  background-color: #EEE;
+  padding: 10px;
+  font-family: "Trebuchet MS", sans-serif;
+}
+
+.common-form-dialog .Caption
+{
+	#background-color			:	#ff0;
+	font-size					:	150%;
+	font-weight					:	bold;
+	border-bottom				:	3px solid #009;
+	#padding					:	5px;
+	text-align					:	center;
+	cursor						:	move;
+}
+
+
 
 .mainpage-global-jobcoach {
 size:24px;
@@ -77,6 +112,7 @@ h1 {
 }
 mainpage-content {
 	position: relative;
+	font-family: "Trebuchet MS", sans-serif;	
 }
 
 .mainpage-title {
@@ -131,12 +167,13 @@ mainpage-content {
 }
 .filecelltable {
 	font-size: 20px;	
-	line-height:30px;
+	line-height:40px;
 	border:10px solid #FFFFFF;
 	-moz-border-radius: 30px;
 	border-radius: 30px;
 	background-color: #EEE;
 	padding: 10px;
+	/*display:block; */
 }
 .clickableText {
 	cursor: pointer;

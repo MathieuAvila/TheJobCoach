@@ -13,7 +13,8 @@ public class UserLogEntry implements Serializable {
 	{
 		INFO,
 		APPLICATION,
-		INTERVIEW,	
+		INTERVIEW,
+		EVENT
 	};
 
 	public String opportunityId;
@@ -33,6 +34,7 @@ public class UserLogEntry implements Serializable {
 		case INFO: return "INFO";
 		case APPLICATION: return "APPLICATION";
 		case INTERVIEW: return "INTERVIEW";
+		case EVENT: return "EVENT";
 		}
 		return "INFO";
 	}
@@ -42,6 +44,7 @@ public class UserLogEntry implements Serializable {
 		if ("INFO".equals(t)) return LogEntryType.INFO;
 		if ("APPLICATION".equals(t)) return LogEntryType.APPLICATION;
 		if ("INTERVIEW".equals(t))return LogEntryType.INTERVIEW;
+		if ("EVENT".equals(t))return LogEntryType.EVENT;
 		return LogEntryType.INFO;
 	}
 

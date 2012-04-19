@@ -143,7 +143,11 @@ public class MessageBox implements EntryPoint {
 	
 	public static void messageBoxException(Panel rootPanel, String exception)
 	{
-		messageBox(rootPanel, TYPE.ERROR, "Unexpected system error.", "An unexpected system error occured. Please try again later. Details: " + exception);
-		
+		messageBox(rootPanel, TYPE.ERROR, "Unexpected system error.", "An unexpected system error occured. Please try again later. Details: " + exception);		
+	}
+	
+	public static void messageBoxException(Panel rootPanel, Exception exception)
+	{
+		messageBoxException(rootPanel, exception.toString());		
 	}
 }

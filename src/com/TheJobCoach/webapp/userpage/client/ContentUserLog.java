@@ -10,6 +10,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -57,7 +58,7 @@ public class ContentUserLog implements EntryPoint {
 		user = _user;
 	}
 
-	private final UserServiceAsync userService = GWT.create(UserService.class);
+	private final static UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
 
@@ -114,25 +115,33 @@ public class ContentUserLog implements EntryPoint {
 	}
 
 
-	void deleteLogEntry(UserLogEntry currentLogEntry)
+	void deleteLogEntry(final UserLogEntry currentLogEntry)
 	{
-		try {
-			userService.deleteUserLogEntry(user, currentLogEntry.ID, new AsyncCallback<String>() {
-				public void onFailure(Throwable caught) {
-					// Show the RPC error message to the user
-					Window.alert(caught.toString());
-					//connectButton.setEnabled(true);
-				}
-				public void onSuccess(String result)
-				{
-					getAllContent();
-				}
-			});
-		} 
-		catch (CassandraException e) 
-		{
-			Window.alert(e.toString());
-		}
+		MessageBox mb = new MessageBox(
+				rootPanel, true, true, MessageBox.TYPE.QUESTION, "Delete user log entry ?", 
+				"Are you sure you wish to delete user log entry " + currentLogEntry.title, new MessageBox.ICallback() {
+					@Override
+					public void complete(boolean ok) {
+						if (ok == true)
+						{
+							try {
+								userService.deleteUserLogEntry(user, currentLogEntry.ID, new AsyncCallback<String>() {
+									public void onFailure(Throwable caught) {
+										MessageBox.messageBoxException(rootPanel, caught.toString());
+									}
+									public void onSuccess(String result)
+									{
+										getAllContent();
+									}
+								});
+							} 
+							catch (CassandraException e) 
+							{
+								Window.alert(e.toString());
+							}
+						}
+					}});
+		mb.onModuleLoad();
 	}
 
 
@@ -140,36 +149,16 @@ public class ContentUserLog implements EntryPoint {
 	{
 		public void onClick(ClickEvent event)
 		{
-			EditLogEntry eus = new EditLogEntry(rootPanel, null, user, new EditLogEntryResult() {
-
+			EditLogEntry eus = new EditLogEntry(rootPanel, null, editedOpportunity.ID, user, new EditLogEntryResult() 
+			{
 				@Override
 				public void setResult(UserLogEntry result) {
-					try 
+					if (result != null)
 					{
-						if (result != null)
-						{
-							result.ID = SiteUUID.getDateUuid();
-							result.opportunityId = editedOpportunity.ID;
-							userService.setUserLogEntry(user, result, new AsyncCallback<String>() {
-								public void onFailure(Throwable caught) {
-									// Show the RPC error message to the user
-									Window.alert(caught.toString());
-									//connectButton.setEnabled(true);
-								}
-								public void onSuccess(String result)
-								{
-									System.out.println("Created user log entry: " + result);
-									getAllContent();
-								}
-							});
-						}
-					}
-					catch (CassandraException e)
-					{
-						System.out.println(e);
+						getAllContent();
 					}
 				}
-			}, lang._TextNewLogEntry());
+			});
 			eus.onModuleLoad();
 		}
 	}
@@ -177,35 +166,18 @@ public class ContentUserLog implements EntryPoint {
 
 	void updateLogEntry(UserLogEntry currentLogEntry)
 	{
-		EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, user, new EditLogEntryResult() {
+		EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, editedOpportunity.ID, user, new EditLogEntryResult() {
 			@Override
 			public void setResult(UserLogEntry result) {
-				try 
-				{
-					if (result != null)
-					{
-						userService.setUserLogEntry(user, result, new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								Window.alert(caught.toString());
-								//connectButton.setEnabled(true);
-							}
-							public void onSuccess(String result)
-							{
-								System.out.println("Updated opp: " + result);
-								getAllContent();
-							}
-						});
-					}
-				}
-				catch (CassandraException e)
-				{
-					System.out.println(e);
+
+				if (result != null)
+				{					
+					getAllContent();
 				}
 			}
-		}, lang._TextUpdateLogEntry());
+		});
 		eus.onModuleLoad();
-	}
+	}	
 
 	private <C> Column<UserLogEntry, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserLogEntry, C> fieldUpdater) 
 	{

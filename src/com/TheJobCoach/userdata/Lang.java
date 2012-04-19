@@ -14,13 +14,13 @@ public class Lang
 					"We are happy to to see you soon on The Job Coach !\n\n"+
 					"The Job Coach team\n";
 		}
-		if (lang.equals("fr"))
+		if (lang.equals("fr") || lang.equals("") || lang == null)
 		{
 			body="Bonjour {0}\n\n"+
 					"Vous pouvez activer votre compte en cliquant sur le lien suivant:\n"+
 					"{1}/TheJobCoach.html?action=validate&username={2}&token={3}\n\n"+
 					"Nous sommes heureux de vous voir sur The Job Coach !\n\n"+
-					"L'équipe The Job Coach\n";
+					"L'equipe The Job Coach\n";
 		}
 		body = body.replace("{0}", firstName);
 		body = body.replace("{1}", site);
