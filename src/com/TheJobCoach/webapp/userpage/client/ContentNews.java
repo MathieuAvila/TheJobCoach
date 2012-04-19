@@ -5,11 +5,16 @@ import java.util.Vector;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -21,7 +26,8 @@ public class ContentNews implements EntryPoint {
 
 	UserId user;
 	HTML htmlNews = new HTML("News", true);
-
+	final Lang lang = GWT.create(Lang.class);
+	
 	public void setUserParameters(UserId _user)
 	{
 		user = _user;
@@ -85,6 +91,8 @@ public class ContentNews implements EntryPoint {
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "100%");
 		rootPanel.add(simplePanelCenter);
+		
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextNews(), ClientImageBundle.INSTANCE.newsContent());
 
 		simplePanelCenter.add(htmlNews);
 		simplePanelCenter.setCellWidth(htmlNews, "100%");

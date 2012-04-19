@@ -51,7 +51,11 @@ public class MainPage implements EntryPoint {
 		rootPanel.setStyleName("mainpage-content");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 		rootPanel.setSize("100%", "100%");
-
+		
+		Image image_FR = new Image(ClientImageBundle.INSTANCE.flag_FR());
+		Image image_EN = new Image(ClientImageBundle.INSTANCE.flag_EN());
+		Image image_coach = new Image(ClientImageBundle.INSTANCE.coach_logo());
+		
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel.setStyleName("mainpage-content");
@@ -64,8 +68,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_1.setHeight("100px");
 		horizontalPanel_1.setStyleName("mainpage-content");
 
-		Image image = new Image("jobcoach.gif");
-		verticalPanel.add(image);
+		verticalPanel.add(image_coach);
 
 		Label lblTheJobCoach = new Label("The Job Coach");
 		lblTheJobCoach.setStyleName("mainpage-title");
@@ -83,23 +86,19 @@ public class MainPage implements EntryPoint {
 		HorizontalPanel horizontalPanel_12 = new HorizontalPanel();
 		verticalPanel.add(horizontalPanel_12);
 
-		Image imageFr = new Image("drapeau_francais.gif");
-		horizontalPanel_12.add(imageFr);
-		horizontalPanel_12.setCellHeight(imageFr, "20");
-		horizontalPanel_12.setCellWidth(imageFr, "20");
-		imageFr.setSize("30px", "30px");
-
+		horizontalPanel_12.add(image_FR);
+		horizontalPanel_12.setCellHeight(image_FR, "20");
+		horizontalPanel_12.setCellWidth(image_FR, "20");
+		
 		VerticalPanel verticalPanel_3 = new VerticalPanel();
 		horizontalPanel_12.add(verticalPanel_3);
 		horizontalPanel_12.setCellWidth(verticalPanel_3, "50px");
 		verticalPanel_3.setSize("50px", "");
 
-		Image imageEn = new Image("drapeau_anglais.gif");
-		horizontalPanel_12.add(imageEn);
-		horizontalPanel_12.setCellHeight(imageEn, "20");
-		horizontalPanel_12.setCellWidth(imageEn, "20");
-		imageEn.setSize("30px", "30px");
-
+		horizontalPanel_12.add(image_EN);
+		horizontalPanel_12.setCellHeight(image_EN, "20");
+		horizontalPanel_12.setCellWidth(image_EN, "20");
+		
 		HorizontalPanel horizontalPanel_11 = new HorizontalPanel();
 		horizontalPanel_11.setStyleName("mainpage-content");
 		verticalPanel.add(horizontalPanel_11);
@@ -271,8 +270,8 @@ public class MainPage implements EntryPoint {
 				Window.Location.reload();
 			}
 		}
-		imageFr.addClickHandler(new CreateLangHandler("fr"));
-		imageEn.addClickHandler(new CreateLangHandler("en"));		
+		image_FR.addClickHandler(new CreateLangHandler("fr"));
+		image_EN.addClickHandler(new CreateLangHandler("en"));		
 
 	}
 

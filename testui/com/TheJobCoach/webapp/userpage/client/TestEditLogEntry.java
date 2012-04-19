@@ -26,13 +26,12 @@ public class TestEditLogEntry implements EntryPoint {
 			hp.setStyleName("mainpage-content");
 			root.add(hp);
 			hp.setSize("100%", "100%");
-			EditLogEntry ele = new EditLogEntry(hp, null, new UserId("", "", UserType.USER_TYPE_SEEKER), new EditLogEntryResult() {
+			EditLogEntry ele = new EditLogEntry(hp, null, "toto1", new UserId("avila", "avila", UserType.USER_TYPE_SEEKER), new EditLogEntryResult() {
 
 				@Override
 				public void setResult(UserLogEntry result) {
-					// TODO Auto-generated method stub
-
-				}}, "creation");
+					System.out.println("done: " + result);
+				}});
 			ele.onModuleLoad();
 		}
 	}

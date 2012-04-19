@@ -2,11 +2,13 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -78,21 +80,7 @@ public class ContentReport implements EntryPoint {
 		simplePanelCenter.setSize("100%", "100%");
 		rootPanel.add(simplePanelCenter);
 		
-		HorizontalPanel panelTitle = new HorizontalPanel();
-		simplePanelCenter.add(panelTitle);
-		Image imageLogout = new Image(ClientImageBundle.INSTANCE.sendComment());
-		imageLogout.setWidth(String.valueOf(imageLogout.getWidth()) + "px");
-		panelTitle.add(imageLogout);
-		
-		HorizontalPanel panelSpace = new HorizontalPanel();
-		panelSpace.setWidth("20px");
-		panelTitle.add(panelSpace);
-		
-		InlineHTML labelTitle = new InlineHTML();
-		labelTitle.setHTML("<h2>" + lang._TextMakeComment() + "</h2>");
-		
-		panelTitle.add(labelTitle);
-		panelTitle.setCellVerticalAlignment(labelTitle, HasVerticalAlignment.ALIGN_MIDDLE);
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextMakeComment(), ClientImageBundle.INSTANCE.sendComment());
 		
 		Label labelExplanation = new Label(lang._TextAboutComment());
 		labelExplanation.setStyleName("standard-text");

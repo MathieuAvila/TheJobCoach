@@ -273,7 +273,7 @@ public class ContentUserSite implements EntryPoint {
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 
-		// Delet column
+		// Delete column
 		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
 		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
 			public String getValue(UserJobSite contact) {

@@ -216,10 +216,10 @@ public class ContentUserLog implements EntryPoint {
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
-
-		InlineHTML lblOpportunities = new InlineHTML();
-		lblOpportunities.setHTML("<h2>" + lang._Text_EditLog() + "</h2>" );
-		simplePanelCenter.add(lblOpportunities);
+		
+		Label labelTitle = new Label(lang._Text_EditLog());
+		labelTitle.setStyleName("label-content");		
+		simplePanelCenter.add(labelTitle);
 
 		// Create title column.
 		TextColumn<UserLogEntry> titleColumn = new TextColumn<UserLogEntry>() 	{
