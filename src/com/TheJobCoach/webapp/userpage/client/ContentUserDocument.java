@@ -9,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.client.EditUserDocument.EditUserDocumentR
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.IconCellFile;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
@@ -187,24 +188,14 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 	 */
 	public void onModuleLoad()
 	{		
-		System.out.println("Load Content User Document, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		//RootPanel rootPanel = RootPanel.get("centercontent");
 		rootPanel.setSize("100%", "100%");
 		rootPanel.clear();
 
 		final VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "100%");
 		rootPanel.add(simplePanelCenter);
-		//cellTable
-		//cellTable.setRowCount(5);
-		//cellTable.setVisibleRange(0, 3);
-		
-		Label lblUserDocument = new Label(lang._TextUserDocument());
-		lblUserDocument.setStyleName("label-content" );
-		simplePanelCenter.add(lblUserDocument);
+				
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextUserDocument(), ClientImageBundle.INSTANCE.userDocumentContent());
 		
 		// Create name column.
 		TextColumn<UserDocument> nameColumn = new TextColumn<UserDocument>() 	{
@@ -318,12 +309,8 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		cellTable.setStyleName("filecelltable");
 		cellTable.addColumnSortHandler(columnSortHandler);
 		simplePanelCenter.add(cellTable);
-		cellTable.setSize("100%", "");		
-
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		simplePanelCenter.add(horizontalPanel);
-		horizontalPanel.setWidth("100%");
-
+		cellTable.setSize("100%", "");
+		
 		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewUserDocument());
 		button.addClickHandler(new ClickHandler()
 		{			

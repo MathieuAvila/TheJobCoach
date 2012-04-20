@@ -9,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.client.EditUserSite.EditUserSiteResult;
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.IconCellUrl;
 import com.TheJobCoach.webapp.util.client.MessageBox;
@@ -260,12 +261,7 @@ public class ContentUserSite implements EntryPoint {
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad()
-	{		
-		System.out.println("Load Content User Site, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		//RootPanel rootPanel = RootPanel.get("centercontent");
+	{
 		rootPanel.setSize("100%", "100%");
 		rootPanel.clear();
 
@@ -273,6 +269,8 @@ public class ContentUserSite implements EntryPoint {
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang.lblJobSites_text(), ClientImageBundle.INSTANCE.userJobSiteContent());
+				
 		// Delete column
 		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
 		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
@@ -400,9 +398,6 @@ public class ContentUserSite implements EntryPoint {
 		cellTable.addColumnSortHandler(columnSortHandler);
 		cellTable.setStyleName("filecelltable");
 
-		Label lblJobSites = new Label(lang.lblJobSites_text());
-		lblJobSites.setStyleName("label-content");
-		simplePanelCenter.add(lblJobSites);
 		simplePanelCenter.add(cellTable);
 		cellTable.setSize("100%", "");		
 

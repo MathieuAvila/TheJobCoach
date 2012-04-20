@@ -14,8 +14,9 @@ public interface ClientImageBundle extends ClientBundle
 	 * 
 	 * @gwt.resource deleteFile.gif
 	 */
-	//public ClippedImagePrototype deleteFile();	
-	
+	@Source("jobcoach.gif")
+	ImageResource coachIcon();
+
 	@Source("file_delete.png")
 	ImageResource deleteFile();
 
@@ -49,9 +50,21 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("news_64.png")
 	ImageResource newsContent();
 
+	@Source("www_64.png")
+	ImageResource userJobSiteContent();
+
+	@Source("documents_64.png")
+	ImageResource userDocumentContent();
+
+	@Source("parameters_64.png")
+	ImageResource parametersContent();
+
 	@Source("logout_32.png")
 	ImageResource urlLogout();
 
 	@Source("comment_64.jpeg")
 	ImageResource sendComment();
+	
+	@Source("idea_64.png")
+	ImageResource opportunityContent();
 }

@@ -82,4 +82,5 @@ public interface Lang extends Constants {
 	@Key("createaccountpasswordcheck")
 	String _TextUserPasswordCheck();
 
+	String verticalPanel_2_height();
 }

@@ -8,18 +8,11 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -57,7 +50,9 @@ public class ContentReport implements EntryPoint {
 			public void onSuccess(String result)
 			{
 				simplePanelCenter.clear();
-				simplePanelCenter.add(new Label(lang._TextReplyComment()));
+				Label thanks = new Label(lang._TextReplyComment());
+				thanks.setStyleName("standard-text");
+				simplePanelCenter.add(thanks);
 			}
 		};
 		userService.sendComment(user, textArea.getValue(), callback);
@@ -76,23 +71,25 @@ public class ContentReport implements EntryPoint {
 		rootPanel.clear();
 				
 		simplePanelCenter.setSize("100%", "100%");
-		rootPanel.add(simplePanelCenter);
+		VerticalPanel uberPanel = new VerticalPanel();
+		rootPanel.add(uberPanel);
 		
-		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextMakeComment(), ClientImageBundle.INSTANCE.sendComment());
+		ContentHelper.insertTitlePanel(uberPanel, lang._TextMakeComment(), ClientImageBundle.INSTANCE.sendComment());
+		uberPanel.add(simplePanelCenter);
 		
 		Label labelExplanation = new Label(lang._TextAboutComment());
 		labelExplanation.setStyleName("standard-text");
 		simplePanelCenter.add(labelExplanation);
 		
 		simplePanelCenter.add(textArea);
-		textArea.setSize("100%", "100%");
-		textArea.setHeight("200px");
+		textArea.setSize("100%", "200px");
 		
-		ButtonImageText buttonSendReport = new ButtonImageText(ButtonImageText.Type.MAIL, lang._TextSendComment());
+		final ButtonImageText buttonSendReport = new ButtonImageText(ButtonImageText.Type.MAIL, lang._TextSendComment());
 		buttonSendReport.addClickHandler(new ClickHandler()
 		{
 			@Override
 			public void onClick(ClickEvent event) {
+				buttonSendReport.setEnabled(false);
 				sendComment();				
 			}			
 		});

@@ -154,7 +154,7 @@ public class UserPage implements EntryPoint {
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		flexTable.setWidget(0, 0, horizontalPanel);		
 		horizontalPanel.setWidth("100%");
-		Image image = new Image("jobcoach.gif");
+		Image image = new Image(ClientImageBundle.INSTANCE.coachIcon());
 
 		horizontalPanel.add(image);
 		

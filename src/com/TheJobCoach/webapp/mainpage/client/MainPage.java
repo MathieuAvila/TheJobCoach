@@ -57,15 +57,16 @@ public class MainPage implements EntryPoint {
 		Image image_coach = new Image(ClientImageBundle.INSTANCE.coach_logo());
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
-		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		verticalPanel.setStyleName("mainpage-content");
 		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		rootPanel.add(verticalPanel, 0, 0);
-		verticalPanel.setSize("100%", "100%");
+		verticalPanel.setSize("100%", Window.getClientHeight() - 20 + "px");
 
 		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
 		verticalPanel.add(horizontalPanel_1);
-		horizontalPanel_1.setHeight("100px");
+		verticalPanel.setCellVerticalAlignment(horizontalPanel_1, HasVerticalAlignment.ALIGN_BOTTOM);
+		horizontalPanel_1.setHeight("50px");
 		horizontalPanel_1.setStyleName("mainpage-content");
 
 		verticalPanel.add(image_coach);
@@ -147,18 +148,7 @@ public class MainPage implements EntryPoint {
 
 		Label lblPasEncoreInscrit = new Label(lang._TextNotYesRegistered());
 		verticalPanel.add(lblPasEncoreInscrit);
-		lblPasEncoreInscrit.setStyleName("mainpage-label-clickable");				
-
-		VerticalPanel verticalPanel_2 = new VerticalPanel();
-		verticalPanel.add(verticalPanel_2);
-		verticalPanel.setCellHeight(verticalPanel_2, "50px");
-		verticalPanel_2.setHeight("50px");
-
-		HorizontalPanel horizontalPanel_8 = new HorizontalPanel();
-		verticalPanel.add(horizontalPanel_8);
-		verticalPanel.setCellWidth(horizontalPanel_8, "378");
-		verticalPanel.setCellHeight(horizontalPanel_8, "178");
-		horizontalPanel_8.setSize("378", "178");
+		lblPasEncoreInscrit.setStyleName("mainpage-label-clickable");
 
 		// Create a handler for the not subscribed button
 		class NotSubscribedHandler implements ClickHandler {
@@ -171,20 +161,23 @@ public class MainPage implements EntryPoint {
 		NotSubscribedHandler notSubscribedHandler = new NotSubscribedHandler();
 		lblPasEncoreInscrit.addClickHandler(notSubscribedHandler);
 
-		HorizontalPanel horizontalPanel_3 = new HorizontalPanel();
-		horizontalPanel_3.setStyleName("mainpage-content");
-		verticalPanel.add(horizontalPanel_3);
-		verticalPanel.setCellVerticalAlignment(horizontalPanel_3, HasVerticalAlignment.ALIGN_BOTTOM);
-		horizontalPanel_3.setHeight("100px");
-
 		VerticalPanel simplePanelCenter = new VerticalPanel();
+		simplePanelCenter.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		simplePanelCenter.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		Footer footerPanel = new Footer();
 		footerPanel.setRootPanel(simplePanelCenter);	
 		footerPanel.onModuleLoad();
+		
+		VerticalPanel verticalPanel_2 = new VerticalPanel();
+		verticalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_2.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+		verticalPanel.add(verticalPanel_2);
+		verticalPanel.setCellVerticalAlignment(verticalPanel_2, HasVerticalAlignment.ALIGN_BOTTOM);
+		verticalPanel.setCellHeight(verticalPanel_2, lang.verticalPanel_2_height());
+		verticalPanel_2.setHeight("100%");
 		verticalPanel.add(simplePanelCenter);
 		verticalPanel.setCellHorizontalAlignment(simplePanelCenter, HasHorizontalAlignment.ALIGN_CENTER);
-		simplePanelCenter.setStyleName("mainpage-content");	
+		verticalPanel.setCellVerticalAlignment(simplePanelCenter, HasVerticalAlignment.ALIGN_BOTTOM);
 		simplePanelCenter.setSize("", "");
 		class ConnectHandler implements ClickHandler {
 

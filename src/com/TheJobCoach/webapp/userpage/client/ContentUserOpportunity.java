@@ -9,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.client.EditOpportunity.EditOpportunityRes
 import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.IconCellUrl;
 import com.TheJobCoach.webapp.util.client.MessageBox;
@@ -282,11 +283,9 @@ public class ContentUserOpportunity implements EntryPoint {
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "100%");
 		rootPanel.add(simplePanelCenter);
-
-		Label lblOpportunities = new Label(lang.lblOpportunities_text());
-		lblOpportunities.setStyleName("label-content" );
-		simplePanelCenter.add(lblOpportunities);
-
+		
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang.lblOpportunities_text(), ClientImageBundle.INSTANCE.opportunityContent());
+		
 		// Create title column.
 		TextColumn<UserOpportunity> titleColumn = new TextColumn<UserOpportunity>() 	{
 			@Override
