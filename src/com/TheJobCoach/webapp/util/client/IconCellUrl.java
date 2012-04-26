@@ -141,7 +141,7 @@ public class IconCellUrl implements Cell<String> {
   protected SafeHtml getIconHtml(String value) 
   {
 	  SafeHtml iconHTML = getImageHtml(wpImageBundle.urlLink(), HasVerticalAlignment.ALIGN_MIDDLE, false); 
-	  SafeHtml linkHtml = SafeHtmlUtils.fromSafeConstant("<a href='javascript:window.open(\"" + value + "\", \"opportunity\")'>" + iconHTML.asString() + "</a>") ;
+	  SafeHtml linkHtml = SafeHtmlUtils.fromSafeConstant("<a style='cursor: pointer;' onClick='javascript:window.open(\"" + value + "\", \"opportunity\")'>" + iconHTML.asString() + "</a>") ;
 	return linkHtml;
    // return getImageHtml(wpImageBundle.urlLink(), HasVerticalAlignment.ALIGN_MIDDLE, false);
   }

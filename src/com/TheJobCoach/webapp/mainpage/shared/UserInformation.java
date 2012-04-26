@@ -23,9 +23,14 @@ public class UserInformation implements Serializable {
 	{		
 	}
 	
+	public static String getMailRegexp()
+	{
+		return "[a-zA-Z0-9_.-]+@[a-zA-Z0-9_.-]+";
+	}
+	
 	public static boolean checkEmail(String email)
 	{
 		if (email == null) return false;
-		return email.matches("[a-zA-Z0-9_.-]+@[a-zA-Z0-9_.-]+");
+		return email.matches(getMailRegexp());
 	}
 }

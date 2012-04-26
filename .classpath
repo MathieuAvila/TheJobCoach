@@ -127,5 +127,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/advanced-components-2.0.7.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

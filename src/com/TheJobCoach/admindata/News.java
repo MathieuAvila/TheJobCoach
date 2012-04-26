@@ -10,8 +10,9 @@ import java.util.Vector;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.factory.HFactory;

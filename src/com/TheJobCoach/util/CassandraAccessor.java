@@ -8,10 +8,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 import me.prettyprint.cassandra.serializers.BytesArraySerializer;
-import me.prettyprint.cassandra.serializers.CompositeSerializer;
 import me.prettyprint.cassandra.serializers.StringSerializer;
 import me.prettyprint.cassandra.service.CassandraHostConfigurator;
 import me.prettyprint.cassandra.service.ThriftKsDef;
@@ -20,10 +19,10 @@ import me.prettyprint.cassandra.service.template.ColumnFamilyUpdater;
 import me.prettyprint.cassandra.service.template.ThriftColumnFamilyTemplate;
 import me.prettyprint.hector.api.*;
 import me.prettyprint.hector.api.beans.ColumnSlice;
-import me.prettyprint.hector.api.beans.Composite;
 import me.prettyprint.hector.api.beans.HColumn;
 import me.prettyprint.hector.api.beans.OrderedRows;
 import me.prettyprint.hector.api.beans.Row;
+import me.prettyprint.hector.api.beans.Rows;
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
@@ -32,15 +31,16 @@ import me.prettyprint.hector.api.factory.HFactory;
 import me.prettyprint.hector.api.mutation.MutationResult;
 import me.prettyprint.hector.api.mutation.Mutator;
 import me.prettyprint.hector.api.query.ColumnQuery;
+import me.prettyprint.hector.api.query.MultigetSliceQuery;
 import me.prettyprint.hector.api.query.QueryResult;
 import me.prettyprint.hector.api.query.RangeSlicesQuery;
 import me.prettyprint.hector.api.query.SliceQuery;
-
+import static me.prettyprint.hector.api.factory.HFactory.createMultigetSliceQuery;
 
 public class CassandraAccessor {
-	
+
 	static CassandraAccessor current = new CassandraAccessor();
-	
+
 	static final public String CLUSTERNAME = "TheJobCoach";
 	static final public String KEYSPACENAME = "keyspacejobcoach";
 
@@ -49,10 +49,9 @@ public class CassandraAccessor {
 	static Keyspace myKeyspace = null;
 	private static final StringSerializer se = new StringSerializer();
 	private static final BytesArraySerializer bse = new BytesArraySerializer();
-	private static final CompositeSerializer ce = new CompositeSerializer();
-	
+
 	private static String location = "localhost:9160";	
-	
+
 	static public void setLocation(String _location)
 	{
 		location = _location;
@@ -60,7 +59,7 @@ public class CassandraAccessor {
 		myKeyspace = null;
 		myCluster = null;
 	}
-	
+
 	static public void setCluster(String clusterName)
 	{		
 		myCluster = HFactory.getOrCreateCluster(clusterName, new CassandraHostConfigurator(location));
@@ -89,7 +88,7 @@ public class CassandraAccessor {
 		}
 		return myKeyspaceDefinition;
 	}
-			
+
 	static public Keyspace getKeyspace()
 	{
 		if (myKeyspace == null)
@@ -189,18 +188,26 @@ public class CassandraAccessor {
 		mutator.execute();
 		mutator.discardPendingMutations();		
 	}
-   
-	static public Set<String> getColumnRange(String CF, String keyFirst, String keyLast, int number)
+
+	static public Map<String, String> getColumnRange(String CF, String row, String keyFirst, String keyLast, int number) throws CassandraException
 	{
-		RangeSlicesQuery<String, String, String> rangeSlicesQuery =
-				HFactory.createRangeSlicesQuery(getKeyspace(), se, se, se);
-		rangeSlicesQuery.setColumnFamily(CF);
-		rangeSlicesQuery.setKeys(keyFirst, keyLast);
-		rangeSlicesQuery.setRange("", "", false, number);
-		//QueryResult<OrderedRows<String, String, String>> result = rangeSlicesQuery.execute();
-		//If you did not want to explicitly set the column names, or as above, get the first three columns in order, but instead wanted to return all columns starting with a common prefix, you could change the RangeSlicesQuery from the example above as follows:
-		rangeSlicesQuery.setRange("fake_column_", "", false, 3);
-		return null;
+		MultigetSliceQuery<String, String, String> q = createMultigetSliceQuery(getKeyspace(), se, se, se);
+		q.setColumnFamily(CF);
+		q.setKeys(row);
+		q.setRange(keyFirst, keyLast, false, number);
+		QueryResult<Rows<String, String, String>> r = q.execute();
+		if (r == null) throw new CassandraException();
+		Rows<String, String, String> rows = r.get();
+		if (rows == null) return null;
+		Row<String, String, String> rowK = rows.getByKey(row);
+		if (rowK == null) return null;
+		ColumnSlice<String, String> slice = rowK.getColumnSlice();
+		Map<String, String> result = new HashMap<String, String>();
+		for (HColumn<String, String> column : slice.getColumns())
+		{	
+			result.put(column.getName(), column.getValue());	        
+		}
+		return result;
 	}
 
 	public static boolean deleteColumnFamily(String columnFamily)
@@ -215,7 +222,7 @@ public class CassandraAccessor {
 		}
 		return true;
 	}
-/*
+	/*
 	public static boolean createCompositeColumnFamily(String name, String type)
 	{
 		ColumnFamilyDefinition cfDef = null;		
@@ -269,7 +276,7 @@ public class CassandraAccessor {
 		public String value;
 		CompositeColumnEntry(Composite _key, String _value) { key=_key; value = _value;}
 	}
-	
+
 	static public boolean getCompositeColumnsRange(String CFName, String mainKey, Composite keyStart, Composite keyEnd, List<CompositeColumnEntry> result)
 	{
 		// get value
@@ -317,8 +324,8 @@ public class CassandraAccessor {
 		}
 		return true;
 	}	
-	*/
-	
+	 */
+
 	static public void deleteColumn(String CF, String key, String col) throws CassandraException
 	{
 		Mutator<String> mutator = HFactory.createMutator(CassandraAccessor.getKeyspace(), se);		
@@ -336,26 +343,26 @@ public class CassandraAccessor {
 	static public boolean getKeyRange(String CFName, String start, int count, Set<String> result, Vector<String> last)
 	{
 		RangeSlicesQuery<String, String, String> rangeSlicesQuery =
-                HFactory.createRangeSlicesQuery(CassandraAccessor.getKeyspace(), se, se, se);
+				HFactory.createRangeSlicesQuery(CassandraAccessor.getKeyspace(), se, se, se);
 		rangeSlicesQuery.setColumnFamily(CFName);
-        rangeSlicesQuery.setKeys(start, "");
-        rangeSlicesQuery.setRange(start, "", false, count);        
-        rangeSlicesQuery.setRowCount(count);
-        
-        QueryResult<OrderedRows<String, String, String>> resultQuery = rangeSlicesQuery.execute();
-        OrderedRows<String, String, String> orderedRows = resultQuery.get();
-                
-        Row<String,String,String> lastRow = orderedRows.peekLast();
+		rangeSlicesQuery.setKeys(start, "");
+		rangeSlicesQuery.setRange(start, "", false, count);        
+		rangeSlicesQuery.setRowCount(count);
 
-        for (Row<String, String, String> r : orderedRows)
-        {
-            result.add(r.getKey());
-        }
-        if (lastRow != null) last.add(lastRow.getKey());
-        
-	    return true;
+		QueryResult<OrderedRows<String, String, String>> resultQuery = rangeSlicesQuery.execute();
+		OrderedRows<String, String, String> orderedRows = resultQuery.get();
+
+		Row<String,String,String> lastRow = orderedRows.peekLast();
+
+		for (Row<String, String, String> r : orderedRows)
+		{
+			result.add(r.getKey());
+		}
+		if (lastRow != null) last.add(lastRow.getKey());
+
+		return true;
 	}
-	
+
 	public static ColumnFamilyDefinition checkColumnFamilyAscii(String CFName, ColumnFamilyDefinition cfDefList)
 	{		
 		if (cfDefList == null)
@@ -371,8 +378,8 @@ public class CassandraAccessor {
 		}
 		return cfDefList;
 	}
-	
-	
+
+
 	static public void updateColumnByte(String CF, String key, String column, byte[] data) throws CassandraException
 	{
 		ColumnFamilyTemplate<String, String> cfTemplate = new ThriftColumnFamilyTemplate<String, String>(CassandraAccessor.getKeyspace(),
@@ -382,7 +389,7 @@ public class CassandraAccessor {
 				);
 		ColumnFamilyUpdater<String, String> updater = cfTemplate.createUpdater(key);		
 		updater.setByteArray(column, data);
-		
+
 		try 
 		{
 			cfTemplate.update(updater);

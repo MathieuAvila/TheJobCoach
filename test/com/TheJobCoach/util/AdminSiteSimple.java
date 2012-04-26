@@ -7,7 +7,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 import org.junit.Test;
 

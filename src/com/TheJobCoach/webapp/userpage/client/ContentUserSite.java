@@ -6,13 +6,13 @@ import java.util.List;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.EditUserSite.EditUserSiteResult;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.IconCellUrl;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -20,7 +20,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
@@ -34,7 +33,6 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -189,7 +187,6 @@ public class ContentUserSite implements EntryPoint {
 							}
 							public void onSuccess(Integer result)
 							{
-								System.out.println("Created site: " + result);
 								getAllContent();
 							}
 						});
@@ -221,7 +218,6 @@ public class ContentUserSite implements EntryPoint {
 							}
 							public void onSuccess(Integer result)
 							{
-								System.out.println("Created site: " + result);
 								getAllContent();
 							}
 						});
@@ -284,6 +280,7 @@ public class ContentUserSite implements EntryPoint {
 			}
 		}), lang._TextDeleteUserDocument());
 
+		// Update column
 		IconCellSingle updateCell =	new IconCellSingle(IconCellSingle.IconType.UPDATE);		
 		cellTable.addColumn(addColumn(updateCell, new GetValue<String>() {
 			public String getValue(UserJobSite contact) {

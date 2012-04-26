@@ -4,6 +4,9 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.CheckedLabel;
+import com.TheJobCoach.webapp.util.client.CheckedTextField;
+import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -25,22 +28,22 @@ import com.google.gwt.user.client.ui.TextBox;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class CreateAccount implements EntryPoint {
+public class CreateAccount implements EntryPoint, IChanged {
 
 	Panel rootPanel;
+	final Lang lang = GWT.create(Lang.class);
 
-
-	private final TextBox textBoxUserName = new TextBox();
+	private CheckedLabel labelMail = new CheckedLabel(lang._TextUserEMail(), true, this);
+	private CheckedLabel lblUserName = new CheckedLabel(lang._TextUserName(), true, this);
+	private final CheckedTextField textBoxUserName = new CheckedTextField(lblUserName, UserId.getRegexp());
+	private final CheckedTextField textBoxMail = new CheckedTextField(labelMail, UserInformation.getMailRegexp());
 	private final TextBox newUserPassword = new PasswordTextBox();
 	private final TextBox newUserPasswordCheck = new PasswordTextBox();
-	private final TextBox textBoxMail = new TextBox();
 	private final TextBox textBoxCreateName = new TextBox();
 	private final TextBox textBoxFirstName = new TextBox();
 	private final DialogBox dBox = new DialogBox();
-	private Label labelPasswordCheck = new Label();
-	private Label labelPassword = new Label();
-	private Label lblUserName = new Label();
-	private Label labelMail = new Label();
+	private CheckedLabel labelPasswordCheck = new CheckedLabel(lang._TextUserPasswordCheck(), true, null);
+	private CheckedLabel labelPassword = new CheckedLabel(lang._TextUserPassword(), true, null);
 	private ButtonImageText btnCreateAccount = null;
 
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
@@ -49,9 +52,6 @@ public class CreateAccount implements EntryPoint {
 	{
 		rootPanel = panel;
 	}
-
-	final Lang lang = GWT.create(Lang.class);
-
 
 	// Create a handler for the create account button.em
 	class CreateAccountHandler implements ClickHandler {
@@ -92,39 +92,33 @@ public class CreateAccount implements EntryPoint {
 		}
 	}
 
-	public void checkUserValues()
-	{		
-		btnCreateAccount.setEnabled(false);
-		// Check the username.
-		if ("".equals(textBoxUserName.getValue())) 
-		{
-			textBoxUserName.setStyleName("label-create-account-error");
-			lblUserName.setStyleName("label-create-account-error");
-			return;
-		}
-		textBoxUserName.setStyleName("label-create-account-ok");
-		lblUserName.setStyleName("label-create-account-ok");
 
-		if (!UserInformation.checkEmail(textBoxMail.getValue())) 
-		{
-			labelMail.setStyleName("label-create-account-error");
-			return;
-		}
-		labelMail.setStyleName("label-create-account-ok");
+	@Override
+	public void changed(boolean ok, boolean init) 
+	{
+		if (init) return;
+		btnCreateAccount.setEnabled(false);
+		boolean setOk = true;
+		setOk = setOk && textBoxUserName.isValid();
+		setOk = setOk && textBoxMail.isValid();
 
 		if (!UserId.checkUserName(newUserPasswordCheck.getValue()) || !newUserPasswordCheck.getValue().equals(newUserPassword.getValue())) 
 		{
-			newUserPasswordCheck.setStyleName("label-create-account-error");		
-			newUserPassword.setStyleName("label-create-account-error");
-			labelPasswordCheck.setStyleName("label-create-account-error");
-			labelPassword.setStyleName("label-create-account-error");
-			return;
-		}		
-		newUserPasswordCheck.setStyleName("label-create-account-ok");		
-		newUserPassword.setStyleName("label-create-account-ok");	
-		labelPasswordCheck.setStyleName("label-create-account-ok");
-		labelPassword.setStyleName("label-create-account-ok");
-		btnCreateAccount.setEnabled(true);
+			labelPasswordCheck.setStatus(false);
+			labelPassword.setStatus(false);
+			setOk = false;
+		}
+		else
+		{
+			labelPasswordCheck.setStatus(true);
+			labelPassword.setStatus(true);
+		}
+		btnCreateAccount.setEnabled(setOk);	
+	}
+
+	public void checkUserValues()
+	{		
+		changed(true, false); 
 	}
 
 	/**
@@ -142,14 +136,9 @@ public class CreateAccount implements EntryPoint {
 		grid.setBorderWidth(0);
 		dBox.setWidget(grid);
 
-		lblUserName.setText(lang._TextUserName());
 		grid.setWidget(0, 0, lblUserName);
-
 		grid.setWidget(0, 1, textBoxUserName);
-
-		labelMail.setText(lang._TextUserEMail());
 		grid.setWidget(1, 0, labelMail);
-
 		grid.setWidget(1, 1, textBoxMail);
 
 		Label label_2 = new Label(lang._TextUserLastName());
@@ -161,67 +150,57 @@ public class CreateAccount implements EntryPoint {
 		grid.setWidget(3, 0, label_1);
 
 		grid.setWidget(3, 1, textBoxFirstName);
-
-		labelPassword.setText(lang._TextUserPassword());
 		grid.setWidget(4, 0, labelPassword);
-
 		grid.setWidget(4, 1, newUserPassword);
-
-		labelPasswordCheck.setText(lang._TextUserPasswordCheck());
 		grid.setWidget(5, 0, labelPasswordCheck);
-
 		grid.setWidget(5, 1, newUserPasswordCheck);	
 
-		ValueChangeHandler<String> changeH = new ValueChangeHandler<String>()
-				{
+		ValueChangeHandler<String> changeH = new ValueChangeHandler<String>(){
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				checkUserValues();
 			}
-				};
+		};
 
-				KeyUpHandler changeKey = new KeyUpHandler()
-				{
-					@Override
-					public void onKeyUp(KeyUpEvent event) {
-						checkUserValues();
-					}
-				};
-
-				newUserPasswordCheck.addValueChangeHandler(changeH);
-				newUserPassword.addValueChangeHandler(changeH);
-				textBoxUserName.addValueChangeHandler(changeH);
-				textBoxMail.addValueChangeHandler(changeH);
-				
-				newUserPasswordCheck.addKeyUpHandler(changeKey);
-				newUserPassword.addKeyUpHandler(changeKey);
-				textBoxUserName.addKeyUpHandler(changeKey);
-				textBoxMail.addKeyUpHandler(changeKey);
-				
-				btnCreateAccount = new ButtonImageText(ButtonImageText.Type.OK, lang._TextCreateAccountOk());
-				ButtonImageText btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCreateCancel());
-
-				// Add a handler to the connect button clicker.
-				CreateAccountHandler createAccountHandler = new CreateAccountHandler();
-				btnCreateAccount.addClickHandler(createAccountHandler);
-
-				// Add a handler to the connect button clicker.
-				btnCancel.addClickHandler(new ClickHandler() {
-
-					@Override
-					public void onClick(ClickEvent event) {
-						dBox.hide();
-					}});
-
-				HorizontalPanel hpButton = new HorizontalPanel();
-				hpButton.add(btnCreateAccount);
-				hpButton.add(btnCancel);
-
-				grid.setWidget(6, 1, hpButton);
-
+		KeyUpHandler changeKey = new KeyUpHandler()	{
+			@Override
+			public void onKeyUp(KeyUpEvent event) 
+			{
 				checkUserValues();
+			}
+		};
 
-				rootPanel.add(dBox);
-				dBox.center();	
+		newUserPasswordCheck.addValueChangeHandler(changeH);
+		newUserPassword.addValueChangeHandler(changeH);
+
+		newUserPasswordCheck.addKeyUpHandler(changeKey);
+		newUserPassword.addKeyUpHandler(changeKey);
+
+		btnCreateAccount = new ButtonImageText(ButtonImageText.Type.OK, lang._TextCreateAccountOk());
+		ButtonImageText btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCreateCancel());
+
+		// Add a handler to the connect button clicker.
+		CreateAccountHandler createAccountHandler = new CreateAccountHandler();
+		btnCreateAccount.addClickHandler(createAccountHandler);
+
+		// Add a handler to the connect button clicker.
+		btnCancel.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				dBox.hide();
+			}});
+
+		HorizontalPanel hpButton = new HorizontalPanel();
+		hpButton.add(btnCreateAccount);
+		hpButton.add(btnCancel);
+
+		grid.setWidget(6, 1, hpButton);
+
+		checkUserValues();
+
+		rootPanel.add(dBox);
+		dBox.center();	
 	}
+
 }

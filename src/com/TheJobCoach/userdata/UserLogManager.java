@@ -8,8 +8,8 @@ import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class UserLogManager {
 

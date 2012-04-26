@@ -13,7 +13,7 @@ import me.prettyprint.hector.api.factory.HFactory;
 
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class TestCassandraAccessor {
 	

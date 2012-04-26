@@ -6,7 +6,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccount
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**

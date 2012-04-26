@@ -6,13 +6,13 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.EditUserDocument.EditUserDocumentResult;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.IconCellFile;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -21,12 +21,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -35,7 +33,6 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -192,7 +189,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		rootPanel.clear();
 
 		final VerticalPanel simplePanelCenter = new VerticalPanel();
-		simplePanelCenter.setSize("100%", "100%");
+		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 				
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextUserDocument(), ClientImageBundle.INSTANCE.userDocumentContent());

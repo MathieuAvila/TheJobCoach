@@ -3,12 +3,12 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.List;
 import java.util.Vector;
 
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;

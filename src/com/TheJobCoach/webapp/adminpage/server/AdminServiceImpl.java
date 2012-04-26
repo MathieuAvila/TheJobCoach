@@ -7,8 +7,8 @@ import java.util.Vector;
 import com.TheJobCoach.webapp.adminpage.client.AdminService;
 import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**

@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.TheJobCoach.userdata.UserDocumentManager;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class DownloadFileServlet extends HttpServlet {
 

@@ -41,8 +41,7 @@ public class EditLogEntry implements EntryPoint {
 	TextBox txtbxTitle = new TextBox();
 	ListBox comboBoxStatus = new ListBox();
 	DateBox dateBoxCreation = new DateBox();
-	DateBox dateBoxEvent = new DateBox();
-	
+	DateBox dateBoxEvent = new DateBox();	
 	String id;
 
 	Panel rootPanel;
@@ -135,8 +134,9 @@ public class EditLogEntry implements EntryPoint {
 		Label lblEventDate = new Label(lang._TextCreated());
 		grid.setWidget(3, 0, lblEventDate);
 
-		grid.setWidget(3, 1, dateBoxCreation);
-
+		grid.setWidget(3, 1, dateBoxCreation);		
+		//dateBoxCreation.getDatePicker().setTimeVisible(true);
+		
 		Label lblEndDate = new Label(lang._TextExpectedFollowUp());
 		grid.setWidget(4, 0, lblEndDate);
 

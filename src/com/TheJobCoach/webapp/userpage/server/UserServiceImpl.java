@@ -11,12 +11,12 @@ import com.TheJobCoach.userdata.UserLogManager;
 import com.TheJobCoach.userdata.UserOpportunityManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserService;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**

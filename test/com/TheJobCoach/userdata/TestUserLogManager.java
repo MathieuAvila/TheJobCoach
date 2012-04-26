@@ -8,10 +8,10 @@ import java.util.Vector;
 import org.junit.Test;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class TestUserLogManager {
 	

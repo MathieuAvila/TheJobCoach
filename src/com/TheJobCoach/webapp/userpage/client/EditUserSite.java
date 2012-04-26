@@ -5,6 +5,9 @@ import java.util.Date;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.CheckedLabel;
+import com.TheJobCoach.webapp.util.client.CheckedTextField;
+import com.TheJobCoach.webapp.util.client.IChanged;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,7 +25,9 @@ import com.google.gwt.user.datepicker.client.DateBox;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class EditUserSite implements EntryPoint {
+public class EditUserSite implements EntryPoint, IChanged {
+
+	static Lang lang = GWT.create(Lang.class);
 
 	public interface EditUserSiteResult
 	{
@@ -31,13 +36,16 @@ public class EditUserSite implements EntryPoint {
 
 	UserId user;
 
-	TextBox textBoxName = new TextBox();
+	ButtonImageText btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
+	CheckedLabel lblName = new CheckedLabel(lang._TextName(), true, this);
+	CheckedTextField textBoxName = new CheckedTextField(lblName, ".+");
 	RichTextArea textAreaDescription = new RichTextArea();
-	TextBox textBoxUrl = new TextBox();
+	CheckedLabel lblUrl = new CheckedLabel(lang._TextURL(), true, this, true);
+	CheckedTextField textBoxUrl = new CheckedTextField(lblUrl, "http://.*", "http://");
 	TextBox textBoxLogin = new TextBox();
 	TextBox textBoxPassword = new TextBox();
 	DateBox datePickerLastVisit = new DateBox();
-
+	
 	Panel rootPanel;
 	EditUserSiteResult result;
 	UserJobSite currentUserSite;
@@ -68,7 +76,6 @@ public class EditUserSite implements EntryPoint {
 	{
 		String ID = new Date().toString();
 		if (currentUserSite != null) ID = currentUserSite.ID;
-		//System.out.println("getUserJobSite -" + ID + "-" + textBoxName.getText()+ textBoxUrl.getText()+ textAreaDescription.getHTML()+ textBoxLogin.getValue());
 		return new UserJobSite(ID,
 				textBoxName.getText(), textBoxUrl.getText(), textAreaDescription.getHTML(), textBoxLogin.getValue(),
 				textBoxPassword.getText(), datePickerLastVisit.getValue());
@@ -79,9 +86,7 @@ public class EditUserSite implements EntryPoint {
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad()
-	{	
-		Lang lang = GWT.create(Lang.class);
-
+	{			
 		final DialogBox dBox = new DialogBox();
 		dBox.setText(currentUserSite == null ? lang._TextCreateUserSiteTitle() : lang._TextEditUserSiteTitle());
 		dBox.setGlassEnabled(true);
@@ -91,10 +96,7 @@ public class EditUserSite implements EntryPoint {
 		grid.setBorderWidth(0);
 		dBox.setWidget(grid);		
 
-
-		Label lblName = new Label(lang._TextName());
 		grid.setWidget(0, 0, lblName);
-
 		grid.setWidget(0, 1, textBoxName);
 		textBoxName.setWidth("100%");
 
@@ -104,7 +106,6 @@ public class EditUserSite implements EntryPoint {
 		grid.setWidget(1, 1, textAreaDescription);
 		textAreaDescription.setSize("100%", "50px");
 
-		Label lblUrl = new Label(lang._TextURL());
 		grid.setWidget(2, 0, lblUrl);
 
 		grid.setWidget(2, 1, textBoxUrl);
@@ -128,7 +129,6 @@ public class EditUserSite implements EntryPoint {
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		grid.setWidget(6, 1, horizontalPanel);
 
-		Button btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
 		horizontalPanel.add(btnOk);
 
 		Button btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
@@ -152,7 +152,18 @@ public class EditUserSite implements EntryPoint {
 				result.setResult(null);				
 			}
 		});
-
+		changed(false, false);
 		dBox.center();
+	}
+
+	@Override
+	public void changed(boolean ok, boolean init)
+	{		
+		if (init) return;
+		btnOk.setEnabled(false);
+		boolean setOk = true;
+		setOk = setOk && textBoxName.isValid();
+		setOk = setOk && textBoxUrl.isValid();
+		btnOk.setEnabled(setOk);	
 	}
 }

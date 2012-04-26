@@ -7,8 +7,8 @@ import java.util.Vector;
 
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.userpage.shared.CassandraException;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class TestNews
 {

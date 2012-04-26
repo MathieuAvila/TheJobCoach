@@ -21,10 +21,15 @@ public class UserId implements Serializable {
 	}
 	public UserId() {}
 	
+	public static String getRegexp()
+	{
+		return "[a-zA-Z0-9_.-]+";
+	}
+	
 	public static boolean checkUserName(String userName)
 	{
 		if (userName == null) return false;
 		if (userName.equals("")) return false;
-		return userName.matches("[a-zA-Z0-9_.]+");
+		return userName.matches(getRegexp());
 	}
 };
