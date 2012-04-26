@@ -20,4 +20,6 @@ public interface LoginService extends RemoteService {
 	MainPageReturnLogin connect(String userName, String userPassword);
 
 	MainPageReturnCode.ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException;
+	
+	Boolean lostCredentials(String email, String lang) throws CassandraException;
 }

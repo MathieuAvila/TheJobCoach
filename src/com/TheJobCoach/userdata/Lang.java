@@ -13,9 +13,7 @@ public class Lang
 					"{1}/TheJobCoach.html?action=validate&username={2}&token={3}\n\n" +
 					"We are happy to to see you soon on The Job Coach !\n\n"+
 					"The Job Coach team\n";
-		}
-		if (lang.equals("fr") || lang.equals("") || lang == null)
-		{
+		} else {
 			body="Bonjour {0}\n\n"+
 					"Vous pouvez activer votre compte en cliquant sur le lien suivant:\n"+
 					"{1}/TheJobCoach.html?action=validate&username={2}&token={3}\n\n"+
@@ -35,12 +33,47 @@ public class Lang
 		if (lang.equals("en"))
 		{
 			subject="Activate Account on www.TheJobCoach.fr";
-		}
-		if (lang.equals("fr"))
+		} 
+		else
 		{
 			subject="Activer votre compte www.TheJobCoach.fr";
 		}
 		return subject;
 	}
-
+	
+	static String _TextLostCredentialsSubject(String lang)
+	{
+		String subject="";
+		if (lang.equals("en"))
+		{
+			subject="Your credentials on www.TheJobCoach.fr";
+		} 
+		else
+		{
+			subject="Vos identifiants sur www.TheJobCoach.fr !";
+		}
+		return subject;
+	}
+	
+	static String _TextLostCredentials(String user, String password, String lang)
+	{
+		String body="";
+		if (lang.equals("en"))
+		{
+			body=
+					"You asked for your credentials on www.TheJobCoach.fr\n"+
+					"Your user name is: '" + user + "'\n"+
+					"Your password is: '" + password + "'\n\n"+
+					"Hoping to see you soon on www.TheJobCoach.fr!";
+		} 
+		else
+		{
+			body=
+					"Vous avez demandé vos identifiants de www.TheJobCoach.fr\n"+
+					"Votre login est : '" + user + "'\n"+
+					"Votre mot de passe est : '" + password + "'\n\n"+
+					"En espérant vous revoir bientôt sur www.TheJobCoach.fr !";
+		}
+		return body;
+	}
 }

@@ -74,10 +74,13 @@ public class CreateAccount implements EntryPoint, IChanged {
 							switch (result)
 							{
 							case CREATE_STATUS_ALREADY_EXISTS:
-								MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextCreateLoginAlreadyExists());
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR, "Error", lang._TextCreateEmailAlreadyExists());
+								break;
+							case CREATE_STATUS_ALREADY_EXISTS_EMAIL:
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR, "Error", lang._TextCreateLoginAlreadyExists());
 								break;
 							case CREATE_STATUS_ERROR:
-								MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Unexpected Error", lang._TextCreateLoginUnexpectedError());
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR, "Unexpected Error", lang._TextCreateLoginUnexpectedError());
 								break;
 							case CREATE_STATUS_INVALID:
 								MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Unexpected Error", lang._TextCreateLoginUnexpectedError());

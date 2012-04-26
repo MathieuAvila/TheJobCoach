@@ -18,6 +18,7 @@ import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
+import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
@@ -29,15 +30,18 @@ import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 public class Account implements AccountInterface {
 
 	static ColumnFamilyDefinition cfDef = null;
-	static ColumnFamilyDefinition cfDefToken = null;
+	static ColumnFamilyDefinition cfDefEmail = null;
+	static ColumnFamilyDefinition cfDefValidation = null;
 
 	final static String COLUMN_FAMILY_NAME_ACCOUNT = "account";
-	//final static String COLUMN_FAMILY_NAME_TOKEN = "token";
+	final static String COLUMN_FAMILY_NAME_EMAIL = "accountemail";
+	final static String COLUMN_FAMILY_NAME_NOT_VALIDATED = "accountvalidation";
 
 	public Account()
 	{
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_ACCOUNT, cfDef);
-		//cfDefToken = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_TOKEN, cfDefToken);
+		cfDefEmail = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_EMAIL, cfDefEmail);
+		cfDefValidation = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_NOT_VALIDATED, cfDefValidation);
 	}
 
 	public boolean existsAccount(String userName)
@@ -82,11 +86,29 @@ public class Account implements AccountInterface {
 				.get());
 	}
 
+	public String getUsernameFromEmail(String mail)
+	{
+		String result = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_EMAIL, mail, "username");	
+		return result;
+	}
+	
 	public CreateAccountStatus createAccountWithToken(UserId id, UserInformation info, String langStr) throws CassandraException
 	{
 		if (existsAccount(id.userName))
 			return CreateAccountStatus.CREATE_STATUS_ALREADY_EXISTS;
-		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
+		if (getUsernameFromEmail(info.email) != null)
+			return CreateAccountStatus.CREATE_STATUS_ALREADY_EXISTS_EMAIL;
+		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_NOT_VALIDATED, id.userName, 
+				(new ShortMap())
+				.add("validated", false)
+				.get());
+		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
+		result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_EMAIL, info.email, 
+				(new ShortMap())
+				.add("username", id.userName)
+				.get());
+		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
+		result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
 				(new ShortMap())
 				.add("username", id.userName)
 				.add("validated", false)
@@ -119,6 +141,7 @@ public class Account implements AccountInterface {
 						.add("date", new Date())
 						.get());
 		if (!result) return ValidateAccountStatus.VALIDATE_STATUS_ERROR;
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_NOT_VALIDATED, userName);		
 		return ValidateAccountStatus.VALIDATE_STATUS_OK;
 	}
 
@@ -177,6 +200,7 @@ public class Account implements AccountInterface {
 	public UserReport getUserReport(UserId id) throws CassandraException
 	{		
 		Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
+		if (result == null) return null;
 		return new UserReport(				
 				id.userName, 
 				result.get("password"),
@@ -202,8 +226,19 @@ public class Account implements AccountInterface {
 	
 	public void deleteAccount(String userName) throws CassandraException
 	{
-		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, userName);
-		System.out.println("DELETED ACCOUNT: " + userName);
+		UserId id = new UserId(userName, "", UserType.USER_TYPE_SEEKER);
+		UserReport user = getUserReport(id);
+		if (user != null)
+		{
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_NOT_VALIDATED, id.userName);
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_EMAIL, user.mail);
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
+			System.out.println("DELETED ACCOUNT: " + id.userName);
+		}
+		else
+		{
+		System.out.println("COULD NOT DELETE ACCOUNT: " + id.userName + " NO SUCH ACCOUNT FOUND");
+		}
 	}
 	
 	public void purgeAccount() throws CassandraException
@@ -245,7 +280,17 @@ public class Account implements AccountInterface {
 				"Comment on TheJobCoach from '" + report.mail + "' user '" + report.userName + "'", 
 				report.mail + "\n" + comment, 
 				"noreply@www.thejobcoach.fr");
-		System.out.println("Comment sent.");
+	}
+
+	public Boolean lostCredentials(String email, String lang) throws CassandraException 
+	{	
+		String userName = getUsernameFromEmail(email);
+		if (userName == null) return new Boolean(false);
+		UserReport info = getUserReport(new UserId(userName, "", UserType.USER_TYPE_SEEKER));
+		if (info == null) return new Boolean(false);
+		String body = Lang._TextLostCredentials(info.userName, info.password, lang);
+		MailerFactory.getMailer().sendEmail(info.mail, Lang._TextLostCredentialsSubject(lang), body, "noreply@www.thejobcoach.fr");
+		return new Boolean(true);
 	}
 
 }

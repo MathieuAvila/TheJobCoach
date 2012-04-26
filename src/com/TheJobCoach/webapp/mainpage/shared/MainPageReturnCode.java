@@ -16,6 +16,7 @@ public class MainPageReturnCode implements Serializable {
 	public static enum CreateAccountStatus 
 	{ 
 		CREATE_STATUS_ALREADY_EXISTS, 
+		CREATE_STATUS_ALREADY_EXISTS_EMAIL, 
 		CREATE_STATUS_ERROR, 
 		CREATE_STATUS_INVALID, 
 		CREATE_STATUS_OK

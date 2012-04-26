@@ -143,9 +143,29 @@ public class MainPage implements EntryPoint {
 
 		VerticalPanel verticalPanel_1 = new VerticalPanel();
 		verticalPanel.add(verticalPanel_1);
-		verticalPanel.setCellHeight(verticalPanel_1, "50px");
-		verticalPanel_1.setHeight("50px");
+		verticalPanel.setCellHeight(verticalPanel_1, "20px");
+		verticalPanel_1.setHeight("20px");
 
+		Label lblLostCredentials = new Label(lang._TextLostCredentials());
+		verticalPanel.add(lblLostCredentials);
+		lblLostCredentials.setStyleName("mainpage-label-clickable");
+		// Create a handler for the lost credentials
+		class LostCredentialsHandler implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				LostCredentials lc = new LostCredentials(rootPanel);
+				lc.onModuleLoad();
+			}
+		}
+		// Add a handler to the the lost credentials button clicker.
+		LostCredentialsHandler lostCredentialsHandler = new LostCredentialsHandler();
+		lblLostCredentials.addClickHandler(lostCredentialsHandler);
+
+		VerticalPanel verticalPanel_space = new VerticalPanel();
+		verticalPanel.add(verticalPanel_space);
+		verticalPanel.setCellHeight(verticalPanel_space, "20px");
+		verticalPanel_space.setHeight("20px");
+		
+		
 		Label lblPasEncoreInscrit = new Label(lang._TextNotYesRegistered());
 		verticalPanel.add(lblPasEncoreInscrit);
 		lblPasEncoreInscrit.setStyleName("mainpage-label-clickable");
@@ -161,6 +181,8 @@ public class MainPage implements EntryPoint {
 		NotSubscribedHandler notSubscribedHandler = new NotSubscribedHandler();
 		lblPasEncoreInscrit.addClickHandler(notSubscribedHandler);
 
+		
+		
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		simplePanelCenter.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -173,7 +195,7 @@ public class MainPage implements EntryPoint {
 		verticalPanel_2.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		verticalPanel.add(verticalPanel_2);
 		verticalPanel.setCellVerticalAlignment(verticalPanel_2, HasVerticalAlignment.ALIGN_BOTTOM);
-		verticalPanel.setCellHeight(verticalPanel_2, lang.verticalPanel_2_height());
+		verticalPanel.setCellHeight(verticalPanel_2, "100%");
 		verticalPanel_2.setHeight("100%");
 		verticalPanel.add(simplePanelCenter);
 		verticalPanel.setCellHorizontalAlignment(simplePanelCenter, HasHorizontalAlignment.ALIGN_CENTER);

@@ -24,6 +24,9 @@ public interface Lang extends Constants {
 	
 	@ Key("createaccount")
 	String _TextCreateAccount();
+
+	@ Key("lostcredentials")
+	String _TextLostCredentials();
 	
 	@ Key("login")
 	String _TextLogin();
@@ -47,7 +50,10 @@ public interface Lang extends Constants {
 	String _TextLoginNotValidated();
 	
 	@ Key("create_login_already_exist")
-	String _TextCreateLoginAlreadyExists(); 
+	String _TextCreateLoginAlreadyExists();
+	
+	@ Key("create_email_already_exist")
+	String 	_TextCreateEmailAlreadyExists();
 	
 	@ Key("create_login_unexpected_error")
 	String _TextCreateLoginUnexpectedError();
@@ -82,5 +88,15 @@ public interface Lang extends Constants {
 	@Key("createaccountpasswordcheck")
 	String _TextUserPasswordCheck();
 
-	String verticalPanel_2_height();
+	@Key("lostcredentialsexplanation")
+	String _TextLostCredentialsExplanation();
+	
+	@Key("lostcredentialsvalidate")
+	String _TextLostCredentialsValidate(); 
+	
+	@Key("lostcredentialsok")
+	String _TextLostCredentialsOk();
+	
+	@Key("lostcredentialserror")
+	String _TextLostCredentialsError();
 }

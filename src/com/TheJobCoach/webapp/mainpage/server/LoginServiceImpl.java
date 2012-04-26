@@ -35,8 +35,12 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException {
-		// TODO Auto-generated method stub
 		return account.validateAccount(userName, token);
+	}
+
+	@Override
+	public Boolean lostCredentials(String email, String lang) throws CassandraException {
+		return account.lostCredentials(email, lang);
 	}
 
 }
