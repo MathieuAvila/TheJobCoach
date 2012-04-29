@@ -12,7 +12,6 @@ public class TestMessageBox extends GWTTestCase {
 
 	public void testMessageBox()
 	{
-		final boolean end = false;
 		MessageBox mb = new MessageBox(
 			RootPanel.get("content"), 
 			true, true, MessageBox.TYPE.WARNING, "title", "message", new MessageBox.ICallback() {

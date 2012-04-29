@@ -139,8 +139,29 @@ mainpage-content {
 }
 .gwt-StackLayout {
 }
+
+
 .gwt-StackPanel {
+  border-bottom: 1px solid #bbbbbb;
 }
+.gwt-StackPanel .gwt-StackPanelItem {
+  cursor: pointer;
+  cursor: hand;
+  font-weight: bold;
+  font-size: 1.3em;
+  padding: 3px;
+  border: 1px solid #bbbbbb;
+  border-bottom: 0px;
+  background: #d3def6 url(images/hborder.png) repeat-x 0px -989px;
+}
+.gwt-StackPanel .gwt-StackPanelContent {
+  border: 1px solid #bbbbbb;
+  border-bottom: 0px;
+  background: white;
+  padding: 2px 2px 10px 5px;
+}
+
+
 .userpage-label-clickable {
 	color: blue;
 	font-weight: bold;

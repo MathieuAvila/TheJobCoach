@@ -222,36 +222,37 @@ public class ContentUserLog implements EntryPoint {
 		// Create title column.
 		TextColumn<UserLogEntry> titleColumn = new TextColumn<UserLogEntry>() 	{
 			@Override
-			public String getValue(UserLogEntry site) 
+			public String getValue(UserLogEntry userLog) 
 			{
-				return site.title;
+				return userLog.title;
 			}
 		};
 
 		// Create status column.
 		TextColumn<UserLogEntry> statusColumn = new TextColumn<UserLogEntry>() {
 			@Override
-			public String getValue(UserLogEntry site) 
+			public String getValue(UserLogEntry userLog) 
 			{
-				return UserLogEntry.entryTypeToString(site.type);
+				System.out.println("USER LOG TYPE " + userLog.type);
+				return lang.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(userLog.type));
 			}
 		};
 
 		// Create created column.
 		TextColumn<UserLogEntry> createdColumn = new TextColumn<UserLogEntry>() {
 			@Override
-			public String getValue(UserLogEntry site) 
+			public String getValue(UserLogEntry userLog) 
 			{
-				return site.creation.toString();
+				return userLog.creation.toString();
 			}
 		};
 
 		// Create expectedFollowUp column.
 		TextColumn<UserLogEntry> expectedFollowUpColumn = new TextColumn<UserLogEntry>() {
 			@Override
-			public String getValue(UserLogEntry site) 
+			public String getValue(UserLogEntry userLog) 
 			{
-				return site.expectedFollowUp.toString();
+				return userLog.expectedFollowUp.toString();
 			}
 		};
 
@@ -333,7 +334,7 @@ public class ContentUserLog implements EntryPoint {
 		labelStatus.setStyleName("summary-title");
 		grid_1.setWidget(1, 0, labelStatus);
 
-		Label label_1 = new Label(UserOpportunity.applicationStatusToString(editedOpportunity.status));
+		Label label_1 = new Label(lang.applicationStatusMap().get("ApplicationStatus_" + UserOpportunity.applicationStatusToString(editedOpportunity.status)));
 		label_1.setStyleName("summary-text");
 		grid_1.setWidget(1, 1, label_1);
 
@@ -348,8 +349,19 @@ public class ContentUserLog implements EntryPoint {
 		SimplePanel simplePanel = new SimplePanel();
 		simplePanelCenter.add(simplePanel);
 		simplePanel.setHeight("20px");
-
+		
 		ButtonImageText buttonBack = new ButtonImageText(ButtonImageText.Type.BACK, lang._Text_BackToOpportunityList());
+		buttonBack.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity();
+				contentUserOpportunity.setRootPanel(rootPanel);
+				contentUserOpportunity.setUserParameters(user);
+				contentUserOpportunity.onModuleLoad();		
+			}
+			
+		});
+		
 		simplePanelCenter.add(buttonBack);
 
 		SimplePanel simplePanel_2 = new SimplePanel();

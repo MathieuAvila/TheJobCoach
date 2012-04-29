@@ -83,7 +83,7 @@ public class EditOpportunity implements EntryPoint {
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), txtbxCompany.getValue(),
 				txtbxContractType.getText(), txtbxSalary.getValue(), new Date(), new Date(),
 				false, txtbxSource.getText(), txtbxUrl.getText(), txtbxLocation.getText(), 
-				UserOpportunity.applicationStatusToString(comboBoxStatus.getValue(comboBoxStatus.getTabIndex())));
+				UserOpportunity.applicationStatusToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex())));
 	}
 	
 	/**

@@ -4,6 +4,7 @@ import com.TheJobCoach.webapp.adminpage.client.AdminPage;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
+import com.TheJobCoach.webapp.util.client.DialogToolBox;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -30,6 +31,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class MainPage implements EntryPoint {
 
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
+	final Lang lang = GWT.create(Lang.class);
+	final Button connectButton = new Button(lang._TextLogin());
+	final TextBox nameField = new TextBox();
+	final TextBox passwordField = new PasswordTextBox();
 
 	RootPanel rootPanel = null;
 
@@ -42,10 +47,93 @@ public class MainPage implements EntryPoint {
 		mb.onModuleLoad();
 	}
 
+	// Create a handler for the Language click button
+	class CreateLangHandler implements ClickHandler
+	{
+
+		String langName;
+
+		public CreateLangHandler(String _langName)
+		{			
+			langName = _langName;
+		}
+
+		public void onClick(ClickEvent event)
+		{				
+			System.out.println("Setting is: " + LocaleInfo.getCurrentLocale().getLocaleName());
+
+			System.out.println("Click on " + langName);
+			String cookie = LocaleInfo.getLocaleCookieName();
+			com.google.gwt.user.client.Cookies.setCookie(cookie, langName);
+			System.out.println("Applied locale "+langName);
+			Window.Location.reload();
+		}
+	}
+	
+	class ConnectHandler implements ClickHandler {
+
+		public void onClick(ClickEvent event) {							
+			// Then, we send the input to the server.
+			connectButton.setEnabled(false);
+			loginService.connect(nameField.getText(), passwordField.getText(), new AsyncCallback<MainPageReturnLogin>() {
+				public void onFailure(Throwable caught) {
+					// Show the RPC error message to the user						
+					connectButton.setEnabled(true);
+				}
+
+				public void onSuccess(MainPageReturnLogin result)
+				{
+					connectButton.setEnabled(true);
+					System.out.println("Login returned result is:" + result.getLoginStatus());
+					if (result.id != null)
+						System.out.println("Login returned: " + result.id.token + " result is:" + result.getLoginStatus());
+					switch (result.getLoginStatus())
+					{ 
+					case CONNECT_STATUS_UNKNOWN_USER:
+						MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNoSuchLoginPassword());
+						break;
+					case CONNECT_STATUS_PASSWORD:		
+						MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNoSuchLoginPassword());
+						break;
+					case CONNECT_STATUS_NOT_VALIDATED:
+						MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNotValidated());
+						break;
+					case CONNECT_STATUS_OK:
+						switch (result.id.type)
+						{
+						case USER_TYPE_SEEKER:
+							UserPage uP = new UserPage();
+							uP.setUser(result.id);
+							uP.onModuleLoad();
+							break;
+						case USER_TYPE_COACH:
+							UserPage cP = new UserPage();
+							cP.setUser(result.id);
+							cP.onModuleLoad();
+							break;
+						case USER_TYPE_ADMIN:
+							AdminPage aP = new AdminPage();
+							aP.setUser(result.id);
+							aP.onModuleLoad();
+							break;
+						}
+						return;
+					}
+				}
+			});
+		}
+	}
+	
+	// Create a handler for the lost credentials
+	class LostCredentialsHandler implements ClickHandler {
+		public void onClick(ClickEvent event) {
+			LostCredentials lc = new LostCredentials(rootPanel);
+			lc.onModuleLoad();
+		}
+	}
+	
 	public void onModuleLoad()
-	{	
-		final Lang lang = GWT.create(Lang.class);
-		
+	{			
 		rootPanel = RootPanel.get("content");
 		rootPanel.clear();
 		rootPanel.setStyleName("mainpage-content");
@@ -115,7 +203,6 @@ public class MainPage implements EntryPoint {
 		lblNomDutilisateur.setStyleName("mainpage-label-userpass");
 		horizontalPanel.add(lblNomDutilisateur);
 		horizontalPanel.setCellVerticalAlignment(lblNomDutilisateur, HasVerticalAlignment.ALIGN_MIDDLE);
-		final TextBox nameField = new TextBox();
 		horizontalPanel.add(nameField);
 		horizontalPanel.setCellVerticalAlignment(nameField, HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setCellHorizontalAlignment(nameField, HasHorizontalAlignment.ALIGN_CENTER);
@@ -126,14 +213,12 @@ public class MainPage implements EntryPoint {
 		horizontalPanel.setCellVerticalAlignment(lblMotDePasse, HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setCellHorizontalAlignment(lblMotDePasse, HasHorizontalAlignment.ALIGN_CENTER);
 
-		final TextBox passwordField = new PasswordTextBox();
 		horizontalPanel.add(passwordField);
 		horizontalPanel.setCellVerticalAlignment(passwordField, HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setCellHorizontalAlignment(passwordField, HasHorizontalAlignment.ALIGN_CENTER);
 
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
-		final Button connectButton = new Button(lang._TextLogin());
 		connectButton.setStyleName("mainpage-connect");
 		horizontalPanel.add(connectButton);
 		verticalPanel.setCellHorizontalAlignment(connectButton, HasHorizontalAlignment.ALIGN_CENTER);
@@ -149,13 +234,7 @@ public class MainPage implements EntryPoint {
 		Label lblLostCredentials = new Label(lang._TextLostCredentials());
 		verticalPanel.add(lblLostCredentials);
 		lblLostCredentials.setStyleName("mainpage-label-clickable");
-		// Create a handler for the lost credentials
-		class LostCredentialsHandler implements ClickHandler {
-			public void onClick(ClickEvent event) {
-				LostCredentials lc = new LostCredentials(rootPanel);
-				lc.onModuleLoad();
-			}
-		}
+		
 		// Add a handler to the the lost credentials button clicker.
 		LostCredentialsHandler lostCredentialsHandler = new LostCredentialsHandler();
 		lblLostCredentials.addClickHandler(lostCredentialsHandler);
@@ -201,90 +280,14 @@ public class MainPage implements EntryPoint {
 		verticalPanel.setCellHorizontalAlignment(simplePanelCenter, HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel.setCellVerticalAlignment(simplePanelCenter, HasVerticalAlignment.ALIGN_BOTTOM);
 		simplePanelCenter.setSize("", "");
-		class ConnectHandler implements ClickHandler {
-
-			public void onClick(ClickEvent event) {
-				sendNameToServer();
-			}
-
-			private void sendNameToServer() {						
-				// Then, we send the input to the server.
-				connectButton.setEnabled(false);
-				loginService.connect(nameField.getText(), passwordField.getText(), new AsyncCallback<MainPageReturnLogin>() {
-					public void onFailure(Throwable caught) {
-						// Show the RPC error message to the user						
-						connectButton.setEnabled(true);
-					}
-
-					public void onSuccess(MainPageReturnLogin result)
-					{
-						connectButton.setEnabled(true);
-						System.out.println("Login returned result is:" + result.getLoginStatus());
-						if (result.id != null)
-							System.out.println("Login returned: " + result.id.token + " result is:" + result.getLoginStatus());
-						switch (result.getLoginStatus())
-						{ 
-						case CONNECT_STATUS_UNKNOWN_USER:
-							MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNoSuchLoginPassword());
-							break;
-						case CONNECT_STATUS_PASSWORD:		
-							MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNoSuchLoginPassword());
-							break;
-						case CONNECT_STATUS_NOT_VALIDATED:
-							MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNotValidated());
-							break;
-						case CONNECT_STATUS_OK:
-							switch (result.id.type)
-							{
-							case USER_TYPE_SEEKER:
-								UserPage uP = new UserPage();
-								uP.setUser(result.id);
-								uP.onModuleLoad();
-								break;
-							case USER_TYPE_COACH:
-								UserPage cP = new UserPage();
-								cP.setUser(result.id);
-								cP.onModuleLoad();
-								break;
-							case USER_TYPE_ADMIN:
-								AdminPage aP = new AdminPage();
-								aP.setUser(result.id);
-								aP.onModuleLoad();
-								break;
-							}
-							return;
-						}
-					}
-				});
-			}
-		}
-
+		
 		// Add a handler to the connect button clicker.
 		ConnectHandler handler = new ConnectHandler();
 		connectButton.addClickHandler(handler);
-
-		// Create a handler for the Language click button
-		class CreateLangHandler implements ClickHandler
-		{
-
-			String langName;
-
-			public CreateLangHandler(String _langName)
-			{			
-				langName = _langName;
-			}
-
-			public void onClick(ClickEvent event)
-			{				
-				System.out.println("Setting is: " + LocaleInfo.getCurrentLocale().getLocaleName());
-
-				System.out.println("Click on " + langName);
-				String cookie = LocaleInfo.getLocaleCookieName();
-				com.google.gwt.user.client.Cookies.setCookie(cookie, langName);
-				System.out.println("Applied locale "+langName);
-				Window.Location.reload();
-			}
-		}
+		
+		DialogToolBox.connectTextEnterToButton(connectButton, nameField);
+		DialogToolBox.connectTextEnterToButton(connectButton, passwordField);
+		
 		image_FR.addClickHandler(new CreateLangHandler("fr"));
 		image_EN.addClickHandler(new CreateLangHandler("en"));		
 

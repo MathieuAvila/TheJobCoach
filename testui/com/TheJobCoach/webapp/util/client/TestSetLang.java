@@ -2,8 +2,6 @@ package com.TheJobCoach.webapp.util.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.

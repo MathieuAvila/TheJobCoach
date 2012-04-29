@@ -28,7 +28,6 @@ import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
 import me.prettyprint.hector.api.exceptions.HectorException;
 import me.prettyprint.hector.api.factory.HFactory;
-import me.prettyprint.hector.api.mutation.MutationResult;
 import me.prettyprint.hector.api.mutation.Mutator;
 import me.prettyprint.hector.api.query.ColumnQuery;
 import me.prettyprint.hector.api.query.MultigetSliceQuery;
@@ -332,7 +331,7 @@ public class CassandraAccessor {
 		mutator.delete(key, CF, col, se);
 		try 
 		{
-			MutationResult mr = mutator.execute();			
+			mutator.execute();			
 		}
 		catch (Exception e)
 		{

@@ -102,7 +102,7 @@ public class UserLogManager {
 				.add("expectedfollowup", result.expectedFollowUp)
 				.add("title", result.title)
 				.add("description", result.description)				
-				.add("type", UserLogEntry.entryTypeToString(result.type))
+				.add("status", UserLogEntry.entryTypeToString(result.type))
 				.get());	
 		if (resultReq == false)
 		{

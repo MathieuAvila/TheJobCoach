@@ -123,6 +123,10 @@ public class EditLogEntry implements EntryPoint {
 		for (LogEntryType e : UserLogEntry.getLogTypeTable())
 		{
 			comboBoxStatus.addItem(lang.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(e)), UserLogEntry.entryTypeToString(e));
+			if ((currentLogEntry != null) && (currentLogEntry.type == e))
+			{
+				comboBoxStatus.setSelectedIndex(comboBoxStatus.getItemCount()-1);
+			}
 		}
 
 		Label lblDescription = new Label("Description");

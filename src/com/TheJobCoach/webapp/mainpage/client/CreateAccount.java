@@ -3,9 +3,9 @@ package com.TheJobCoach.webapp.mainpage.client;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
-import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
+import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
@@ -18,13 +18,14 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
@@ -44,7 +45,7 @@ public class CreateAccount implements EntryPoint, IChanged {
 	private final DialogBox dBox = new DialogBox();
 	private CheckedLabel labelPasswordCheck = new CheckedLabel(lang._TextUserPasswordCheck(), true, null);
 	private CheckedLabel labelPassword = new CheckedLabel(lang._TextUserPassword(), true, null);
-	private ButtonImageText btnCreateAccount = null;
+	private Button btnCreateAccount = null;
 
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
 
@@ -137,7 +138,9 @@ public class CreateAccount implements EntryPoint, IChanged {
 
 		Grid grid = new Grid(7, 2);
 		grid.setBorderWidth(0);
-		dBox.setWidget(grid);
+		VerticalPanel vp = new VerticalPanel();
+		vp.add(grid);
+		dBox.setWidget(vp);
 
 		grid.setWidget(0, 0, lblUserName);
 		grid.setWidget(0, 1, textBoxUserName);
@@ -179,26 +182,10 @@ public class CreateAccount implements EntryPoint, IChanged {
 		newUserPasswordCheck.addKeyUpHandler(changeKey);
 		newUserPassword.addKeyUpHandler(changeKey);
 
-		btnCreateAccount = new ButtonImageText(ButtonImageText.Type.OK, lang._TextCreateAccountOk());
-		ButtonImageText btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCreateCancel());
-
-		// Add a handler to the connect button clicker.
-		CreateAccountHandler createAccountHandler = new CreateAccountHandler();
-		btnCreateAccount.addClickHandler(createAccountHandler);
-
-		// Add a handler to the connect button clicker.
-		btnCancel.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				dBox.hide();
-			}});
-
-		HorizontalPanel hpButton = new HorizontalPanel();
-		hpButton.add(btnCreateAccount);
-		hpButton.add(btnCancel);
-
-		grid.setWidget(6, 1, hpButton);
+		DialogBlockOkCancel okCancel = new DialogBlockOkCancel(lang._TextCreateAccountOk(), dBox);
+		btnCreateAccount = okCancel.getOk();
+		btnCreateAccount.addClickHandler(new CreateAccountHandler());
+		vp.add(okCancel);
 
 		checkUserValues();
 
