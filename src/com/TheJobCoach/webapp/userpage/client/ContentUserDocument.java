@@ -21,6 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
@@ -45,19 +46,13 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 
 	final CellTable<UserDocument> cellTable = new CellTable<UserDocument>();
 	UserDocument currentSite = null;
-
-	public void setUserParameters(UserId _user)
-	{
-		user = _user;
-	}
-
 	private final UserServiceAsync userService = GWT.create(UserService.class);
-
 	Panel rootPanel;
 
-	public void setRootPanel(Panel panel)
+	public ContentUserDocument(Panel _rootPanel, UserId userId)
 	{
-		rootPanel = panel;
+		user = userId;
+		rootPanel = _rootPanel;
 	}
 
 	// The list of data to display.
@@ -224,11 +219,10 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 
 		// Create lastUpdate column.
 		TextColumn<UserDocument> downloadLastUpdate = new TextColumn<UserDocument>() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public String getValue(UserDocument document) 
 			{
-				return document.lastUpdate.toLocaleString();				
+				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(document.lastUpdate);							
 			}
 		};
 

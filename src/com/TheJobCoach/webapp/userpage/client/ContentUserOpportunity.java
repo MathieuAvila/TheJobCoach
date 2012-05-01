@@ -20,6 +20,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
@@ -341,11 +342,10 @@ public class ContentUserOpportunity implements EntryPoint {
 
 		// Create last visit column.
 		TextColumn<UserOpportunity> firstSeenColumn = new TextColumn<UserOpportunity>() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public String getValue(UserOpportunity userOpportunity) 
 			{
-				return userOpportunity.firstSeen.toLocaleString();
+				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userOpportunity.firstSeen);				
 			}
 		};
 

@@ -55,16 +55,12 @@ public class UserPage implements EntryPoint {
 		}
 		if (menu.equals("news"))
 		{
-			ContentNews contentNews = new ContentNews();
-			contentNews.setRootPanel(simplePanelContent);
-			contentNews.setUserParameters(userId);
+			ContentNews contentNews = new ContentNews(simplePanelContent, userId);			
 			contentNews.onModuleLoad();
 		}
 		if (menu.equals("mydocuments"))
 		{
-			ContentUserDocument contentMyDocuments = new ContentUserDocument();
-			contentMyDocuments.setRootPanel(simplePanelContent);
-			contentMyDocuments.setUserParameters(userId);
+			ContentUserDocument contentMyDocuments = new ContentUserDocument(simplePanelContent, userId);
 			contentMyDocuments.onModuleLoad();
 		}
 		if (menu.equals("applications"))
@@ -368,9 +364,6 @@ public class UserPage implements EntryPoint {
 		footerPanel.setRootPanel(verticalPanel);	
 		footerPanel.onModuleLoad();
 
-		ContentNews contentNews = new ContentNews();
-		contentNews.setRootPanel(simplePanelContent);
-		contentNews.setUserParameters(userId);
-		contentNews.onModuleLoad();		
+		changeMenu("news");
 	}
 }

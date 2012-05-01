@@ -100,7 +100,7 @@ public class LostCredentials implements EntryPoint, IChanged {
 
 		VerticalPanel vp = new VerticalPanel();
 
-		Grid grid = new Grid(2, 2);
+		Grid grid = new Grid(1, 2);
 		grid.setBorderWidth(0);
 
 		vp.setSpacing(20);
@@ -113,7 +113,7 @@ public class LostCredentials implements EntryPoint, IChanged {
 		grid.setWidget(0, 0, labelMail);
 		grid.setWidget(0, 1, textBoxMail);
 		
-		okCancel = new DialogBlockOkCancel(lang._TextCreateAccountOk(), dBox);
+		okCancel = new DialogBlockOkCancel(lang._TextLostCredentialsValidate(), dBox);
 		okCancel.getOk().addClickHandler(new LostCredentialsHandler());
 		
 		vp.add(okCancel);

@@ -24,19 +24,16 @@ public class ContentNews implements EntryPoint {
 	HTML htmlNews = new HTML("News", true);
 	final Lang lang = GWT.create(Lang.class);
 	
-	public void setUserParameters(UserId _user)
+	public ContentNews(Panel panel, UserId _user)
 	{
+		rootPanel = panel;
 		user = _user;
 	}
+	
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
-
-	public void setRootPanel(Panel panel)
-	{
-		rootPanel = panel;
-	}
 
 	private void getNews()
 	{

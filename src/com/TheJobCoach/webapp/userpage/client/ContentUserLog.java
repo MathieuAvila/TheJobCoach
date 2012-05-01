@@ -17,6 +17,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
@@ -243,7 +244,7 @@ public class ContentUserLog implements EntryPoint {
 			@Override
 			public String getValue(UserLogEntry userLog) 
 			{
-				return userLog.creation.toString();
+				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userLog.creation);
 			}
 		};
 
@@ -252,7 +253,7 @@ public class ContentUserLog implements EntryPoint {
 			@Override
 			public String getValue(UserLogEntry userLog) 
 			{
-				return userLog.expectedFollowUp.toString();
+				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userLog.expectedFollowUp);
 			}
 		};
 
