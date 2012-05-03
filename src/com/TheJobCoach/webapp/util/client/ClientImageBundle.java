@@ -14,13 +14,13 @@ public interface ClientImageBundle extends ClientBundle
 	 */
 	//public ClippedImagePrototype deleteFile();	
 	
-	@Source("button_cancel_32.png")
+	@Source("button_cancel_24.png")
 	ImageResource createCancel();
 
-	@Source("button_ok_32.png")
+	@Source("button_ok_24.gif")
 	ImageResource createOk();
 	
-	@Source("elementNew.png")
+	@Source("new_24.png")
 	ImageResource createNew();
 
 	@Source("question_64.png")
@@ -38,7 +38,7 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("wait_64.png")
 	ImageResource createWait();
 
-	@Source("left_32.png")
+	@Source("left_24.png")
 	ImageResource backIcon();
 
 	@Source("email_32.png")

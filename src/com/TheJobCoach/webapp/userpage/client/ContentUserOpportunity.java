@@ -350,9 +350,7 @@ public class ContentUserOpportunity implements EntryPoint {
 		};
 
 		// Create URL column.
-		ClickableTextCell anchorcolumn = new ClickableTextCell()
-		{			
-		};
+		ClickableTextCell anchorcolumn = new ClickableTextCell();
 		IconCellUrl iconCellUrl = new IconCellUrl(anchorcolumn);
 		cellTable.addColumn(addColumn(iconCellUrl, new GetValue<String>() {
 			public String getValue(UserOpportunity contact) {

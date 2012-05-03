@@ -3,7 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
-import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
@@ -18,9 +18,9 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 /**
@@ -42,13 +42,16 @@ public class EditLogEntry implements EntryPoint {
 	ListBox comboBoxStatus = new ListBox();
 	DateBox dateBoxCreation = new DateBox();
 	DateBox dateBoxEvent = new DateBox();	
+	DialogBlockOkCancel okCancel;
+
 	String id;
 
 	Panel rootPanel;
 	EditLogEntryResult result;
 	UserLogEntry currentLogEntry;
 	String oppId;
-
+	
+	
 	public EditLogEntry(Panel panel, UserLogEntry _currentLogEntry, String _oppId, UserId _user, EditLogEntryResult _result)
 	{
 		user = _user;
@@ -105,11 +108,15 @@ public class EditLogEntry implements EntryPoint {
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		Grid grid = new Grid(7, 2);
+		VerticalPanel hp = new VerticalPanel();		
+		Grid grid = new Grid(5, 2);
 		grid.setBorderWidth(0);
-		dBox.setWidget(grid);		
-		grid.setSize("386px", "472px");
+		dBox.setWidget(hp);		
+		grid.setSize("100%", "100%");
 
+		hp.add(grid);
+
+		
 		Label lblTitle = new Label(lang._TextUserLogTitle());
 		grid.setWidget(0, 0, lblTitle);		
 		grid.setWidget(0, 1, txtbxTitle);
@@ -139,41 +146,23 @@ public class EditLogEntry implements EntryPoint {
 		grid.setWidget(3, 0, lblEventDate);
 
 		grid.setWidget(3, 1, dateBoxCreation);		
-		//dateBoxCreation.getDatePicker().setTimeVisible(true);
 		
 		Label lblEndDate = new Label(lang._TextExpectedFollowUp());
 		grid.setWidget(4, 0, lblEndDate);
 
 		grid.setWidget(4, 1, dateBoxEvent);
-
-		grid.getCellFormatter().setHorizontalAlignment(6, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid.setWidget(6, 1, horizontalPanel);
-
-		final Button btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
-		horizontalPanel.add(btnOk);
-
-		btnOk.addClickHandler(new ClickHandler() {
+		
+		okCancel = new DialogBlockOkCancel(null, dBox);
+		okCancel.getOk().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
-				btnOk.setEnabled(false);
+				okCancel.setEnabled(false);
 				commit();
 				dBox.hide();
 			}
 		});
-
-		Button btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
-		horizontalPanel.add(btnCancel);
-
-		btnCancel.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				result.setResult(null);
-				dBox.hide();
-			}
-		});
+		hp.add(okCancel);
+		
 		if (currentLogEntry != null)
 		{
 			txtbxTitle.setText(currentLogEntry.title);

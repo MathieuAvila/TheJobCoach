@@ -1,0 +1,2 @@
+serviceClass: com.TheJobCoach.webapp.userpage.client.UserService
+path: C3EE6C762B3AE8A7687B8D7275A87910.gwt.rpc

@@ -17,7 +17,7 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("jobcoach.gif")
 	ImageResource coachIcon();
 
-	@Source("file_delete.png")
+	@Source("file-delete-24.png")
 	ImageResource deleteFile();
 
 	@Source("file-icon_doc.gif")
@@ -29,7 +29,7 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("file-icon_unk.png")
 	ImageResource unkFile();
 
-	@Source("file_edit.png")
+	@Source("file-edit-24.png")
 	ImageResource updateFile();
 
 	@Source("elementNew.png")
@@ -41,19 +41,19 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("button_ok_32.png")
 	ImageResource createOk();
 
-	@Source("right_32.png")
+	@Source("right_24.png")
 	ImageResource right();
 
-	@Source("web_32.png")
+	@Source("web_24.png")
 	ImageResource urlLink();
 
-	@Source("news_64.png")
+	@Source("news_32.png")
 	ImageResource newsContent();
 
-	@Source("www_64.png")
+	@Source("sites-32.png")
 	ImageResource userJobSiteContent();
 
-	@Source("documents_64.png")
+	@Source("documents-32.png")
 	ImageResource userDocumentContent();
 
 	@Source("parameters_64.png")
@@ -62,9 +62,12 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("logout_32.png")
 	ImageResource urlLogout();
 
-	@Source("comment_64.jpeg")
+	@Source("comment-32.png")
 	ImageResource sendComment();
 	
-	@Source("idea_64.png")
+	@Source("opportunity-32.png")
 	ImageResource opportunityContent();
+
+	@Source("log-32.png")
+	ImageResource userLogContent();
 }

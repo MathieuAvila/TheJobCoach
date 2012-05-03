@@ -8,6 +8,7 @@ import com.TheJobCoach.webapp.userpage.client.EditLogEntry.EditLogEntryResult;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -216,10 +217,8 @@ public class ContentUserLog implements EntryPoint {
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 		
-		Label labelTitle = new Label(lang._Text_EditLog());
-		labelTitle.setStyleName("label-content");		
-		simplePanelCenter.add(labelTitle);
-
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang._Text_EditLog(), ClientImageBundle.INSTANCE.userLogContent());
+		
 		// Create title column.
 		TextColumn<UserLogEntry> titleColumn = new TextColumn<UserLogEntry>() 	{
 			@Override
