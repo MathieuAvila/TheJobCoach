@@ -97,7 +97,6 @@ public class ContentUserLog implements EntryPoint {
 			}
 			@Override
 			public void onSuccess(Vector<UserLogEntry> result) {
-				System.out.println("FROM GET ALL CONTENT" + result);
 				UserLogEntryList.clear();
 				UserLogEntryList.addAll(result);
 				dataProvider.updateRowCount(UserLogEntryList.size(), true);

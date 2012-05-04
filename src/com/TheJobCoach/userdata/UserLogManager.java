@@ -34,7 +34,7 @@ public class UserLogManager {
 			return result;
 		for (String logId: resultReq.keySet())
 		{
-			UserLogEntry opp = getLogEntryShort(id, logId);
+			UserLogEntry opp = getLogEntryLong(id, logId);
 			if (opp == null)
 			{
 				deleteUserLogEntryFromList(id, logId, oppId);

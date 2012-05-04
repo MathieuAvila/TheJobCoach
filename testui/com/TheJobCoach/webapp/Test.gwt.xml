@@ -20,11 +20,13 @@
 	<entry-point class='com.TheJobCoach.webapp.mainpage.client.TestMainPage'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditLogEntry'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditUserSite'/>
+	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditUserOpportunity'/>
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserOpportunity" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserDocument" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserSite" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserLog" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserReport" />
+	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestUserPage" />
 	<entry-point class='com.TheJobCoach.webapp.adminpage.client.TestContentUsers'/>
 	
 	<source path="util/client"/>	

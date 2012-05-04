@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
@@ -39,4 +40,7 @@ public interface UserServiceAsync {
 	public void deleteUserLogEntry(UserId id, String logId, AsyncCallback<String> callback) throws CassandraException;
 	
 	public void sendComment(UserId user, String value, AsyncCallback<String> callback);
+	
+	public void getValues(UserId user, String rootValue, AsyncCallback<Map<String,String>> callback);
+	public void setValue(UserId user, String id, String value, AsyncCallback<String> callback);
 }

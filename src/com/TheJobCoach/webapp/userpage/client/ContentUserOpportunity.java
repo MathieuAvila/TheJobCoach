@@ -61,7 +61,6 @@ public class ContentUserOpportunity implements EntryPoint {
 			}
 			@Override
 			public void onSuccess(UserOpportunity result) {
-				System.out.println(result);
 				currentOpportunity = result;
 				panelDescriptionContent.setHTML(currentOpportunity.description);
 				cellTable.redraw();				
@@ -171,9 +170,7 @@ public class ContentUserOpportunity implements EntryPoint {
 	{
 		public void onClick(ClickEvent event)
 		{
-			EditOpportunity eus = new EditOpportunity();
-			UserOpportunity ujb = new UserOpportunity();
-			eus.setRootPanel(rootPanel, ujb, new EditOpportunityResult() {
+			EditOpportunity eus = new EditOpportunity(rootPanel, user, null, new EditOpportunityResult() {
 
 				@Override
 				public void setResult(UserOpportunity result) {
@@ -201,7 +198,7 @@ public class ContentUserOpportunity implements EntryPoint {
 						System.out.println(e);
 					}
 				}
-			}, lang._TextNewOpportunity());
+			});
 			eus.onModuleLoad();
 		}
 	}
@@ -210,8 +207,7 @@ public class ContentUserOpportunity implements EntryPoint {
 
 	private void updateUserOpportunity(UserOpportunity opp)
 	{
-		EditOpportunity eus = new EditOpportunity();
-		eus.setRootPanel(rootPanel, opp, new EditOpportunityResult() {
+		EditOpportunity eus = new EditOpportunity(rootPanel, user, opp, new EditOpportunityResult() {
 			@Override
 			public void setResult(UserOpportunity result) {
 				try 
@@ -237,7 +233,7 @@ public class ContentUserOpportunity implements EntryPoint {
 					System.out.println(e);
 				}
 			}
-		}, lang._TextUpdateOpportunity());
+		});
 		eus.onModuleLoad();
 	}
 

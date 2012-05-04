@@ -23,9 +23,7 @@ public class TestContentUserSite implements EntryPoint {
 			hp.setStyleName("mainpage-content");
 			root.add(hp);
 			hp.setSize("100%", "100%");
-			ContentUserSite cud = new ContentUserSite();
-			cud.setRootPanel(hp);
-			cud.setUserParameters(new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
+			ContentUserSite cud = new ContentUserSite(hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
 			cud.onModuleLoad();
 		}
 	}

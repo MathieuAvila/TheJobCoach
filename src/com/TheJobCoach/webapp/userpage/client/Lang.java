@@ -19,7 +19,7 @@ public interface Lang extends Constants {
 	String _TextMyProfile();
 
 	@Key("myparameters")
-	String _TextMyParameters();
+	String _TextMyAccount();
 
 	@Key("goals")
 	String _TextGoals();
@@ -39,8 +39,8 @@ public interface Lang extends Constants {
 	@Key("mydocuments")
 	String _TextMyDocuments();
 
-	@Key("myapplications")
-	String _TextMyApplications();
+	@Key("mysearch")
+	String _TextMySearch();
 
 	@Key("myresearches")
 	String _TextMyOpportunities();
@@ -63,8 +63,8 @@ public interface Lang extends Constants {
 	@Key("bilans")
 	String _TextBilans();
 
-	@Key("statistics")
-	String _TextStatistiques();
+	@Key("performance")
+	String _TextPerformance();
 
 	@Key("library")
 	String _TextLibrary();

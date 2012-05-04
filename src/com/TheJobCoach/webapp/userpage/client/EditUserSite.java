@@ -7,6 +7,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
+import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -21,6 +22,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -36,7 +38,6 @@ public class EditUserSite implements EntryPoint, IChanged {
 
 	UserId user;
 
-	ButtonImageText btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
 	CheckedLabel lblName = new CheckedLabel(lang._TextName(), true, this);
 	CheckedTextField textBoxName = new CheckedTextField(lblName, ".+");
 	RichTextArea textAreaDescription = new RichTextArea();
@@ -49,7 +50,9 @@ public class EditUserSite implements EntryPoint, IChanged {
 	Panel rootPanel;
 	EditUserSiteResult result;
 	UserJobSite currentUserSite;
-
+	
+	DialogBlockOkCancel okCancel;
+	
 	public EditUserSite(Panel panel, UserJobSite _currentUserSite, UserId _user, EditUserSiteResult _result)
 	{
 		rootPanel = panel;
@@ -92,10 +95,14 @@ public class EditUserSite implements EntryPoint, IChanged {
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		Grid grid = new Grid(7, 2);
+		Grid grid = new Grid(6, 2);
 		grid.setBorderWidth(0);
-		dBox.setWidget(grid);		
+		
+		VerticalPanel vp = new VerticalPanel();
+		dBox.setWidget(vp);		
 
+		vp.add(grid);
+		
 		grid.setWidget(0, 0, lblName);
 		grid.setWidget(0, 1, textBoxName);
 		textBoxName.setWidth("100%");
@@ -125,33 +132,19 @@ public class EditUserSite implements EntryPoint, IChanged {
 
 		grid.setWidget(5, 1, datePickerLastVisit);
 
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid.setWidget(6, 1, horizontalPanel);
-
-		horizontalPanel.add(btnOk);
-
-		Button btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
-		horizontalPanel.add(btnCancel);
-		grid.getCellFormatter().setHorizontalAlignment(6, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-
 		setUserJobSite(currentUserSite);
 
-		btnOk.addClickHandler(new ClickHandler() {
+		okCancel = new DialogBlockOkCancel(null, dBox);
+		okCancel.getOk().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
+				okCancel.setEnabled(false);
 				dBox.hide();
-				result.setResult(getUserJobSite());				
+				result.setResult(getUserJobSite());	
 			}
-		});
-
-		btnCancel.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				dBox.hide();
-				result.setResult(null);				
-			}
-		});
+		});		
+		
+		vp.add(okCancel);
 		changed(false, false);
 		dBox.center();
 	}
@@ -160,10 +153,10 @@ public class EditUserSite implements EntryPoint, IChanged {
 	public void changed(boolean ok, boolean init)
 	{		
 		if (init) return;
-		btnOk.setEnabled(false);
+		okCancel.getOk().setEnabled(false);
 		boolean setOk = true;
 		setOk = setOk && textBoxName.isValid();
 		setOk = setOk && textBoxUrl.isValid();
-		btnOk.setEnabled(setOk);	
+		okCancel.getOk().setEnabled(setOk);	
 	}
 }

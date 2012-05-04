@@ -1,10 +1,11 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.Date;
+
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
-import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -18,9 +19,9 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 /**
@@ -45,25 +46,20 @@ public class EditOpportunity implements EntryPoint {
 	TextBox txtbxLocation = new TextBox();
 	ListBox comboBoxStatus = new ListBox();
 	String id;
+	DialogBlockOkCancel okCancel;
 	
-	public void setUserParameters(UserId _user)
-	{
+	public EditOpportunity(Panel panel, UserId _user, UserOpportunity _currentOpportunity, EditOpportunityResult _result)
+	{	
 		user = _user;
+		rootPanel = panel;
+		currentOpportunity = _currentOpportunity;
+		result = _result;		
 	}
 
 	Panel rootPanel;
 	EditOpportunityResult result;
 	UserOpportunity currentOpportunity;
-	String boxName;
 	
-	public void setRootPanel(Panel panel, UserOpportunity _currentOpportunity, EditOpportunityResult _result, String _boxName)
-	{
-		rootPanel = panel;
-		currentOpportunity = _currentOpportunity;
-		result = _result;
-		boxName = _boxName;
-	}
-
 	private void setOpportunity(UserOpportunity opp)
 	{
 		id = opp.ID;
@@ -96,13 +92,15 @@ public class EditOpportunity implements EntryPoint {
 	    System.out.println("Locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 	
 		final DialogBox dBox = new DialogBox();
-		dBox.setText(boxName);
+		dBox.setText(currentOpportunity == null ? lang._TextNewOpportunity(): lang._TextUpdateOpportunity());
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 		
+		VerticalPanel vp = new VerticalPanel();
+		
 		Grid grid = new Grid(12, 2);
 		grid.setBorderWidth(0);
-		dBox.add(grid);		
+		dBox.add(vp);		
 		grid.setWidth("95%");
 		
 		Label lblTitle = new Label(lang._TextPositionName());
@@ -180,31 +178,21 @@ public class EditOpportunity implements EntryPoint {
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		grid.setWidget(11, 1, horizontalPanel);
+
+		if (currentOpportunity != null) setOpportunity(currentOpportunity);
+
+		vp.add(grid);		
 		
-		Button btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
-		horizontalPanel.add(btnOk);
-		
-		Button btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
-		horizontalPanel.add(btnCancel);
-		grid.getCellFormatter().setHorizontalAlignment(11, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-		
-		setOpportunity(this.currentOpportunity);
-		
-		btnOk.addClickHandler(new ClickHandler() {
+		okCancel = new DialogBlockOkCancel(null, dBox);
+		okCancel.getOk().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
+				okCancel.setEnabled(false);
 				result.setResult(getOpportunity());
 				dBox.hide();
 			}
-		});
-		
-		btnCancel.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				result.setResult(null);
-				dBox.hide();
-			}
-		});
+		});		
+		vp.add(okCancel);
 		
 		dBox.center();
 	}

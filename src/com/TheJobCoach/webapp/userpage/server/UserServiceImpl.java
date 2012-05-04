@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.userpage.server;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.TheJobCoach.userdata.Account;
@@ -143,5 +144,16 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		account.sendComment(user, value);
 		return null;
 	}
-
+	
+	@Override
+	public Map<String,String> getValues(UserId user, String rootValue) throws CassandraException 
+	{
+		return null;
+	}
+	
+	@Override
+	public String setValue(UserId user, String id, String value) throws CassandraException 
+	{
+		return null;
+	}
 }

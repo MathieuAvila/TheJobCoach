@@ -47,6 +47,11 @@ public class ContentUserSite implements EntryPoint {
 	final CellTable<UserJobSite> cellTable = new CellTable<UserJobSite>();
 	UserJobSite currentSite = null;
 
+	public ContentUserSite(Panel rootPanel, UserId user) {
+		this.user = user;
+		this.rootPanel = rootPanel;
+	}
+
 	private void setUserJobSite(UserJobSite site)
 	{
 		currentSite = site;

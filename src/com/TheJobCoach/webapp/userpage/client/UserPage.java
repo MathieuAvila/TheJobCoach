@@ -4,8 +4,10 @@ package com.TheJobCoach.webapp.userpage.client;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.client.MainPage;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Position;
 
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -31,7 +33,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class UserPage implements EntryPoint {
-		
+
 	final VerticalPanel simplePanelContent = new VerticalPanel();
 	Label selectedMenu = null;
 
@@ -44,42 +46,100 @@ public class UserPage implements EntryPoint {
 
 	public void changeMenu(String menu)
 	{
-		System.out.println(menu);
 		if (menu.equals("myjobboards"))
 		{
-			ContentUserSite contentUserSite = new ContentUserSite();
-			contentUserSite.setRootPanel(simplePanelContent);
-			contentUserSite.setUserParameters(userId);
-			contentUserSite.onModuleLoad();
+			GWT.runAsync(new RunAsyncCallback() 
+			{
+				@Override
+				public void onFailure(Throwable reason) 
+				{
+					MessageBox.messageBoxException(simplePanelContent, reason.toString());
+				}
 
-		}
+				@Override
+				public void onSuccess() 
+				{
+					ContentUserSite contentUserSite = new ContentUserSite(simplePanelContent, userId);
+					contentUserSite.onModuleLoad();
+				}
+			});
+		};
 		if (menu.equals("news"))
-		{
-			ContentNews contentNews = new ContentNews(simplePanelContent, userId);			
-			contentNews.onModuleLoad();
-		}
+		{			
+			GWT.runAsync(new RunAsyncCallback() 
+			{
+				@Override
+				public void onFailure(Throwable reason) 
+				{
+					MessageBox.messageBoxException(simplePanelContent, reason.toString());
+				}
+				@Override
+				public void onSuccess() 
+				{
+					ContentNews contentNews = new ContentNews(simplePanelContent, userId);				
+					contentNews.onModuleLoad();
+				}
+			});
+		};
 		if (menu.equals("mydocuments"))
 		{
-			ContentUserDocument contentMyDocuments = new ContentUserDocument(simplePanelContent, userId);
-			contentMyDocuments.onModuleLoad();
+			GWT.runAsync(new RunAsyncCallback() 
+			{
+				@Override
+				public void onFailure(Throwable reason) 
+				{
+					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
+				}
+				@Override
+				public void onSuccess() 
+				{
+					ContentUserDocument contentMyDocuments = new ContentUserDocument(simplePanelContent, userId);
+					contentMyDocuments.onModuleLoad();
+				}			
+			});
+
 		}
 		if (menu.equals("applications"))
 		{
-			ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity();
-			contentUserOpportunity.setRootPanel(simplePanelContent);
-			contentUserOpportunity.setUserParameters(userId);
-			contentUserOpportunity.onModuleLoad();
+			GWT.runAsync(new RunAsyncCallback() 
+			{
+				@Override
+				public void onFailure(Throwable reason) 
+				{
+					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
+				}
+				@Override
+				public void onSuccess() 
+				{
+					ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity();
+					contentUserOpportunity.setRootPanel(simplePanelContent);
+					contentUserOpportunity.setUserParameters(userId);
+					contentUserOpportunity.onModuleLoad();
+				}			
+			});
 		}
 		if (menu.equals("report"))
 		{
-			ContentReport contentReport = new ContentReport();
-			contentReport.setRootPanel(simplePanelContent);
-			contentReport.setUserParameters(userId);
-			contentReport.onModuleLoad();
+			GWT.runAsync(new RunAsyncCallback() 
+			{
+				@Override
+				public void onFailure(Throwable reason) 
+				{
+					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
+				}
+				@Override
+				public void onSuccess() 
+				{
+					ContentReport contentReport = new ContentReport();				
+					contentReport.setRootPanel(simplePanelContent);
+					contentReport.setUserParameters(userId);
+					contentReport.onModuleLoad();
+				}			
+			});
 		}
 	}
 
-	public void setLabelMenu(final Label label, final String menu)
+	private void setLabelMenu(final Label label, final String menu)
 	{
 		label.setStyleName("userpage-label-normal");
 		if (
@@ -153,31 +213,41 @@ public class UserPage implements EntryPoint {
 		Image image = new Image(ClientImageBundle.INSTANCE.coachIcon());
 
 		horizontalPanel.add(image);
-		
+
 		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
 		horizontalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		horizontalPanel.add(horizontalPanel_2);
 		horizontalPanel.setCellHorizontalAlignment(horizontalPanel_2, HasHorizontalAlignment.ALIGN_RIGHT);
-		
+
 		Label labelUserName = new Label(userId.userName);
 		horizontalPanel_2.add(labelUserName);
 		horizontalPanel_2.setCellVerticalAlignment(labelUserName, HasVerticalAlignment.ALIGN_MIDDLE);
-		
+
 		SimplePanel simplePanel_6 = new SimplePanel();
 		horizontalPanel_2.add(simplePanel_6);
 		simplePanel_6.setWidth("30px");
-		
+
 		Image imageLogout = new Image(ClientImageBundle.INSTANCE.urlLogout());
 		horizontalPanel_2.add(imageLogout);
 		imageLogout.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				MainPage main = new MainPage();
-				main.onModuleLoad();				
-			}			
+				GWT.runAsync(new RunAsyncCallback() {
+					@Override
+					public void onFailure(Throwable reason) 
+					{
+						MessageBox.messageBoxException(simplePanelContent, reason.toString());					
+					}
+					@Override
+					public void onSuccess() {
+						MainPage main = new MainPage();
+						main.onModuleLoad();
+					}
+				});
+			}		
 		});
 		imageLogout.setStyleName("mainpage-label-clickable");
-		
+
 		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
 		horizontalPanel_1.setWidth("100%");
 		flexTable.setWidget(1, 0, horizontalPanel_1);
@@ -195,65 +265,27 @@ public class UserPage implements EntryPoint {
 		stackPanelAccount.add(verticalPanelAccount, lang._TextAccount(), false);
 		verticalPanelAccount.setSize("100%", "100%");
 
+		final Label label_Parameters = new Label(lang._TextMyAccount());
+		setLabelMenu(label_Parameters, "parameters");
+		verticalPanelAccount.add(label_Parameters);
+
 		final Label label_Profile = new Label(lang._TextMyProfile());
 		setLabelMenu(label_Profile, "profile");
 		verticalPanelAccount.add(label_Profile);
-
-		final Label label_Parameters = new Label(lang._TextMyParameters());
-		label_Parameters.setStyleName("userpage-label-clicked");
-		setLabelMenu(label_Parameters, "parameters");
-		verticalPanelAccount.add(label_Parameters);
 
 		SimplePanel simplePanel_4 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_4);
 		simplePanel_4.setHeight("10px");
 
-		StackPanel stackPanelGoals = new StackPanel();
-		verticalPanel_2.add(stackPanelGoals);
-		stackPanelGoals.setWidth("100%");
-
-		VerticalPanel verticalPanelGoals = new VerticalPanel();
-		stackPanelGoals.add(verticalPanelGoals, lang._TextGoals(), false);
-		verticalPanelGoals.setSize("100%", "100%");
-
-		final Label lblNewLabel_MyGoals = new Label(lang._TextMyGoals());
-		setLabelMenu(lblNewLabel_MyGoals, "goals");
-		verticalPanelGoals.add(lblNewLabel_MyGoals);
-
-		SimplePanel simplePanel = new SimplePanel();
-		verticalPanel_2.add(simplePanel);
-		simplePanel.setHeight("10px");
-
-		StackPanel stackPanelMyTools = new StackPanel();
-		verticalPanel_2.add(stackPanelMyTools);
-		stackPanelMyTools.setWidth("100%");
-
-		VerticalPanel verticalPanelMyTools = new VerticalPanel();
-		stackPanelMyTools.add(verticalPanelMyTools, lang._TextMyTools(), false);
-		verticalPanelMyTools.setSize("100%", "100%");
-
-		final Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
-		setLabelMenu(lblNewLabel_AddressBook, "addressbook");
-		verticalPanelMyTools.add(lblNewLabel_AddressBook);
-		final Label lblNewLabel_JobBoards = new Label(lang._TextMyJobBoards());
-		setLabelMenu(lblNewLabel_JobBoards, "myjobboards");
-		verticalPanelMyTools.add(lblNewLabel_JobBoards);
-		final Label lblNewLabel_Documents = new Label(lang._TextMyDocuments());
-		setLabelMenu(lblNewLabel_Documents, "mydocuments");
-		verticalPanelMyTools.add(lblNewLabel_Documents);
-
-		SimplePanel simplePanel_1 = new SimplePanel();
-		verticalPanel_2.add(simplePanel_1);
-		simplePanel_1.setHeight("10px");
-
 		StackPanel stackPanelMyApplication = new StackPanel();
 		verticalPanel_2.add(stackPanelMyApplication);
 		stackPanelMyApplication.setWidth("100%");
 
-		VerticalPanel verticalPanelMyApplication = new VerticalPanel();
-		stackPanelMyApplication.add(verticalPanelMyApplication, lang._TextMyApplications(), false);
-		verticalPanelMyApplication.setSize("100%", "100%");
+		VerticalPanel verticalPanelMySearch = new VerticalPanel();
+		stackPanelMyApplication.add(verticalPanelMySearch, lang._TextMySearch(), false);
+		verticalPanelMySearch.setSize("100%", "100%");
 
+		/*
 		final Label label_Researches = new Label(lang._TextMyOpportunities());
 		setLabelMenu(label_Researches, "research");
 		verticalPanelMyApplication.add(label_Researches);
@@ -261,19 +293,34 @@ public class UserPage implements EntryPoint {
 		final Label label_SearchResults = new Label(lang._TextSearchResults());
 		setLabelMenu(label_SearchResults, "searchresult");
 		verticalPanelMyApplication.add(label_SearchResults);
+*/
+
+
+		final Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
+		setLabelMenu(lblNewLabel_AddressBook, "addressbook");
+		verticalPanelMySearch.add(lblNewLabel_AddressBook);
+		
+		final Label lblNewLabel_JobBoards = new Label(lang._TextMyJobBoards());
+		setLabelMenu(lblNewLabel_JobBoards, "myjobboards");
+		verticalPanelMySearch.add(lblNewLabel_JobBoards);
+		
+		final Label lblNewLabel_Documents = new Label(lang._TextMyDocuments());
+		setLabelMenu(lblNewLabel_Documents, "mydocuments");
+		verticalPanelMySearch.add(lblNewLabel_Documents);
 
 		final Label label_MyApplications = new Label(lang._TextApplicationFollowUp());
 		setLabelMenu(label_MyApplications, "applications");
-		verticalPanelMyApplication.add(label_MyApplications);
+		verticalPanelMySearch.add(label_MyApplications);
 
 		final Label label_ActionsAgenda = new Label(lang._TextAgenda());
 		setLabelMenu(label_ActionsAgenda, "agenda");
-		verticalPanelMyApplication.add(label_ActionsAgenda);
-
+		verticalPanelMySearch.add(label_ActionsAgenda);
+/*
 		final Label label_ArchivedApplications = new Label(lang._TextArchivedApplications());
 		setLabelMenu(label_ArchivedApplications, "archivedapplications");
-		verticalPanelMyApplication.add(label_ArchivedApplications);
-
+		verticalPanelMySearch.add(label_ArchivedApplications);
+*/
+		
 		SimplePanel simplePanel_2 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_2);
 		simplePanel_2.setHeight("10px");
@@ -290,7 +337,11 @@ public class UserPage implements EntryPoint {
 		setLabelMenu(label_Bilans, "bilans");
 		verticalPanelStats.add(label_Bilans);
 
-		final Label label_Statistics = new Label(lang._TextStatistiques());
+		final Label lblNewLabel_MyGoals = new Label(lang._TextMyGoals());
+		setLabelMenu(lblNewLabel_MyGoals, "goals");
+		verticalPanelStats.add(lblNewLabel_MyGoals);
+		
+		final Label label_Statistics = new Label(lang._TextPerformance());
 		setLabelMenu(label_Statistics, "statistiques");
 		verticalPanelStats.add(label_Statistics);
 

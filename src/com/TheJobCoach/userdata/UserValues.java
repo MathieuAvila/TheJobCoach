@@ -26,6 +26,15 @@ public class UserValues {
 		"coach.advice.general.createopportunity",
 		"coach.advice.general.createdocument",
 		"coach.advice.general.jobsite",
+		"performance.createopportunity.monthly",
+		"performance.createopportunity.weekly",
+		"performance.candidateopportunity.monthly",
+		"performance.candidateopportunity.weekly",
+		"performance.interview.monthly",
+		"performance.interview.weekly",
+		"performance.phonecall.monthly",
+		"performance.phonecall.weekly",
+		"performance.connect.weekly",
 		};
 	static final int MAX_OPTION_LENGTH = 100;
 	
