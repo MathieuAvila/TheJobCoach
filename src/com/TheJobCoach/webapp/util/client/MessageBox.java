@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -98,10 +99,16 @@ public class MessageBox implements EntryPoint {
 		flexTable.setWidget(1, 2, htmlMessage);
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		horizontalPanel.setSize("100%", "100%");
+		HorizontalPanel innerPanel = new HorizontalPanel();
+		innerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		horizontalPanel.add(innerPanel);
 		flexTable.setWidget(2, 2, horizontalPanel);
-		
+				
 		Button buttonOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
-		if (ok) horizontalPanel.add(buttonOk);
+		
+		if (ok) innerPanel.add(buttonOk);
 		buttonOk.addClickHandler(new ClickHandler() 
 		{
 			public void onClick(ClickEvent event)
@@ -117,8 +124,8 @@ public class MessageBox implements EntryPoint {
 		Button buttonCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
 		if (cancel) 
 			{
-			horizontalPanel.add(horizontalPanelSpace);
-			horizontalPanel.add(buttonCancel);
+			innerPanel.add(horizontalPanelSpace);
+			innerPanel.add(buttonCancel);
 			}
 		
 		buttonCancel.addClickHandler(new ClickHandler() 

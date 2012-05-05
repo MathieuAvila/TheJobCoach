@@ -38,7 +38,7 @@ public class CreateTestDefault {
 					new UserId("admin","mytokenadmin", UserType.USER_TYPE_ADMIN),
 					new UserInformation("nom", "prenom", "password", "toto@toto.com"), "en");
 			System.out.println("Created account returned: " + status.toString());
-			ValidateAccountStatus validate = account.validateAccount("user", "mytoken");
+			ValidateAccountStatus validate = account.validateAccount("admin", "mytokenadmin");
 			System.out.println("Validate account returned: " + validate.toString());
 			MainPageReturnLogin token = account.loginAccount("user", "password");
 			System.out.println("Login account returned: " + token.getLoginStatus() + " with token: " + token.id.token);
@@ -49,7 +49,7 @@ public class CreateTestDefault {
 					new UserId("coach","mytokencoach", UserType.USER_TYPE_COACH),
 					new UserInformation("nom", "prenom", "password", "toto@toto.com"), "en");
 			System.out.println("Created account returned: " + status.toString());
-			ValidateAccountStatus validate = account.validateAccount("user", "mytoken");
+			ValidateAccountStatus validate = account.validateAccount("coach", "mytokencoach");
 			System.out.println("Validate account returned: " + validate.toString());
 			MainPageReturnLogin token = account.loginAccount("user", "password");	
 			System.out.println("Login account returned: " + token.getLoginStatus() + " with token: " + token.id.token);

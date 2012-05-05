@@ -24,14 +24,14 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
@@ -43,7 +43,6 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 	final static Lang lang = GWT.create(Lang.class);
 	
 	UserId user;
-
 	final CellTable<UserDocument> cellTable = new CellTable<UserDocument>();
 	UserDocument currentSite = null;
 	private final UserServiceAsync userService = GWT.create(UserService.class);
@@ -105,16 +104,12 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 	
 	void updateDoc(final UserDocument object)
 	{
-		EditUserDocument eud = new EditUserDocument();
-		eud.setRootPanel(rootPanel, object, lang._TextUpdateANewUserDocument(), new EditUserDocument.EditUserDocumentResult() {
-
+		EditUserDocument eud = new EditUserDocument(rootPanel, user, object, new EditUserDocument.EditUserDocumentResult() {
 			@Override
 			public void setResult() {							
 				getAllContent();
 			}
-
 		});
-		eud.setUserParameters(user);
 		eud.onModuleLoad();
 	}
 	
@@ -306,8 +301,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		button.addClickHandler(new ClickHandler()
 		{			
 			public void onClick(ClickEvent event) {
-				EditUserDocument eud = new EditUserDocument();
-				eud.setRootPanel(rootPanel, null, lang._TextCreateANewUserDocument(), new EditUserDocument.EditUserDocumentResult() {
+				EditUserDocument eud = new EditUserDocument(rootPanel, user, null, new EditUserDocument.EditUserDocumentResult() {
 
 					@Override
 					public void setResult() {							
@@ -315,12 +309,16 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 					}
 
 				});
-				eud.setUserParameters(user);
 				eud.onModuleLoad();
 			}
 		});
 		simplePanelCenter.add(button);
 
+		
+		
+		
+		
+		
 		getAllContent();
 	}
 

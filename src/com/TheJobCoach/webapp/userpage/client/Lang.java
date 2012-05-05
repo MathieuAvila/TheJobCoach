@@ -12,6 +12,13 @@ public interface Lang extends Constants {
 	@Key("cancel")
 	String _TextCancel();
 
+	// Context UP
+	
+	//@Key("connectedas")
+	//String _TextConnectedAs();
+	
+	// Menu
+	
 	@Key("account")
 	String _TextAccount();
 
@@ -86,6 +93,8 @@ public interface Lang extends Constants {
 
 	@Key("report")
 	String _TextReport();
+	
+	// Footer
 	
 	@Key("about")
 	String _TextAbout();

@@ -117,12 +117,12 @@ public class News {
 					if (d.after(start) && d.before(end))
 					{
 						//System.out.println("Insert !");
-						returnResult.add(new NewsInformation(
+						returnResult.insertElementAt(new NewsInformation(
 								key,
 								Convertor.toDate(resultInfo.get("date")),
 								resultInfo.get("title"),
 								resultInfo.get("text")
-								));
+								), 0);
 					}
 				}
 			}

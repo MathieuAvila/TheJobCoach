@@ -5,7 +5,7 @@ import java.util.Date;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
-import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
@@ -30,9 +30,9 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -50,32 +50,23 @@ public class EditUserDocument implements EntryPoint {
 	FileUpload upload = new FileUpload();
 	FormPanel form = new FormPanel();
 	EditUserDocumentResult resultInterface;
-
+	Panel rootPanel;
+	UserDocument currentUserDocument;
+	DialogBlockOkCancel okCancel;
+	
 	public interface EditUserDocumentResult
 	{
 		public void setResult();
 	}
 
-	public void setUserParameters(UserId _user)
+	public EditUserDocument(Panel panel, UserId _user, UserDocument _currentUserDocument, EditUserDocumentResult resultInterface)
 	{
 		user = _user;
-	}
-
-	Panel rootPanel;
-	UserDocument currentUserDocument;
-
-	public void setRootPanel(Panel panel, UserDocument _currentUserDocument, String text, EditUserDocumentResult resultInterface)
-	{
 		rootPanel = panel;
 		currentUserDocument = _currentUserDocument;
-		if (currentUserDocument != null)
-		{
-			txtbxTitle.setText(currentUserDocument.name);
-			richTextAreaDescription.setHTML(currentUserDocument.description);
-		}
 		this.resultInterface = resultInterface;
 	}
-
+	
 	private String stripUserName(String name)
 	{
 		String[] split0t = name.split("\\\\");
@@ -172,13 +163,12 @@ public class EditUserDocument implements EntryPoint {
 		System.out.println("Load Edit User Document, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 
 		dBox.setSize("500", "300");
-		dBox.setText("Edit UserDocument");
+		dBox.setText(currentUserDocument == null ? lang._TextCreateANewUserDocument() : lang._TextUpdateANewUserDocument());
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		Grid grid = new Grid(6, 2);
+		Grid grid = new Grid(4, 2);
 		grid.setBorderWidth(0);
-		dBox.setWidget(grid);		
 		grid.setSize("100%", "100%");
 
 		Label lblTitle = new Label("Title");
@@ -194,7 +184,7 @@ public class EditUserDocument implements EntryPoint {
 		int index = 0;
 		for (DocumentStatus e: UserDocument.DocumentStatus.values() )
 		{
-			comboBoxStatus.addItem(UserDocument.documentStatusToString(e), lang.documentStatusMap().get(UserDocument.documentStatusToString(e)));
+			comboBoxStatus.addItem(lang.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(e)), UserDocument.documentStatusToString(e));
 			if (currentUserDocument != null)
 			{
 				if (currentUserDocument.status == e)
@@ -218,30 +208,6 @@ public class EditUserDocument implements EntryPoint {
 
 		grid.getCellFormatter().setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_RIGHT);
 
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid.setWidget(4, 1, horizontalPanel);
-
-		Button btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
-		horizontalPanel.add(btnOk);
-
-		btnOk.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				commit();
-			}
-		});
-
-		Button btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
-		horizontalPanel.add(btnCancel);
-
-		btnCancel.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				dBox.hide();
-			}
-		});		
-
 		HorizontalPanel holder = new HorizontalPanel();
 		holder.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
 
@@ -263,8 +229,26 @@ public class EditUserDocument implements EntryPoint {
 			}			
 		});
 		grid.setWidget(3, 1, form);
-		grid.getCellFormatter().setHeight(5, 1, "0px");
+		
+		if (currentUserDocument != null)
+		{
+			txtbxTitle.setText(currentUserDocument.name);
+			richTextAreaDescription.setHTML(currentUserDocument.description);
+		}
+		
+		okCancel = new DialogBlockOkCancel(null, dBox);
+		okCancel.getOk().addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event)
+			{
+				commit();
+			}
+		});		
 
+		VerticalPanel vp = new VerticalPanel();
+		dBox.setWidget(vp);	
+		vp.add(grid);
+		vp.add(okCancel);
+		
 		dBox.center();
 	}
 }

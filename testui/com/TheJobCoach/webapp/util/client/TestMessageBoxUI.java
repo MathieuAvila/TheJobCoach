@@ -23,7 +23,7 @@ public class TestMessageBoxUI implements EntryPoint {
 			hp.setStyleName("mainpage-content");
 			root.add(hp);
 			hp.setSize("100%", "100%");
-			MessageBox mb = new MessageBox(hp, true, true, MessageBox.TYPE.WARNING, "title", "message", new MessageBox.ICallback() {
+			MessageBox mb = new MessageBox(hp, true, true, MessageBox.TYPE.WARNING, "title", "very looooooooooooooong and multi-line message<br/>Yes multi-line I said", new MessageBox.ICallback() {
 
 				@Override
 				public void complete(boolean ok) {
