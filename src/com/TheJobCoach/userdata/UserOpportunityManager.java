@@ -155,4 +155,22 @@ public class UserOpportunityManager {
 		log.deleteOpportunityLogList(id, ID);
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, ID);
 	}
+
+	public void deleteUserList(UserId id, String listName) throws CassandraException
+	{
+		String key = id.userName + "#" + listName;
+		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_LIST, key);
+		if (resultReq == null)
+			return;
+		for (String oppId: resultReq.keySet())
+		{			
+			deleteUserOpportunity(id, oppId);
+		}
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST, key);
+	}
+
+	public void deleteUser(UserId id) throws CassandraException
+	{
+		deleteUserList(id, "managed");
+	}
 }

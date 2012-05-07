@@ -1,8 +1,47 @@
 package com.TheJobCoach.userdata;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Properties;
+
 public class Lang
 {
-
+	
+	static HashMap<String, Properties> langProp = new HashMap<String, Properties>();
+	
+	static {
+		langProp.put("fr", new Properties());
+		langProp.put("en", new Properties());
+		try {
+			langProp.get("fr").load((new VoidObject()).getClass().getResourceAsStream("Lang_fr.properties"));
+			langProp.get("en").load((new VoidObject()).getClass().getResourceAsStream("Lang_en.properties"));
+		} 
+		catch (FileNotFoundException e) 
+		{			
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	static String getLang(String lang)
+	{
+		if (lang == null) return "fr";
+		if (lang.equals("FR")) return "fr";
+		if (lang.equals("fr")) return "fr";
+		if (lang.equals("EN")) return "en";
+		if (lang.equals("en")) return "en";
+		return "fr";
+	}
+	
+	static Properties getLangProp(String lang)
+	{
+		return langProp.get(getLang(lang));
+	}
+	
 	static String _TextBody(String firstName, String site, String userName, String key, String lang)
 	{
 		String body="";
@@ -76,4 +115,15 @@ public class Lang
 		}
 		return body;
 	}
+	
+	static String getTestName(String lang)
+	{
+		return getLangProp(lang).getProperty("testusername");
+	}
+	
+	static String getTestLastName(String lang)
+	{
+		return getLangProp(lang).getProperty("testuserlastname");
+	}
+	
 }

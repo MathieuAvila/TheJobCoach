@@ -112,9 +112,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 
 	@Override
-	public Vector<UserLogEntry> getUserLogEntryShortList(UserId id, String oppId)
+	public Vector<UserLogEntry> getUserLogEntryList(UserId id, String oppId)
 			throws CassandraException {
-		return userLogManager.getLogShortList(id, oppId);
+		return userLogManager.getLogList(id, oppId);
 	}
 
 	@Override

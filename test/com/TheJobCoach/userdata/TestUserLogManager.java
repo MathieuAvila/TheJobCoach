@@ -57,20 +57,13 @@ public class TestUserLogManager {
 			getDate(2000, 2, 10),
 			LogEntryType.INFO, null, null);
 		
-	private void checkUserLogEntry(UserLogEntry op1, UserLogEntry opRef, boolean shortDefinition)
+	private void checkUserLogEntry(UserLogEntry op1, UserLogEntry opRef)
 	{
 		assertEquals(op1.ID, opRef.ID);
 		assertEquals(op1.creation, opRef.creation);
 		assertEquals(op1.opportunityId, opRef.opportunityId);
-		assertEquals(op1.title, opRef.title);
-		if (shortDefinition)
-		{
-			assertEquals(op1.description, "");
-		}
-		else
-		{
-			assertEquals(op1.description, opRef.description);
-		}
+		assertEquals(op1.title, opRef.title);		
+		assertEquals(op1.description, opRef.description);
 		assertEquals(op1.expectedFollowUp, opRef.expectedFollowUp);
 		assertEquals(op1.type, opRef.type);
 	}
@@ -78,12 +71,12 @@ public class TestUserLogManager {
 	@Test
 	public void testCleanup() throws CassandraException
 	{
-		Vector<UserLogEntry> idList = manager.getLogShortList(id, "opp1");
+		Vector<UserLogEntry> idList = manager.getLogList(id, "opp1");
 		for (UserLogEntry logId : idList)
 		{
 			manager.deleteUserLogEntry(id, logId.ID);
 		}
-		idList = manager.getLogShortList(id, "opp2");
+		idList = manager.getLogList(id, "opp2");
 		for (UserLogEntry logId : idList)
 		{
 			manager.deleteUserLogEntry(id, logId.ID);
@@ -99,40 +92,19 @@ public class TestUserLogManager {
 	}
 
 	@Test
-	public void testGetUserLogEntryShort() throws CassandraException {
-		UserLogEntry opp1 = manager.getLogEntryShort(id, userLog1.ID);
-		checkUserLogEntry(opp1, userLog1, true);		
-		UserLogEntry opp2 = manager.getLogEntryShort(id, userLog2.ID);
-		checkUserLogEntry(opp2, userLog2, true);		
-		UserLogEntry opp3 = manager.getLogEntryShort(id, userLog3.ID);
-		checkUserLogEntry(opp3, userLog3, true);		
-	}
-
-	@Test
 	public void testGetUserLogEntryLong() throws CassandraException {
 		UserLogEntry opp1 = manager.getLogEntryLong(id, userLog1.ID);
-		checkUserLogEntry(opp1, userLog1, false);		
+		checkUserLogEntry(opp1, userLog1);		
 		UserLogEntry opp2 = manager.getLogEntryLong(id, userLog2.ID);
-		checkUserLogEntry(opp2, userLog2, false);		
+		checkUserLogEntry(opp2, userLog2);		
 		UserLogEntry opp3 = manager.getLogEntryLong(id, userLog3.ID);
-		checkUserLogEntry(opp3, userLog3, false);	
+		checkUserLogEntry(opp3, userLog3);	
 	}
-	
-	@Test
-	public void testGetUserLogEntryList() throws CassandraException {
-		Vector<UserLogEntry> result = manager.getLogShortList(id, "opp1");
-		assertEquals(2, result.size());
-		this.checkUserLogEntry(result.get(0), userLog2, true);
-		this.checkUserLogEntry(result.get(1), userLog1, true);
-		result = manager.getLogShortList(id, "opp2");
-		assertEquals(1, result.size());
-		this.checkUserLogEntry(result.get(0), userLog3, true);
-	}
-	
+		
 	@Test
 	public void testDeleteLogEntry() throws CassandraException {
 		manager.deleteUserLogEntry(id, "log1");
-		Vector<UserLogEntry> result = manager.getLogShortList(id, "opp1");
+		Vector<UserLogEntry> result = manager.getLogList(id, "opp1");
 		System.out.println(result);
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "log2");
@@ -140,7 +112,7 @@ public class TestUserLogManager {
 	@Test
 	public void testDeleteUserOpportunity() throws CassandraException {
 		manager.deleteOpportunityLogList(id, "opp1");
-		Vector<UserLogEntry> result = manager.getLogShortList(id, "opp1");
+		Vector<UserLogEntry> result = manager.getLogList(id, "opp1");
 		System.out.println(result);
 		assertEquals(0, result.size());
 	}

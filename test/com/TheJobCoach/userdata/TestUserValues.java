@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
 
+import com.TheJobCoach.userdata.UserValues.FieldDefinition;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
@@ -21,11 +22,19 @@ public class TestUserValues {
 		// Clear...
 		values.deleteUser(id);
 		System.out.println("Deleted user...");
+		
+		UserValues.addField(new FieldDefinition("test1.test1"));
+		UserValues.addField(new FieldDefinition("test1.test1"));
+		UserValues.addField(new FieldDefinition("test1.test2"));
+		UserValues.addField(new FieldDefinition("test2.test1"));
+		UserValues.addField(new FieldDefinition("test2.test2"));
+		UserValues.addField(new FieldDefinition("test3.testsystem", 10, false, "DEFAULT"));
 	}
 	
 	@Test
 	public void testFetchUserValuesFromVoid() throws CassandraException, SystemException
 	{
+		setUp();
 		Map<String, String> val = values.getValues(id, "test1");
 		assertEquals(val.size(), 2);
 		assertEquals("", val.get("test1.test1"));
@@ -40,7 +49,7 @@ public class TestUserValues {
 		boolean excp = false;
 		try
 		{
-			val = values.getValues(id, "test3");
+			val = values.getValues(id, "testvoid");
 		}
 		catch (SystemException e)
 		{
@@ -51,65 +60,62 @@ public class TestUserValues {
 	}
 	
 	@Test
-	public void testSetUserValues() throws CassandraException, SystemException
+	public void testGetUserValuesDefault() throws CassandraException, SystemException
+	{
+		Map<String, String> val = values.getValues(id, "test3");
+		assertEquals(val.size(), 1);
+		assertEquals("DEFAULT", val.get("test3.testsystem"));
+	}
+
+	
+	@Test(expected=SystemException.class)
+	public void testSetUserValuesNotExist() throws CassandraException, SystemException
 	{
 		Map<String,String> toSet = new HashMap<String, String>();
-		values.setValues(id, toSet); // No throw
-		toSet.put("test3.toot", "ff");
-		boolean excp = false;
-		try 
-		{
-			values.setValues(id, toSet);
-		}
-		catch (SystemException e)
-		{
-			excp = true;
-		}
-		assertEquals(excp, true);
-		
-		
-		excp = false;
-		toSet.clear();
+		values.setValues(id, toSet, true); // No throw
+		toSet.put("test3.toot", "ff");		
+		values.setValues(id, toSet, true);		
+	}
+	
+	@Test(expected=SystemException.class)
+	public void testSetUserValuesNull() throws CassandraException, SystemException
+	{
+		Map<String,String> toSet = new HashMap<String, String>();
+		values.setValues(id, toSet, true); // No throw
 		toSet.put("test1.test1", null);
-		try 
-		{
-			values.setValues(id, toSet);
-		}
-		catch (SystemException e)
-		{
-			excp = true;
-		}
-		assertEquals(excp, true);
-		
-		excp = false;
-		toSet.clear();
+		values.setValues(id, toSet, true);		
+	}
+	
+	@Test(expected=SystemException.class)
+	public void testSetUserValuesTooBig() throws CassandraException, SystemException
+	{
+		Map<String,String> toSet = new HashMap<String, String>();
 		String v = "";
 		for (int i = 0; i < 200; i++) v+="i";
 		toSet.put("test1.test1", v);
-		try 
-		{
-			values.setValues(id, toSet);
-		}
-		catch (SystemException e)
-		{
-			excp = true;
-		}
-		assertEquals(excp, true);
+		values.setValues(id, toSet, true);		
+	}
+
+	@Test(expected=SystemException.class)
+	public void testSetUserValuesSystem() throws CassandraException, SystemException
+	{
+		Map<String,String> toSet = new HashMap<String, String>();
+		String v = "TOTO";
+		toSet.put("test3.testsystem", v);
+		values.setValues(id, toSet, true);		
+	}
 		
-		excp = false;
+	@Test
+	public void testSetUserValues() throws CassandraException, SystemException
+	{
+		Map<String,String> toSet = new HashMap<String, String>();
+		values.setValues(id, toSet, true); // No throw
+		toSet.put("test3.toot", "ff");
+		
 		toSet.clear();
 		toSet.put("test1.test1", "value1");
-		toSet.put("test1.test2", "value2");
-		try 
-		{
-			values.setValues(id, toSet);
-		}
-		catch (SystemException e)
-		{
-			excp = true;
-		}
-		assertEquals(excp, false);
-					
+		toSet.put("test1.test2", "value2");		
+		values.setValues(id, toSet, true);
 	}
 	
 }

@@ -36,7 +36,7 @@ public interface UserService extends RemoteService
 	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException;
 	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException;
 	
-	public Vector<UserLogEntry> getUserLogEntryShortList(UserId id, String oppId) throws CassandraException;
+	public Vector<UserLogEntry> getUserLogEntryList(UserId id, String oppId) throws CassandraException;
 	public UserLogEntry getUserLogEntry(UserId id, String logId) throws CassandraException;
 	public String setUserLogEntry(UserId id, UserLogEntry opp) throws CassandraException;
 	public String deleteUserLogEntry(UserId id, String logId) throws CassandraException;

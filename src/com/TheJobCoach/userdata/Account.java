@@ -2,11 +2,14 @@ package com.TheJobCoach.userdata;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -23,6 +26,8 @@ import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SiteUUID;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
@@ -32,16 +37,24 @@ public class Account implements AccountInterface {
 	static ColumnFamilyDefinition cfDef = null;
 	static ColumnFamilyDefinition cfDefEmail = null;
 	static ColumnFamilyDefinition cfDefValidation = null;
+	static ColumnFamilyDefinition cfDefTestList = null;
 
 	final static String COLUMN_FAMILY_NAME_ACCOUNT = "account";
 	final static String COLUMN_FAMILY_NAME_EMAIL = "accountemail";
 	final static String COLUMN_FAMILY_NAME_NOT_VALIDATED = "accountvalidation";
+	final static String COLUMN_FAMILY_TEST_LIST = "accounttestlist";
+	private static final String CONSTANT_TEST_LIST_ROW = "testlist";
+
+	UserOpportunityManager oppManager = new UserOpportunityManager();
+	UserValues valuesManager = new UserValues();
+	UserJobSiteManager siteManager = new UserJobSiteManager();
 
 	public Account()
 	{
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_ACCOUNT, cfDef);
 		cfDefEmail = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_EMAIL, cfDefEmail);
 		cfDefValidation = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_NOT_VALIDATED, cfDefValidation);
+		cfDefTestList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_TEST_LIST, cfDefTestList);
 	}
 
 	public boolean existsAccount(String userName)
@@ -91,8 +104,8 @@ public class Account implements AccountInterface {
 		String result = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_EMAIL, mail, "username");	
 		return result;
 	}
-	
-	public CreateAccountStatus createAccountWithToken(UserId id, UserInformation info, String langStr) throws CassandraException
+
+	private CreateAccountStatus createAccountWithTokenNoMail(UserId id, UserInformation info, String langStr) throws CassandraException
 	{
 		if (existsAccount(id.userName))
 			return CreateAccountStatus.CREATE_STATUS_ALREADY_EXISTS;
@@ -116,6 +129,13 @@ public class Account implements AccountInterface {
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
 		result = updateUserInformation(id, info);
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
+		return CreateAccountStatus.CREATE_STATUS_OK;
+	}
+	
+	public CreateAccountStatus createAccountWithToken(UserId id, UserInformation info, String langStr) throws CassandraException
+	{
+		CreateAccountStatus result = createAccountWithTokenNoMail(id, info, langStr);
+		if (result != CreateAccountStatus.CREATE_STATUS_OK) return result;
 		String body = Lang._TextBody(info.firstName, com.TheJobCoach.util.SiteDef.getAddress(), id.userName, id.token, langStr);
 		MailerFactory.getMailer().sendEmail(info.email, Lang._TextSubject(langStr), body, "noreply@www.thejobcoach.fr");
 		return CreateAccountStatus.CREATE_STATUS_OK;
@@ -212,7 +232,7 @@ public class Account implements AccountInterface {
 				ShortMap.getBoolean(result.get("validated"), true)
 				);
 	}
-	
+
 	public List<UserReport> getUserReportList() throws CassandraException
 	{
 		List<UserReport> report = new ArrayList<UserReport>();
@@ -223,7 +243,7 @@ public class Account implements AccountInterface {
 		}
 		return report;
 	}
-	
+
 	public void deleteAccount(String userName) throws CassandraException
 	{
 		UserId id = new UserId(userName, "", UserType.USER_TYPE_SEEKER);
@@ -237,10 +257,10 @@ public class Account implements AccountInterface {
 		}
 		else
 		{
-		System.out.println("COULD NOT DELETE ACCOUNT: " + id.userName + " NO SUCH ACCOUNT FOUND");
+			System.out.println("COULD NOT DELETE ACCOUNT: " + id.userName + " NO SUCH ACCOUNT FOUND");
 		}
 	}
-	
+
 	public void purgeAccount() throws CassandraException
 	{
 		Set<String> resultRows = new HashSet<String>();
@@ -292,5 +312,93 @@ public class Account implements AccountInterface {
 		MailerFactory.getMailer().sendEmail(info.mail, Lang._TextLostCredentialsSubject(lang), body, "noreply@www.thejobcoach.fr");
 		return new Boolean(true);
 	}
+
+	public void deleteUser(UserId id) throws CassandraException
+	{
+		oppManager.deleteUser(id);
+		valuesManager.deleteUser(id);
+		siteManager.deleteUser(id);
+		deleteAccount(id.userName);
+	}
+	
+	protected Map<String, String> getTestAccountList() throws CassandraException
+	{
+		Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_TEST_LIST, CONSTANT_TEST_LIST_ROW);
+		if (result == null)
+		{
+			return new TreeMap<String, String>();
+		}
+		return result;
+	}
+	
+	public void purgeTestAccount(int purgeTime) throws CassandraException
+	{
+		Map<String, String> testAccountList = getTestAccountList();
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.SECOND, -purgeTime);
+		String currentTime = SiteUUID.dateFormatter(c.getTime());
+		// purge.
+		Set<String> keys =  testAccountList.keySet();
+		for (String key: keys)
+		{
+			System.out.println("Compare test account: " + currentTime + " with: " + key + " " + currentTime.compareTo(key));
+			if (currentTime.compareTo(key) > 0) // purge
+			{
+				String userName = testAccountList.get(key);				
+				System.out.println("Too old, delete: " + userName);
+				deleteUser(new UserId(userName, "", UserId.UserType.USER_TYPE_SEEKER));
+				CassandraAccessor.deleteColumn(COLUMN_FAMILY_TEST_LIST, CONSTANT_TEST_LIST_ROW, key);
+			}
+		}
+	}
+	
+	public UserId createTestAccount(String langStr, UserId.UserType userType) throws CassandraException, SystemException
+	{
+		if (userType == UserType.USER_TYPE_ADMIN) throw new SystemException();
+		boolean exist = true;
+		String userName = null;
+		int counter = 0;
+		Map<String, String> testAccountList = getTestAccountList();	
+		// Get a valid time stamp.
+		String time = null;
+		do 
+		{
+			time = SiteUUID.getDateUuid();
+		}
+		while (testAccountList.get(time) != null);
+		
+		do 
+		{
+			counter++;
+			if (counter == 1000)
+			{
+				throw new SystemException();
+			}
+			time = SiteUUID.getDateUuid();
+			if (testAccountList.get(time) == null)
+			{
+				userName = "test#" + new Random().nextInt(1000);
+				if (!existsAccount(userName))
+				{
+					exist = false;
+				}
+			}
+		}
+		while (exist);
+		CassandraAccessor.updateColumn(COLUMN_FAMILY_TEST_LIST, CONSTANT_TEST_LIST_ROW,
+				(new ShortMap())
+				.add(time, userName)
+				.get());
+		UserId result = new UserId(userName, userName, userType);
+		UserInformation info = new UserInformation(
+				Lang.getTestName(langStr), 
+				userName + "@recherche.com", 
+				"recherche", 
+				Lang.getTestLastName(langStr));
+		createAccountWithTokenNoMail(result, info, langStr);
+		validateAccount(userName, userName);
+		return result;
+	}
+
 
 }

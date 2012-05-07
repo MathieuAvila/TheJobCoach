@@ -25,7 +25,7 @@ public class UserLogManager {
 		cfDefData = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_DATA, cfDefData);
 	}
 
-	public Vector<UserLogEntry> getLogShortList(UserId id, String oppId) throws CassandraException 
+	public Vector<UserLogEntry> getLogList(UserId id, String oppId) throws CassandraException 
 	{	
 		String key = id.userName + "#" + oppId;
 		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_LIST, key);
@@ -43,26 +43,6 @@ public class UserLogManager {
 				result.add(opp);
 		}
 		return result;
-	}
-
-	public UserLogEntry getLogEntryShort(UserId id, String ID) throws CassandraException 
-	{
-		String reqId = ID;
-		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
-		if (resultReq == null)
-		{
-			return null;  // this means it was deleted.
-		}
-		System.out.println("found log entry " + ID + " or opportunity " + resultReq.get("opportunityid"));		
-		return new UserLogEntry(
-				Convertor.toString(resultReq.get("opportunityid")),
-				ID,
-				Convertor.toString(resultReq.get("title")),
-				"",
-				Convertor.toDate(resultReq.get("creation")),
-				Convertor.toDate(resultReq.get("expectedfollowup")),
-				UserLogEntry.entryTypeToString(resultReq.get("status")),
-				null, null);
 	}
 
 	public UserLogEntry getLogEntryLong(UserId id, String ID) throws CassandraException 
@@ -132,7 +112,7 @@ public class UserLogManager {
 	
 	public void deleteOpportunityLogList(UserId id, String oppId) throws CassandraException
 	{
-		Vector<UserLogEntry> resultReq = getLogShortList(id, oppId);
+		Vector<UserLogEntry> resultReq = getLogList(id, oppId);
 		for (UserLogEntry log: resultReq)
 		{			
 				deleteUserLogEntryFromList(id, log.ID, oppId);			

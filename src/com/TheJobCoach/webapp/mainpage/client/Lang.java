@@ -25,6 +25,12 @@ public interface Lang extends Constants {
 	@ Key("createaccount")
 	String _TextCreateAccount();
 
+	@ Key("createtestaccount")
+	String _TextCreateTestAccount();
+	
+	@ Key("warningcreatetestaccount")
+	String _TextWarningCreateAccount();
+	
 	@ Key("lostcredentials")
 	String _TextLostCredentials();
 	

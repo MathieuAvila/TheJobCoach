@@ -1,9 +1,11 @@
 package com.TheJobCoach.userdata;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import com.TheJobCoach.util.CassandraAccessor;
@@ -17,26 +19,68 @@ public class UserValues {
 
 	static ColumnFamilyDefinition cfDefList = null;
 
-	static final String[] allowedKeysArray = 
-		{
-		"test1.test1",
-		"test1.test2",
-		"test2.test1",
-		"test2.test2",
-		"coach.advice.general.createopportunity",
-		"coach.advice.general.createdocument",
-		"coach.advice.general.jobsite",
-		"performance.createopportunity.monthly",
-		"performance.createopportunity.weekly",
-		"performance.candidateopportunity.monthly",
-		"performance.candidateopportunity.weekly",
-		"performance.interview.monthly",
-		"performance.interview.weekly",
-		"performance.phonecall.monthly",
-		"performance.phonecall.weekly",
-		"performance.connect.weekly",
+	static protected class FieldDefinition
+	{
+		String name;
+		public int length;
+		boolean clientSideFree;
+		String defaultValue;
+		public FieldDefinition(String name) 
+		{ 
+			this.name = name;
+			this.length = MAX_OPTION_LENGTH;
+			this.clientSideFree = true;
+			this.defaultValue = "";
 		};
+		public FieldDefinition(String name, int length, boolean clientSideFree, String defaultValue) 
+		{ 
+			this.name = name;
+			this.length = length;
+			this.clientSideFree = clientSideFree;
+			this.defaultValue = defaultValue;
+		}
+		public void check(String val, boolean client) throws SystemException 
+		{
+			if (val == null) throw new SystemException();
+			if (val.length() >= length) throw new SystemException();
+			if (client && !clientSideFree) throw new SystemException();
+		};
+	}
+	
 	static final int MAX_OPTION_LENGTH = 100;
+	
+	static List<FieldDefinition> keys;
+	static Map<String, FieldDefinition> keysMap;
+	static Set<String> keysName;
+	static List<String> keysNameList;
+	
+	static public void addField(FieldDefinition f)
+	{
+		keys.add(f);
+		keysName.add(f.name);
+		keysNameList.add(f.name);
+		keysMap.put(f.name, f);
+	}
+	
+	{
+		keys = new ArrayList<FieldDefinition>();
+		keysName = new HashSet<String>();
+		keysNameList = new ArrayList<String>();
+		keysMap = new HashMap<String, FieldDefinition>();
+		
+		addField(new FieldDefinition("coach.advice.general.createopportunity"));
+		addField(new FieldDefinition("coach.advice.general.createdocument"));
+		addField(new FieldDefinition("coach.advice.general.jobsite"));
+		addField(new FieldDefinition("performance.createopportunity.monthly"));
+		addField(new FieldDefinition("performance.createopportunity.weekly"));
+		addField(new FieldDefinition("performance.candidateopportunity.monthly"));
+		addField(new FieldDefinition("performance.candidateopportunity.weekly"));
+		addField(new FieldDefinition("performance.interview.monthly"));
+		addField(new FieldDefinition("performance.interview.weekly"));
+		addField(new FieldDefinition("performance.phonecall.monthly"));
+		addField(new FieldDefinition("performance.phonecall.weekly"));
+		addField(new FieldDefinition("performance.connect.weekly"));
+	}
 	
 	public UserValues()
 	{
@@ -48,7 +92,7 @@ public class UserValues {
 		String start = "";
 		String end = "";
 		List<String> subSet = new ArrayList<String>();
-		for (String key: allowedKeysArray)
+		for (String key: keysNameList)
 		{
 			System.out.println("KEY "+ key + " " + rootKey);
 			if (key.matches(rootKey + ".*"))
@@ -66,31 +110,20 @@ public class UserValues {
 		Map<String, String> result = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME_LIST, id.userName, start, end, 1000);
 		for (String key: subSet)
 		{
-			if (result.get(key) == null) result.put(key, "");
+			if (result.get(key) == null) result.put(key, keysMap.get(key).defaultValue);
 		}
 		return result;
 	}
 
-	private static List<String> allowedKeyList = null;
-	
-	private List<String> getList()
-	{
-		if (allowedKeyList == null) 
-		{
-			allowedKeyList = new ArrayList<String>(Arrays.asList(allowedKeysArray));
-		}
-		return allowedKeyList;		
-	}
-	
-	public void setValues(UserId id, Map<String,String> values) throws CassandraException, SystemException 
+	public void setValues(UserId id, Map<String,String> values, boolean client) throws CassandraException, SystemException 
 	{
 		for (String key: values.keySet())
 		{
 			if (key == null) throw new SystemException();
-			if (!getList().contains(key)) throw new SystemException();
+			if (!keysName.contains(key)) throw new SystemException();
 			String val = values.get(key);
-			if (val == null) throw new SystemException();
-			if (val.length() >= MAX_OPTION_LENGTH) throw new SystemException();
+			FieldDefinition def = keysMap.get(key);
+			def.check(val, client);
 		}
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST, id.userName, values);
 	}

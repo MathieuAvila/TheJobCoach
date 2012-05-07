@@ -34,7 +34,7 @@ public interface UserServiceAsync {
 	public void setUserOpportunity(UserId id, String list, UserOpportunity opp, AsyncCallback<String> callback) throws CassandraException;
 	public void deleteUserOpportunity(UserId id, String oppId, AsyncCallback<String> callback) throws CassandraException;
 		
-	public void getUserLogEntryShortList(UserId id, String oppId, AsyncCallback<Vector<UserLogEntry>> callback) throws CassandraException;
+	public void getUserLogEntryList(UserId id, String oppId, AsyncCallback<Vector<UserLogEntry>> callback) throws CassandraException;
 	public void getUserLogEntry(UserId id, String logId, AsyncCallback<UserLogEntry> callback) throws CassandraException;
 	public void setUserLogEntry(UserId id, UserLogEntry opp, AsyncCallback<String> callback) throws CassandraException;
 	public void deleteUserLogEntry(UserId id, String logId, AsyncCallback<String> callback) throws CassandraException;

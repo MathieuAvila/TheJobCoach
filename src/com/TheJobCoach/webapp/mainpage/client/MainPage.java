@@ -3,11 +3,14 @@ package com.TheJobCoach.webapp.mainpage.client;
 import com.TheJobCoach.webapp.adminpage.client.AdminPage;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
 import com.TheJobCoach.webapp.util.client.DialogToolBox;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -69,7 +72,7 @@ public class MainPage implements EntryPoint {
 			Window.Location.reload();
 		}
 	}
-	
+
 	class ConnectHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {							
@@ -81,49 +84,62 @@ public class MainPage implements EntryPoint {
 					connectButton.setEnabled(true);
 				}
 
-				public void onSuccess(MainPageReturnLogin result)
+				public void onSuccess(final MainPageReturnLogin result)
 				{
 					connectButton.setEnabled(true);
 					System.out.println("Login returned result is:" + result.getLoginStatus());
 					if (result.id != null)
 						System.out.println("Login returned: " + result.id.token + " result is:" + result.getLoginStatus());
-					switch (result.getLoginStatus())
-					{ 
-					case CONNECT_STATUS_UNKNOWN_USER:
-						MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNoSuchLoginPassword());
-						break;
-					case CONNECT_STATUS_PASSWORD:		
-						MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNoSuchLoginPassword());
-						break;
-					case CONNECT_STATUS_NOT_VALIDATED:
-						MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Error", lang._TextLoginNotValidated());
-						break;
-					case CONNECT_STATUS_OK:
-						switch (result.id.type)
+					GWT.runAsync(new RunAsyncCallback() 
+					{
+						@Override
+						public void onFailure(Throwable reason) 
 						{
-						case USER_TYPE_SEEKER:
-							UserPage uP = new UserPage();
-							uP.setUser(result.id);
-							uP.onModuleLoad();
-							break;
-						case USER_TYPE_COACH:
-							UserPage cP = new UserPage();
-							cP.setUser(result.id);
-							cP.onModuleLoad();
-							break;
-						case USER_TYPE_ADMIN:
-							AdminPage aP = new AdminPage();
-							aP.setUser(result.id);
-							aP.onModuleLoad();
-							break;
+							MessageBox.messageBoxException(rootPanel, reason.toString());
 						}
-						return;
-					}
+
+						@Override
+						public void onSuccess() 
+						{
+							switch (result.getLoginStatus())
+							{ 
+							case CONNECT_STATUS_UNKNOWN_USER:
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR, "Error", lang._TextLoginNoSuchLoginPassword());
+								break;
+							case CONNECT_STATUS_PASSWORD:		
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR, "Error", lang._TextLoginNoSuchLoginPassword());
+								break;
+							case CONNECT_STATUS_NOT_VALIDATED:
+								MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR, "Error", lang._TextLoginNotValidated());
+								break;
+							case CONNECT_STATUS_OK:
+								switch (result.id.type)
+								{
+								case USER_TYPE_SEEKER:
+									UserPage uP = new UserPage();
+									uP.setUser(result.id);
+									uP.onModuleLoad();
+									break;
+								case USER_TYPE_COACH:
+									UserPage cP = new UserPage();
+									cP.setUser(result.id);
+									cP.onModuleLoad();
+									break;
+								case USER_TYPE_ADMIN:
+									AdminPage aP = new AdminPage();
+									aP.setUser(result.id);
+									aP.onModuleLoad();
+									break;
+								}
+								return;
+							}
+						}
+					});
 				}
 			});
 		}
 	}
-	
+
 	// Create a handler for the lost credentials
 	class LostCredentialsHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
@@ -131,7 +147,73 @@ public class MainPage implements EntryPoint {
 			lc.onModuleLoad();
 		}
 	}
-	
+
+	// Create a handler for the not subscribed button
+	class NotSubscribedHandler implements ClickHandler {
+		public void onClick(ClickEvent event) {
+			CreateAccount ca = new CreateAccount(rootPanel);
+			ca.onModuleLoad();
+		}
+	}
+
+	private void createTestAccount()
+	{
+		try
+		{
+			loginService.createTestUser(LocaleInfo.getCurrentLocale().getLocaleName(), UserType.USER_TYPE_SEEKER, new AsyncCallback<UserId>() {
+				public void onFailure(Throwable caught) 
+				{
+					MessageBox.messageBoxException(rootPanel, caught.toString());		
+				}
+
+				@Override
+				public void onSuccess(final UserId result) 
+				{
+					GWT.runAsync(new RunAsyncCallback() 
+					{
+						@Override
+						public void onFailure(Throwable reason) 
+						{
+							MessageBox.messageBoxException(rootPanel, reason.toString());
+						}
+
+						@Override
+						public void onSuccess() 
+						{
+							UserPage uP = new UserPage();
+
+							uP.setUser(result);
+							uP.onModuleLoad();
+						}
+					});
+				}
+			});
+		} 
+		catch (Exception e)
+		{
+			MessageBox.messageBoxException(rootPanel, e);
+		}
+	}
+
+	// Create a handler for the create test account button
+	class CreateTestAccountHandler implements ClickHandler {
+		public void onClick(ClickEvent event) 
+		{
+			MessageBox mb = new MessageBox(rootPanel, true, true, MessageBox.TYPE.INFO, "Information", lang._TextWarningCreateAccount(), new MessageBox.ICallback() {
+
+				@Override
+				public void complete(boolean ok) {
+					if (ok == true)
+					{
+						createTestAccount();
+					}
+				}
+
+			});
+			mb.onModuleLoad();
+		}
+	}
+
 	public void onModuleLoad()
 	{			
 		rootPanel = RootPanel.get("content");
@@ -139,11 +221,11 @@ public class MainPage implements EntryPoint {
 		rootPanel.setStyleName("mainpage-content");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 		rootPanel.setSize("100%", "100%");
-		
+
 		Image image_FR = new Image(ClientImageBundle.INSTANCE.flag_FR());
 		Image image_EN = new Image(ClientImageBundle.INSTANCE.flag_EN());
 		Image image_coach = new Image(ClientImageBundle.INSTANCE.coach_logo());
-		
+
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		verticalPanel.setStyleName("mainpage-content");
@@ -167,10 +249,7 @@ public class MainPage implements EntryPoint {
 		lblNewLabel.setStyleName("mainpage-label-slogan");
 		verticalPanel.add(lblNewLabel);
 
-		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
-		horizontalPanel_2.setStyleName("mainpage-content");
-		verticalPanel.add(horizontalPanel_2);
-		horizontalPanel_2.setHeight("10px");
+		DialogToolBox.addVerticalSpacer(verticalPanel, "10px");
 
 		HorizontalPanel horizontalPanel_12 = new HorizontalPanel();
 		verticalPanel.add(horizontalPanel_12);
@@ -178,7 +257,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_12.add(image_FR);
 		horizontalPanel_12.setCellHeight(image_FR, "20");
 		horizontalPanel_12.setCellWidth(image_FR, "20");
-		
+
 		VerticalPanel verticalPanel_3 = new VerticalPanel();
 		horizontalPanel_12.add(verticalPanel_3);
 		horizontalPanel_12.setCellWidth(verticalPanel_3, "50px");
@@ -187,7 +266,7 @@ public class MainPage implements EntryPoint {
 		horizontalPanel_12.add(image_EN);
 		horizontalPanel_12.setCellHeight(image_EN, "20");
 		horizontalPanel_12.setCellWidth(image_EN, "20");
-		
+
 		HorizontalPanel horizontalPanel_11 = new HorizontalPanel();
 		horizontalPanel_11.setStyleName("mainpage-content");
 		verticalPanel.add(horizontalPanel_11);
@@ -226,49 +305,38 @@ public class MainPage implements EntryPoint {
 		// We can add style names to widgets
 		connectButton.addStyleName("sendButton");
 
-		VerticalPanel verticalPanel_1 = new VerticalPanel();
-		verticalPanel.add(verticalPanel_1);
-		verticalPanel.setCellHeight(verticalPanel_1, "20px");
-		verticalPanel_1.setHeight("20px");
+		DialogToolBox.addVerticalSpacer(verticalPanel, "20px");
 
 		Label lblLostCredentials = new Label(lang._TextLostCredentials());
 		verticalPanel.add(lblLostCredentials);
 		lblLostCredentials.setStyleName("mainpage-label-clickable");
-		
+
 		// Add a handler to the the lost credentials button clicker.
 		LostCredentialsHandler lostCredentialsHandler = new LostCredentialsHandler();
 		lblLostCredentials.addClickHandler(lostCredentialsHandler);
 
-		VerticalPanel verticalPanel_space = new VerticalPanel();
-		verticalPanel.add(verticalPanel_space);
-		verticalPanel.setCellHeight(verticalPanel_space, "20px");
-		verticalPanel_space.setHeight("20px");
-		
-		
+		DialogToolBox.addVerticalSpacer(verticalPanel, "20px");
+
 		Label lblPasEncoreInscrit = new Label(lang._TextNotYesRegistered());
 		verticalPanel.add(lblPasEncoreInscrit);
 		lblPasEncoreInscrit.setStyleName("mainpage-label-clickable");
+		lblPasEncoreInscrit.addClickHandler(new NotSubscribedHandler());
 
-		// Create a handler for the not subscribed button
-		class NotSubscribedHandler implements ClickHandler {
-			public void onClick(ClickEvent event) {
-				CreateAccount ca = new CreateAccount(rootPanel);
-				ca.onModuleLoad();
-			}
-		}
-		// Add a handler to the not subscribed button clicker.
-		NotSubscribedHandler notSubscribedHandler = new NotSubscribedHandler();
-		lblPasEncoreInscrit.addClickHandler(notSubscribedHandler);
+		DialogToolBox.addVerticalSpacer(verticalPanel, "20px");
 
-		
-		
+		Label lblTestAccount = new Label(lang._TextCreateTestAccount());
+		verticalPanel.add(lblTestAccount);
+		lblTestAccount.setStyleName("mainpage-label-clickable");
+		lblTestAccount.addClickHandler(new CreateTestAccountHandler());
+
+
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		simplePanelCenter.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		Footer footerPanel = new Footer();
 		footerPanel.setRootPanel(simplePanelCenter);	
 		footerPanel.onModuleLoad();
-		
+
 		VerticalPanel verticalPanel_2 = new VerticalPanel();
 		verticalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel_2.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
@@ -280,14 +348,14 @@ public class MainPage implements EntryPoint {
 		verticalPanel.setCellHorizontalAlignment(simplePanelCenter, HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel.setCellVerticalAlignment(simplePanelCenter, HasVerticalAlignment.ALIGN_BOTTOM);
 		simplePanelCenter.setSize("", "");
-		
+
 		// Add a handler to the connect button clicker.
 		ConnectHandler handler = new ConnectHandler();
 		connectButton.addClickHandler(handler);
-		
+
 		DialogToolBox.connectTextEnterToButton(connectButton, nameField);
 		DialogToolBox.connectTextEnterToButton(connectButton, passwordField);
-		
+
 		image_FR.addClickHandler(new CreateLangHandler("fr"));
 		image_EN.addClickHandler(new CreateLangHandler("en"));		
 

@@ -5,6 +5,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -22,4 +23,6 @@ public interface LoginService extends RemoteService {
 	MainPageReturnCode.ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException;
 	
 	Boolean lostCredentials(String email, String lang) throws CassandraException;
+	
+	UserId createTestUser(String lang, UserId.UserType type) throws CassandraException, SystemException ;	
 }

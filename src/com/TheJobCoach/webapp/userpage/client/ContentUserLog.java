@@ -105,7 +105,7 @@ public class ContentUserLog implements EntryPoint {
 			}
 		};
 		try {
-			userService.getUserLogEntryShortList(user, editedOpportunity.ID, callback);
+			userService.getUserLogEntryList(user, editedOpportunity.ID, callback);
 		}
 		catch (CassandraException e) 
 		{

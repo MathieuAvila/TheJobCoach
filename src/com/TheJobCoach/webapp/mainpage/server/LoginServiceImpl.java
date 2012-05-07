@@ -5,8 +5,10 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -41,6 +43,12 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public Boolean lostCredentials(String email, String lang) throws CassandraException {
 		return account.lostCredentials(email, lang);
+	}
+
+	@Override
+	public UserId createTestUser(String lang, UserType type) throws CassandraException, SystemException 
+	{
+		return account.createTestAccount(lang, type);
 	}
 
 }

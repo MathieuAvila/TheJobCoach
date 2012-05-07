@@ -17,7 +17,7 @@ public class DialogBlockOkCancel extends HorizontalPanel {
 	public DialogBlockOkCancel(String okMsg, final DialogBox upper)
 	{
 		super.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		//super.setWidth("100%");
+		super.setWidth("100%");
 		if (okMsg != null) btnOk = new ButtonImageText(ButtonImageText.Type.OK, okMsg);
 		HorizontalPanel spacer = new HorizontalPanel();
 		spacer.setWidth("20px");		

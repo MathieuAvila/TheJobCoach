@@ -78,10 +78,19 @@ public class UserJobSiteManager {
 	
 	public void deleteUserSite(UserId id, String ID) throws CassandraException 
 	{
-		// TODO: Perform the 2 updates in a single command...
 		String reqId = id.userName + "_" + ID;
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, reqId);	
 		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_LIST, id.userName, ID);		
+	}
+
+	public void deleteUser(UserId id) throws CassandraException 
+	{
+		List<String> siteList = getUserSiteList(id);
+		for (String siteId: siteList)
+		{
+			deleteUserSite(id, siteId);
+		}
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST, id.userName);	
 	}
 
 }

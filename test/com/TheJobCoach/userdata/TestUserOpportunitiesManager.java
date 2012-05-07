@@ -60,15 +60,14 @@ public class TestUserOpportunitiesManager {
 			assertEquals(op1.description, "");
 			assertEquals(op1.systemSource, true);			
 			assertEquals(op1.source, "");
-			assertEquals(op1.url, "");
 		}
 		else
 		{
 			assertEquals(op1.description, opRef.description);
 			assertEquals(op1.systemSource, opRef.systemSource);						
 			assertEquals(op1.source, opRef.source);
-			assertEquals(op1.url, opRef.url);
 		}
+		assertEquals(op1.url, opRef.url);
 		assertEquals(op1.companyId, opRef.companyId);
 		assertEquals(op1.contractType, opRef.contractType);
 		assertEquals(op1.salary, opRef.salary);
@@ -139,5 +138,16 @@ public class TestUserOpportunitiesManager {
 		System.out.println(result);
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "opp2");
+	}
+	
+	@Test
+	public void testDeleteUser() throws CassandraException {
+		Vector<UserOpportunity> result = manager.getOpportunitiesShortList(id, "managed");
+		System.out.println(result);
+		assertEquals(1, result.size());
+		manager.deleteUser(id);
+		result = manager.getOpportunitiesShortList(id, "managed");
+		System.out.println(result);
+		assertEquals(0, result.size());		
 	}
 }

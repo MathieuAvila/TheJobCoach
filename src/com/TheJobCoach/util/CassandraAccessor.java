@@ -2,12 +2,11 @@ package com.TheJobCoach.util;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.Vector;
-
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 import me.prettyprint.cassandra.serializers.BytesArraySerializer;
@@ -152,7 +151,7 @@ public class CassandraAccessor {
 		if (c == null) return null;
 		return  c.getValue();
 	}
-
+	
 	static public Map<String, String> getRow(String CF, String key) throws CassandraException
 	{
 		SliceQuery<String, String, String> cQ = HFactory.createSliceQuery(getKeyspace(), se, se, se);
@@ -170,7 +169,7 @@ public class CassandraAccessor {
 		if (c == null) throw new CassandraException();
 		List<HColumn<String, String>> l = c.getColumns();
 		if (l.size() == 0) return null;
-		HashMap<String, String> map = new HashMap<String, String>();
+		TreeMap<String, String> map = new TreeMap<String, String>();
 		for (HColumn<String, String> i: l)
 		{
 			map.put(i.getName(), i.getValue());
@@ -201,7 +200,7 @@ public class CassandraAccessor {
 		Row<String, String, String> rowK = rows.getByKey(row);
 		if (rowK == null) return null;
 		ColumnSlice<String, String> slice = rowK.getColumnSlice();
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, String> result = new TreeMap<String, String>();
 		for (HColumn<String, String> column : slice.getColumns())
 		{	
 			result.put(column.getName(), column.getValue());	        
