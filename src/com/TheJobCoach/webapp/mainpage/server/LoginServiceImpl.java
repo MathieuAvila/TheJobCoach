@@ -48,6 +48,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public UserId createTestUser(String lang, UserType type) throws CassandraException, SystemException 
 	{
+		// purge old accounts.
+		account.purgeTestAccount(60 * 60 * 24); // 1 day
+		// create account
 		return account.createTestAccount(lang, type);
 	}
 
