@@ -9,12 +9,10 @@ import com.TheJobCoach.webapp.userpage.client.EditOpportunity.EditOpportunityRes
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
-import com.TheJobCoach.webapp.util.client.IconCellUrl;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -25,8 +23,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -46,7 +42,7 @@ public class ContentUserOpportunity implements EntryPoint {
 
 	UserId user;
 
-	final CellTable<UserOpportunity> cellTable = new CellTable<UserOpportunity>();
+	final ExtendedCellTable<UserOpportunity> cellTable = new ExtendedCellTable<UserOpportunity>();
 	UserOpportunity currentOpportunity = null;
 	final HTML panelDescriptionContent = new HTML("");
 
@@ -202,9 +198,7 @@ public class ContentUserOpportunity implements EntryPoint {
 			eus.onModuleLoad();
 		}
 	}
-
-
-
+	
 	private void updateUserOpportunity(UserOpportunity opp)
 	{
 		EditOpportunity eus = new EditOpportunity(rootPanel, user, opp, new EditOpportunityResult() {
@@ -243,27 +237,6 @@ public class ContentUserOpportunity implements EntryPoint {
 		cul.onModuleLoad();		
 	}
 
-	private <C> Column<UserOpportunity, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserOpportunity, C> fieldUpdater) 
-	{
-		Column<UserOpportunity, C> column = new Column<UserOpportunity, C>(cell) 
-				{
-
-			@Override
-			public C getValue(UserOpportunity object) 
-			{
-				return getter.getValue(object);
-			}
-				};
-				column.setFieldUpdater(fieldUpdater);
-				return column;
-	}
-
-
-	private static interface GetValue<C> {
-		C getValue(UserOpportunity contact);
-	}
-
-
 	/**
 	 * This is the entry point method.
 	 * @wbp.parser.entryPoint
@@ -279,9 +252,28 @@ public class ContentUserOpportunity implements EntryPoint {
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
-		
+
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang.lblOpportunities_text(), ClientImageBundle.INSTANCE.opportunityContent());
+
+
+		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserOpportunity, String>() {
+			@Override
+			public void update(int index, UserOpportunity object, String value) {
+				delete(object);
+			}});
+
+		cellTable.addColumnWithIcon(IconCellSingle.IconType.UPDATE, new FieldUpdater<UserOpportunity, String>() {
+			@Override
+			public void update(int index, UserOpportunity object, String value) {
+				updateUserOpportunity(object);
+			}});
 		
+		cellTable.addColumnUrl(new ExtendedCellTable.GetValue<String, UserOpportunity>() {
+			public String getValue(UserOpportunity contact) {
+				return contact.url;
+			}
+		});
+
 		// Create title column.
 		TextColumn<UserOpportunity> titleColumn = new TextColumn<UserOpportunity>() 	{
 			@Override
@@ -345,50 +337,12 @@ public class ContentUserOpportunity implements EntryPoint {
 			}
 		};
 
-		// Create URL column.
-		ClickableTextCell anchorcolumn = new ClickableTextCell();
-		IconCellUrl iconCellUrl = new IconCellUrl(anchorcolumn);
-		cellTable.addColumn(addColumn(iconCellUrl, new GetValue<String>() {
-			public String getValue(UserOpportunity contact) {
-				return contact.url;
-			}
-		},
-		new FieldUpdater<UserOpportunity, String>() {
-			public void update(int index, UserOpportunity object, String value) {				
-			}
-		}), "URL");
-
 		titleColumn.setSortable(true);
 		companyColumn.setSortable(true);
 		locationColumn.setSortable(true);
 		salaryColumn.setSortable(true);
 		contractTypeColumn.setSortable(true);
 		firstSeenColumn.setSortable(true);
-
-		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
-		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
-			public String getValue(UserOpportunity contact) {
-				return "&nbsp;";
-			}
-		},
-		new FieldUpdater<UserOpportunity, String>() {
-			public void update(int index, UserOpportunity object, String value) {				
-				delete(object);
-			}
-		}), "Delete");
-
-		IconCellSingle updateCell =	new IconCellSingle(IconCellSingle.IconType.UPDATE);		
-		cellTable.addColumn(addColumn(updateCell, new GetValue<String>() {
-			public String getValue(UserOpportunity contact) {
-				return "&nbsp;";
-			}
-		},
-		new FieldUpdater<UserOpportunity, String>() {
-			public void update(int index, UserOpportunity object, String value) {
-				updateUserOpportunity(object);
-			}
-		}), "Update");
-
 
 		cellTable.addColumn(titleColumn, lang._TextName());
 		cellTable.addColumn(companyColumn, lang._TextCompany());
@@ -400,17 +354,12 @@ public class ContentUserOpportunity implements EntryPoint {
 		cellTable.getColumnSortList().push(titleColumn);	
 		cellTable.setStyleName("filecelltable");
 
-		IconCellSingle logCell =	new IconCellSingle(IconCellSingle.IconType.RIGHT);		
-		cellTable.addColumn(addColumn(logCell, new GetValue<String>() {
-			public String getValue(UserOpportunity contact) {
-				return "&nbsp;";
-			}
-		},
-		new FieldUpdater<UserOpportunity, String>() {
+
+		cellTable.addColumnWithIcon(IconCellSingle.IconType.RIGHT, new FieldUpdater<UserOpportunity, String>() {
+			@Override
 			public void update(int index, UserOpportunity object, String value) {
 				editLog(object);
-			}
-		}), "Update");
+			}});
 
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<UserOpportunity> selectionModel = new SingleSelectionModel<UserOpportunity>();

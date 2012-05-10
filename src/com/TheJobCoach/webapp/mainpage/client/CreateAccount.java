@@ -46,7 +46,8 @@ public class CreateAccount implements EntryPoint, IChanged {
 	private CheckedLabel labelPasswordCheck = new CheckedLabel(lang._TextUserPasswordCheck(), true, null);
 	private CheckedLabel labelPassword = new CheckedLabel(lang._TextUserPassword(), true, null);
 	private Button btnCreateAccount = null;
-
+	private final DialogBlockOkCancel okCancel = new DialogBlockOkCancel(lang._TextCreateAccountOk(), dBox);
+	
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
 
 	public CreateAccount(Panel panel)
@@ -57,9 +58,7 @@ public class CreateAccount implements EntryPoint, IChanged {
 	// Create a handler for the create account button.em
 	class CreateAccountHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
-			System.out.println(textBoxUserName.getText());
-			System.out.println(newUserPassword.getText());
-			System.out.println(textBoxMail.getText());
+			okCancel.setEnabled(false);
 			loginService.createAccount(
 					new UserId(textBoxUserName.getText(), "", UserId.UserType.USER_TYPE_SEEKER),
 					new UserInformation(textBoxCreateName.getText(), textBoxMail.getText(), newUserPassword.getText(), textBoxFirstName.getText()),
@@ -90,7 +89,8 @@ public class CreateAccount implements EntryPoint, IChanged {
 								MessageBox.messageBox(rootPanel, MessageBox.TYPE.INFO, "Success", lang._TextCreateAccountSuccess());
 								dBox.hide();
 								break;
-							}							
+							}
+							okCancel.setEnabled(true);							
 						}
 					});
 		}
@@ -182,7 +182,6 @@ public class CreateAccount implements EntryPoint, IChanged {
 		newUserPasswordCheck.addKeyUpHandler(changeKey);
 		newUserPassword.addKeyUpHandler(changeKey);
 
-		DialogBlockOkCancel okCancel = new DialogBlockOkCancel(lang._TextCreateAccountOk(), dBox);
 		btnCreateAccount = okCancel.getOk();
 		btnCreateAccount.addClickHandler(new CreateAccountHandler());
 		vp.add(okCancel);

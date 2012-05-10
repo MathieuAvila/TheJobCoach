@@ -9,12 +9,11 @@ import com.TheJobCoach.webapp.userpage.client.EditUserDocument.EditUserDocumentR
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
-import com.TheJobCoach.webapp.util.client.IconCellFile;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -22,10 +21,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
@@ -39,11 +34,11 @@ import com.google.gwt.view.client.HasData;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
-	
+
 	final static Lang lang = GWT.create(Lang.class);
-	
+
 	UserId user;
-	final CellTable<UserDocument> cellTable = new CellTable<UserDocument>();
+	final ExtendedCellTable<UserDocument> cellTable = new ExtendedCellTable<UserDocument>();
 	UserDocument currentSite = null;
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 	Panel rootPanel;
@@ -101,7 +96,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		dataProvider.updateRowCount(userDocumentList.size(), true);
 		cellTable.redraw();
 	}
-	
+
 	void updateDoc(final UserDocument object)
 	{
 		EditUserDocument eud = new EditUserDocument(rootPanel, user, object, new EditUserDocument.EditUserDocumentResult() {
@@ -112,13 +107,13 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		});
 		eud.onModuleLoad();
 	}
-	
+
 	void deleteDoc(final UserDocument object)
 	{
 		MessageBox mb = new MessageBox(
 				rootPanel, true, true, MessageBox.TYPE.QUESTION, lang._TextConfirmDeleteUserDocumentTitle(), 
 				lang._TextConfirmDeleteUserDocument() + object.fileName, new MessageBox.ICallback() {
-					
+
 					@Override
 					public void complete(boolean ok) {
 						if (ok == true)
@@ -146,29 +141,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 				});
 		mb.onModuleLoad();
 	}
-
-	private <C> Column<UserDocument, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserDocument, C> fieldUpdater) 
-	{
-		Column<UserDocument, C> column = new Column<UserDocument, C>(cell) 
-				{
-
-			@Override
-			public C getValue(UserDocument object) 
-			{
-				return getter.getValue(object);
-			}
-				};
-				column.setFieldUpdater(fieldUpdater);
-
-				return column;
-	}
-
-
-	private static interface GetValue<C> {
-		C getValue(UserDocument contact);
-	}
-
-
+	
 	/**
 	 * This is the entry point method.
 	 * @wbp.parser.entryPoint
@@ -181,9 +154,9 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		final VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
-				
+
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextUserDocument(), ClientImageBundle.INSTANCE.userDocumentContent());
-		
+
 		// Create name column.
 		TextColumn<UserDocument> nameColumn = new TextColumn<UserDocument>() 	{
 			@Override
@@ -220,61 +193,37 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(document.lastUpdate);							
 			}
 		};
-
-		ClickableTextCell anchorcolumn = new ClickableTextCell()
-		{
+		
+		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserDocument, String>() {
 			@Override
-			protected void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
-				if (value != null) {
-					sb.appendHtmlConstant(
-							"<div class=\"clickableText\">" + 
-							"<a style=\"clickableText\">");
-					sb.append(value);
-					sb.appendHtmlConstant("</a></div>");
-				}
-			}
-		};
-
-		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
-		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
-			public String getValue(UserDocument contact) {
-				return "&nbsp;";//contact.fileName;
-			}
-		},
-		new FieldUpdater<UserDocument, String>() {
-			public void update(int index, UserDocument object, String value) {				
+			public void update(int index, UserDocument object, String value) {
 				deleteDoc(object);
-			}
-		}), lang._TextDeleteUserDocument());
+			}}	
+				);
 
-		IconCellSingle updateCell =	new IconCellSingle(IconCellSingle.IconType.UPDATE);		
-		cellTable.addColumn(addColumn(updateCell, new GetValue<String>() {
-			public String getValue(UserDocument contact) {
-				return "&nbsp;";//contact.fileName;
-			}
-		},
-		new FieldUpdater<UserDocument, String>() {
+		cellTable.addColumnWithIcon(IconCellSingle.IconType.UPDATE, new FieldUpdater<UserDocument, String>() {
+			@Override
 			public void update(int index, UserDocument object, String value) {
 				updateDoc(object);
-			}
-		}), lang._TextUpdateUserDocument());
-		
+			}}	
+				);
+		cellTable.addColumnWithIconCellFile(
+				new FieldUpdater<UserDocument, String>() {
+					@Override
+					public void update(int index, UserDocument object, String value) {
+						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.ID);
+						DownloadIFrame iframe = new DownloadIFrame(copyURL);
+						simplePanelCenter.add(iframe);
+					}},
+					new GetValue<String, UserDocument>() {
+						@Override
+						public String getValue(UserDocument contact) {
+							return contact.fileName;
+						}},
+						lang._TextFilename());
+
 		statusColumn.setSortable(true);
 		cellTable.addColumn(statusColumn, lang._TextStatus());
-		
-		IconCellFile iconCellFile = new IconCellFile(anchorcolumn);
-		cellTable.addColumn(addColumn(iconCellFile, new GetValue<String>() {
-			public String getValue(UserDocument contact) {
-				return contact.fileName;
-			}
-		},
-		new FieldUpdater<UserDocument, String>() {
-			public void update(int index, UserDocument object, String value) {
-				String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.ID);
-				DownloadIFrame iframe = new DownloadIFrame(copyURL);
-				simplePanelCenter.add(iframe);
-			}
-		}), lang._TextFilename());
 
 		nameColumn.setSortable(true);
 		descriptionColumn.setSortable(true);
@@ -291,12 +240,9 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 
 		cellTable.setRowData(0, userDocumentList);
 		cellTable.setRowCount(userDocumentList.size(), true);
-		cellTable.setVisibleRange(0, 20);
-		cellTable.setStyleName("filecelltable");
 		cellTable.addColumnSortHandler(columnSortHandler);
-		simplePanelCenter.add(cellTable);
-		cellTable.setSize("100%", "");
-		
+		simplePanelCenter.add(cellTable);		
+
 		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewUserDocument());
 		button.addClickHandler(new ClickHandler()
 		{			
@@ -314,11 +260,6 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		});
 		simplePanelCenter.add(button);
 
-		
-		
-		
-		
-		
 		getAllContent();
 	}
 

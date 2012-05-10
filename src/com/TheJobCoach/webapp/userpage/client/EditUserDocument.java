@@ -17,7 +17,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -53,6 +52,7 @@ public class EditUserDocument implements EntryPoint {
 	Panel rootPanel;
 	UserDocument currentUserDocument;
 	DialogBlockOkCancel okCancel;
+	Lang lang = GWT.create(Lang.class);
 	
 	public interface EditUserDocumentResult
 	{
@@ -101,15 +101,11 @@ public class EditUserDocument implements EntryPoint {
 	{
 		if (currentUserDocument == null)
 		{		
-			System.out.println("FileName '" + upload.getFilename()+ "'");
+			//System.out.println("FileName '" + upload.getFilename()+ "'");
 			if ("".equals(upload.getFilename()))
 			{
 				// This is not allowed: first insert must set a file.
-				MessageBox mb = new MessageBox(rootPanel, true, false, MessageBox.TYPE.ERROR, 
-						"Must set file name", 
-						"When inserting a new document, you must provide a name",
-						null);
-				mb.onModuleLoad();
+				MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR,	lang._TextNeedFilename());
 				return;
 			}
 		}
@@ -117,11 +113,11 @@ public class EditUserDocument implements EntryPoint {
 		AsyncCallback<String> callback = new AsyncCallback<String>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				//Window.alert(caught.getMessage());
 			}
 			@Override
 			public void onSuccess(String result) {
-				System.out.println(result);
+				//System.out.println(result);
 			}
 		};
 		try {
@@ -137,7 +133,7 @@ public class EditUserDocument implements EntryPoint {
 		}
 		String copyURL = GWT.getModuleBaseURL() + "UploadServlet?docid=" + URL.encode(ud.ID);
 		form.setAction(copyURL);
-		final MessageBox mb = new MessageBox(dBox, false, false, MessageBox.TYPE.WAIT, "Upload in progress", "Please wait while upload is in progress", null);
+		final MessageBox mb = MessageBox.messageBox(rootPanel, MessageBox.TYPE.WAIT, lang._TextUploadInProgress());
 		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() 
 		{		      
 			@Override
@@ -145,8 +141,7 @@ public class EditUserDocument implements EntryPoint {
 			{
 				mb.close();
 				dBox.hide();
-				resultInterface.setResult();
-				//Window.alert("Submit result " + event.getResults()  + " " + event.toDebugString());
+				resultInterface.setResult();				
 			}
 		});
 		form.submit();
@@ -159,7 +154,6 @@ public class EditUserDocument implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{					
-		Lang lang = GWT.create(Lang.class);
 		System.out.println("Load Edit User Document, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 
 		dBox.setSize("500", "300");
@@ -195,13 +189,13 @@ public class EditUserDocument implements EntryPoint {
 			index++;
 		}
 
-		Label lblDescription = new Label("Description");
+		Label lblDescription = new Label(lang._TextDescription());
 		grid.setWidget(2, 0, lblDescription);		
 		grid.setWidget(2, 1, richTextAreaDescription);
 		grid.getCellFormatter().setWidth(2, 1, "90%");
 		richTextAreaDescription.setWidth("100%");
 
-		Label lblSelectFile = new Label("Select File");
+		Label lblSelectFile = new Label(lang._TextSelectFile());
 		grid.setWidget(3, 0, lblSelectFile);	
 		grid.getCellFormatter().setWidth(2, 0, "30%");
 		grid.getCellFormatter().setWidth(2, 1, "100%");

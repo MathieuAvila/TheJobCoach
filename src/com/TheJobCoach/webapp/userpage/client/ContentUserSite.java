@@ -9,12 +9,10 @@ import com.TheJobCoach.webapp.userpage.client.EditUserSite.EditUserSiteResult;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
-import com.TheJobCoach.webapp.util.client.IconCellUrl;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -25,8 +23,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -44,7 +40,7 @@ public class ContentUserSite implements EntryPoint {
 	
 	UserId user;
 
-	final CellTable<UserJobSite> cellTable = new CellTable<UserJobSite>();
+	final ExtendedCellTable<UserJobSite> cellTable = new ExtendedCellTable<UserJobSite>();
 	UserJobSite currentSite = null;
 
 	public ContentUserSite(Panel rootPanel, UserId user) {
@@ -237,27 +233,6 @@ public class ContentUserSite implements EntryPoint {
 		eus.onModuleLoad();
 	}
 
-	private <C> Column<UserJobSite, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserJobSite, C> fieldUpdater) 
-	{
-		Column<UserJobSite, C> column = new Column<UserJobSite, C>(cell) 
-				{
-
-			@Override
-			public C getValue(UserJobSite object) 
-			{
-				return getter.getValue(object);
-			}
-				};
-				column.setFieldUpdater(fieldUpdater);
-				return column;
-	}
-
-
-	private static interface GetValue<C> {
-		C getValue(UserJobSite contact);
-	}
-
-
 	/**
 	 * This is the entry point method.
 	 * @wbp.parser.entryPoint
@@ -272,34 +247,21 @@ public class ContentUserSite implements EntryPoint {
 		rootPanel.add(simplePanelCenter);
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang.lblJobSites_text(), ClientImageBundle.INSTANCE.userJobSiteContent());
-				
-		// Delete column
-		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
-		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
-			public String getValue(UserJobSite contact) {
-				return "&nbsp;";//contact.fileName;
-			}
-		},
-		new FieldUpdater<UserJobSite, String>() {
-			public void update(int index, UserJobSite object, String value) {				
+		
+		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserJobSite, String>() {
+			@Override
+			public void update(int index, UserJobSite object, String value) {
 				deleteSite(object);
-			}
-		}), lang._TextDeleteUserDocument());
+			}}	
+				);
 
-		// Update column
-		IconCellSingle updateCell =	new IconCellSingle(IconCellSingle.IconType.UPDATE);		
-		cellTable.addColumn(addColumn(updateCell, new GetValue<String>() {
-			public String getValue(UserJobSite contact) {
-				return "&nbsp;";//contact.fileName;
-			}
-		},
-		new FieldUpdater<UserJobSite, String>() {
+		cellTable.addColumnWithIcon(IconCellSingle.IconType.UPDATE, new FieldUpdater<UserJobSite, String>() {
+			@Override
 			public void update(int index, UserJobSite object, String value) {
 				updateSite(object);
-			}
-		}), lang._TextUpdateUserDocument());
-
-
+			}}	
+				);
+		
 		// Create name column.
 		TextColumn<UserJobSite> nameColumn = new TextColumn<UserJobSite>() 	{
 			@Override
@@ -319,22 +281,12 @@ public class ContentUserSite implements EntryPoint {
 		};
 
 		// Create URL column.
-		ClickableTextCell anchorcolumn = new ClickableTextCell()
-		{			
-		};
-		IconCellUrl iconCellUrl = new IconCellUrl(anchorcolumn);
-		Column<UserJobSite, String> columnUrl = addColumn(iconCellUrl, new GetValue<String>() {
+		cellTable.addColumnUrl(new ExtendedCellTable.GetValue<String, UserJobSite>() {
 			public String getValue(UserJobSite contact) {
 				return contact.URL;
 			}
-		},
-		new FieldUpdater<UserJobSite, String>() {
-			public void update(int index, UserJobSite object, String value) {				
-			}
 		});
-		cellTable.addColumn(columnUrl, "URL");
-		cellTable.setColumnWidth(columnUrl, "30px");
-
+		
 		// Create login column.
 		TextColumn<UserJobSite> loginColumn = new TextColumn<UserJobSite>() {
 			@Override
@@ -396,13 +348,10 @@ public class ContentUserSite implements EntryPoint {
 		getAllContent();
 		cellTable.setRowData(0, jobSiteList);
 		cellTable.setRowCount(jobSiteList.size(), true);
-		cellTable.setVisibleRange(0, 20);
 		cellTable.addColumnSortHandler(columnSortHandler);
-		cellTable.setStyleName("filecelltable");
-
+		
 		simplePanelCenter.add(cellTable);
-		cellTable.setSize("100%", "");		
-
+		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");

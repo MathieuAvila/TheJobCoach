@@ -4,6 +4,7 @@ import com.TheJobCoach.webapp.mainpage.client.MainPage;
 import com.TheJobCoach.webapp.mainpage.client.Validate;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -35,6 +36,7 @@ public class TheJobCoach implements EntryPoint {
 				loadCount++;
 				com.google.gwt.user.client.Cookies.setCookie(cookie, "fr");
 				System.out.println("Applied locale fr");
+				Window.Location.reload();
 			}
 		}
 		

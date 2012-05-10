@@ -286,6 +286,15 @@ public interface Lang extends Constants {
 	@Key("confirmdeletedocument")
 	String _TextConfirmDeleteUserDocument();
 
+	@Key("uploadinprogress")
+	String _TextUploadInProgress();
+	
+	@Key("selectfile")
+	String _TextSelectFile();
+	
+	@Key("needfile")
+	String _TextNeedFilename();
+	
 	// Edit user site
 
 	@Key("editusersitetitle")
@@ -293,6 +302,5 @@ public interface Lang extends Constants {
 
 	@Key("createusersitetitle")
 	String _TextCreateUserSiteTitle();
-	
 
 }

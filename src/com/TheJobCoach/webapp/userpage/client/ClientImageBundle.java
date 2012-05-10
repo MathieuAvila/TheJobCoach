@@ -20,7 +20,7 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("file-delete-24.png")
 	ImageResource deleteFile();
 
-	@Source("file-icon_doc.gif")
+	@Source("file-icon_doc.png")
 	ImageResource docFile();
 
 	@Source("file-icon_pdf.png")

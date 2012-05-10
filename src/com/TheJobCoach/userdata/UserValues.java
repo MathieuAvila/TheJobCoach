@@ -13,6 +13,8 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsPerformance;
+
 public class UserValues {
 
 	final static String COLUMN_FAMILY_NAME_LIST = "uservalues";
@@ -68,18 +70,19 @@ public class UserValues {
 		keysNameList = new ArrayList<String>();
 		keysMap = new HashMap<String, FieldDefinition>();
 		
-		addField(new FieldDefinition("coach.advice.general.createopportunity"));
-		addField(new FieldDefinition("coach.advice.general.createdocument"));
-		addField(new FieldDefinition("coach.advice.general.jobsite"));
-		addField(new FieldDefinition("performance.createopportunity.monthly"));
-		addField(new FieldDefinition("performance.createopportunity.weekly"));
-		addField(new FieldDefinition("performance.candidateopportunity.monthly"));
-		addField(new FieldDefinition("performance.candidateopportunity.weekly"));
-		addField(new FieldDefinition("performance.interview.monthly"));
-		addField(new FieldDefinition("performance.interview.weekly"));
-		addField(new FieldDefinition("performance.phonecall.monthly"));
-		addField(new FieldDefinition("performance.phonecall.weekly"));
-		addField(new FieldDefinition("performance.connect.weekly"));
+		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CREATEOPPORTUNITY_MONTHLY));
+		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CREATEOPPORTUNITY_WEEKLY));
+		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CANDIDATEOPPORTUNITY_MONTHLY));
+		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CANDIDATEOPPORTUNITY_WEEKLY));
+		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_INTERVIEW_MONTHLY));
+		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_INTERVIEW_WEEKLY));
+		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_PHONECALL_MONTHLY));
+		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_PHONECALL_WEEKLY));
+		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CONNECT_WEEKLY));
+		
+		addField(new FieldDefinition("DEFINITION_TITLE"));
+		addField(new FieldDefinition("DEFINITION_OBJECTIVE"));
+		addField(new FieldDefinition("DEFINITION_ACCOUNT_TYPE", MAX_OPTION_LENGTH, false, "Fremium"));
 	}
 	
 	public UserValues()
