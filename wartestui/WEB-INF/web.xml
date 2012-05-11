@@ -22,6 +22,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>utilServlet</servlet-name>
+    <servlet-class>com.TheJobCoach.webapp.util.server.UtilServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>adminServlet</servlet-name>
     <servlet-class>com.TheJobCoach.webapp.adminpage.server.AdminServiceImpl</servlet-class>
   </servlet>
@@ -39,6 +44,11 @@
   <servlet-mapping>
     <servlet-name>userServlet</servlet-name>
     <url-pattern>/thejobcoach/user</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>utilServlet</servlet-name>
+    <url-pattern>/thejobcoach/util</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

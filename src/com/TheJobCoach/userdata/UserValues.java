@@ -103,7 +103,7 @@ public class UserValues {
 				subSet.add(key);
 				if (start.equals("")) 
 				{ 
-					start = key + ".";
+					start = key + "_";
 					end = start;
 				}
 				else end = key;
