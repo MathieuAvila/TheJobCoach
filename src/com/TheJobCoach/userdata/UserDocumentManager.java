@@ -63,7 +63,8 @@ public class UserDocumentManager {
 				Convertor.toString(resultReq.get("description")),
 				Convertor.toDate(resultReq.get("lastupdate")),
 				Convertor.toString(resultReq.get("filename")),
-				UserDocument.documentStatusToString(resultReq.get("status"))
+				UserDocument.documentStatusToString(resultReq.get("status")),
+				UserDocument.documentTypeToString(resultReq.get("type"))
 				);
 	}
 
@@ -89,6 +90,7 @@ public class UserDocumentManager {
 				.add("description", result.description)
 				.add("filename", result.fileName)
 				.add("status", UserDocument.documentStatusToString(result.status))
+				.add("type", UserDocument.documentTypeToString(result.type))
 				.get());		
 		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_LIST, 

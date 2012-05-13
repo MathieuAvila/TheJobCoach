@@ -166,6 +166,15 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 			}
 		};
 
+		// Create type column.
+		TextColumn<UserDocument> typeColumn = new TextColumn<UserDocument>() 	{
+			@Override
+			public String getValue(UserDocument document) 
+			{
+				return lang.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(document.type));
+			}
+		};
+
 		// Create status column.
 		TextColumn<UserDocument> statusColumn = new TextColumn<UserDocument>() 	{
 			@Override
@@ -224,6 +233,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 
 		statusColumn.setSortable(true);
 		cellTable.addColumn(statusColumn, lang._TextStatus());
+		cellTable.addColumn(typeColumn, lang._TextType());
 
 		nameColumn.setSortable(true);
 		descriptionColumn.setSortable(true);

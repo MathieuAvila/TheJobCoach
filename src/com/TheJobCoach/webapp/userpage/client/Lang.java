@@ -17,6 +17,11 @@ public interface Lang extends Constants {
 	//@Key("connectedas")
 	//String _TextConnectedAs();
 	
+	// Common
+	
+	@Key("type")
+	String  _TextType();
+	
 	// Menu
 	
 	@Key("account")
@@ -249,6 +254,9 @@ public interface Lang extends Constants {
 	
 	@Key("documentStatusMap")	
 	Map<String, String> documentStatusMap();
+	
+	@Key("documentTypeMap")	
+	Map<String, String> documentTypeMap();
 
 	@Key("downloadfile")
 	String _TextDownloadFile();

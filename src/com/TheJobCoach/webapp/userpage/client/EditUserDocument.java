@@ -43,16 +43,22 @@ public class EditUserDocument implements EntryPoint {
 
 	UserId user;
 
+	Lang lang = GWT.create(Lang.class);
+	Label lblType = new Label(lang._TextType());
+	Label lblStatus = new Label(lang._TextStatus());
+	Label lblDescription = new Label(lang._TextDescription());
+	Label lblSelectFile = new Label(lang._TextSelectFile());
+
 	RichTextArea richTextAreaDescription = new RichTextArea();
 	TextBox txtbxTitle = new TextBox();
 	ListBox comboBoxStatus = new ListBox();
+	ListBox comboBoxType = new ListBox();
 	FileUpload upload = new FileUpload();
 	FormPanel form = new FormPanel();
 	EditUserDocumentResult resultInterface;
 	Panel rootPanel;
 	UserDocument currentUserDocument;
 	DialogBlockOkCancel okCancel;
-	Lang lang = GWT.create(Lang.class);
 	
 	public interface EditUserDocumentResult
 	{
@@ -94,7 +100,8 @@ public class EditUserDocument implements EntryPoint {
 				iD, 
 				txtbxTitle.getValue(), richTextAreaDescription.getHTML(),
 				d, stripUserName, 
-				UserDocument.DocumentStatus.values()[comboBoxStatus.getSelectedIndex()]);
+				UserDocument.DocumentStatus.values()[comboBoxStatus.getSelectedIndex()],
+				UserDocument.DocumentType.values()[comboBoxType.getSelectedIndex()]);
 	}
 
 	public void commit()
@@ -156,12 +163,12 @@ public class EditUserDocument implements EntryPoint {
 	{					
 		System.out.println("Load Edit User Document, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 
-		dBox.setSize("500", "300");
+		//dBox.setSize("500", "300");
 		dBox.setText(currentUserDocument == null ? lang._TextCreateANewUserDocument() : lang._TextUpdateANewUserDocument());
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		Grid grid = new Grid(4, 2);
+		Grid grid = new Grid(5, 2);
 		grid.setBorderWidth(0);
 		grid.setSize("100%", "100%");
 
@@ -171,10 +178,6 @@ public class EditUserDocument implements EntryPoint {
 		grid.getCellFormatter().setWidth(0, 1, "90%");
 		txtbxTitle.setWidth("90%");
 
-		Label lblStatus = new Label("Status");
-		grid.setWidget(1, 0, lblStatus);
-
-		grid.setWidget(1, 1, comboBoxStatus);
 		int index = 0;
 		for (DocumentStatus e: UserDocument.DocumentStatus.values() )
 		{
@@ -188,17 +191,34 @@ public class EditUserDocument implements EntryPoint {
 			}
 			index++;
 		}
-
-		Label lblDescription = new Label(lang._TextDescription());
-		grid.setWidget(2, 0, lblDescription);		
-		grid.setWidget(2, 1, richTextAreaDescription);
-		grid.getCellFormatter().setWidth(2, 1, "90%");
+		index = 0;
+		for (UserDocument.DocumentType e: UserDocument.DocumentType.values() )
+		{
+			comboBoxType.addItem(lang.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(e)), UserDocument.documentTypeToString(e));
+			if (currentUserDocument != null)
+			{
+				if (currentUserDocument.type == e)
+				{
+					comboBoxType.setItemSelected(index, true);
+				}
+			}
+			index++;
+		}
+		
+		grid.setWidget(1, 0, lblType);
+		grid.setWidget(1, 1, comboBoxType);
+		
+		grid.setWidget(2, 0, lblStatus);
+		grid.setWidget(2, 1, comboBoxStatus);
+		
+		grid.setWidget(3, 0, lblDescription);		
+		grid.setWidget(3, 1, richTextAreaDescription);
+		grid.getCellFormatter().setWidth(2, 1, "100%");
 		richTextAreaDescription.setWidth("100%");
 
-		Label lblSelectFile = new Label(lang._TextSelectFile());
-		grid.setWidget(3, 0, lblSelectFile);	
-		grid.getCellFormatter().setWidth(2, 0, "30%");
-		grid.getCellFormatter().setWidth(2, 1, "100%");
+		grid.setWidget(4, 0, lblSelectFile);	
+		grid.getCellFormatter().setWidth(3, 0, "30%");
+		grid.getCellFormatter().setWidth(3, 1, "100%");
 
 		grid.getCellFormatter().setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -222,7 +242,7 @@ public class EditUserDocument implements EntryPoint {
 				}
 			}			
 		});
-		grid.setWidget(3, 1, form);
+		grid.setWidget(4, 1, form);
 		
 		if (currentUserDocument != null)
 		{

@@ -65,7 +65,7 @@
 
 	<servlet-mapping>
 		<servlet-name>uploadFileServlet</servlet-name>
-		<url-pattern>/com.TheJobCoach.webapp.Test/UploadServlet</url-pattern>
+		<url-pattern>/thejobcoach/UploadServlet</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -75,7 +75,7 @@
 
 	<servlet-mapping>
 		<servlet-name>downloadFileServlet</servlet-name>
-		<url-pattern>/com.TheJobCoach.webapp.Test/DownloadServlet</url-pattern>
+		<url-pattern>/thejobcoach/DownloadServlet</url-pattern>
 	</servlet-mapping>
 	
 	<!-- Default page to serve -->
