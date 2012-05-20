@@ -1,9 +1,9 @@
 package com.TheJobCoach.webapp.userpage.server;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
+import com.TheJobCoach.admindata.News;
 import com.TheJobCoach.userdata.Account;
 import com.TheJobCoach.userdata.AccountInterface;
 import com.TheJobCoach.userdata.UserDocumentManager;
@@ -28,7 +28,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 {
 	static private AccountInterface account = new Account();
 	static private UserJobSiteManager jobSiteManager = new UserJobSiteManager();
-	static private com.TheJobCoach.admindata.News news = new com.TheJobCoach.admindata.News();
+	static private News news = new News();
 	static private UserOpportunityManager userOpportunityManager = new UserOpportunityManager();
 	static private UserLogManager userLogManager = new UserLogManager();
 	static private UserDocumentManager userDocumentManager = new UserDocumentManager();
@@ -142,18 +142,6 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	{
 		System.out.println("send comment '" + value + "' to trash");
 		account.sendComment(user, value);
-		return null;
-	}
-	
-	@Override
-	public Map<String,String> getValues(UserId user, String rootValue) throws CassandraException 
-	{
-		return null;
-	}
-	
-	@Override
-	public String setValue(UserId user, String id, String value) throws CassandraException 
-	{
 		return null;
 	}
 }

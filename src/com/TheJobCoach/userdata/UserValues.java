@@ -13,7 +13,7 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 
-import com.TheJobCoach.webapp.util.shared.UserValuesConstantsPerformance;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 
 public class UserValues {
 
@@ -69,20 +69,34 @@ public class UserValues {
 		keysName = new HashSet<String>();
 		keysNameList = new ArrayList<String>();
 		keysMap = new HashMap<String, FieldDefinition>();
-		
-		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CREATEOPPORTUNITY_MONTHLY));
-		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CREATEOPPORTUNITY_WEEKLY));
-		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CANDIDATEOPPORTUNITY_MONTHLY));
-		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CANDIDATEOPPORTUNITY_WEEKLY));
-		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_INTERVIEW_MONTHLY));
-		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_INTERVIEW_WEEKLY));
-		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_PHONECALL_MONTHLY));
-		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_PHONECALL_WEEKLY));
-		addField(new FieldDefinition(UserValuesConstantsPerformance.PERFORMANCE_CONNECT_WEEKLY));
-		
-		addField(new FieldDefinition("DEFINITION_TITLE"));
+
+		addField(new FieldDefinition("DEFINITION_ACCOUNT_TYPE", MAX_OPTION_LENGTH, false, "Freemium"));
 		addField(new FieldDefinition("DEFINITION_OBJECTIVE"));
-		addField(new FieldDefinition("DEFINITION_ACCOUNT_TYPE", MAX_OPTION_LENGTH, false, "Fremium"));
+		addField(new FieldDefinition("DEFINITION_TITLE"));
+
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_WEEKLY_RATIO));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_MONTHLY_RATIO));
+		
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_BIWEEKLY));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_MONTHLY));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_WEEKLY));
+
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_BIWEEKLY));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_MONTHLY));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_WEEKLY));
+		
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_BIWEEKLY));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_MONTHLY));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_WEEKLY));
+
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_BIWEEKLY));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_MONTHLY));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_WEEKLY));
+
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_RECALL_GOAL_MIDDLE));
+		
 	}
 	
 	public UserValues()
@@ -101,15 +115,17 @@ public class UserValues {
 			if (key.matches(rootKey + ".*"))
 			{
 				subSet.add(key);
-				if (start.equals("")) 
+				if (start.equals("") || (start.compareTo(key) > 0))
 				{ 
-					start = key + "_";
+					start = key;
 					end = start;
 				}
 				else end = key;
 			}
 		}
 		if (start.equals("")) throw new SystemException();
+		end = end + "Z";
+		System.out.println("Start key: " + start + " End key: " + end);
 		Map<String, String> result = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME_LIST, id.userName, start, end, 1000);
 		for (String key: subSet)
 		{

@@ -6,10 +6,19 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.TextBox;
 
-public class CheckedTextField extends TextBox {
+public class CheckedTextField extends TextBox implements IExtendedField {
 
 	String regexp;
-
+	String defaultValue = null;
+	
+	@Override
+	public boolean getIsDefault()
+	{
+		if (defaultValue == null) return true;
+		return defaultValue.equals(getValue());
+	}
+	
+	@Override
 	public boolean isValid()
 	{
 		if (getValue() == null) return false;
@@ -20,13 +29,12 @@ public class CheckedTextField extends TextBox {
 
 	private void checkUserValue(boolean init)
 	{
-		//System.out.println("VALID " + isValid() + " VAL: " + getValue() + " INIT " + init);
-		if (changed != null) changed.changed(isValid(), init);
+		if (changed != null) changed.changed(isValid(), getIsDefault(), init);
 	}
-
-	public void setText(String value)
+	
+	public void setValue(String value)
 	{
-		super.setText(value);
+		super.setValue(value);		
 		checkUserValue(true);
 	}
 	
@@ -58,9 +66,22 @@ public class CheckedTextField extends TextBox {
 		init(changed, regexp); 
 	}
 	
+	public void setDefault(String defaultValue)
+	{
+		this.defaultValue = defaultValue;
+		checkUserValue(true);
+	}
+	
 	public CheckedTextField(IChanged changed, String regexp, String init)
 	{
+		setDefault(init);
 		init(changed, regexp);
 		setValue(init);
+	}
+
+	@Override
+	public void resetToDefault() 
+	{
+		setText(this.defaultValue);
 	}
 }

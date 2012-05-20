@@ -10,7 +10,7 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 /**
  * The client side stub for the RPC service.
  */
-@RemoteServiceRelativePath("user")
+@RemoteServiceRelativePath("util")
 public interface UtilService extends RemoteService 
 {		
 	public Map<String,String> getValues(UserId user, String rootValue) throws CassandraException, SystemException;

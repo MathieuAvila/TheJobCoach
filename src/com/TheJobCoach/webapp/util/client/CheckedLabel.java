@@ -4,17 +4,30 @@ import com.google.gwt.user.client.ui.Label;
 
 public class CheckedLabel extends Label implements IChanged {
 
+	boolean isChanged = false;
+	boolean isError = false;
+	
+	private void setStyle()
+	{
+		String style="label-status-" 
+				+ (isError ? "error" : "ok")
+				+ (isChanged ? "-c" : "-nc");
+		//System.out.println("STYLE:" + style);
+		setStyleName(style);			
+	} 
+	
 	public void setStatus(boolean ok)
 	{
-		setStyleName(ok ? "label-create-account-ok" : "label-create-account-error");
+		isError = !ok;
+		setStyle();
 	}
-	
+		
 	@Override
-	public void changed(boolean ok, boolean init) 
+	public void changed(boolean ok, boolean isDefault, boolean init) 
 	{
-		//System.out.println("OK is: " + ok);
+		this.isChanged = !isDefault;
 		setStatus(ok);
-		if (up != null) up.changed(ok, init);
+		if (up != null) up.changed(ok, isDefault, init);
 	}
 	
 	IChanged up;

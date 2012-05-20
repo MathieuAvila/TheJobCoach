@@ -1,7 +1,6 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
@@ -42,7 +41,4 @@ public interface UserService extends RemoteService
 	public String deleteUserLogEntry(UserId id, String logId) throws CassandraException;
 	
 	public String sendComment(UserId user, String value) throws CassandraException;
-	
-	public Map<String,String> getValues(UserId user, String rootValue) throws CassandraException;
-	public String setValue(UserId user, String id, String value) throws CassandraException;
 }

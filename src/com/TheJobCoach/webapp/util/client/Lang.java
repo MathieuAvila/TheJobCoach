@@ -27,4 +27,10 @@ public interface Lang extends Constants {
 
 	@Key("NONE")
 	String _TextNONE();
+
+	@Key("Apply")
+	String _TextApply();
+
+	@Key("Reset")
+	String _TextReset();
 }

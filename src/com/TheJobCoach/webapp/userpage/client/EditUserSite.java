@@ -141,12 +141,12 @@ public class EditUserSite implements EntryPoint, IChanged {
 		});		
 		
 		vp.add(okCancel);
-		changed(false, false);
+		changed(false, true, false);
 		dBox.center();
 	}
 
 	@Override
-	public void changed(boolean ok, boolean init)
+	public void changed(boolean ok, boolean isDefault, boolean init)
 	{		
 		if (init) return;
 		okCancel.getOk().setEnabled(false);

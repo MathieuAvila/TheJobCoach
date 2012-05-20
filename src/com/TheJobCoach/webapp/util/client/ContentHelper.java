@@ -27,5 +27,17 @@ public class ContentHelper {
 		panelTitle.add(labelTitle);
 		panelTitle.setCellVerticalAlignment(labelTitle, HasVerticalAlignment.ALIGN_MIDDLE);
 	}
+
+	public static void insertSubTitlePanel(Panel rootPanel, String text)
+	{
+		HorizontalPanel panelTitle = new HorizontalPanel();
+		rootPanel.add(panelTitle);
+		
+		Label labelTitle = new Label(text);
+		labelTitle.setStyleName("label-content-subtitle");		
+		
+		panelTitle.add(labelTitle);
+		panelTitle.setCellVerticalAlignment(labelTitle, HasVerticalAlignment.ALIGN_MIDDLE);
+	}
 	
 }

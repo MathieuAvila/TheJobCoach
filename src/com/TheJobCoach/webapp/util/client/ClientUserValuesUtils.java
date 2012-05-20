@@ -6,19 +6,19 @@ import java.util.Map;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Panel;
 
 public class ClientUserValuesUtils {
 
 	static HashMap<String, String> valuesCache = new HashMap<String, String>();
 	static UtilServiceAsync utilService =  GWT.create(UtilService.class);
 
-	final RootPanel panel;
+	final Panel panel;
 	final UserId id;
 
-	public ClientUserValuesUtils(RootPanel panel, UserId id)
+	public ClientUserValuesUtils(Panel rootPanel, UserId id)
 	{
-		this.panel = panel;
+		this.panel = rootPanel;
 		this.id = id;
 	}
 

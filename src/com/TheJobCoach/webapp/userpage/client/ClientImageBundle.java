@@ -70,4 +70,7 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("log-32.png")
 	ImageResource userLogContent();
+
+	@Source("log-32.png")
+	ImageResource userVirtualCoachGoals();
 }

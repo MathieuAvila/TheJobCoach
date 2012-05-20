@@ -98,7 +98,7 @@ public class CreateAccount implements EntryPoint, IChanged {
 
 
 	@Override
-	public void changed(boolean ok, boolean init) 
+	public void changed(boolean ok, boolean isDefault, boolean init) 
 	{
 		if (init) return;
 		btnCreateAccount.setEnabled(false);
@@ -122,7 +122,7 @@ public class CreateAccount implements EntryPoint, IChanged {
 
 	public void checkUserValues()
 	{		
-		changed(true, false); 
+		changed(true, true, false); 
 	}
 
 	/**

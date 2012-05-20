@@ -73,7 +73,7 @@ public class LostCredentials implements EntryPoint, IChanged {
 	}
 
 	@Override
-	public void changed(boolean ok, boolean init) 
+	public void changed(boolean ok, boolean isDefault, boolean init) 
 	{
 		if (init) return;
 		okCancel.getOk().setEnabled(false);
@@ -84,7 +84,7 @@ public class LostCredentials implements EntryPoint, IChanged {
 
 	public void checkUserValues()
 	{		
-		changed(true, false); 
+		changed(true, true, false); 
 	}
 
 	/**
