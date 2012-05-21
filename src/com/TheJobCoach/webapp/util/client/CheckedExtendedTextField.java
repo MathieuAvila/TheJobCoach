@@ -4,12 +4,19 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.TextBoxBase;
 
-public class CheckedTextField extends TextBox implements IExtendedField {
+public class CheckedExtendedTextField implements IExtendedField {
 
 	String regexp;
 	String defaultValue = null;
+	
+	TextBoxBase tb = null;
+	
+	public TextBoxBase getItem()
+	{
+		return tb;
+	}
 	
 	@Override
 	public boolean getIsDefault()
@@ -34,12 +41,14 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 	
 	public void setValue(String value)
 	{
-		super.setValue(value);		
+		tb.setValue(value);		
 		checkUserValue(true);
 	}
 	
-	private void init(IChanged changed, String regexp)
+	private void init(TextBoxBase tb, IChanged changed, String regexp)
 	{
+		this.tb = tb;
+		
 		this.changed = changed;
 		this.regexp = regexp;
 
@@ -56,14 +65,14 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 				checkUserValue(false);
 			}
 		};
-		addValueChangeHandler(changeH);
-		addKeyUpHandler(changeKey);
+		tb.addValueChangeHandler(changeH);
+		tb.addKeyUpHandler(changeKey);
 		checkUserValue(true);		
 	}
 
-	public CheckedTextField(IChanged changed, String regexp)
+	public CheckedExtendedTextField(TextBoxBase tb, IChanged changed, String regexp)
 	{
-		init(changed, regexp); 
+		init(tb, changed, regexp); 
 	}
 	
 	public void setDefault(String defaultValue)
@@ -72,10 +81,10 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 		checkUserValue(true);
 	}
 	
-	public CheckedTextField(IChanged changed, String regexp, String init)
+	public CheckedExtendedTextField(TextBoxBase tb, IChanged changed, String regexp, String init)
 	{
 		setDefault(init);
-		init(changed, regexp);
+		init(tb, changed, regexp);
 		setValue(init);
 	}
 
@@ -83,5 +92,11 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 	public void resetToDefault() 
 	{
 		setValue(this.defaultValue);
+	}
+
+	@Override
+	public String getValue() 
+	{		
+		return tb.getValue();
 	}
 }

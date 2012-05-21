@@ -67,7 +67,7 @@ public class DialogBlockApplyReset extends HorizontalPanel
 			ok = ok && (elem.isValid());
 			oneIsNotDefault = oneIsNotDefault || !elem.getIsDefault();
 		}
-		System.out.println("OK: " + ok + " DEFAULT: " + oneIsNotDefault);
+		//System.out.println("OK: " + ok + " DEFAULT: " + oneIsNotDefault);
 		btnApply.setEnabled(oneIsNotDefault && ok);
 	}
 }

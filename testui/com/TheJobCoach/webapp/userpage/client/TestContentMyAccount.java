@@ -11,14 +11,14 @@ import com.google.gwt.user.client.ui.RootPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class TestContentMyGoals implements EntryPoint {
+public class TestContentMyAccount implements EntryPoint {
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad()
 	{
-		final RootPanel root = RootPanel.get("contentmygoals");
+		final RootPanel root = RootPanel.get("contentmyaccount");
 		if (root != null)
 		{
 			GWT.runAsync(new RunAsyncCallback() 
@@ -32,13 +32,13 @@ public class TestContentMyGoals implements EntryPoint {
 				@Override
 				public void onSuccess() 
 				{
-					System.out.println("Content My Goals");
+					System.out.println("Content My Account");
 					root.setStyleName("mainpage-content");		
 					HorizontalPanel hp = new HorizontalPanel();
 					hp.setStyleName("mainpage-content");
 					root.add(hp);
 					hp.setSize("100%", "100%");
-					ContentMyGoals cud = new ContentMyGoals(hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
+					ContentAccount cud = new ContentAccount(hp, new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER));
 					cud.onModuleLoad();
 				}
 			});

@@ -28,4 +28,5 @@ public class UserValuesConstantsMyGoals
 	public final static String PERFORMANCE_CONNECT_NOT_AFTER_HOUR            = "PERFORMANCE_CONNECT_NOT_AFTER_HOUR";
 	public final static String PERFORMANCE_CONNECT_WEEKLY_RATIO              = "PERFORMANCE_CONNECT_WEEKLY";
 	public final static String PERFORMANCE_CONNECT_MONTHLY_RATIO             = "PERFORMANCE_CONNECT_MONTHLY";
+
 }

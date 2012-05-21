@@ -12,6 +12,7 @@ import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 
@@ -50,6 +51,8 @@ public class UserValues {
 	}
 	
 	static final int MAX_OPTION_LENGTH = 100;
+
+	static final int YES_NO_LENGTH = 4;
 	
 	static List<FieldDefinition> keys;
 	static Map<String, FieldDefinition> keysMap;
@@ -70,9 +73,16 @@ public class UserValues {
 		keysNameList = new ArrayList<String>();
 		keysMap = new HashMap<String, FieldDefinition>();
 
-		addField(new FieldDefinition("DEFINITION_ACCOUNT_TYPE", MAX_OPTION_LENGTH, false, "Freemium"));
-		addField(new FieldDefinition("DEFINITION_OBJECTIVE"));
-		addField(new FieldDefinition("DEFINITION_TITLE"));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_TYPE, MAX_OPTION_LENGTH, false, "Freemium"));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_MODEL, MAX_OPTION_LENGTH, false, UserValuesConstantsAccount.ACCOUNT_MODEL_LIST.get(0)));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_TITLE));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_STATUS));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_KEYWORDS));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR));
+
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_SEEKER, YES_NO_LENGTH, true, "YES"));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_COACH, YES_NO_LENGTH, true, "YES"));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_RECRUITER, YES_NO_LENGTH, true, "YES"));
 
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR));
@@ -118,9 +128,11 @@ public class UserValues {
 				if (start.equals("") || (start.compareTo(key) > 0))
 				{ 
 					start = key;
-					end = start;
+				}				
+				if (end.equals("") || key.compareTo(end) > 0)
+				{						
+					end = key;
 				}
-				else end = key;
 			}
 		}
 		if (start.equals("")) throw new SystemException();
