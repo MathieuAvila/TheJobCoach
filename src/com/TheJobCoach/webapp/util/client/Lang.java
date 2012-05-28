@@ -1,5 +1,7 @@
 package com.TheJobCoach.webapp.util.client;
 
+import java.util.Map;
+
 import com.google.gwt.i18n.client.Constants;
 
 public interface Lang extends Constants {
@@ -33,4 +35,7 @@ public interface Lang extends Constants {
 
 	@Key("Reset")
 	String _TextReset();
+	
+	@Key("yesNoMap")	
+	Map<String, String> yesNoMap();
 }

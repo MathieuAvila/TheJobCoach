@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 
+import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.client.MainPage;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
@@ -137,12 +138,48 @@ public class UserPage implements EntryPoint {
 				}			
 			});
 		}
+		if (menu.equals("account"))
+		{
+			GWT.runAsync(new RunAsyncCallback() 
+			{
+				@Override
+				public void onFailure(Throwable reason) 
+				{
+					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
+				}
+				@Override
+				public void onSuccess() 
+				{
+					ContentAccount contentAccount = new ContentAccount(simplePanelContent, userId);
+					contentAccount.onModuleLoad();
+				}			
+			});
+		}
+		if (menu.equals("goals"))
+		{
+			GWT.runAsync(new RunAsyncCallback() 
+			{
+				@Override
+				public void onFailure(Throwable reason) 
+				{
+					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
+				}
+				@Override
+				public void onSuccess() 
+				{
+					ContentMyGoals contentGoals = new ContentMyGoals(simplePanelContent, userId);
+					contentGoals.onModuleLoad();
+				}			
+			});
+		}
 	}
 
 	private void setLabelMenu(final Label label, final String menu)
 	{
 		label.setStyleName("userpage-label-normal");
 		if (
+				!menu.equals("account") &&
+				!menu.equals("goals") &&
 				!menu.equals("news") &&
 				!menu.equals("myjobboards") &&
 				!menu.equals("mydocuments") &&
@@ -266,7 +303,7 @@ public class UserPage implements EntryPoint {
 		verticalPanelAccount.setSize("100%", "100%");
 
 		final Label label_Parameters = new Label(lang._TextMyAccount());
-		setLabelMenu(label_Parameters, "parameters");
+		setLabelMenu(label_Parameters, "account");
 		verticalPanelAccount.add(label_Parameters);
 
 		final Label label_Profile = new Label(lang._TextMyProfile());

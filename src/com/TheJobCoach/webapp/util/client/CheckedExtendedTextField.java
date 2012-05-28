@@ -1,5 +1,8 @@
 package com.TheJobCoach.webapp.util.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -32,11 +35,12 @@ public class CheckedExtendedTextField implements IExtendedField {
 		return getValue().matches(regexp);
 	}
 
-	IChanged changed;
+	List<IChanged> listChanged = new ArrayList<IChanged>();
 
 	private void checkUserValue(boolean init)
 	{
-		if (changed != null) changed.changed(isValid(), getIsDefault(), init);
+		for (IChanged changed: listChanged)
+			changed.changed(isValid(), getIsDefault(), init);
 	}
 	
 	public void setValue(String value)
@@ -45,11 +49,10 @@ public class CheckedExtendedTextField implements IExtendedField {
 		checkUserValue(true);
 	}
 	
-	private void init(TextBoxBase tb, IChanged changed, String regexp)
+	private void init(TextBoxBase tb, String regexp)
 	{
 		this.tb = tb;
 		
-		this.changed = changed;
 		this.regexp = regexp;
 
 		ValueChangeHandler<String> changeH = new ValueChangeHandler<String>() {
@@ -70,9 +73,9 @@ public class CheckedExtendedTextField implements IExtendedField {
 		checkUserValue(true);		
 	}
 
-	public CheckedExtendedTextField(TextBoxBase tb, IChanged changed, String regexp)
+	public CheckedExtendedTextField(TextBoxBase tb, String regexp)
 	{
-		init(tb, changed, regexp); 
+		init(tb, regexp); 
 	}
 	
 	public void setDefault(String defaultValue)
@@ -81,10 +84,10 @@ public class CheckedExtendedTextField implements IExtendedField {
 		checkUserValue(true);
 	}
 	
-	public CheckedExtendedTextField(TextBoxBase tb, IChanged changed, String regexp, String init)
+	public CheckedExtendedTextField(TextBoxBase tb, String regexp, String init)
 	{
 		setDefault(init);
-		init(tb, changed, regexp);
+		init(tb, regexp);
 		setValue(init);
 	}
 
@@ -98,5 +101,11 @@ public class CheckedExtendedTextField implements IExtendedField {
 	public String getValue() 
 	{		
 		return tb.getValue();
+	}
+
+	@Override
+	public void registerListener(IChanged listener) 
+	{
+		listChanged.add(listener);	
 	}
 }

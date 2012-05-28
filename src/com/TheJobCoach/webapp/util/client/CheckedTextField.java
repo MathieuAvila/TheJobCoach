@@ -1,5 +1,8 @@
 package com.TheJobCoach.webapp.util.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -25,11 +28,10 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 		return getValue().matches(regexp);
 	}
 
-	IChanged changed;
-
 	private void checkUserValue(boolean init)
 	{
-		if (changed != null) changed.changed(isValid(), getIsDefault(), init);
+		for (IChanged changed: listChanged)
+			changed.changed(isValid(), getIsDefault(), init);
 	}
 	
 	public void setValue(String value)
@@ -38,9 +40,8 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 		checkUserValue(true);
 	}
 	
-	private void init(IChanged changed, String regexp)
+	private void init(String regexp)
 	{
-		this.changed = changed;
 		this.regexp = regexp;
 
 		ValueChangeHandler<String> changeH = new ValueChangeHandler<String>() {
@@ -61,9 +62,9 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 		checkUserValue(true);		
 	}
 
-	public CheckedTextField(IChanged changed, String regexp)
+	public CheckedTextField(String regexp)
 	{
-		init(changed, regexp); 
+		init(regexp); 
 	}
 	
 	public void setDefault(String defaultValue)
@@ -72,10 +73,10 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 		checkUserValue(true);
 	}
 	
-	public CheckedTextField(IChanged changed, String regexp, String init)
+	public CheckedTextField(String regexp, String init)
 	{
 		setDefault(init);
-		init(changed, regexp);
+		init(regexp);
 		setValue(init);
 	}
 
@@ -83,5 +84,13 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 	public void resetToDefault() 
 	{
 		setValue(this.defaultValue);
+	}
+	
+	List<IChanged> listChanged = new ArrayList<IChanged>();
+
+	@Override
+	public void registerListener(IChanged listener) 
+	{
+		listChanged.add(listener);	
 	}
 }

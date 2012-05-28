@@ -34,10 +34,10 @@ public class CreateAccount implements EntryPoint, IChanged {
 	Panel rootPanel;
 	final Lang lang = GWT.create(Lang.class);
 
-	private CheckedLabel labelMail = new CheckedLabel(lang._TextUserEMail(), true, this);
-	private CheckedLabel lblUserName = new CheckedLabel(lang._TextUserName(), true, this);
-	private final CheckedTextField textBoxUserName = new CheckedTextField(lblUserName, UserId.getRegexp());
-	private final CheckedTextField textBoxMail = new CheckedTextField(labelMail, UserInformation.getMailRegexp());
+	private final CheckedTextField textBoxUserName = new CheckedTextField(UserId.getRegexp());
+	private CheckedLabel lblUserName = new CheckedLabel(lang._TextUserName(), true, textBoxUserName);
+	private final CheckedTextField textBoxMail = new CheckedTextField(UserInformation.getMailRegexp());
+	private CheckedLabel labelMail = new CheckedLabel(lang._TextUserEMail(), true, textBoxMail);
 	private final TextBox newUserPassword = new PasswordTextBox();
 	private final TextBox newUserPasswordCheck = new PasswordTextBox();
 	private final TextBox textBoxCreateName = new TextBox();

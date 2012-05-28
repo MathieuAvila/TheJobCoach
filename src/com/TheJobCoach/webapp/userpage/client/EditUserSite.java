@@ -34,11 +34,11 @@ public class EditUserSite implements EntryPoint, IChanged {
 
 	UserId user;
 
-	CheckedLabel lblName = new CheckedLabel(lang._TextName(), true, this);
-	CheckedTextField textBoxName = new CheckedTextField(lblName, ".+");
+	CheckedTextField textBoxName = new CheckedTextField(".+");
+	CheckedLabel lblName = new CheckedLabel(lang._TextName(), true, textBoxName);
 	RichTextArea textAreaDescription = new RichTextArea();
-	CheckedLabel lblUrl = new CheckedLabel(lang._TextURL(), true, this, true);
-	CheckedTextField textBoxUrl = new CheckedTextField(lblUrl, "http://.*", "http://");
+	CheckedTextField textBoxUrl = new CheckedTextField("http://.*", "http://");
+	CheckedLabel lblUrl = new CheckedLabel(lang._TextURL(), true, textBoxUrl);
 	TextBox textBoxLogin = new TextBox();
 	TextBox textBoxPassword = new TextBox();
 	DateBox datePickerLastVisit = new DateBox();

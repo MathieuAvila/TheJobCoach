@@ -14,7 +14,7 @@ public class CheckedLabel extends Label implements IChanged {
 				+ (isChanged ? "-c" : "-nc");
 		//System.out.println("STYLE:" + style);
 		setStyleName(style);			
-	} 
+	}
 	
 	public void setStatus(boolean ok)
 	{
@@ -27,27 +27,24 @@ public class CheckedLabel extends Label implements IChanged {
 	{
 		this.isChanged = !isDefault;
 		setStatus(ok);
-		if (up != null) up.changed(ok, isDefault, init);
 	}
 	
-	IChanged up;
-	
-	void init(IChanged up, boolean initial)
+	void init(boolean initial)
 	{
-		this.up = up;
 		setStatus(initial);
 	}
 	
-	public CheckedLabel(String text, boolean tip, IChanged up)
+	public CheckedLabel(String text, boolean tip, IExtendedField from)
 	{
 		super(text + (tip ? " [*]" : ""));
-		init(up, false);
+		from.registerListener(this);
+		init(false);
 	}
 	
-	public CheckedLabel(String text, boolean tip, IChanged up, boolean initial)
+	public CheckedLabel(String text, boolean tip)
 	{
 		super(text + (tip ? " [*]" : ""));
-		init(up, initial);
+		init(false);
 	}
 
 }

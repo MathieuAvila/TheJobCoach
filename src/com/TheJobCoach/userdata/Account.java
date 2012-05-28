@@ -76,6 +76,7 @@ public class Account implements AccountInterface {
 
 	protected UserId.UserType stringToUserType(String type)
 	{
+		if (type == null) return UserId.UserType.USER_TYPE_SEEKER;
 		if (type.equals("seeker"))
 			return UserId.UserType.USER_TYPE_SEEKER;
 		if (type.equals("coach"))

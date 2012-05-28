@@ -1,5 +1,6 @@
 package com.TheJobCoach.webapp.util.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,11 +35,10 @@ public class CheckedExtendedDropListField implements IExtendedField {
 		return true;
 	}
 
-	IChanged changed;
-
 	private void checkUserValue(boolean init)
 	{
-		if (changed != null) changed.changed(isValid(), getIsDefault(), init);
+		for (IChanged changed: listChanged)
+			changed.changed(isValid(), getIsDefault(), init);
 	}
 
 	public void setValue(String value)
@@ -56,18 +56,16 @@ public class CheckedExtendedDropListField implements IExtendedField {
 			ListBox tb, 
 			List<String> values, 
 			Map<String, String> texts, 
-			String prefix,
-			IChanged changed)
+			String prefix)
 	{
 		this.tb = tb;
 
+		if (texts != null)
 		for (String v: values)
 		{
-			tb.insertItem(v, v, tb.getItemCount());
+			tb.insertItem(texts.get(prefix + v), v, tb.getItemCount());
 		}
 
-		this.changed = changed;
-		
 		ChangeHandler changeH = new ChangeHandler() {
 
 			@Override
@@ -92,19 +90,17 @@ public class CheckedExtendedDropListField implements IExtendedField {
 			ListBox tb, 
 			List<String> values, 
 			Map<String, String> texts, 
-			String prefix,
-			IChanged changed)
+			String prefix)
 	{
-		init(tb, values, texts, prefix, changed); 
+		init(tb, values, texts, prefix); 
 	}
 
 	public CheckedExtendedDropListField(
 			List<String> values, 
 			Map<String, String> texts, 
-			String prefix,
-			IChanged changed)
+			String prefix)
 	{
-		init(new ListBox(), values, texts, prefix, changed); 
+		init(new ListBox(), values, texts, prefix); 
 	}
 
 	public void setDefault(String defaultValue)
@@ -118,10 +114,10 @@ public class CheckedExtendedDropListField implements IExtendedField {
 			List<String> values, 
 			Map<String, String> texts, 
 			String prefix, 
-			IChanged changed, String regexp, String init)
+			String regexp, String init)
 	{
 		setDefault(init);
-		init(tb, values, texts, prefix, changed);
+		init(tb, values, texts, prefix);
 		setValue(init);
 	}
 
@@ -138,5 +134,13 @@ public class CheckedExtendedDropListField implements IExtendedField {
 		if ((tb.getSelectedIndex() >= 0) &&(tb.getSelectedIndex() < tb.getItemCount()))
 			return tb.getValue(tb.getSelectedIndex());
 		return "";
+	}
+	
+	List<IChanged> listChanged = new ArrayList<IChanged>();
+
+	@Override
+	public void registerListener(IChanged listener) 
+	{
+		listChanged.add(listener);	
 	}
 }

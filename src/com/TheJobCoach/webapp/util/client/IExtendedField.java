@@ -8,4 +8,5 @@ public interface IExtendedField
 	public String getValue();
 	public void setDefault(String value);
 	public void setValue(String value);
+	public void registerListener(IChanged listener);
 }

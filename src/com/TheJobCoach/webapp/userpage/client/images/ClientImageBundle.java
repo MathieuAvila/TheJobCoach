@@ -1,4 +1,4 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.images;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
@@ -16,6 +16,28 @@ public interface ClientImageBundle extends ClientBundle
 	 */
 	@Source("jobcoach.gif")
 	ImageResource coachIcon();
+
+	@Source("jobcoach_military.jpg")
+	ImageResource coachIconMilitary();
+
+	@Source("jobcoach_surfer.gif")
+	ImageResource coachIconSurfer();
+
+	@Source("jobcoach_woman.png")
+	ImageResource coachIconWoman();
+
+	
+	@Source("jobcoach_small.png")
+	ImageResource coachIconSmall();
+
+	@Source("jobcoach_military_small.png")
+	ImageResource coachIconMilitarySmall();
+
+	@Source("jobcoach_surfer_small.png")
+	ImageResource coachIconSurferSmall();
+
+	@Source("jobcoach_woman_small.png")
+	ImageResource coachIconWomanSmall();
 
 	@Source("file-delete-24.png")
 	ImageResource deleteFile();
@@ -56,7 +78,7 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("documents-32.png")
 	ImageResource userDocumentContent();
 
-	@Source("parameters_64.png")
+	@Source("parameters-32.png")
 	ImageResource parametersContent();
 
 	@Source("logout_32.png")

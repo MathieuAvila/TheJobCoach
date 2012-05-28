@@ -27,8 +27,8 @@ public class LostCredentials implements EntryPoint, IChanged {
 	private final DialogBox dBox = new DialogBox();
 	final Lang lang = GWT.create(Lang.class);
 
-	private CheckedLabel labelMail = new CheckedLabel(lang._TextUserEMail(), true, this);
-	private final CheckedTextField textBoxMail = new CheckedTextField(labelMail, UserInformation.getMailRegexp());
+	private CheckedLabel labelMail = new CheckedLabel(lang._TextUserEMail(), true);
+	private final CheckedTextField textBoxMail = new CheckedTextField(UserInformation.getMailRegexp());
 	DialogBlockOkCancel okCancel;
 	
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);

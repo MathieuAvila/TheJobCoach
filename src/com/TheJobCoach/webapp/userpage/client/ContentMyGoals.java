@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
@@ -42,71 +43,71 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 	Panel rootPanel = null;
 
-	CheckedLabel clConnectBefore = new CheckedLabel("Je dois me connecter avant cette heure ", false, this);
-	CheckedTextField tfConnectBefore = new CheckedTextField(clConnectBefore, "[0-9]*");
+	CheckedTextField tfConnectBefore = new CheckedTextField("[0-9]*");
+	CheckedLabel clConnectBefore = new CheckedLabel("Je dois me connecter avant cette heure ", false, tfConnectBefore);
 
-	CheckedLabel clConnectAfter = new CheckedLabel("Je dois être déconnecté après cette heure", false, this);
-	CheckedTextField tfConnectAfter = new CheckedTextField(clConnectAfter, "[0-9]*");
+	CheckedTextField tfConnectAfter = new CheckedTextField( "[0-9]*");
+	CheckedLabel clConnectAfter = new CheckedLabel("Je dois être déconnecté après cette heure", false, tfConnectAfter);
 
-	CheckedLabel clConnectRatio = new CheckedLabel("Je dois me connecter au moins ce nombre de jours par semaine", false, this);
-	CheckedTextField tfConnectRatio = new CheckedTextField(clConnectRatio, "[0-9]*");
+	CheckedTextField tfConnectRatio = new CheckedTextField("[0-9]*");
+	CheckedLabel clConnectRatio = new CheckedLabel("Je dois me connecter au moins ce nombre de jours par semaine", false, tfConnectRatio);
 
-	CheckedLabel clConnectRatioMonthly = new CheckedLabel("Je dois me connecter au moins ce nombre de jours par mois", false, this);
-	CheckedTextField tfConnectRatioMonthly = new CheckedTextField(clConnectRatioMonthly, "[0-9]*");
+	CheckedTextField tfConnectRatioMonthly = new CheckedTextField("[0-9]*");
+	CheckedLabel clConnectRatioMonthly = new CheckedLabel("Je dois me connecter au moins ce nombre de jours par mois", false, tfConnectRatioMonthly);
 	
 	
-	CheckedLabel clCreateOpportunityW = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités par semaine", false, this);
-	CheckedTextField tfCreateOpportunityW = new CheckedTextField(clCreateOpportunityW, "[0-9]*");
+	CheckedTextField tfCreateOpportunityW = new CheckedTextField("[0-9]*");
+	CheckedLabel clCreateOpportunityW = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités par semaine", false, tfCreateOpportunityW);
 	
-	CheckedLabel clCreateOpportunityBW = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités toutes les deux semaines", false, this);
-	CheckedTextField tfCreateOpportunityBW = new CheckedTextField(clCreateOpportunityBW, "[0-9]*");
+	CheckedTextField tfCreateOpportunityBW = new CheckedTextField("[0-9]*");
+	CheckedLabel clCreateOpportunityBW = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités toutes les deux semaines", false, tfCreateOpportunityBW);
 	
-	CheckedLabel clCreateOpportunityM = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités par mois", false, this);
-	CheckedTextField tfCreateOpportunityM = new CheckedTextField(clCreateOpportunityM, "[0-9]*");
-
-	
-	
-	CheckedLabel clCandidateOpportunityW = new CheckedLabel("Je dois candidater à au moins ce nombre d'opportunités par semaine", false, this);
-	CheckedTextField tfCandidateOpportunityW = new CheckedTextField(clCandidateOpportunityW, "[0-9]*");
-	
-	CheckedLabel clCandidateOpportunityBW = new CheckedLabel("Je dois candidater au moins ce nombre d'opportunités toutes les deux semaines", false, this);
-	CheckedTextField tfCandidateOpportunityBW = new CheckedTextField(clCandidateOpportunityBW, "[0-9]*");
-	
-	CheckedLabel clCandidateOpportunityM = new CheckedLabel("Je dois candidater au moins ce nombre d'opportunités par mois", false, this);
-	CheckedTextField tfCandidateOpportunityM = new CheckedTextField(clCandidateOpportunityM, "[0-9]*");
+	CheckedTextField tfCreateOpportunityM = new CheckedTextField("[0-9]*");
+	CheckedLabel clCreateOpportunityM = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités par mois", false, tfCreateOpportunityM);
 
 	
 	
-	CheckedLabel clInterviewOpportunityW = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens par semaine", false, this);
-	CheckedTextField tfInterviewOpportunityW = new CheckedTextField(clInterviewOpportunityW, "[0-9]*");
+	CheckedTextField tfCandidateOpportunityW = new CheckedTextField("[0-9]*");
+	CheckedLabel clCandidateOpportunityW = new CheckedLabel("Je dois candidater à au moins ce nombre d'opportunités par semaine", false, tfCandidateOpportunityW);
 	
-	CheckedLabel clInterviewOpportunityBW = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens toutes les deux semaines", false, this);
-	CheckedTextField tfInterviewOpportunityBW = new CheckedTextField(clInterviewOpportunityBW, "[0-9]*");
+	CheckedTextField tfCandidateOpportunityBW = new CheckedTextField("[0-9]*");
+	CheckedLabel clCandidateOpportunityBW = new CheckedLabel("Je dois candidater au moins ce nombre d'opportunités toutes les deux semaines", false, tfCandidateOpportunityBW);
 	
-	CheckedLabel clInterviewOpportunityM = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens par mois", false, this);
-	CheckedTextField tfInterviewOpportunityM = new CheckedTextField(clInterviewOpportunityM, "[0-9]*");
+	CheckedTextField tfCandidateOpportunityM = new CheckedTextField("[0-9]*");
+	CheckedLabel clCandidateOpportunityM = new CheckedLabel("Je dois candidater au moins ce nombre d'opportunités par mois", false, tfCandidateOpportunityM);
 
 	
 	
-	CheckedLabel clProposalW = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions par semaine", false, this);
-	CheckedTextField tfProposalW = new CheckedTextField(clProposalW, "[0-9]*");
+	CheckedTextField tfInterviewOpportunityW = new CheckedTextField("[0-9]*");
+	CheckedLabel clInterviewOpportunityW = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens par semaine", false, tfInterviewOpportunityW);
 	
-	CheckedLabel clProposalBW = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions toutes les deux semaines", false, this);
-	CheckedTextField tfProposalBW = new CheckedTextField(clProposalBW, "[0-9]*");
+	CheckedTextField tfInterviewOpportunityBW = new CheckedTextField("[0-9]*");
+	CheckedLabel clInterviewOpportunityBW = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens toutes les deux semaines", false, tfInterviewOpportunityBW);
 	
-	CheckedLabel clProposalM = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions par mois", false, this);
-	CheckedTextField tfProposalM = new CheckedTextField(clProposalM, "[0-9]*");
+	CheckedTextField tfInterviewOpportunityM = new CheckedTextField("[0-9]*");
+	CheckedLabel clInterviewOpportunityM = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens par mois", false, tfInterviewOpportunityM);
 
 	
 	
-	CheckedLabel clPhoneCallW = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques par semaine", false, this);
-	CheckedTextField tfPhoneCallW = new CheckedTextField(clPhoneCallW, "[0-9]*");
+	CheckedTextField tfProposalW = new CheckedTextField("[0-9]*");
+	CheckedLabel clProposalW = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions par semaine", false, tfProposalW);
 	
-	CheckedLabel clPhoneCallBW = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques toutes les deux semaines", false, this);
-	CheckedTextField tfPhoneCallBW = new CheckedTextField(clPhoneCallBW, "[0-9]*");
+	CheckedTextField tfProposalBW = new CheckedTextField("[0-9]*");
+	CheckedLabel clProposalBW = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions toutes les deux semaines", false, tfProposalBW);
 	
-	CheckedLabel clPhoneCallM = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques par mois", false, this);
-	CheckedTextField tfPhoneCallM = new CheckedTextField(clPhoneCallM, "[0-9]*");
+	CheckedTextField tfProposalM = new CheckedTextField("[0-9]*");
+	CheckedLabel clProposalM = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions par mois", false, tfProposalM);
+
+	
+	
+	CheckedTextField tfPhoneCallW = new CheckedTextField("[0-9]*");
+	CheckedLabel clPhoneCallW = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques par semaine", false, tfPhoneCallW);
+	
+	CheckedTextField tfPhoneCallBW = new CheckedTextField("[0-9]*");
+	CheckedLabel clPhoneCallBW = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques toutes les deux semaines", false, tfPhoneCallBW);
+	
+	CheckedTextField tfPhoneCallM = new CheckedTextField("[0-9]*");
+	CheckedLabel clPhoneCallM = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques par mois", false, tfPhoneCallM);
 	
 	void getValues()
 	{	
@@ -223,7 +224,9 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_WEEKLY, tfPhoneCallW);
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_BIWEEKLY, tfPhoneCallBW);
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_MONTHLY, tfPhoneCallM);
-
+		
+		for (IExtendedField f: fields.values()) f.registerListener(this);
+		
 		applyReset = new DialogBlockApplyReset(new ArrayList<IExtendedField>(fields.values()), this);
 
 		simplePanelCenter.add(applyReset);
