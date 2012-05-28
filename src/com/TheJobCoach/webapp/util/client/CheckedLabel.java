@@ -37,11 +37,10 @@ public class CheckedLabel extends Label implements IChanged {
 	public CheckedLabel(String text, boolean tip, IExtendedField from)
 	{
 		super(text + (tip ? " [*]" : ""));
-		from.registerListener(this);
+		if (from != null) from.registerListener(this);
 		init(false);
 	}
-	
-	public CheckedLabel(String text, boolean tip)
+	CheckedLabel(String text, boolean tip)
 	{
 		super(text + (tip ? " [*]" : ""));
 		init(false);
