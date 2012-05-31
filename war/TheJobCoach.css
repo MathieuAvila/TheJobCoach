@@ -5,6 +5,14 @@
 	text-decoration: underline;
 }
 
+.label-content-subtitle {
+	font-size: 20px;
+	bgcolor: darkblue;
+	font-family: "Trebuchet MS", sans-serif;
+	border-bottom:	20px solid #FFFFFF;
+	border-top:	20px solid #FFFFFF;
+}
+
 #content {
 	font-size: 20px;
 	bgcolor: blue;
@@ -43,13 +51,42 @@
 
 .label-create-account-ok
 {
+	font-size: 15px;
 	color:black;
 }
 
 .label-create-account-error
 {
+	font-size: 15px;
 	color:red;
 }
+
+.label-status-ok-c
+{
+	font-size: 15px;
+	color:black;
+	font-weight:bold;
+}
+
+.label-status-ok-nc
+{
+	font-size: 15px;
+	color:black;
+}
+
+.label-status-error-c
+{
+	font-size: 15px;
+	color:red;
+	font-weight:bold;
+}
+
+.label-status-error-nc
+{
+	font-size: 15px;
+	color:red;
+}
+
 
 .common-form-dialog {
   color:black;
