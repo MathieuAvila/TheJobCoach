@@ -292,7 +292,7 @@ public class UserPage implements EntryPoint {
 		VerticalPanel verticalPanel_2 = new VerticalPanel();
 		horizontalPanel_1.add(verticalPanel_2);
 		horizontalPanel_1.setCellWidth(verticalPanel_2, "300px");
-		verticalPanel_2.setSize("300px", "100%");
+		verticalPanel_2.setWidth("300px");
 
 		StackPanel stackPanelAccount = new StackPanel();
 		verticalPanel_2.add(stackPanelAccount);

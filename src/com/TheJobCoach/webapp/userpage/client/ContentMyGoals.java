@@ -151,7 +151,7 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, tfConnectBefore);
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, tfConnectAfter);
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_WEEKLY_RATIO, tfConnectRatio);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_MONTHLY_RATIO, tfConnectRatio);
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_MONTHLY_RATIO, tfConnectRatioMonthly);
 		
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs de créations d'opportunités");
 
