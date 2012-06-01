@@ -29,6 +29,7 @@
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestUserPage" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentMyGoals" />
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentMyAccount'/>
+	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentNews'/>
 	<entry-point class='com.TheJobCoach.webapp.adminpage.client.TestContentUsers'/>
 	
 	<source path="util/client"/>	

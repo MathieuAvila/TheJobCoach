@@ -9,9 +9,11 @@ import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -22,7 +24,7 @@ import com.google.gwt.user.client.ui.HTML;
 public class ContentNews implements EntryPoint {
 
 	UserId user;
-	HTML htmlNews = new HTML("News", true);
+	VerticalPanel simplePanelCenter = new VerticalPanel();
 	final Lang lang = GWT.create(Lang.class);
 	
 	public ContentNews(Panel panel, UserId _user)
@@ -49,15 +51,13 @@ public class ContentNews implements EntryPoint {
 			public void onSuccess(Vector<NewsInformation> result)
 			{
 				System.out.println(result);
-				String html = "";
 				for (NewsInformation news: result)
 				{
-					System.out.println(news.created);
-					int year = news.created.getYear()+1900;
-					int month = news.created.getMonth() + 1;
-					html += "<hr/><h2>" + news.created.getDate() + "/" + month + "/" + year + " - " + news.title + "</h2></br>" + news.text + "</br></br></br>";
-				}
-				htmlNews.setHTML(html);
+					ContentHelper.insertSubTitlePanel(simplePanelCenter, DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(news.created) + " - " + news.title);
+					HTML text = new HTML(news.text);
+					text.setStyleName("label-status-ok-nc");
+					simplePanelCenter.add(text);
+				}				
 			}
 		};
 		try {
@@ -76,22 +76,13 @@ public class ContentNews implements EntryPoint {
 	{		
 		System.out.println("Load News, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		//RootPanel rootPanel = RootPanel.get("centercontent");
 		rootPanel.setSize("100%", "100%");
 		rootPanel.clear();
 
-		VerticalPanel simplePanelCenter = new VerticalPanel();
-		simplePanelCenter.setSize("100%", "100%");
+		simplePanelCenter.setWidth("100%");
 		rootPanel.add(simplePanelCenter);
 		
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextNews(), ClientImageBundle.INSTANCE.newsContent());
-
-		simplePanelCenter.add(htmlNews);
-		simplePanelCenter.setCellWidth(htmlNews, "100%");
-		simplePanelCenter.setCellHeight(htmlNews, "100%");
-		htmlNews.setSize("100%", "100%");
 
 		getNews();
 	}
