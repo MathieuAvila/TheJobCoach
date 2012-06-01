@@ -26,10 +26,19 @@ public class ClientUserValuesUtils {
 	{
 		public void notifyValue(boolean set, String key, String value);
 	}
-
-	static private void insertKeys(Map<String, String> values)
+	
+	static HashMap<String, ReturnValue> notifyValuesChange = new HashMap<String, ReturnValue>();
+	
+	static private void insertKeys(Map<String, String> values, boolean set)
 	{
 		valuesCache.putAll(values);
+		for (String key: values.keySet())
+		{
+			if (notifyValuesChange.containsKey(key))
+			{
+				notifyValuesChange.get(key).notifyValue(set, key, values.get(key));
+			}
+		}
 	}
 
 	public String getValueFromCache(String key)
@@ -37,6 +46,11 @@ public class ClientUserValuesUtils {
 		return valuesCache.get(key);
 	}
 
+	public void addListener(String key, ReturnValue listener)
+	{
+		notifyValuesChange.put(key, listener);
+	}
+	
 	public void preloadValueList(final String key, final ReturnValue result)
 	{
 		AsyncCallback<Map<String,String>> callback = new AsyncCallback<Map<String,String>>() {
@@ -46,7 +60,7 @@ public class ClientUserValuesUtils {
 			}
 			@Override
 			public void onSuccess(Map<String,String> resultMap) {
-				insertKeys(resultMap);
+				insertKeys(resultMap, false);
 				if (result != null)
 				{
 					for (String key: resultMap.keySet())
@@ -73,7 +87,7 @@ public class ClientUserValuesUtils {
 				}
 			}
 		};
-		insertKeys(map);
+		insertKeys(map, true);
 		utilService.setValues(id, map, callback);
 	}	
 

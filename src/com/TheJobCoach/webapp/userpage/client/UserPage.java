@@ -246,11 +246,12 @@ public class UserPage implements EntryPoint {
 
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		flexTable.setWidget(0, 0, horizontalPanel);		
-		horizontalPanel.setWidth("100%");
-		Image image = new Image(ClientImageBundle.INSTANCE.coachIcon());
-
-		horizontalPanel.add(image);
-
+		//horizontalPanel.setWidth("100%");
+		//Image image = new Image(ClientImageBundle.INSTANCE.coachIcon());
+		//horizontalPanel.add(image);
+		PanelCoach pc = new PanelCoach(horizontalPanel, userId);
+		pc.onModuleLoad();
+		
 		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
 		horizontalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		horizontalPanel.add(horizontalPanel_2);

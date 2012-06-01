@@ -6,17 +6,16 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HTML;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -44,9 +43,8 @@ public class ContentNews implements EntryPoint {
 			@Override
 			public void onFailure(Throwable caught)
 			{
-				Window.alert(caught.getMessage());
+				MessageBox.messageBoxException(rootPanel, caught.getMessage());
 			}
-			@SuppressWarnings("deprecation")
 			@Override
 			public void onSuccess(Vector<NewsInformation> result)
 			{
@@ -63,8 +61,7 @@ public class ContentNews implements EntryPoint {
 		try {
 			userService.getNews(user, callback);
 		} catch (CassandraException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			MessageBox.messageBoxException(rootPanel, e);
 		}
 	}
 

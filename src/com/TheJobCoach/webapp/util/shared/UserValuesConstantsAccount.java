@@ -18,7 +18,15 @@ public class UserValuesConstantsAccount
 	public final static String ACCOUNT_KEYWORDS     = "ACCOUNT_KEYWORDS";
 	
 	public final static String ACCOUNT_COACH_AVATAR       = "ACCOUNT_COACH_AVATAR";
-	public final static List<String> ACCOUNT_COACH_AVATAR_LIST  = Arrays.asList("DEFAULT_MAN", "DEFAULT_WOMAN", "COACH_SURFER", "COACH_MILITARY");
+	public final static String ACCOUNT_COACH_AVATAR__DEFAULT_MAN         = "DEFAULT_MAN";
+	public final static String ACCOUNT_COACH_AVATAR__DEFAULT_WOMAN       = "DEFAULT_WOMAN";
+	public final static String ACCOUNT_COACH_AVATAR__COACH_SURFER        = "COACH_SURFER";
+	public final static String ACCOUNT_COACH_AVATAR__COACH_MILITARY      = "COACH_MILITARY";
+	public final static List<String> ACCOUNT_COACH_AVATAR_LIST  = Arrays.asList(
+			ACCOUNT_COACH_AVATAR__DEFAULT_MAN, 
+			ACCOUNT_COACH_AVATAR__DEFAULT_WOMAN, 
+			ACCOUNT_COACH_AVATAR__COACH_SURFER, 
+			ACCOUNT_COACH_AVATAR__COACH_MILITARY);
 	
 	public final static String ACCOUNT_PUBLISH_SEEKER       = "ACCOUNT_PUBLISH_SEEKER";
 	public final static String ACCOUNT_PUBLISH_COACH        = "ACCOUNT_PUBLISH_COACH";
