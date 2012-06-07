@@ -76,9 +76,9 @@ public class UserValues {
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_TYPE, MAX_OPTION_LENGTH, false, "Freemium"));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_MODEL, MAX_OPTION_LENGTH, false, UserValuesConstantsAccount.ACCOUNT_MODEL_LIST.get(0)));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_TITLE));
-		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_STATUS));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_STATUS, MAX_OPTION_LENGTH, true, UserValuesConstantsAccount.ACCOUNT_STATUS_LIST__ACTIVE_SEARCH));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_KEYWORDS));
-		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, MAX_OPTION_LENGTH, true, UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__DEFAULT_MAN));
 
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_SEEKER, YES_NO_LENGTH, true, "YES"));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_COACH, YES_NO_LENGTH, true, "YES"));

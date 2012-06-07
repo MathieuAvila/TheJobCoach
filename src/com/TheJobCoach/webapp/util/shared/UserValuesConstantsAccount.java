@@ -13,7 +13,9 @@ public class UserValuesConstantsAccount
 	
 	public final static String ACCOUNT_TITLE        = "ACCOUNT_TITLE";
 	public final static String ACCOUNT_STATUS       = "ACCOUNT_STATUS";
-	public final static List<String> ACCOUNT_STATUS_LIST  = Arrays.asList("ACTIVE_SEARCH", "WORK_ACTIVE", "LISTENING");
+	
+	public final static String ACCOUNT_STATUS_LIST__ACTIVE_SEARCH = "ACTIVE_SEARCH";
+	public final static List<String> ACCOUNT_STATUS_LIST  = Arrays.asList(ACCOUNT_STATUS_LIST__ACTIVE_SEARCH, "WORK_ACTIVE", "LISTENING");
 	
 	public final static String ACCOUNT_KEYWORDS     = "ACCOUNT_KEYWORDS";
 	

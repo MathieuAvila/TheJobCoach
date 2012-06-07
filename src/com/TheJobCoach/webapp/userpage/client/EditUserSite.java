@@ -139,7 +139,10 @@ public class EditUserSite implements EntryPoint, IChanged {
 				result.setResult(getUserJobSite());	
 			}
 		});		
-		
+
+		textBoxName.registerListener(this);
+		textBoxUrl.registerListener(this);
+
 		vp.add(okCancel);
 		changed(false, true, false);
 		dBox.center();

@@ -6,6 +6,7 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
+import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -45,7 +46,7 @@ public class EditOpportunity implements EntryPoint {
 	TextBox txtbxUrl = new TextBox();
 	TextBox txtbxLocation = new TextBox();
 	ListBox comboBoxStatus = new ListBox();
-	String id;
+	String id = null;
 	DialogBlockOkCancel okCancel;
 	
 	public EditOpportunity(Panel panel, UserId _user, UserOpportunity _currentOpportunity, EditOpportunityResult _result)
@@ -75,9 +76,12 @@ public class EditOpportunity implements EntryPoint {
 	
 	public UserOpportunity getOpportunity()
 	{
+		int salary = 0;
+		if (txtbxSalary.getValue() != null) salary = txtbxSalary.getValue();
+		if (id == null) id = SiteUUID.getDateUuid();		
 		return new UserOpportunity(id, new Date(), new Date(),
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), txtbxCompany.getValue(),
-				txtbxContractType.getText(), txtbxSalary.getValue(), new Date(), new Date(),
+				txtbxContractType.getText(), salary, new Date(), new Date(),
 				false, txtbxSource.getText(), txtbxUrl.getText(), txtbxLocation.getText(), 
 				UserOpportunity.applicationStatusToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex())));
 	}
