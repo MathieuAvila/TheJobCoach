@@ -78,20 +78,19 @@ public class EditLogEntry implements EntryPoint {
 
 	private void commit()
 	{
-		UserLogEntry log = getLogEntry();
+		final UserLogEntry log = getLogEntry();
 		try {
 		userService.setUserLogEntry(user, log, new AsyncCallback<String>() {
 			public void onFailure(Throwable caught) {
 				MessageBox.messageBoxException(rootPanel, caught.toString());
 			}
-			public void onSuccess(String result)
+			public void onSuccess(String tmp)
 			{
-				System.out.println("Created user log entry: " + result);			
+				result.setResult(log);			
 			}
 		});
 		}
 		catch (Exception e) { MessageBox.messageBoxException(rootPanel, e);}
-		result.setResult(log);
 	};
 
 	/**
@@ -163,6 +162,8 @@ public class EditLogEntry implements EntryPoint {
 		
 		if (currentLogEntry != null)
 		{
+			System.out.println("CURRENT + " + currentLogEntry);
+			System.out.println("CURRENT + " + currentLogEntry.title);
 			txtbxTitle.setText(currentLogEntry.title);
 			richTextAreaDescription.setHTML(currentLogEntry.description);
 			dateBoxCreation.setValue(currentLogEntry.creation);

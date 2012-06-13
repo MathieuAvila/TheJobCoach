@@ -153,6 +153,7 @@ public class ContentUserLog implements EntryPoint {
 			{
 				@Override
 				public void setResult(UserLogEntry result) {
+					System.out.println("Commited new log entry " + result);
 					if (result != null)
 					{
 						getAllContent();
@@ -169,7 +170,7 @@ public class ContentUserLog implements EntryPoint {
 		EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, editedOpportunity.ID, user, new EditLogEntryResult() {
 			@Override
 			public void setResult(UserLogEntry result) {
-
+				System.out.println("Updated new log entry " + result);
 				if (result != null)
 				{					
 					getAllContent();

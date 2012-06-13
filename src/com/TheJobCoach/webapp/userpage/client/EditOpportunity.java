@@ -120,6 +120,11 @@ public class EditOpportunity implements EntryPoint {
 		for (ApplicationStatus e : UserOpportunity.getApplicationStatusTable())
 		{
 			comboBoxStatus.addItem(lang.applicationStatusMap().get("ApplicationStatus_" + UserOpportunity.applicationStatusToString(e)) ,UserOpportunity.applicationStatusToString(e));
+			if (currentOpportunity != null)
+			{
+				if (currentOpportunity.status == e)
+					comboBoxStatus.setItemSelected(comboBoxStatus.getItemCount() -1, true);
+			}
 		}
 		
 		Label lblDescription = new Label(lang._TextDescription());
