@@ -152,8 +152,6 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		rootPanel.setSize("100%", "100%");
 		rootPanel.clear();
 
-		System.out.println ("Test...........;\n");
-		
 		final VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
@@ -223,7 +221,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 				new FieldUpdater<UserDocument, String>() {
 					@Override
 					public void update(int index, UserDocument object, String value) {
-						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.ID);
+						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.ID) + "&userid=" + URL.encode(user.userName)+ "&token=" + URL.encode(user.token);
 						DownloadIFrame iframe = new DownloadIFrame(copyURL);
 						simplePanelCenter.add(iframe);
 					}},

@@ -138,7 +138,7 @@ public class EditUserDocument implements EntryPoint {
 			dBox.hide();
 			resultInterface.setResult();		
 		}
-		String copyURL = GWT.getModuleBaseURL() + "UploadServlet?docid=" + URL.encode(ud.ID);
+		String copyURL = GWT.getModuleBaseURL() + "UploadServlet?docid=" + URL.encode(ud.ID) + "&userid=" + URL.encode(user.userName)+ "&token=" + URL.encode(user.token);
 		form.setAction(copyURL);
 		final MessageBox mb = MessageBox.messageBox(rootPanel, MessageBox.TYPE.WAIT, lang._TextUploadInProgress());
 		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() 

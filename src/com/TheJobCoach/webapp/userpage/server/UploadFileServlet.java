@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.TheJobCoach.userdata.UserDocumentManager;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 
 public class UploadFileServlet extends HttpServlet {
 
@@ -23,19 +24,20 @@ public class UploadFileServlet extends HttpServlet {
 	{
 		System.out.println("Upload FILE : " + request.toString());
 	
-		if (!ServletFileUpload.isMultipartContent(request)) 
-			return; 
+		//if (!ServletFileUpload.isMultipartContent(request)) 
+		//	return; 
 
-		UserDocumentManager cm = new UserDocumentManager();
+		UserDocumentManager cm = UserDocumentManager.getInstance();
 		String docId = request.getParameter("docid");
+		String user = request.getParameter("userid");
+		String token = request.getParameter("token");
+		UserId userId = new UserId(user, token, UserId.UserType.USER_TYPE_SEEKER);
 		if (docId == null)
 		{
 			System.out.println("No DOC ID provided");
 			return;
 		}
-		System.out.println("Upload for DOC ID:" + docId);
-		
-		//ServletOutputStream out = response.getOutputStream();
+		System.out.println("Upload for DOC ID:" + docId + " for user: " + user + " with token: " + token);
 		
 		FileItemFactory factory = new DiskFileItemFactory(); 
 		ServletFileUpload upload = new ServletFileUpload(factory); 
@@ -75,7 +77,7 @@ public class UploadFileServlet extends HttpServlet {
 				//	File uploadedFile = new File(DB.PATH_UPLOAD+ fileName);
 				//	item.write(uploadedFile);
 				System.out.println("Upload FILE : "+ fileName + " size " + item.getSize());
-				cm.setUserDocumentContent(null, docId, fileName, item.get());
+				cm.setUserDocumentContent(userId, docId, fileName, item.get());
 			}
 			catch (Exception e) {
 				e.printStackTrace();

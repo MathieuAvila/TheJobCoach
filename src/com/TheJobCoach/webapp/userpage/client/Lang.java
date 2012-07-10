@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.Map;
 
 import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.user.cellview.client.Header;
 
 public interface Lang extends Constants {
 
@@ -231,7 +232,9 @@ public interface Lang extends Constants {
 	@Key("logEntryStatusMap")	
 	Map<String, String> logEntryStatusMap();
 
-	
+	@Key("attachedfiles")
+	String _TextFiles();
+
 	/// Content Comment
 	
 	@Key("comment")

@@ -4,14 +4,17 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Panel;
@@ -72,7 +75,11 @@ public class ComponentDocumentList extends VerticalPanel
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad()
-	{			
+	{	
+		final VerticalPanel simplePanelCenter = new VerticalPanel();
+		simplePanelCenter.setSize("0%", "0%");
+		add(simplePanelCenter);
+	
 		// Create name column.
 		TextColumn<UserDocumentId> nameColumn = new TextColumn<UserDocumentId>() 	{
 			@Override
@@ -92,6 +99,21 @@ public class ComponentDocumentList extends VerticalPanel
 			}
 		};
 		cellTable.addColumn(fileColumn, lang._TextFilename());
+		
+		cellTable.addColumnWithIconCellFile(
+				new FieldUpdater<UserDocumentId, String>() {
+					@Override
+					public void update(int index, UserDocumentId object, String value) {
+						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.ID) + "&userid=" + URL.encode(userId.userName)+ "&token=" + URL.encode(userId.token);
+						DownloadIFrame iframe = new DownloadIFrame(copyURL);
+						simplePanelCenter.add(iframe);
+					}},
+					new GetValue<String, UserDocumentId>() {
+						@Override
+						public String getValue(UserDocumentId contact) {
+							return contact.fileName;
+						}},
+						lang._TextFilename());
 		
 		// Create update date column.
 		TextColumn<UserDocumentId> dateColumn = new TextColumn<UserDocumentId>() 	{

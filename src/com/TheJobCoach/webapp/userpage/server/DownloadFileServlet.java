@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.TheJobCoach.userdata.UserDocumentManager;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
@@ -23,10 +25,14 @@ public class DownloadFileServlet extends HttpServlet {
 	{
 		UserDocumentManager cm = new UserDocumentManager();
 		String docId = request.getParameter("docid");
+		String userId = request.getParameter("userid");
+		String token = request.getParameter("token");
+		System.out.println("Requesting doc: " + docId + " for user: " + userId + " with token: " + token);
 		UserDocument userDoc;
 		ServletOutputStream out = response.getOutputStream();
+		UserId user =new UserId(userId, token, UserType.USER_TYPE_SEEKER);
 		try {
-			userDoc = cm.getUserDocument(null, docId);
+			userDoc = cm.getUserDocument(user, docId);
 		} catch (CassandraException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -36,6 +42,15 @@ public class DownloadFileServlet extends HttpServlet {
 		}
 		// Send zero length, because this File.size() is a long, while
 		// HttpServletResponse.setContentLength() takes an int.
+		if (userDoc == null)
+		{
+			// No such document
+			response.sendError(404);
+			ServletUtils.sendHeaders("ERROR", 0, request, response);
+			out.flush();
+			out.close();
+			return;
+		}
 		ServletUtils.sendHeaders(userDoc.fileName, 0, request, response);
 		response.setBufferSize( 8 * 1024 );
 		int bufSize = response.getBufferSize();
@@ -44,7 +59,7 @@ public class DownloadFileServlet extends HttpServlet {
 		byte[] doc = null;
 		try 
 		{
-			doc = cm.getUserDocumentContent(null, docId);
+			doc = cm.getUserDocumentContent(user, docId);
 			System.out.println("Document has length :" + doc.length);
 		} 
 		catch (CassandraException e) 

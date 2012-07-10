@@ -377,7 +377,6 @@ public class CassandraAccessor {
 		return cfDefList;
 	}
 
-
 	static public void updateColumnByte(String CF, String key, String column, byte[] data) throws CassandraException
 	{
 		ColumnFamilyTemplate<String, String> cfTemplate = new ThriftColumnFamilyTemplate<String, String>(CassandraAccessor.getKeyspace(),
@@ -387,7 +386,7 @@ public class CassandraAccessor {
 				);
 		ColumnFamilyUpdater<String, String> updater = cfTemplate.createUpdater(key);		
 		updater.setByteArray(column, data);
-
+		System.out.println("Update data from CF: " + CF + " key: " + key + " column: " +column + " size: " + data.length);
 		try 
 		{
 			cfTemplate.update(updater);

@@ -10,6 +10,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -46,7 +47,7 @@ public class ContentUserLog implements EntryPoint {
 
 	UserId user;
 
-	final CellTable<UserLogEntry> cellTable = new CellTable<UserLogEntry>();
+	final ExtendedCellTable<UserLogEntry> cellTable = new ExtendedCellTable<UserLogEntry>();
 
 	final Lang lang = GWT.create(Lang.class);
 	UserOpportunity editedOpportunity;
@@ -256,32 +257,28 @@ public class ContentUserLog implements EntryPoint {
 				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userLog.expectedFollowUp);
 			}
 		};
-
-		IconCellSingle deleteCell =	new IconCellSingle(IconCellSingle.IconType.DELETE);		
-		cellTable.addColumn(addColumn(deleteCell, new GetValue<String>() {
-			public String getValue(UserLogEntry contact) {
-				return "&nbsp;";//contact.fileName;
+		
+		// Create attached files column.
+		TextColumn<UserLogEntry> filesColumn = new TextColumn<UserLogEntry>() {
+			@Override
+			public String getValue(UserLogEntry userLog) 
+			{
+				return (userLog.attachedDocumentId.size()!=0) ? Integer.toString(userLog.attachedDocumentId.size()): "";
 			}
-		},
-		new FieldUpdater<UserLogEntry, String>() {
-			public void update(int index, UserLogEntry object, String value) {				
+		};
+
+		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserLogEntry, String>() {
+			@Override
+			public void update(int index, UserLogEntry object, String value) {
 				deleteLogEntry(object);
-			}
-		}), lang._TextDeleteUserDocument());
+			}});
 
-		IconCellSingle updateCell =	new IconCellSingle(IconCellSingle.IconType.UPDATE);		
-		cellTable.addColumn(addColumn(updateCell, new GetValue<String>() {
-			public String getValue(UserLogEntry contact) {
-				return "&nbsp;";//contact.fileName;
-			}
-		},
-		new FieldUpdater<UserLogEntry, String>() {
+		cellTable.addColumnWithIcon(IconCellSingle.IconType.UPDATE, new FieldUpdater<UserLogEntry, String>() {
+			@Override
 			public void update(int index, UserLogEntry object, String value) {
 				updateLogEntry(object);
-			}
-		}), lang._TextUpdateUserDocument());
-
-
+			}});
+		
 		titleColumn.setSortable(true);
 		statusColumn.setSortable(true);
 		createdColumn.setSortable(true);
@@ -291,6 +288,7 @@ public class ContentUserLog implements EntryPoint {
 		cellTable.addColumn(statusColumn, lang._TextStatus());
 		cellTable.addColumn(createdColumn, lang._TextCreated());
 		cellTable.addColumn(expectedFollowUpColumn, lang._TextExpectedFollowUp());
+		cellTable.addColumn(filesColumn, lang._TextFiles());
 
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<UserLogEntry> selectionModel = new SingleSelectionModel<UserLogEntry>();
