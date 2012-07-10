@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
@@ -25,6 +26,7 @@ public interface UserService extends RemoteService
 	public UserJobSite getUserSite(UserId id, String siteId) throws CassandraException;
 	
 	public Vector<UserDocument> getUserDocumentList(UserId id) throws CassandraException;
+	public Vector<UserDocumentId> getUserDocumentIdList(UserId userId) throws CassandraException;
 	public String deleteUserDocument(UserId id, String documentId) throws CassandraException;
 	public String setUserDocument(UserId id, UserDocument document) throws CassandraException;
 

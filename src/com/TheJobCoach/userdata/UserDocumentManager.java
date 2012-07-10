@@ -10,6 +10,7 @@ import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class UserDocumentManager {
@@ -49,6 +50,27 @@ public class UserDocumentManager {
 		}
 		return result;
 	}
+	
+	public Vector<UserDocumentId> getUserDocumentIdList(UserId id) throws CassandraException 
+	{	
+		String key = id.userName;
+		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_LIST, key);
+		Vector<UserDocumentId> result = new Vector<UserDocumentId>();		
+		if (resultReq == null)
+			return result;
+		for (String oppId: resultReq.keySet())
+		{
+			UserDocumentId opp = getUserDocumentId(id, oppId);
+			if (opp == null)
+			{
+				deleteUserDocument(id, oppId);
+				deleteUserDocumentFromList(id, oppId);
+			}
+			else 
+				result.add(opp);
+		}
+		return result;
+	}
 
 	public UserDocument getUserDocument(UserId id, String ID) throws CassandraException 
 	{		
@@ -70,6 +92,16 @@ public class UserDocumentManager {
 				UserDocument.documentStatusToString(resultReq.get("status")),
 				UserDocument.documentTypeToString(resultReq.get("type"))
 				);
+	}
+	
+	public UserDocumentId getUserDocumentId(UserId id, String ID) throws CassandraException 
+	{
+		UserDocument doc = getUserDocument(id, ID);
+		if (doc == null)
+		{
+			return null;  // this means it was deleted.
+		}		
+		return new UserDocumentId(ID, doc.ID, doc.name, doc.fileName, doc.lastUpdate);
 	}
 
 	public void setUserDocument(UserId id, UserDocument result) throws CassandraException 
@@ -131,5 +163,13 @@ public class UserDocumentManager {
 		ID = id.userName + "#" + ID;
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONTENT, ID);
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, ID);
+	}
+	
+	static UserDocumentManager docManager = null;
+	public static UserDocumentManager getInstance() 
+	{
+		if (docManager == null)
+			docManager = new UserDocumentManager();
+		return docManager;
 	}
 }

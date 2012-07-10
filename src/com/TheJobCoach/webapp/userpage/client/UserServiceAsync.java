@@ -6,6 +6,7 @@ import java.util.Vector;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
@@ -23,6 +24,7 @@ public interface UserServiceAsync {
 	void setUserSite(UserId id, UserJobSite data, AsyncCallback<Integer> callback) throws CassandraException;
 	
 	public void getUserDocumentList(UserId id, AsyncCallback<Vector<UserDocument>> callback) throws CassandraException;
+	public void getUserDocumentIdList(UserId userId, AsyncCallback<Vector<UserDocumentId>> callback);
 	public void deleteUserDocument(UserId id, String documentId, AsyncCallback<String> callback) throws CassandraException;
 	public void setUserDocument(UserId id, UserDocument document, AsyncCallback<String> callback) throws CassandraException;
 

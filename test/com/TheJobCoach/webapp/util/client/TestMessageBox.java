@@ -1,29 +1,44 @@
 package com.TheJobCoach.webapp.util.client;
 
-import com.google.gwt.junit.client.GWTTestCase;
-import com.google.gwt.user.client.ui.RootPanel;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestMessageBox extends GWTTestCase {
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.octo.gwt.test.GwtTest;
+
+public class TestMessageBox extends GwtTest {
+
+	private MessageBox mb;
 
 	@Override
 	public String getModuleName() {		
 		return "com.TheJobCoach.webapp.util.Util";
 	}
 
+	@Test
 	public void testMessageBox()
 	{
-		MessageBox mb = new MessageBox(
-			RootPanel.get("content"), 
-			true, true, MessageBox.TYPE.WARNING, "title", "message", new MessageBox.ICallback() {
 
-			@Override
-			public void complete(boolean ok) {
-				// TODO Auto-generated method stub
-				//end = true;
-			}
-		});
-		mb.onModuleLoad();
-		
 	}
-	
+
+	@Before
+	public void beforeMessageBox()
+	{
+		HorizontalPanel p = new HorizontalPanel();
+		mb = new MessageBox(
+				p, 
+				true, true, MessageBox.TYPE.WARNING, "title", "message", new MessageBox.ICallback() {
+
+					@Override
+					public void complete(boolean ok) {
+						// TODO Auto-generated method stub
+						//end = true;
+					}
+				});
+		mb.onModuleLoad();		
+
+		// Some pre-assertions
+
+	}
+
 }

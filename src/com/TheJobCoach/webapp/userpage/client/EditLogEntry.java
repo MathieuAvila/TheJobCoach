@@ -1,6 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client;
 
+import java.util.Vector;
+
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
@@ -48,7 +51,7 @@ public class EditLogEntry implements EntryPoint {
 	EditLogEntryResult result;
 	UserLogEntry currentLogEntry;
 	String oppId;
-	
+	Vector<UserDocumentId> userDocumentList;
 	
 	public EditLogEntry(Panel panel, UserLogEntry _currentLogEntry, String _oppId, UserId _user, EditLogEntryResult _result)
 	{
@@ -73,7 +76,7 @@ public class EditLogEntry implements EntryPoint {
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), 
 				dateBoxCreation.getValue(), dateBoxEvent.getValue(),
 				UserLogEntry.entryTypeToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex())),
-				null, null);
+				null, userDocumentList);
 	}
 
 	private void commit()
@@ -158,6 +161,18 @@ public class EditLogEntry implements EntryPoint {
 				dBox.hide();
 			}
 		});
+		if (currentLogEntry != null)
+		{
+			userDocumentList = currentLogEntry.attachedDocumentId;
+		}
+		else
+		{
+			userDocumentList = new Vector<UserDocumentId>();
+		}
+		ComponentDocumentList cdl = new ComponentDocumentList(userDocumentList, rootPanel, user);
+		cdl.onModuleLoad();
+		hp.add(cdl);
+		
 		hp.add(okCancel);
 		
 		if (currentLogEntry != null)
@@ -168,7 +183,8 @@ public class EditLogEntry implements EntryPoint {
 			richTextAreaDescription.setHTML(currentLogEntry.description);
 			dateBoxCreation.setValue(currentLogEntry.creation);
 			dateBoxEvent.setValue(currentLogEntry.expectedFollowUp);
-		}
+		}		
+		
 		dBox.center();
 	}
 }

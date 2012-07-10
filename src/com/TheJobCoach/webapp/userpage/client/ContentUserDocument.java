@@ -152,6 +152,8 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		rootPanel.setSize("100%", "100%");
 		rootPanel.clear();
 
+		System.out.println ("Test...........;\n");
+		
 		final VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);

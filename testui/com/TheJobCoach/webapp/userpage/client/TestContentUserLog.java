@@ -44,7 +44,7 @@ public class TestContentUserLog implements EntryPoint {
 			
 			ContentUserLog cud = new ContentUserLog(
 					hp, 
-					new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER),
+					new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER),
 					opp);
 			cud.onModuleLoad();
 		}

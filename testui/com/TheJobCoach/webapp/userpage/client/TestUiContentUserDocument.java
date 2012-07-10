@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class TestContentUserDocument implements EntryPoint {
+public class TestUiContentUserDocument implements EntryPoint {
 
 	/**
 	 * This is the entry point method.
@@ -23,7 +23,7 @@ public class TestContentUserDocument implements EntryPoint {
 			hp.setStyleName("mainpage-content");
 			root.add(hp);
 			hp.setSize("100%", "100%");
-			ContentUserDocument cud = new ContentUserDocument(hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
+			ContentUserDocument cud = new ContentUserDocument(hp, new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER));
 			cud.onModuleLoad();
 		}
 	}

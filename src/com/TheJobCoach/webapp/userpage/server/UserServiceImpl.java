@@ -14,6 +14,7 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
@@ -143,5 +144,11 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		System.out.println("send comment '" + value + "' to trash");
 		account.sendComment(user, value);
 		return null;
+	}
+
+	@Override
+	public Vector<UserDocumentId> getUserDocumentIdList(UserId userId)
+			throws CassandraException {
+		return userDocumentManager.getUserDocumentIdList(userId);
 	}
 }

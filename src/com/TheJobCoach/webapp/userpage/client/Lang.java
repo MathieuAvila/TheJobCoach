@@ -303,6 +303,9 @@ public interface Lang extends Constants {
 	@Key("needfile")
 	String _TextNeedFilename();
 	
+	@Key("attachuserdocument")
+	String _TextAttachUserDocument();
+	
 	// Edit user site
 
 	@Key("editusersitetitle")

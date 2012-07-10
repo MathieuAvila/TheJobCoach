@@ -25,7 +25,7 @@ public class UserLogEntry implements Serializable {
 	public Date expectedFollowUp;
 	public LogEntryType type;
 	public Vector<String> contactId;
-	public Vector<String> attachedDocumentId;
+	public Vector<UserDocumentId> attachedDocumentId;
 	
 	static public String entryTypeToString(LogEntryType t)
 	{
@@ -54,7 +54,7 @@ public class UserLogEntry implements Serializable {
 
 	public UserLogEntry(String opportunityId, String iD, String title,
 			String description, Date creation, Date expectedFollowUp, LogEntryType type,
-			Vector<String> contactId, Vector<String> attachedDocumentId) {
+			Vector<String> contactId, Vector<UserDocumentId> attachedDocumentId) {
 		super();
 		this.opportunityId = opportunityId;
 		ID = iD;

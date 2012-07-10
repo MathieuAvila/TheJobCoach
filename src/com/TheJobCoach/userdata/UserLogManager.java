@@ -8,6 +8,7 @@ import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
@@ -53,6 +54,18 @@ public class UserLogManager {
 		{
 			return null;  // this means it was deleted.
 		}
+		int count = 0;
+		String countStr = resultReq.get("doccount");
+		if (countStr != null)
+		{
+			count = Integer.parseInt(countStr);
+		}	
+		Vector<UserDocumentId> docIdList = new Vector<UserDocumentId>();
+		for (int i=0; i != count; i++)
+		{
+			UserDocumentId docId = UserDocumentManager.getInstance().getUserDocumentId(id, resultReq.get("d#" + i));
+			if (docId != null) docIdList.add(docId);
+		}
 		return new UserLogEntry(
 				Convertor.toString(resultReq.get("opportunityid")),
 				ID,
@@ -61,7 +74,7 @@ public class UserLogManager {
 				Convertor.toDate(resultReq.get("creation")),
 				Convertor.toDate(resultReq.get("expectedfollowup")),
 				UserLogEntry.entryTypeToString(resultReq.get("status")),
-				null, null);
+				null, docIdList);
 	}
 
 	public void setUserLogEntry(UserId id, UserLogEntry result) throws CassandraException 
@@ -72,18 +85,26 @@ public class UserLogManager {
 				key, 
 				(new ShortMap())
 				.add(result.ID, result.ID)
-				.get());
-		boolean resultReq = CassandraAccessor.updateColumn(
-				COLUMN_FAMILY_NAME_DATA, 
-				result.ID, 
-				(new ShortMap())				
+				.get());		
+		ShortMap update = new ShortMap()				
 				.add("opportunityid", result.opportunityId)
 				.add("creation", result.creation)
 				.add("expectedfollowup", result.expectedFollowUp)
 				.add("title", result.title)
 				.add("description", result.description)				
-				.add("status", UserLogEntry.entryTypeToString(result.type))
-				.get());	
+				.add("status", UserLogEntry.entryTypeToString(result.type));
+		int count = 0;
+		if (result.attachedDocumentId != null)
+		for (UserDocumentId d: result.attachedDocumentId)
+		{
+			update.add("d#" + Integer.toString(count), d.updateId);
+			count++;
+		}
+		update.add("doccount", count);
+		boolean resultReq = CassandraAccessor.updateColumn(
+				COLUMN_FAMILY_NAME_DATA, 
+				result.ID, 
+				update.get());	
 		if (resultReq == false)
 		{
 			throw new CassandraException(); 
