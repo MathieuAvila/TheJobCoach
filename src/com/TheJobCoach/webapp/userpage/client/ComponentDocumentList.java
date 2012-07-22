@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
@@ -104,7 +103,7 @@ public class ComponentDocumentList extends VerticalPanel
 				new FieldUpdater<UserDocumentId, String>() {
 					@Override
 					public void update(int index, UserDocumentId object, String value) {
-						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.ID) + "&userid=" + URL.encode(userId.userName)+ "&token=" + URL.encode(userId.token);
+						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.updateId) + "&userid=" + URL.encode(userId.userName)+ "&token=" + URL.encode(userId.token);
 						DownloadIFrame iframe = new DownloadIFrame(copyURL);
 						simplePanelCenter.add(iframe);
 					}},

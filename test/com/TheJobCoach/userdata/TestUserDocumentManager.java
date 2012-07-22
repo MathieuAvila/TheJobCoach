@@ -151,11 +151,16 @@ public class TestUserDocumentManager {
 	@Test
 	public void testGetDocumentContent() throws CassandraException
 	{
-		byte[] c1_t = manager.getUserDocumentContent(id, ud1_id);
+		UserDocumentId udid = manager.getUserDocumentId(id, ud1_id);
+		byte[] c1_t = manager.getUserDocumentContent(id, udid.updateId);
 		checkContentEquality(c1_t, c1);
-		byte[] c2_t = manager.getUserDocumentContent(id, ud2_id);
+		
+		udid = manager.getUserDocumentId(id, ud2_id);
+		byte[] c2_t = manager.getUserDocumentContent(id, udid.updateId);
 		checkContentEquality(c2_t, c2);
-		byte[] c21_t = manager.getUserDocumentContent(id2, ud21_id);
+		
+		udid = manager.getUserDocumentId(id2, ud21_id);
+		byte[] c21_t = manager.getUserDocumentContent(id2, udid.updateId);
 		checkContentEquality(c21_t, c21);
 	}
 	
@@ -173,7 +178,8 @@ public class TestUserDocumentManager {
 		manager.setUserDocument(id, ud4);
 		manager.setUserDocumentContent(id, ud4_id, "myfile4", c1);
 		
-		byte[] c1_t = manager.getUserDocumentContent(id, ud4_id);
+		UserDocumentId udid = manager.getUserDocumentId(id, ud4_id);
+		byte[] c1_t = manager.getUserDocumentContent(id, udid.updateId);
 		checkContentEquality(c1_t, c1);
 		UserDocument ud = manager.getUserDocument(id, ud4_id);
 		assertEquals(ud.fileName, "myfile4");

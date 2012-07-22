@@ -50,7 +50,7 @@ public class TestComponentChooseDocument implements EntryPoint {
 					{
 						@Override
 						public void setResult(UserDocumentId result) {
-							System.out.println("Selected + " + result);
+							System.out.println("Selected + " + result.updateId);
 						}						
 					});
 					cud.onModuleLoad();					

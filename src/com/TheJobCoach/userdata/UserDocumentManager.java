@@ -38,10 +38,12 @@ public class UserDocumentManager {
 		String revInfoKey = id.userName + "#" + subKey;
 		Map<String, String> resultSubReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, revInfoKey);
 		if (resultSubReq != null)
+		{
 			return new UserDocument.UserDocumentRevision(
 					Convertor.toDate(resultSubReq.get("lastupdate")),
 					subKey,
 					Convertor.toString(resultSubReq.get("filename")));
+		}
 		else
 			return null;
 	}
@@ -148,9 +150,15 @@ public class UserDocumentManager {
 	public UserDocumentId getUserDocumentId(UserId id, String ID) throws CassandraException 
 	{
 		UserDocument doc = getUserDocument(id, ID);
-		UserDocument.UserDocumentRevision rev =  doc.revisions.get(doc.revisions.size()-1);
-		if ((doc == null) || (rev == null))
+		if (doc == null)
 		{
+			System.out.println("doc is null");
+			return null;  // this means it was deleted.
+		}
+		UserDocument.UserDocumentRevision rev =  doc.revisions.get(doc.revisions.size()-1);
+		if (rev == null)
+		{
+			System.out.println("rev is null" + doc.revisions.size() );
 			return null;  // this means it was deleted.
 		}
 		return new UserDocumentId(doc.ID, rev.ID, doc.name, rev.fileName, doc.lastUpdate, rev.date);
@@ -196,11 +204,13 @@ public class UserDocumentManager {
 		System.out.println("GET DOC name: " + resultReq.get("name"));
 
 		String revisionCount = resultReq.get("revisioncount");
+		System.out.println("REVISION COUNT STRING ********************************* : " + revisionCount);
 		byte[] checkResultContent = CassandraAccessor.getColumnByte(COLUMN_FAMILY_NAME_CONTENT, masterKey, "content");
-		if (checkResultContent == null) revisionCount = "0";
+		if ((checkResultContent == null) && (revisionCount == null)) revisionCount = "0";
 		if ((revisionCount != null) || (checkResultContent == null))
 		{
 			int count = Convertor.toInt(revisionCount);
+			System.out.println("CASE UPDATE ********************************* : " + count);
 			CassandraAccessor.updateColumn(
 					COLUMN_FAMILY_NAME_DATA, 
 					masterKey,
@@ -211,6 +221,7 @@ public class UserDocumentManager {
 		}
 		else
 		{			
+			System.out.println("CASE NOT UPDATE ********************************* : ");
 			newDocId = docId;			
 			subIdKey = masterKey;
 			CassandraAccessor.updateColumn(
@@ -220,8 +231,11 @@ public class UserDocumentManager {
 					.add("filename", fileName)
 					.add("rev#1", newDocId)
 					.add("rev#0", docId)
-					.add("revisioncount", 1).get());	
-		}		
+					.add("revisioncount", 2).get());	
+		}
+		
+		System.out.println("GET DOC sub docId: " + subIdKey);
+		
 		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_DATA, 
 				subIdKey, 
