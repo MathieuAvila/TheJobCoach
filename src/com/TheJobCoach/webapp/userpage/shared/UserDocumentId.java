@@ -14,14 +14,16 @@ public class UserDocumentId implements Serializable {
 	public String name;
 	public String fileName;
 	public Date lastUpdate;
+	public Date currentUpdate;
 	
-	public UserDocumentId(String ID, String updateId, String name, String fileName, Date lastUpdate) {
+	public UserDocumentId(String ID, String updateId, String name, String fileName, Date lastUpdate, Date currentUpdate) {
 		super();
 		 this.ID = ID;
 		 this.updateId = updateId;
 		 this.name = name;
 		 this.fileName = fileName;
-		 this.lastUpdate = lastUpdate;
+		 this.lastUpdate = lastUpdate; 
+		 this.currentUpdate = currentUpdate;
 	}
 
 	public UserDocumentId()

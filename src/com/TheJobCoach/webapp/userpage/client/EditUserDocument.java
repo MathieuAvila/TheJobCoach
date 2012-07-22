@@ -101,7 +101,7 @@ public class EditUserDocument implements EntryPoint {
 				txtbxTitle.getValue(), richTextAreaDescription.getHTML(),
 				d, stripUserName, 
 				UserDocument.DocumentStatus.values()[comboBoxStatus.getSelectedIndex()],
-				UserDocument.DocumentType.values()[comboBoxType.getSelectedIndex()]);
+				UserDocument.DocumentType.values()[comboBoxType.getSelectedIndex()], null);
 	}
 
 	public void commit()

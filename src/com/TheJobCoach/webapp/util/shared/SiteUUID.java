@@ -30,7 +30,7 @@ public class SiteUUID {
 		return 
 				formatInteger(1900 + d.getYear()) + "-" 
 				+ formatInteger(d.getMonth() + 1) + "-"
-				+ formatInteger(d.getDay() + 1) + "_"
+				+ formatInteger(d.getDate()) + "_"
 				+ formatInteger(d.getHours()) + ":"
 				+ formatInteger(d.getMinutes()) + ":"
 				+ formatInteger(d.getSeconds()) + ":"

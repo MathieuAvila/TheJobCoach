@@ -32,7 +32,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	static private News news = new News();
 	static private UserOpportunityManager userOpportunityManager = new UserOpportunityManager();
 	static private UserLogManager userLogManager = new UserLogManager();
-	static private UserDocumentManager userDocumentManager = new UserDocumentManager();
+	static private UserDocumentManager userDocumentManager = UserDocumentManager.getInstance();
 
 	@Override
 	public List<String> getUserSiteList(UserId id) throws CassandraException 

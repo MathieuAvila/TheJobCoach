@@ -2,9 +2,23 @@ package com.TheJobCoach.webapp.userpage.shared;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Vector;
 
 public class UserDocument implements Serializable {
 
+	public static class UserDocumentRevision implements Serializable {		
+		private static final long serialVersionUID = 1115255124501443732L;
+		public Date date;
+		public String ID;
+		public String fileName;
+		public UserDocumentRevision(Date date, String ID, String fileName) {
+			this.date = date;
+			this.ID = ID;
+			this.fileName = fileName;
+		}
+		public UserDocumentRevision() {			
+		}
+	}
 	
 	private static final long serialVersionUID = 1115255124501443731L;
 	
@@ -18,10 +32,12 @@ public class UserDocument implements Serializable {
 	public String fileName;	
 	public DocumentStatus status;
 	public DocumentType type;
+	public Vector<UserDocumentRevision> revisions;
 	
 	public UserDocument(String iD, String name, String description,
 			Date lastUpdate, String fileName, DocumentStatus status,
-			DocumentType type) {
+			DocumentType type,
+			Vector<UserDocumentRevision> revisions) {
 		super();
 		ID = iD;
 		this.name = name;
@@ -30,6 +46,7 @@ public class UserDocument implements Serializable {
 		this.fileName = fileName;
 		this.status = status;
 		this.type = type;
+		this.revisions = revisions;
 	}
 
 	static public String documentStatusToString(DocumentStatus t)

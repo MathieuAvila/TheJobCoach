@@ -86,8 +86,8 @@ public class TestNews
 			e.printStackTrace();
 		}			
 		assertEquals(2, result.size());
-		NewsInformation n0 = result.get(0);
-		NewsInformation n1 = result.get(1);
+		NewsInformation n0 = result.get(1);
+		NewsInformation n1 = result.get(0);
 		
 		assertEquals("ID2", n0.ID);
 		assertEquals("MyTitle2", n0.title);

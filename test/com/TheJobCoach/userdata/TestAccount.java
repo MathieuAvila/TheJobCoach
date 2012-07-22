@@ -146,7 +146,7 @@ public class TestAccount
 		account.purgeTestAccount(0);
 		accountList = account.getTestAccountList();
 		accountNames = accountList.values();
-		System.out.println("TEST ACCOUNT COUNT: " + accountNames.size());
+		System.out.println("TEST ACCOUNT COUNT NUMBER: " + accountNames.size());
 		assertEquals(0, accountNames.size());
 	}
 	

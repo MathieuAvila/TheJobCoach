@@ -77,20 +77,7 @@
 		<servlet-name>downloadFileServlet</servlet-name>
 		<url-pattern>/thejobcoach/DownloadServlet</url-pattern>
 	</servlet-mapping>
-	
-	
-	
-	<servlet>
-		<servlet-name>downloadFileServlet</servlet-name>
-		<servlet-class>com.TheJobCoach.webapp.userpage.server.DownloadFileServlet</servlet-class>
-	</servlet>
 
-	<servlet-mapping>
-		<servlet-name>downloadFileServlet</servlet-name>
-		<url-pattern>/thejobcoach/DownloadServlet</url-pattern>
-	</servlet-mapping>
-	
-	
 	
 	<!-- Default page to serve -->
 	<welcome-file-list>

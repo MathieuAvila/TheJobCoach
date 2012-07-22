@@ -23,7 +23,7 @@ public class DownloadFileServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,	IOException 
 	{
-		UserDocumentManager cm = new UserDocumentManager();
+		UserDocumentManager cm = UserDocumentManager.getInstance();
 		String docId = request.getParameter("docid");
 		String userId = request.getParameter("userid");
 		String token = request.getParameter("token");

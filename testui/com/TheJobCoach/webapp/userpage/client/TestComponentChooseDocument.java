@@ -43,9 +43,9 @@ public class TestComponentChooseDocument implements EntryPoint {
 					root.add(hp);
 					hp.setSize("100%", "100%");
 					ArrayList<UserDocumentId> userDocumentList = new ArrayList<UserDocumentId>();
-					userDocumentList.add(new UserDocumentId("ID1", "updateID1", "name1", "fileName1", new Date()));
-					userDocumentList.add(new UserDocumentId("ID2", "updateID2", "name2", "fileName2", new Date()));
-					userDocumentList.add(new UserDocumentId("ID3", "updateID3", "name3", "fileName3", new Date()));
+					userDocumentList.add(new UserDocumentId("ID1", "updateID1", "name1", "fileName1", new Date(), new Date()));
+					userDocumentList.add(new UserDocumentId("ID2", "updateID2", "name2", "fileName2", new Date(), new Date()));
+					userDocumentList.add(new UserDocumentId("ID3", "updateID3", "name3", "fileName3", new Date(), new Date()));
 					ComponentChooseDocument cud = new ComponentChooseDocument(hp, new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER), new ComponentChooseDocument.ComponentChooseDocumentResult()
 					{
 						@Override

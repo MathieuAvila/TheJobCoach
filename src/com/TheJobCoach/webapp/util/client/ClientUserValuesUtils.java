@@ -2,6 +2,7 @@ package com.TheJobCoach.webapp.util.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.google.gwt.core.client.GWT;
@@ -27,7 +28,7 @@ public class ClientUserValuesUtils {
 		public void notifyValue(boolean set, String key, String value);
 	}
 	
-	static HashMap<String, ReturnValue> notifyValuesChange = new HashMap<String, ReturnValue>();
+	static HashMap<String, Vector<ReturnValue>> notifyValuesChange = new HashMap<String, Vector<ReturnValue>>();
 	
 	static private void insertKeys(Map<String, String> values, boolean set)
 	{
@@ -36,7 +37,8 @@ public class ClientUserValuesUtils {
 		{
 			if (notifyValuesChange.containsKey(key))
 			{
-				notifyValuesChange.get(key).notifyValue(set, key, values.get(key));
+				Vector<ReturnValue> notifyList = notifyValuesChange.get(key);
+				for (ReturnValue notify: notifyList) notify.notifyValue(set, key, values.get(key));
 			}
 		}
 	}
@@ -48,7 +50,10 @@ public class ClientUserValuesUtils {
 
 	public void addListener(String key, ReturnValue listener)
 	{
-		notifyValuesChange.put(key, listener);
+		Vector<ReturnValue> notifyList = notifyValuesChange.get(key);
+		if (notifyList == null) notifyList = new Vector<ReturnValue>();
+		notifyList.add(listener);		
+		notifyValuesChange.put(key, notifyList);
 	}
 	
 	public void preloadValueList(final String key, final ReturnValue result)
@@ -94,6 +99,7 @@ public class ClientUserValuesUtils {
 	public void setValue(String key, String value)
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
+		map.put(key, value);
 		setValues(map, null);
 	}	
 

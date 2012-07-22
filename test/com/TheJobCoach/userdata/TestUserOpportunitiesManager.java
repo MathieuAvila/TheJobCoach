@@ -104,8 +104,8 @@ public class TestUserOpportunitiesManager {
 	public void testGetUserOpportunityList() throws CassandraException {
 		Vector<UserOpportunity> result = manager.getOpportunitiesShortList(id, "managed");
 		assertEquals(2, result.size());
-		assertEquals(result.get(0).ID, "opp2");
-		assertEquals(result.get(1).ID, "opp1");
+		assertEquals(result.get(0).ID, "opp1");
+		assertEquals(result.get(1).ID, "opp2");
 		result = manager.getOpportunitiesShortList(id2, "managed");
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "opp3");		
