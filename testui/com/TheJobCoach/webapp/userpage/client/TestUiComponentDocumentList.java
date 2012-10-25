@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class TestComponentDocumentList implements EntryPoint {
+public class TestUiComponentDocumentList implements EntryPoint {
 
 	/**
 	 * This is the entry point method.

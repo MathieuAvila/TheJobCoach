@@ -14,7 +14,6 @@ import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -25,8 +24,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -180,28 +177,6 @@ public class ContentUserLog implements EntryPoint {
 		});
 		eus.onModuleLoad();
 	}	
-
-	private <C> Column<UserLogEntry, C> addColumn(Cell<C> cell,final GetValue<C> getter, FieldUpdater<UserLogEntry, C> fieldUpdater) 
-	{
-		Column<UserLogEntry, C> column = new Column<UserLogEntry, C>(cell) 
-				{
-
-			@Override
-			public C getValue(UserLogEntry object) 
-			{
-				return getter.getValue(object);
-			}
-				};
-				column.setFieldUpdater(fieldUpdater);
-
-				return column;
-	}
-
-
-	private static interface GetValue<C> {
-		C getValue(UserLogEntry contact);
-	}
-
 
 	/**
 	 * This is the entry point method.
