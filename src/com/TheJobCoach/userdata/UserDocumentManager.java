@@ -12,6 +12,7 @@ import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentRevision;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 
@@ -32,14 +33,14 @@ public class UserDocumentManager {
 		cfDefContent = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_CONTENT, cfDefContent);
 	}
 
-	public UserDocument.UserDocumentRevision getUserDocumentRevision(UserId id, String subKey) throws CassandraException
+	public UserDocumentRevision getUserDocumentRevision(UserId id, String subKey) throws CassandraException
 	{
 		// Get the revision information
 		String revInfoKey = id.userName + "#" + subKey;
 		Map<String, String> resultSubReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, revInfoKey);
 		if (resultSubReq != null)
 		{
-			return new UserDocument.UserDocumentRevision(
+			return new UserDocumentRevision(
 					Convertor.toDate(resultSubReq.get("lastupdate")),
 					subKey,
 					Convertor.toString(resultSubReq.get("filename")));
@@ -114,7 +115,7 @@ public class UserDocumentManager {
 		System.out.println("GET DOC name: " + resultReq.get("name"));
 
 		/* Build out the list of revisions */
-		Vector<UserDocument.UserDocumentRevision> revisions = new Vector<UserDocument.UserDocumentRevision>();	
+		Vector<UserDocumentRevision> revisions = new Vector<UserDocumentRevision>();	
 
 		String revisionCount = resultReq.get("revisioncount");
 		System.out.println("Revision count string: " + revisionCount);
@@ -132,7 +133,7 @@ public class UserDocumentManager {
 		else
 		{
 			Date revDate = Convertor.toDate(resultReq.get("lastupdate"));
-			revisions.add(new UserDocument.UserDocumentRevision(revDate, ID, Convertor.toString(resultReq.get("filename"))));		
+			revisions.add(new UserDocumentRevision(revDate, ID, Convertor.toString(resultReq.get("filename"))));		
 		}
 
 		return new UserDocument(
@@ -155,7 +156,7 @@ public class UserDocumentManager {
 			System.out.println("doc is null");
 			return null;  // this means it was deleted.
 		}
-		UserDocument.UserDocumentRevision rev =  doc.revisions.get(doc.revisions.size()-1);
+		UserDocumentRevision rev =  doc.revisions.get(doc.revisions.size()-1);
 		if (rev == null)
 		{
 			System.out.println("rev is null" + doc.revisions.size() );
@@ -279,7 +280,7 @@ public class UserDocumentManager {
 		System.out.println("Main delete document: " + ID);
 		if (doc != null)
 		{
-			for (UserDocument.UserDocumentRevision revId: doc.revisions)
+			for (UserDocumentRevision revId: doc.revisions)
 			{
 				System.out.println("Main delete sub document: " + revId);
 				if (revId != null)

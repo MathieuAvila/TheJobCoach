@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentRevision;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class TestUserDocumentManager {
@@ -26,25 +27,25 @@ public class TestUserDocumentManager {
 	static String ud21_id = "doc1";
 	static String ud4_id = "doc4";
 	
-	static UserDocument.UserDocumentRevision rev1 = new UserDocument.UserDocumentRevision(getDate(2000, 12, 1), ud1_id, "file1");
+	static UserDocumentRevision rev1 = new UserDocumentRevision(getDate(2000, 12, 1), ud1_id, "file1");
 	static UserDocument ud1 = new UserDocument(
 			ud1_id, "ndoc1", "description1", getDate(2000, 12, 1), "file1", 
-			UserDocument.DocumentStatus.NEW, UserDocument.DocumentType.RESUME, new Vector<UserDocument.UserDocumentRevision>(Arrays.asList(rev1)));
+			UserDocument.DocumentStatus.NEW, UserDocument.DocumentType.RESUME, new Vector<UserDocumentRevision>(Arrays.asList(rev1)));
 	
-	static UserDocument.UserDocumentRevision rev2 = new UserDocument.UserDocumentRevision(getDate(2000, 12, 2), ud2_id, "file2");
+	static UserDocumentRevision rev2 = new UserDocumentRevision(getDate(2000, 12, 2), ud2_id, "file2");
 	static UserDocument ud2 = new UserDocument(
 			ud2_id, "ndoc2", "description2", getDate(2000, 12, 2), "file2", 
-			UserDocument.DocumentStatus.OUTDATED, UserDocument.DocumentType.MOTIVATION, new Vector<UserDocument.UserDocumentRevision>(Arrays.asList(rev2)));
+			UserDocument.DocumentStatus.OUTDATED, UserDocument.DocumentType.MOTIVATION, new Vector<UserDocumentRevision>(Arrays.asList(rev2)));
 	
-	static UserDocument.UserDocumentRevision rev3 = new UserDocument.UserDocumentRevision(getDate(2000, 12, 3), ud21_id, "file3");
+	static UserDocumentRevision rev3 = new UserDocumentRevision(getDate(2000, 12, 3), ud21_id, "file3");
 	static UserDocument ud21 = new UserDocument(
 			ud21_id, "ndoc1", "description1", getDate(2000, 12, 3), "file3", 
-			UserDocument.DocumentStatus.SECONDARY, UserDocument.DocumentType.OTHER, new Vector<UserDocument.UserDocumentRevision>(Arrays.asList(rev3)));
+			UserDocument.DocumentStatus.SECONDARY, UserDocument.DocumentType.OTHER, new Vector<UserDocumentRevision>(Arrays.asList(rev3)));
 	
-	static UserDocument.UserDocumentRevision rev4 = new UserDocument.UserDocumentRevision(getDate(2000, 12, 1), ud1_id, "file4");
+	static UserDocumentRevision rev4 = new UserDocumentRevision(getDate(2000, 12, 1), ud1_id, "file4");
 	static UserDocument ud4 = new UserDocument(
 			ud4_id, "ndoc4", "description4", getDate(2000, 12, 1), "file4", 
-			UserDocument.DocumentStatus.NEW, UserDocument.DocumentType.RESUME, new Vector<UserDocument.UserDocumentRevision>(Arrays.asList(rev4)));
+			UserDocument.DocumentStatus.NEW, UserDocument.DocumentType.RESUME, new Vector<UserDocumentRevision>(Arrays.asList(rev4)));
 	
 	@SuppressWarnings("deprecation")
 	static Date getDate(int year, int month, int day)
