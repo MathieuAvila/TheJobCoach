@@ -11,7 +11,7 @@ public class TestSiteUUID {
 	@SuppressWarnings("deprecation")
 	Date getDate(int year, int month, int day)
 	{
-		Date result = new Date();
+		Date result = new Date(0);
 		result.setDate(day);
 		result.setMonth(month);
 		result.setYear(year - 1900);

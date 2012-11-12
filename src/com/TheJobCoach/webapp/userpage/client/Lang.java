@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.Map;
 
 import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.user.client.ui.Label;
 
 public interface Lang extends Constants {
 
@@ -14,9 +15,12 @@ public interface Lang extends Constants {
 
 	// Context UP
 	
-	//@Key("connectedas")
-	//String _TextConnectedAs();
+	@Key("connectedas")
+	String _Text_ConnectedAs();
 	
+	@Key("connectiontime")
+	String _Text_ConnectionTimeToday();
+
 	// Common
 	
 	@Key("type")
@@ -315,5 +319,4 @@ public interface Lang extends Constants {
 
 	@Key("createusersitetitle")
 	String _TextCreateUserSiteTitle();
-
 }

@@ -49,6 +49,13 @@
 	cursor						:	move;
 }
 
+.label-username
+{
+	font-size: 15px;
+	font-weight:bold;
+	color:darkred;
+}
+
 .label-create-account-ok
 {
 	font-size: 15px;

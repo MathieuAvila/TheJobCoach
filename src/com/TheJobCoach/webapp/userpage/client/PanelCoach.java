@@ -12,8 +12,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -25,7 +28,9 @@ public class PanelCoach implements EntryPoint, IChanged, ReturnValue, IApply {
 	final static Lang lang = GWT.create(Lang.class);
 	
 	final Panel coachPanel = new SimplePanel();
-	final Panel coachAdvicePanel = new DecoratorPanel();
+	final SimplePanel scrollAdvicePanel = new SimplePanel();
+	final DecoratorPanel coachAdvicePanel = new DecoratorPanel();
+	final Panel adviceListPanel = new VerticalPanel();
 	
 	ClientUserValuesUtils values = null;
 
@@ -54,9 +59,38 @@ public class PanelCoach implements EntryPoint, IChanged, ReturnValue, IApply {
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
 		rootPanel.add(hPanel);
+				
 		hPanel.add(coachPanel);
 		hPanel.add(coachAdvicePanel);
 		
+		coachAdvicePanel.add(scrollAdvicePanel);		
+		scrollAdvicePanel.add(adviceListPanel);
+		
+		adviceListPanel.add(new Label("Bienvenue1 !"));
+		adviceListPanel.add(new Label("Bienvenue2 !"));
+		adviceListPanel.add(new Label("Bienvenue3 !"));
+		adviceListPanel.add(new Label("Bienvenue4 !"));
+		adviceListPanel.add(new Label("Bienvenue5 !"));
+		adviceListPanel.add(new Label("Bienvenue6 !"));
+		adviceListPanel.add(new Label("Bienvenue7 !"));
+		adviceListPanel.add(new Label("Bienvenue8 !"));
+		adviceListPanel.add(new Label("Bienvenue9 !"));
+		adviceListPanel.add(new Label("Bienvenue10 !"));
+		adviceListPanel.add(new Label("Bienvenue6 !"));
+		adviceListPanel.add(new Label("Bienvenue7 !"));
+		adviceListPanel.add(new Label("Bienvenue8 !"));
+		adviceListPanel.add(new Label("Bienvenue9 !"));
+		adviceListPanel.add(new Label("Bienvenue10 !"));
+		
+		//adviceListPanel.setHeight("200px");
+		//coachAdvicePanel.setHeight("200px");
+		//adviceListPanel.setWidth("100%");
+		//coachAdvicePanel.setWidth("100%");
+		//scrollAdvicePanel.setHeight("200px");
+		
+		//hPanel.setCellWidth(coachAdvicePanel, "100%");
+		//hPanel.setCellHeight(coachAdvicePanel, "200px");
+		hPanel.setWidth("100%");
 		getValues();
 		values.addListener(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, this);	
 	}

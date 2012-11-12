@@ -1,11 +1,11 @@
 package com.TheJobCoach.webapp.util.client;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.util.shared.SystemException;
+import com.TheJobCoach.webapp.util.shared.UpdateRequest;
+import com.TheJobCoach.webapp.util.shared.UpdateResponse;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -81,5 +81,13 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 			if (values.containsKey(k)) values.put(k, map.get(k));
 		}
 		callback.onSuccess("");
+	}
+	
+	@Override
+	public void sendUpdateList(UserId user, UpdateRequest request,
+			AsyncCallback<UpdateResponse> callback)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 };

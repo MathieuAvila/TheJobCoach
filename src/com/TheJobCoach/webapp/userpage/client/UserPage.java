@@ -244,29 +244,51 @@ public class UserPage implements EntryPoint {
 		rootPanel.add(flexTable, 0, 0);
 		flexTable.setSize("100%", "100%");
 
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		flexTable.setWidget(0, 0, horizontalPanel);		
+		HorizontalPanel upperGlobalPanel = new HorizontalPanel();
+		
+		flexTable.setWidget(0, 0, upperGlobalPanel);		
 		//horizontalPanel.setWidth("100%");
 		//Image image = new Image(ClientImageBundle.INSTANCE.coachIcon());
 		//horizontalPanel.add(image);
-		PanelCoach pc = new PanelCoach(horizontalPanel, userId);
+		PanelCoach pc = new PanelCoach(upperGlobalPanel, userId);
 		pc.onModuleLoad();
 		
-		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
-		horizontalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		horizontalPanel.add(horizontalPanel_2);
-		horizontalPanel.setCellHorizontalAlignment(horizontalPanel_2, HasHorizontalAlignment.ALIGN_RIGHT);
-
+		HorizontalPanel panelConnectionInfo = new HorizontalPanel();
+		
+		VerticalPanel connectionTextPanel = new VerticalPanel();
+		
+		HorizontalPanel panelConnectedAs = new HorizontalPanel();
+		panelConnectedAs.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		Label labelConnectedAs = new Label(lang._Text_ConnectedAs());
+		panelConnectedAs.add(labelConnectedAs);
 		Label labelUserName = new Label(userId.userName);
-		horizontalPanel_2.add(labelUserName);
-		horizontalPanel_2.setCellVerticalAlignment(labelUserName, HasVerticalAlignment.ALIGN_MIDDLE);
+		panelConnectedAs.add(labelUserName);
+		panelConnectedAs.setCellVerticalAlignment(labelUserName, HasVerticalAlignment.ALIGN_MIDDLE);
+		panelConnectedAs.setCellVerticalAlignment(labelConnectedAs, HasVerticalAlignment.ALIGN_MIDDLE);
+		labelUserName.setStyleName("label-username");
 
-		SimplePanel simplePanel_6 = new SimplePanel();
-		horizontalPanel_2.add(simplePanel_6);
-		simplePanel_6.setWidth("30px");
+		HorizontalPanel panelConnectionTime = new HorizontalPanel();
+		panelConnectionTime.add(new Label(lang._Text_ConnectionTimeToday()));
+		Label connectionTime = new Label();
+		panelConnectionTime.add(connectionTime);
+		
+		connectionTextPanel.add(panelConnectedAs);
+		connectionTextPanel.add(panelConnectionTime);
+		
+		PanelUpdate panelUpdate = new PanelUpdate(panelConnectedAs, userId, connectionTime);
+		panelConnectedAs.add(panelUpdate);
+		
+		panelConnectionInfo.add(panelUpdate);
+		panelConnectionInfo.add(connectionTextPanel);
+		
+		upperGlobalPanel.add(panelConnectionInfo);
+		upperGlobalPanel.setCellHorizontalAlignment(panelConnectionInfo, HasHorizontalAlignment.ALIGN_RIGHT);
+		
+		panelUpdate.setWidth("30px");
+		panelUpdate.onModuleLoad();
 
 		Image imageLogout = new Image(ClientImageBundle.INSTANCE.urlLogout());
-		horizontalPanel_2.add(imageLogout);
+		panelConnectionInfo.add(imageLogout);
 		imageLogout.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -323,17 +345,6 @@ public class UserPage implements EntryPoint {
 		stackPanelMyApplication.add(verticalPanelMySearch, lang._TextMySearch(), false);
 		verticalPanelMySearch.setSize("100%", "100%");
 
-		/*
-		final Label label_Researches = new Label(lang._TextMyOpportunities());
-		setLabelMenu(label_Researches, "research");
-		verticalPanelMyApplication.add(label_Researches);
-
-		final Label label_SearchResults = new Label(lang._TextSearchResults());
-		setLabelMenu(label_SearchResults, "searchresult");
-		verticalPanelMyApplication.add(label_SearchResults);
-*/
-
-
 		final Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
 		setLabelMenu(lblNewLabel_AddressBook, "addressbook");
 		verticalPanelMySearch.add(lblNewLabel_AddressBook);
@@ -353,12 +364,7 @@ public class UserPage implements EntryPoint {
 		final Label label_ActionsAgenda = new Label(lang._TextAgenda());
 		setLabelMenu(label_ActionsAgenda, "agenda");
 		verticalPanelMySearch.add(label_ActionsAgenda);
-/*
-		final Label label_ArchivedApplications = new Label(lang._TextArchivedApplications());
-		setLabelMenu(label_ArchivedApplications, "archivedapplications");
-		verticalPanelMySearch.add(label_ArchivedApplications);
-*/
-		
+	
 		SimplePanel simplePanel_2 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_2);
 		simplePanel_2.setHeight("10px");
