@@ -50,64 +50,23 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 	CheckedLabel clConnectAfter = new CheckedLabel("Je dois être déconnecté après cette heure", false, tfConnectAfter);
 
 	CheckedTextField tfConnectRatio = new CheckedTextField("[0-9]*");
-	CheckedLabel clConnectRatio = new CheckedLabel("Je dois me connecter au moins ce nombre de jours par semaine", false, tfConnectRatio);
+	CheckedLabel clConnectRatio = new CheckedLabel("Je dois me connecter au moins ce nombre de jours", false, tfConnectRatio);
 
-	CheckedTextField tfConnectRatioMonthly = new CheckedTextField("[0-9]*");
-	CheckedLabel clConnectRatioMonthly = new CheckedLabel("Je dois me connecter au moins ce nombre de jours par mois", false, tfConnectRatioMonthly);
+	CheckedTextField tfCreateOpportunity = new CheckedTextField("[0-9]*");
+	CheckedLabel clCreateOpportunity = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités", false, tfCreateOpportunity);
 	
+	CheckedTextField tfCandidateOpportunity = new CheckedTextField("[0-9]*");
+	CheckedLabel clCandidateOpportunity = new CheckedLabel("Je dois candidater à au moins ce nombre d'opportunités", false, tfCandidateOpportunity);
 	
-	CheckedTextField tfCreateOpportunityW = new CheckedTextField("[0-9]*");
-	CheckedLabel clCreateOpportunityW = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités par semaine", false, tfCreateOpportunityW);
+	CheckedTextField tfInterviewOpportunity = new CheckedTextField("[0-9]*");
+	CheckedLabel clInterviewOpportunity = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens", false, tfInterviewOpportunity);
 	
-	CheckedTextField tfCreateOpportunityBW = new CheckedTextField("[0-9]*");
-	CheckedLabel clCreateOpportunityBW = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités toutes les deux semaines", false, tfCreateOpportunityBW);
+	CheckedTextField tfProposal = new CheckedTextField("[0-9]*");
+	CheckedLabel clProposal = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions", false, tfProposal);
 	
-	CheckedTextField tfCreateOpportunityM = new CheckedTextField("[0-9]*");
-	CheckedLabel clCreateOpportunityM = new CheckedLabel("Je dois créer au moins ce nombre d'opportunités par mois", false, tfCreateOpportunityM);
-
+	CheckedTextField tfPhoneCall = new CheckedTextField("[0-9]*");
+	CheckedLabel clPhoneCall = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques", false, tfPhoneCall);
 	
-	
-	CheckedTextField tfCandidateOpportunityW = new CheckedTextField("[0-9]*");
-	CheckedLabel clCandidateOpportunityW = new CheckedLabel("Je dois candidater à au moins ce nombre d'opportunités par semaine", false, tfCandidateOpportunityW);
-	
-	CheckedTextField tfCandidateOpportunityBW = new CheckedTextField("[0-9]*");
-	CheckedLabel clCandidateOpportunityBW = new CheckedLabel("Je dois candidater au moins ce nombre d'opportunités toutes les deux semaines", false, tfCandidateOpportunityBW);
-	
-	CheckedTextField tfCandidateOpportunityM = new CheckedTextField("[0-9]*");
-	CheckedLabel clCandidateOpportunityM = new CheckedLabel("Je dois candidater au moins ce nombre d'opportunités par mois", false, tfCandidateOpportunityM);
-
-	
-	
-	CheckedTextField tfInterviewOpportunityW = new CheckedTextField("[0-9]*");
-	CheckedLabel clInterviewOpportunityW = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens par semaine", false, tfInterviewOpportunityW);
-	
-	CheckedTextField tfInterviewOpportunityBW = new CheckedTextField("[0-9]*");
-	CheckedLabel clInterviewOpportunityBW = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens toutes les deux semaines", false, tfInterviewOpportunityBW);
-	
-	CheckedTextField tfInterviewOpportunityM = new CheckedTextField("[0-9]*");
-	CheckedLabel clInterviewOpportunityM = new CheckedLabel("Je dois passer au moins ce nombre d'entretiens par mois", false, tfInterviewOpportunityM);
-
-	
-	
-	CheckedTextField tfProposalW = new CheckedTextField("[0-9]*");
-	CheckedLabel clProposalW = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions par semaine", false, tfProposalW);
-	
-	CheckedTextField tfProposalBW = new CheckedTextField("[0-9]*");
-	CheckedLabel clProposalBW = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions toutes les deux semaines", false, tfProposalBW);
-	
-	CheckedTextField tfProposalM = new CheckedTextField("[0-9]*");
-	CheckedLabel clProposalM = new CheckedLabel("Je dois obtenir au moins ce nombre de propositions par mois", false, tfProposalM);
-
-	
-	
-	CheckedTextField tfPhoneCallW = new CheckedTextField("[0-9]*");
-	CheckedLabel clPhoneCallW = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques par semaine", false, tfPhoneCallW);
-	
-	CheckedTextField tfPhoneCallBW = new CheckedTextField("[0-9]*");
-	CheckedLabel clPhoneCallBW = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques toutes les deux semaines", false, tfPhoneCallBW);
-	
-	CheckedTextField tfPhoneCallM = new CheckedTextField("[0-9]*");
-	CheckedLabel clPhoneCallM = new CheckedLabel("Je dois passer ce nombre d'appels téléphoniques par mois", false, tfPhoneCallM);
 	
 	void getValues()
 	{	
@@ -145,85 +104,49 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 		grid0.setWidget(2,0, clConnectRatio);
 		grid0.setWidget(2,1, tfConnectRatio);
 		
-		grid0.setWidget(3,0, clConnectRatioMonthly);
-		grid0.setWidget(3,1, tfConnectRatioMonthly);
-
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, tfConnectBefore);
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, tfConnectAfter);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_WEEKLY_RATIO, tfConnectRatio);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_MONTHLY_RATIO, tfConnectRatioMonthly);
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, tfConnectRatio);
 		
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs de créations d'opportunités");
 
 		Grid grid1 = new Grid(3, 2);
 		simplePanelCenter.add(grid1);
 		
-		grid1.setWidget(0,0, clCreateOpportunityW);
-		grid1.setWidget(0,1, tfCreateOpportunityW);
+		grid1.setWidget(0,0, clCreateOpportunity);
+		grid1.setWidget(0,1, tfCreateOpportunity);
 
-		grid1.setWidget(1,0, clCreateOpportunityBW);
-		grid1.setWidget(1,1, tfCreateOpportunityBW);
-
-		grid1.setWidget(2,0, clCreateOpportunityM);
-		grid1.setWidget(2,1, tfCreateOpportunityM);
-
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_WEEKLY, tfCreateOpportunityW);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_BIWEEKLY, tfCreateOpportunityBW);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_MONTHLY, tfCreateOpportunityM);
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, tfCreateOpportunity);
 
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs de candidatures");
 
 		Grid grid2 = new Grid(3, 2);
 		simplePanelCenter.add(grid2);
 		
-		grid2.setWidget(0,0, clCandidateOpportunityW);
-		grid2.setWidget(0,1, tfCandidateOpportunityW);
+		grid2.setWidget(0,0, clCandidateOpportunity);
+		grid2.setWidget(0,1, tfCandidateOpportunity);
 
-		grid2.setWidget(1,0, clCandidateOpportunityBW);
-		grid2.setWidget(1,1, tfCandidateOpportunityBW);
-
-		grid2.setWidget(2,0, clCandidateOpportunityM);
-		grid2.setWidget(2,1, tfCandidateOpportunityM);
-
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_WEEKLY, tfCandidateOpportunityW);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_BIWEEKLY, tfCandidateOpportunityBW);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_MONTHLY, tfCandidateOpportunityM);
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY, tfCandidateOpportunity);
 
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs d'entretiens");
 
 		Grid grid3 = new Grid(3, 2);
 		simplePanelCenter.add(grid3);
 		
-		grid3.setWidget(0,0, clInterviewOpportunityW);
-		grid3.setWidget(0,1, tfInterviewOpportunityW);
+		grid3.setWidget(0,0, clInterviewOpportunity);
+		grid3.setWidget(0,1, tfInterviewOpportunity);
 
-		grid3.setWidget(1,0, clInterviewOpportunityBW);
-		grid3.setWidget(1,1, tfInterviewOpportunityBW);
-
-		grid3.setWidget(2,0, clInterviewOpportunityM);
-		grid3.setWidget(2,1, tfInterviewOpportunityM);
-
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_WEEKLY, tfInterviewOpportunityW);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_BIWEEKLY, tfInterviewOpportunityBW);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_MONTHLY, tfInterviewOpportunityM);
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW, tfInterviewOpportunity);
 
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs d'appels téléphoniques");
 
 		Grid grid4 = new Grid(3, 2);
 		simplePanelCenter.add(grid4);
 		
-		grid4.setWidget(0,0, clPhoneCallW);
-		grid4.setWidget(0,1, tfPhoneCallW);
+		grid4.setWidget(0,0, clPhoneCall);
+		grid4.setWidget(0,1, tfPhoneCall);
 
-		grid4.setWidget(1,0, clPhoneCallBW);
-		grid4.setWidget(1,1, tfPhoneCallBW);
-
-		grid4.setWidget(2,0, clPhoneCallM);
-		grid4.setWidget(2,1, tfPhoneCallM);
-
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_WEEKLY, tfPhoneCallW);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_BIWEEKLY, tfPhoneCallBW);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_MONTHLY, tfPhoneCallM);
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL, tfPhoneCall);
 		
 		for (IExtendedField f: fields.values()) f.registerListener(this);
 		

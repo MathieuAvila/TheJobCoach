@@ -28,24 +28,12 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR);
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_WEEKLY_RATIO);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_MONTHLY_RATIO);
+		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO);
 		
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_BIWEEKLY);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_MONTHLY);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_WEEKLY);
-
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_BIWEEKLY);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_MONTHLY);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_WEEKLY);
-		
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_BIWEEKLY);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_MONTHLY);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_WEEKLY);
-
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_BIWEEKLY);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_MONTHLY);
-		addValue(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_WEEKLY);
+		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY);
+		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY);
+		addValue(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW);
+		addValue(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL);
 
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_RECALL_GOAL_MIDDLE);
 			

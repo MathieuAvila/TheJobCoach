@@ -86,25 +86,12 @@ public class UserValues {
 
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_WEEKLY_RATIO));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_MONTHLY_RATIO));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO));
 		
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_BIWEEKLY));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_MONTHLY));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY_WEEKLY));
-
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_BIWEEKLY));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_MONTHLY));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY_WEEKLY));
-		
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_BIWEEKLY));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_MONTHLY));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW_WEEKLY));
-
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_BIWEEKLY));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_MONTHLY));
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL_WEEKLY));
-
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY));		
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_RECALL_GOAL_MIDDLE));
 		
 	}
