@@ -14,5 +14,6 @@
 	<set-configuration-property name="locale.cookie" value="gwtlang"/>
 	
 	<servlet path='/UploadServlet' class='com.TheJobCoach.webapp.userpage.server.UploadFileServlet'/>
+	<servlet path='/UploadServlet' class='com.TheJobCoach.webapp.userpage.server.UploadFileServlet'/>
 	
 </module>

@@ -1,7 +1,6 @@
 package com.TheJobCoach.webapp.util.shared;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class UpdateResponse implements Serializable {
 	

@@ -18,7 +18,10 @@ public class UserOpportunityManager {
 
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
-
+	
+	final public static String MANAGED_LIST = "managed";
+	
+	
 	public UserOpportunityManager()
 	{
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
@@ -171,6 +174,6 @@ public class UserOpportunityManager {
 
 	public void deleteUser(UserId id) throws CassandraException
 	{
-		deleteUserList(id, "managed");
+		deleteUserList(id, MANAGED_LIST);
 	}
 }

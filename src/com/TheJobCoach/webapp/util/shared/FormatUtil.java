@@ -32,6 +32,7 @@ public class FormatUtil
 	@SuppressWarnings({ "deprecation" })
 	public static String getDateString(Date d)
 	{
+		if (d == null) return "";
 		return fillWithZeroCount(d.getYear() + 1900 ,4) + "_" + 
 				fillWithZeroCount(d.getMonth(),2) + "_" +
 				fillWithZeroCount(d.getDate(), 2) + "_" +
@@ -49,6 +50,7 @@ public class FormatUtil
 	@SuppressWarnings({ "deprecation" })
 	public static Date getStringDate(String s)
 	{
+		if (s == null) return new Date();
 		int[] table = readIntegersFromString(s);
 		Date d = new Date(0);
 		d.setYear(getIntFromIndex(table, 0) - 1900);
