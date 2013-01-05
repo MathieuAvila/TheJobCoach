@@ -81,4 +81,8 @@ public class FormatUtil
 		r.setSeconds(59);
 		return r;
 	}
+	
+	
+	public static String trueString = "1";
+	public static String falseString = "0";
 }

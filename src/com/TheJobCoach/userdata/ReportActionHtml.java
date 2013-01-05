@@ -16,7 +16,7 @@ public class ReportActionHtml extends ReportAction {
 	@Override
 	void includeTitle(Date Start, Date end)
 	{
-		content+="<HTML><BODY><H1>Rapport de temps</H1>";
+		content+="<HTML><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"><BODY><H1>Rapport de temps</H1>";
 	}
 	
 	static String addWithSeparator(String src, String append, String sep, String end)
@@ -64,7 +64,7 @@ public class ReportActionHtml extends ReportAction {
 	void logHeader(UserLogEntry log, boolean includeLogDetail) 
 	{
 		content += "<TR>"
-				+ "<TD>" + log.expectedFollowUp + "</TD>"
+				+ "<TD>" + log.eventDate + "</TD>"
 				+ "<TD>" + UserLogEntry.entryTypeToString(log.type) + "</TD>"
 				+ "<TD>" + (log.title + (includeLogDetail ? log.description : "" ))
 				+ "</TD>";

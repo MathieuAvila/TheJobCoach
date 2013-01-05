@@ -38,14 +38,14 @@ public class TestUserLogManager {
 			"contractType1",  1,  
 			getDate(2000, 1, 1), getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
-			UserOpportunity.ApplicationStatus.APPLIED);
+			UserOpportunity.ApplicationStatus.APPLIED, "note1");
 	
 	static UserOpportunity opportunity2 = new UserOpportunity("opp2", getDate(2000, 1, 2), getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  2,  
 			getDate(2000, 1, 2), getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
-			UserOpportunity.ApplicationStatus.NEW);
+			UserOpportunity.ApplicationStatus.NEW, "note2");
 	
 	static UserDocumentId docId1 = new UserDocumentId("id1", "id1", "name1", "fileName1", new Date(), new Date());
 	static UserDocumentId docId2 = new UserDocumentId("id2", "id2", "name2", "fileName2", new Date(), new Date());
@@ -59,33 +59,30 @@ public class TestUserLogManager {
 	
 	static UserLogEntry userLog1 = new UserLogEntry("opp1", "log1", "title1", "description1", 
 			getDate(2000, 2, 1),
-			getDate(2000, 2, 10),
-			LogEntryType.INFO, null, docIdList);
+			LogEntryType.INFO, null, docIdList, "note1", false);
 	
 	static UserLogEntry userLog1_less = new UserLogEntry("opp1", "log1", "title1", "description1", 
 			getDate(2000, 2, 1),
-			getDate(2000, 2, 10),
-			LogEntryType.INFO, null, docIdList_less);
+			LogEntryType.INFO, null, docIdList_less, "note1_less", false);
 	
 	static UserLogEntry userLog2 = new UserLogEntry("opp1", "log2", "title2", "description2", 
 			getDate(2000, 2, 1),
-			getDate(2000, 2, 10),
-			LogEntryType.INFO, null, docIdListVoid);
+			LogEntryType.INFO, null, docIdListVoid, "note2", false);
 		
 	static UserLogEntry userLog3 = new UserLogEntry("opp2", "log3", "title3", "description3", 
 			getDate(2000, 2, 1),
-			getDate(2000, 2, 10),
-			LogEntryType.INFO, null, docIdListVoid);
+			LogEntryType.INFO, null, docIdListVoid, "note3", true);
 		
 	private void checkUserLogEntry(UserLogEntry op1, UserLogEntry opRef)
 	{
 		assertEquals(op1.ID, opRef.ID);
-		assertEquals(op1.creation, opRef.creation);
+		assertEquals(op1.eventDate, opRef.eventDate);
 		assertEquals(op1.opportunityId, opRef.opportunityId);
 		assertEquals(op1.title, opRef.title);		
 		assertEquals(op1.description, opRef.description);
-		assertEquals(op1.expectedFollowUp, opRef.expectedFollowUp);
 		assertEquals(op1.type, opRef.type);
+		assertEquals(op1.note, opRef.note);
+		assertEquals(op1.done, opRef.done);
 		
 		assertEquals(op1.attachedDocumentId.size(), opRef.attachedDocumentId.size());
 		for (UserDocumentId doc : op1.attachedDocumentId)

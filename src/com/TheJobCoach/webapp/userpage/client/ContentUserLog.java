@@ -47,6 +47,8 @@ public class ContentUserLog implements EntryPoint {
 	final ExtendedCellTable<UserLogEntry> cellTable = new ExtendedCellTable<UserLogEntry>();
 
 	final Lang lang = GWT.create(Lang.class);
+	final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
+	
 	UserOpportunity editedOpportunity;
 	UserLogEntry currentLogEntry;
 
@@ -194,7 +196,7 @@ public class ContentUserLog implements EntryPoint {
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 		
-		ContentHelper.insertTitlePanel(simplePanelCenter, lang._Text_EditLog(), ClientImageBundle.INSTANCE.userLogContent());
+		ContentHelper.insertTitlePanel(simplePanelCenter, langLogEntry._Text_EditLog(), ClientImageBundle.INSTANCE.userLogContent());
 		
 		// Create title column.
 		TextColumn<UserLogEntry> titleColumn = new TextColumn<UserLogEntry>() 	{
@@ -211,28 +213,19 @@ public class ContentUserLog implements EntryPoint {
 			public String getValue(UserLogEntry userLog) 
 			{
 				System.out.println("USER LOG TYPE " + userLog.type);
-				return lang.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(userLog.type));
+				return langLogEntry.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(userLog.type));
 			}
 		};
 
-		// Create created column.
+		// Create event column.
 		TextColumn<UserLogEntry> createdColumn = new TextColumn<UserLogEntry>() {
 			@Override
 			public String getValue(UserLogEntry userLog) 
 			{
-				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userLog.creation);
+				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userLog.eventDate);
 			}
 		};
 
-		// Create expectedFollowUp column.
-		TextColumn<UserLogEntry> expectedFollowUpColumn = new TextColumn<UserLogEntry>() {
-			@Override
-			public String getValue(UserLogEntry userLog) 
-			{
-				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userLog.expectedFollowUp);
-			}
-		};
-		
 		// Create attached files column.
 		TextColumn<UserLogEntry> filesColumn = new TextColumn<UserLogEntry>() {
 			@Override
@@ -257,13 +250,11 @@ public class ContentUserLog implements EntryPoint {
 		titleColumn.setSortable(true);
 		statusColumn.setSortable(true);
 		createdColumn.setSortable(true);
-		expectedFollowUpColumn.setSortable(true);
 		cellTable.setStyleName("filecelltable");
 		cellTable.addColumn(titleColumn, lang._TextName());
 		cellTable.addColumn(statusColumn, lang._TextStatus());
-		cellTable.addColumn(createdColumn, lang._TextCreated());
-		cellTable.addColumn(expectedFollowUpColumn, lang._TextExpectedFollowUp());
-		cellTable.addColumn(filesColumn, lang._TextFiles());
+		cellTable.addColumn(createdColumn, langLogEntry._TextCreated());
+		cellTable.addColumn(filesColumn, langLogEntry._TextFiles());
 
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<UserLogEntry> selectionModel = new SingleSelectionModel<UserLogEntry>();
@@ -324,7 +315,7 @@ public class ContentUserLog implements EntryPoint {
 		simplePanelCenter.add(simplePanel);
 		simplePanel.setHeight("20px");
 		
-		ButtonImageText buttonBack = new ButtonImageText(ButtonImageText.Type.BACK, lang._Text_BackToOpportunityList());
+		ButtonImageText buttonBack = new ButtonImageText(ButtonImageText.Type.BACK, langLogEntry._Text_BackToOpportunityList());
 		buttonBack.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

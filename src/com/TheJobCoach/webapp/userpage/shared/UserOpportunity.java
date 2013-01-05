@@ -10,16 +10,12 @@ public class UserOpportunity implements Serializable {
 
 	public enum ApplicationStatus 
 	{
-		NONE,
 		NEW,
-		APPLIED,
-		NEED_CALL_BACK,
-		WAIT_INTERVIEW,
-		WAIT_INTERVIEW_RESULT,
-		REQUEST_PENDING,
-		DISMISSED,
+		DISCOVERED,
+		APPLIED,		
+		INTERVIEWS,		
 		SUCCESS,
-		FAILURE
+		CLOSED
 	};
 
 	/** UUID. Same as @UserApplication. */
@@ -36,7 +32,10 @@ public class UserOpportunity implements Serializable {
 
 	/** Full description for the opportunity */
 	public String description;
-
+	
+	/** User private notes */
+	public String note;
+	
 	/** Refers to the list of companies */
 	public String companyId;
 
@@ -74,33 +73,24 @@ public class UserOpportunity implements Serializable {
 	{
 		switch (t)
 		{
-		case NONE: return "NONE";
 		case NEW: return "NEW";
 		case APPLIED: return "APPLIED";
-		case NEED_CALL_BACK: return "NEED_CALL_BACK";
-		case WAIT_INTERVIEW: return "WAIT_INTERVIEW";
-		case WAIT_INTERVIEW_RESULT: return "WAIT_INTERVIEW_RESULT";
-		case REQUEST_PENDING: return "REQUEST_PENDING";
-		case DISMISSED: return "DISMISSED";
+		case DISCOVERED: return "DISCOVERED";
+		case INTERVIEWS: return "INTERVIEWS";
 		case SUCCESS: return "SUCCESS";
-		case FAILURE: return "FAILURE";
+		case CLOSED: return "CLOSED";
 		}
 		return "NONE";
 	}
-	
+
 	static public ApplicationStatus applicationStatusToString(String t)
 	{
-		if ("NONE".equals(t)) return ApplicationStatus.NONE;
 		if ("NEW".equals(t)) return ApplicationStatus.NEW;
 		if ("APPLIED".equals(t)) return ApplicationStatus.APPLIED;
-		if ("NEED_CALL_BACK".equals(t)) return ApplicationStatus.NEED_CALL_BACK;
-		if ("WAIT_INTERVIEW".equals(t))return ApplicationStatus.WAIT_INTERVIEW;
-		if ("WAIT_INTERVIEW_RESULT".equals(t))return ApplicationStatus.WAIT_INTERVIEW_RESULT;
-		if ("REQUEST_PENDING".equals(t)) return ApplicationStatus.REQUEST_PENDING;
-		if ("DISMISSED".equals(t)) return ApplicationStatus.DISMISSED;
+		if ("INTERVIEWS".equals(t)) return ApplicationStatus.INTERVIEWS;
 		if ("SUCCESS".equals(t)) return ApplicationStatus.SUCCESS;
-		if ("FAILURE".equals(t)) return ApplicationStatus.FAILURE;
-		return ApplicationStatus.NONE;
+		if ("CLOSED".equals(t)) return ApplicationStatus.CLOSED;
+		return ApplicationStatus.NEW;
 	}
 
 
@@ -108,7 +98,7 @@ public class UserOpportunity implements Serializable {
 			String title, String description, String companyId,
 			String contractType, int salary, Date startDate, Date endDate,
 			boolean systemSource, String source, String url, String location,
-			ApplicationStatus status) 
+			ApplicationStatus status, String note) 
 	{
 		super();
 		ID = iD;
@@ -126,6 +116,7 @@ public class UserOpportunity implements Serializable {
 		this.url = url;
 		this.location = location;
 		this.status = status;
+		this.note = note;
 	}
 
 	public UserOpportunity()

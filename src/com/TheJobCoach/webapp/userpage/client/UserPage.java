@@ -172,6 +172,23 @@ public class UserPage implements EntryPoint {
 				}			
 			});
 		}
+		if (menu.equals("myreports"))
+		{
+			GWT.runAsync(new RunAsyncCallback() 
+			{
+				@Override
+				public void onFailure(Throwable reason) 
+				{
+					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
+				}
+				@Override
+				public void onSuccess() 
+				{
+					ContentMyReports contentMyReports = new ContentMyReports(simplePanelContent, userId);
+					contentMyReports.onModuleLoad();
+				}			
+			});
+		}
 	}
 
 	private void setLabelMenu(final Label label, final String menu)
@@ -180,6 +197,7 @@ public class UserPage implements EntryPoint {
 		if (
 				!menu.equals("account") &&
 				!menu.equals("goals") &&
+				//!menu.equals("myreports") &&
 				!menu.equals("news") &&
 				!menu.equals("myjobboards") &&
 				!menu.equals("mydocuments") &&
@@ -378,7 +396,7 @@ public class UserPage implements EntryPoint {
 		verticalPanelStats.setSize("100%", "100%");
 
 		final Label label_Bilans = new Label(lang._TextBilans());
-		setLabelMenu(label_Bilans, "bilans");
+		setLabelMenu(label_Bilans, "myreports");
 		verticalPanelStats.add(label_Bilans);
 
 		final Label lblNewLabel_MyGoals = new Label(lang._TextMyGoals());

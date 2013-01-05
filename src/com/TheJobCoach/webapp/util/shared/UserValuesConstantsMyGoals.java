@@ -1,7 +1,19 @@
 package com.TheJobCoach.webapp.util.shared;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class UserValuesConstantsMyGoals 
-{
+{	
+	public final static String PERFORMANCE_EVALUATION_PERIOD        = "PERFORMANCE_EVALUATION_PERIOD";
+	public final static String PERFORMANCE_EVALUATION_PERIOD__WEEK  = "WEEK";
+	public final static String PERFORMANCE_EVALUATION_PERIOD__2WEEK = "2WEEKS";
+	public final static String PERFORMANCE_EVALUATION_PERIOD__MONTH = "MONTH";
+	public final static List<String> PERFORMANCE_EVALUATION_PERIOD_LIST  = Arrays.asList(
+			PERFORMANCE_EVALUATION_PERIOD__WEEK, 
+			PERFORMANCE_EVALUATION_PERIOD__2WEEK, 
+			PERFORMANCE_EVALUATION_PERIOD__MONTH);
+
 	public final static String PERFORMANCE_CREATEOPPORTUNITY        = "PERFORMANCE_CREATEOPPORTUNITY";
 	public final static String PERFORMANCE_CANDIDATEOPPORTUNITY     = "PERFORMANCE_CANDIDATEOPPORTUNITY";	
 	public final static String PERFORMANCE_INTERVIEW                = "PERFORMANCE_INTERVIEW";	

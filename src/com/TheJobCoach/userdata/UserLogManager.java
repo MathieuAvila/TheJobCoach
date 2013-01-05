@@ -72,9 +72,10 @@ public class UserLogManager {
 				Convertor.toString(resultReq.get("title")),
 				Convertor.toString(resultReq.get("description")),
 				Convertor.toDate(resultReq.get("creation")),
-				Convertor.toDate(resultReq.get("expectedfollowup")),
 				UserLogEntry.entryTypeToString(resultReq.get("status")),
-				null, docIdList);
+				null, docIdList,
+				Convertor.toString(resultReq.get("note")),
+				Convertor.toBoolean(resultReq.get("done")));
 	}
 
 	public void setUserLogEntry(UserId id, UserLogEntry result) throws CassandraException 
@@ -88,11 +89,11 @@ public class UserLogManager {
 				.get());		
 		ShortMap update = new ShortMap()				
 				.add("opportunityid", result.opportunityId)
-				.add("creation", result.creation)
-				.add("expectedfollowup", result.expectedFollowUp)
+				.add("creation", result.eventDate)
 				.add("title", result.title)
 				.add("description", result.description)				
-				.add("status", UserLogEntry.entryTypeToString(result.type));
+				.add("status", UserLogEntry.entryTypeToString(result.type))
+				.add("note", result.note).add("done", result.done);
 		int count = 0;
 		if (result.attachedDocumentId != null)
 		for (UserDocumentId d: result.attachedDocumentId)

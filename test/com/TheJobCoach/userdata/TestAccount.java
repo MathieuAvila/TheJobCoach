@@ -40,8 +40,10 @@ public class TestAccount
 	static String tokenSeeker = "tokenSeeker" + UUID.randomUUID().hashCode();
 
 	@Test
-	public void testCreateAccount() throws CassandraException
+	public void test00CreateAccount() throws CassandraException
 	{
+		account.deleteAccount(id);
+		
 		MailerFactory.setMailer(mockMail);
 		CreateAccountStatus status = account.createAccountWithToken(
 				new UserId(id, "mytoken", UserId.UserType.USER_TYPE_SEEKER),
@@ -56,23 +58,22 @@ public class TestAccount
 	}
 
 	@Test
-	public void testExistsAccount()
+	public void test01ExistsAccount()
 	{	
 		assertEquals(false, account.existsAccount("fake one"));
 		assertEquals(true, account.existsAccount(id));
 	}
 
 	@Test
-	public void testGetUsernameFromEmail()
+	public void test02GetUsernameFromEmail()
 	{	
 		assertEquals(id, account.getUsernameFromEmail(email));
 		assertNull(account.getUsernameFromEmail("nop@nop.com"));
 	}
 
 	@Test
-	public void testValidateAccount() throws CassandraException
+	public void test03ValidateAccount() throws CassandraException
 	{
-
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_NOT_VALIDATED, account.loginAccount(id, "password").getLoginStatus());
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(id, token));
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_UNKNOWN, account.validateAccount("nop", token));
@@ -81,7 +82,7 @@ public class TestAccount
 	}
 
 	@Test
-	public void testCreateAccountType() throws CassandraException
+	public void test04CreateAccountType() throws CassandraException
 	{
 		{
 			MailerFactory.setMailer(mockMail);			
@@ -120,7 +121,7 @@ public class TestAccount
 	}
 
 	@Test
-	public void testDeleteAccount() throws CassandraException
+	public void test05DeleteAccount() throws CassandraException
 	{
 		account.deleteAccount("toto"); // no throw
 		account.deleteAccount(idAdmin);
@@ -134,7 +135,7 @@ public class TestAccount
 	}
 
 	@Test
-	public void testGetTestAccountList() throws CassandraException
+	public void test06GetTestAccountList() throws CassandraException
 	{
 		Map<String, String> accountList = account.getTestAccountList();
 		Collection<String> accountNames = accountList.values();
@@ -151,7 +152,7 @@ public class TestAccount
 	}
 	
 	@Test
-	public void testCreateTestAccount() throws CassandraException, SystemException, InterruptedException
+	public void test07CreateTestAccount() throws CassandraException, SystemException, InterruptedException
 	{
 		String beforeTime = SiteUUID.getDateUuid();		
 		UserId user1 = account.createTestAccount("FR", UserId.UserType.USER_TYPE_SEEKER);

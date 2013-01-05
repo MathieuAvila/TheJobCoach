@@ -12,7 +12,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -64,22 +63,6 @@ public class PanelCoach implements EntryPoint, IChanged, ReturnValue, IApply {
 		
 		coachAdvicePanel.add(scrollAdvicePanel);		
 		scrollAdvicePanel.add(adviceListPanel);
-		
-		adviceListPanel.add(new Label("Bienvenue1 !"));
-		adviceListPanel.add(new Label("Bienvenue2 !"));
-		adviceListPanel.add(new Label("Bienvenue3 !"));
-		adviceListPanel.add(new Label("Bienvenue4 !"));
-		adviceListPanel.add(new Label("Bienvenue5 !"));
-		adviceListPanel.add(new Label("Bienvenue6 !"));
-		adviceListPanel.add(new Label("Bienvenue7 !"));
-		adviceListPanel.add(new Label("Bienvenue8 !"));
-		adviceListPanel.add(new Label("Bienvenue9 !"));
-		adviceListPanel.add(new Label("Bienvenue10 !"));
-		adviceListPanel.add(new Label("Bienvenue6 !"));
-		adviceListPanel.add(new Label("Bienvenue7 !"));
-		adviceListPanel.add(new Label("Bienvenue8 !"));
-		adviceListPanel.add(new Label("Bienvenue9 !"));
-		adviceListPanel.add(new Label("Bienvenue10 !"));
 		
 		//adviceListPanel.setHeight("200px");
 		//coachAdvicePanel.setHeight("200px");

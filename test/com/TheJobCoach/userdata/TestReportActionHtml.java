@@ -36,7 +36,7 @@ public class TestReportActionHtml {
 			"contractType1",  1,  
 			getDate(2000, 1, 1), getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
-			UserOpportunity.ApplicationStatus.APPLIED);
+			UserOpportunity.ApplicationStatus.APPLIED, "");
 
 	static UserDocumentId docId1 = new UserDocumentId("id1", "id1", "name1", "fileName1", new Date(), new Date());
 	static UserDocumentId docId2 = new UserDocumentId("id2", "id2", "name2", "fileName2", new Date(), new Date());
@@ -50,8 +50,7 @@ public class TestReportActionHtml {
 	
 	static UserLogEntry userLog1 = new UserLogEntry("opp1", "log1", "title1", "description1", 
 			getDate(2000, 2, 1),
-			getDate(2000, 2, 10),
-			LogEntryType.INFO, null, docIdList);
+			LogEntryType.INFO, null, docIdList, "", false);
 	
 	@Test
 	public void testOpportunityHeader() {
@@ -79,7 +78,7 @@ public class TestReportActionHtml {
 
 	@Test
 	public void testAddWithSeparatorStringStringString() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 }

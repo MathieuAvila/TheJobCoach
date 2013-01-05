@@ -33,21 +33,21 @@ public class TestUserOpportunitiesManager {
 			"contractType1",  1,  
 			getDate(2000, 1, 1), getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
-			UserOpportunity.ApplicationStatus.APPLIED);
+			UserOpportunity.ApplicationStatus.APPLIED, "note1");
 	
 	static UserOpportunity opportunity2 = new UserOpportunity("opp2", getDate(2000, 1, 2), getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  2,  
 			getDate(2000, 1, 2), getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
-			UserOpportunity.ApplicationStatus.NEW);
+			UserOpportunity.ApplicationStatus.NEW, "note2");
 
 	static UserOpportunity opportunity3 = new UserOpportunity("opp3", getDate(2000, 1, 2), getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  2,  
 			getDate(2000, 1, 2), getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
-			UserOpportunity.ApplicationStatus.FAILURE);
+			UserOpportunity.ApplicationStatus.CLOSED, "note3");
 	
 	private void checkOpportunity(UserOpportunity op1, UserOpportunity opRef, boolean shortDefinition)
 	{
@@ -75,6 +75,7 @@ public class TestUserOpportunitiesManager {
 		assertEquals(op1.endDate, opRef.endDate);
 		assertEquals(op1.location, opRef.location);
 		assertEquals(op1.status, opRef.status);
+		assertEquals(op1.note, opRef.note);
 	}
 	
 	@Test

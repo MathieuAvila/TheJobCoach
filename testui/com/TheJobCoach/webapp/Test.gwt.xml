@@ -28,6 +28,7 @@
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserReport" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestUserPage" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentMyGoals" />
+	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentMyReports" />
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentMyAccount'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentNews'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestUiComponentDocumentList'/>
@@ -38,4 +39,7 @@
 	<source path="userpage/client"/>	
 	
 	<set-configuration-property name="locale.cookie" value="gwtlang"/>
+	
+	<servlet path='/ReportServlet' class='com.TheJobCoach.webapp.userpage.server.DownloadReport'/>
+	
 </module>

@@ -72,7 +72,8 @@ public class UserOpportunityManager {
 				"",
 				Convertor.toString(resultReq.get("url")),
 				Convertor.toString(resultReq.get("location")),
-				UserOpportunity.applicationStatusToString(resultReq.get("status"))
+				UserOpportunity.applicationStatusToString(resultReq.get("status")),
+				Convertor.toString(resultReq.get("note"))
 				);
 	}
 
@@ -99,7 +100,8 @@ public class UserOpportunityManager {
 				Convertor.toString(resultReq.get("source")),
 				Convertor.toString(resultReq.get("url")),
 				Convertor.toString(resultReq.get("location")),
-				UserOpportunity.applicationStatusToString(resultReq.get("status"))
+				UserOpportunity.applicationStatusToString(resultReq.get("status")),
+				Convertor.toString(resultReq.get("note"))				
 				);
 	}
 
@@ -129,6 +131,7 @@ public class UserOpportunityManager {
 				.add("source", result.source)
 				.add("location", result.location)
 				.add("url", result.url)
+				.add("note", result.note)
 				.add("status", UserOpportunity.applicationStatusToString(result.status))
 				.get());	
 		if (resultReq == false)

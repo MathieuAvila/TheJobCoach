@@ -14,6 +14,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Grid;
@@ -31,6 +32,9 @@ public class EditLogEntry implements EntryPoint {
 	
 	private final static UserServiceAsync userService = GWT.create(UserService.class);
 
+	private static final Lang lang = GWT.create(Lang.class);
+	private static final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
+	
 	public interface EditLogEntryResult
 	{
 		public void setResult(UserLogEntry result);
@@ -39,10 +43,11 @@ public class EditLogEntry implements EntryPoint {
 	UserId user;
 
 	RichTextArea richTextAreaDescription = new RichTextArea();
+	RichTextArea richTextAreaNote = new RichTextArea();
 	TextBox txtbxTitle = new TextBox();
 	ListBox comboBoxStatus = new ListBox();
-	DateBox dateBoxCreation = new DateBox();
 	DateBox dateBoxEvent = new DateBox();	
+	CheckBox doneBox = new CheckBox();	
 	DialogBlockOkCancel okCancel;
 
 	String id;
@@ -74,9 +79,9 @@ public class EditLogEntry implements EntryPoint {
 				oppId,
 				id, 
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), 
-				dateBoxCreation.getValue(), dateBoxEvent.getValue(),
+				dateBoxEvent.getValue(),
 				UserLogEntry.entryTypeToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex())),
-				null, userDocumentList);
+				null, userDocumentList, richTextAreaNote.getHTML(), doneBox.getValue().booleanValue());
 	}
 
 	private void commit()
@@ -102,22 +107,20 @@ public class EditLogEntry implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{	
-		Lang lang = GWT.create(Lang.class);
 		final DialogBox dBox = new DialogBox();
 		dBox.setText(currentLogEntry == null ? lang._TextNewLogEntry(): lang._TextUpdateLogEntry());
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
 		VerticalPanel hp = new VerticalPanel();		
-		Grid grid = new Grid(5, 2);
+		Grid grid = new Grid(6, 2);
 		grid.setBorderWidth(0);
 		dBox.setWidget(hp);		
 		grid.setSize("100%", "100%");
 
 		hp.add(grid);
-
 		
-		Label lblTitle = new Label(lang._TextUserLogTitle());
+		Label lblTitle = new Label(langLogEntry._TextUserLogTitle());
 		grid.setWidget(0, 0, lblTitle);		
 		grid.setWidget(0, 1, txtbxTitle);
 		grid.getCellFormatter().setWidth(0, 1, "100%");
@@ -125,11 +128,12 @@ public class EditLogEntry implements EntryPoint {
 
 		Label lblStatus = new Label("Status");
 		grid.setWidget(1, 0, lblStatus);
-
 		grid.setWidget(1, 1, comboBoxStatus);
+		
 		for (LogEntryType e : UserLogEntry.getLogTypeTable())
 		{
-			comboBoxStatus.addItem(lang.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(e)), UserLogEntry.entryTypeToString(e));
+			System.out.println("logEntryStatus_" + UserLogEntry.entryTypeToString(e));
+			comboBoxStatus.addItem(langLogEntry.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(e)), UserLogEntry.entryTypeToString(e));
 			if ((currentLogEntry != null) && (currentLogEntry.type == e))
 			{
 				comboBoxStatus.setSelectedIndex(comboBoxStatus.getItemCount()-1);
@@ -139,23 +143,25 @@ public class EditLogEntry implements EntryPoint {
 		Label lblDescription = new Label("Description");
 		grid.setWidget(2, 0, lblDescription);		
 		grid.setWidget(2, 1, richTextAreaDescription);
+		
 		grid.getCellFormatter().setWidth(2, 1, "100%");
 		richTextAreaDescription.setWidth("100%");
 
-		Label lblEventDate = new Label(lang._TextCreated());
-		grid.setWidget(3, 0, lblEventDate);
+		Label lblEndDate = new Label(langLogEntry._TextCreated());
+		grid.setWidget(3, 0, lblEndDate);
+		grid.setWidget(3, 1, dateBoxEvent);
 
-		grid.setWidget(3, 1, dateBoxCreation);		
+		grid.setWidget(4, 0, new Label(langLogEntry._TextDone()));
+		grid.setWidget(4, 1, doneBox);
 		
-		Label lblEndDate = new Label(lang._TextExpectedFollowUp());
-		grid.setWidget(4, 0, lblEndDate);
-
-		grid.setWidget(4, 1, dateBoxEvent);
+		grid.setWidget(5, 0, new Label(lang._TextPersonalNote()));
+		grid.setWidget(5, 1, richTextAreaNote);
 		
 		okCancel = new DialogBlockOkCancel(null, dBox);
 		okCancel.getOk().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
+				System.out.println("clicked ok...");
 				okCancel.setEnabled(false);
 				commit();
 				dBox.hide();
@@ -181,8 +187,8 @@ public class EditLogEntry implements EntryPoint {
 			System.out.println("CURRENT + " + currentLogEntry.title);
 			txtbxTitle.setText(currentLogEntry.title);
 			richTextAreaDescription.setHTML(currentLogEntry.description);
-			dateBoxCreation.setValue(currentLogEntry.creation);
-			dateBoxEvent.setValue(currentLogEntry.expectedFollowUp);
+			richTextAreaNote.setHTML(currentLogEntry.note);
+			dateBoxEvent.setValue(currentLogEntry.eventDate);
 		}		
 		
 		dBox.center();

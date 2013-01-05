@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.TheJobCoach.userdata.ReportActionHtml;
-import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
-import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 
@@ -29,21 +27,32 @@ public class DownloadReport extends HttpServlet {
 		String type = request.getParameter("reporttype");
 		String userId = request.getParameter("userid");
 		String token = request.getParameter("token");
-		String docType = request.getParameter("doctype");
 		String lang = request.getParameter("lang");
+		String format = request.getParameter("format");
 		
 		String start = request.getParameter("start");
 		Date startDate = FormatUtil.getStringDate(start);
 		String end = request.getParameter("end");
 		Date endDate = FormatUtil.getStringDate(end);
 		String detailOpp = request.getParameter("detailopp");
-		boolean includeOppDetail = new String("true.").equals(detailOpp);
+		boolean includeOppDetail = FormatUtil.trueString.equals(detailOpp);
 		String detailLog = request.getParameter("detaillog");
-		boolean includeLogDetail = new String("true.").equals(detailLog);
-		String logPeriod = request.getParameter("logPeriod");
-		boolean onlyLogPeriod = new String("true.").equals(logPeriod);
+		boolean includeLogDetail = FormatUtil.trueString.equals(detailLog);
+		String logPeriod = request.getParameter("logperiod");
+		boolean onlyLogPeriod = FormatUtil.trueString.equals(logPeriod);
 		
-		System.out.println("Requesting report: " + type + " for user: " + userId + " with token: " + token + " doc type:" + docType);
+		System.out.println(
+				"Requesting report: " + type 
+				+ " user:" + userId 
+				+ " format:" + format 
+				+ " token:" + token 
+				+ " start:" + start
+				+ " end:" + end
+				+ " lang:" + lang
+				+ " detailOpp:" + detailOpp
+				+ " detailLog:" + detailLog
+				+ " logPeriod:" + logPeriod
+				);
 		ServletOutputStream out = response.getOutputStream();
 		UserId user =new UserId(userId, token, UserType.USER_TYPE_SEEKER);
 		

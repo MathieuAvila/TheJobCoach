@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
@@ -43,6 +44,13 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 	Panel rootPanel = null;
 
+
+	final static LangGoals langGoals = GWT.create(LangGoals.class);
+	
+	CheckedExtendedDropListField tfGoalPeriod = new CheckedExtendedDropListField(
+			UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD_LIST, langGoals.periodMap(), "periodMap_");
+	CheckedLabel clGoalPeriod = new CheckedLabel("Période d'évaluation", false, tfGoalPeriod);
+
 	CheckedTextField tfConnectBefore = new CheckedTextField("[0-9]*");
 	CheckedLabel clConnectBefore = new CheckedLabel("Je dois me connecter avant cette heure ", false, tfConnectBefore);
 
@@ -74,13 +82,13 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 	}
 
 	HashMap<String, IExtendedField> fields = new HashMap<String, IExtendedField>();
-
+	
 	/**
 	 * This is the entry point method.
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad()
-	{			
+	{		
 		rootPanel.setSize("100%", "100%");
 		rootPanel.clear();
 
@@ -89,10 +97,17 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 		rootPanel.add(simplePanelCenter);
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextMyGoals(), ClientImageBundle.INSTANCE.userVirtualCoachGoals());
-		
+
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Ma période d'évaluation");
+		Grid gridPeriod = new Grid(1, 2);
+		simplePanelCenter.add(gridPeriod);
+		gridPeriod.setWidget(0,0, clGoalPeriod);
+		gridPeriod.setWidget(0,1, tfGoalPeriod.getItem());
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD, tfGoalPeriod);
+
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes horaires de connection");
 
-		Grid grid0 = new Grid(4, 2);
+		Grid grid0 = new Grid(3, 2);
 		simplePanelCenter.add(grid0);
 
 		grid0.setWidget(0,0, clConnectBefore);
@@ -108,9 +123,9 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, tfConnectAfter);
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, tfConnectRatio);
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs de créations d'opportunités");
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs d'opportunités");
 
-		Grid grid1 = new Grid(3, 2);
+		Grid grid1 = new Grid(1, 2);
 		simplePanelCenter.add(grid1);
 		
 		grid1.setWidget(0,0, clCreateOpportunity);
@@ -118,9 +133,7 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, tfCreateOpportunity);
 
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs de candidatures");
-
-		Grid grid2 = new Grid(3, 2);
+		Grid grid2 = new Grid(1, 2);
 		simplePanelCenter.add(grid2);
 		
 		grid2.setWidget(0,0, clCandidateOpportunity);
@@ -130,7 +143,7 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs d'entretiens");
 
-		Grid grid3 = new Grid(3, 2);
+		Grid grid3 = new Grid(1, 2);
 		simplePanelCenter.add(grid3);
 		
 		grid3.setWidget(0,0, clInterviewOpportunity);
@@ -140,14 +153,24 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs d'appels téléphoniques");
 
-		Grid grid4 = new Grid(3, 2);
+		Grid grid4 = new Grid(1, 2);
 		simplePanelCenter.add(grid4);
 		
 		grid4.setWidget(0,0, clPhoneCall);
 		grid4.setWidget(0,1, tfPhoneCall);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL, tfPhoneCall);
+			
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes objectifs de propositions");
+
+		Grid grid5 = new Grid(1, 2);
+		simplePanelCenter.add(grid5);
 		
+		grid5.setWidget(0,0, clProposal);
+		grid5.setWidget(0,1, tfProposal);
+
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL, tfProposal);
+				
 		for (IExtendedField f: fields.values()) f.registerListener(this);
 		
 		applyReset = new DialogBlockApplyReset(new ArrayList<IExtendedField>(fields.values()), this);

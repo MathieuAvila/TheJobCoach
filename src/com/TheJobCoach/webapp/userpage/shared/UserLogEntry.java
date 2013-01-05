@@ -13,17 +13,29 @@ public class UserLogEntry implements Serializable {
 	{
 		INFO,
 		APPLICATION,
+		EVENT,
+		RECALL,
 		INTERVIEW,
-		EVENT
+		PROPOSAL,
+		CLOSED
 	};
 
 	public String opportunityId;
 	public String ID;
 	public String title;
 	public String description;
-	public Date creation;
-	public Date expectedFollowUp;
+	
+	/** User private notes */
+	public String note;
+	
+	/** Date specified by user */
+	public Date eventDate;
+	
 	public LogEntryType type;
+	
+	/** In case of Interview or Recall, set to TRUE if action was performed */
+	public boolean done;
+	
 	public Vector<String> contactId;
 	public Vector<UserDocumentId> attachedDocumentId;
 	
@@ -35,6 +47,9 @@ public class UserLogEntry implements Serializable {
 		case APPLICATION: return "APPLICATION";
 		case INTERVIEW: return "INTERVIEW";
 		case EVENT: return "EVENT";
+		case RECALL: return "RECALL";
+		case PROPOSAL: return "PROPOSAL";
+		case CLOSED: return "CLOSED";
 		}
 		return "INFO";
 	}
@@ -45,6 +60,9 @@ public class UserLogEntry implements Serializable {
 		if ("APPLICATION".equals(t)) return LogEntryType.APPLICATION;
 		if ("INTERVIEW".equals(t))return LogEntryType.INTERVIEW;
 		if ("EVENT".equals(t))return LogEntryType.EVENT;
+		if ("RECALL".equals(t))return LogEntryType.RECALL;
+		if ("PROPOSAL".equals(t))return LogEntryType.PROPOSAL;
+		if ("CLOSED".equals(t))return LogEntryType.CLOSED;
 		return LogEntryType.INFO;
 	}
 
@@ -53,18 +71,21 @@ public class UserLogEntry implements Serializable {
 	}
 
 	public UserLogEntry(String opportunityId, String iD, String title,
-			String description, Date creation, Date expectedFollowUp, LogEntryType type,
-			Vector<String> contactId, Vector<UserDocumentId> attachedDocumentId) {
+			String description, Date eventDate, LogEntryType type,
+			Vector<String> contactId, Vector<UserDocumentId> attachedDocumentId,
+			String note,
+			boolean done) {
 		super();
 		this.opportunityId = opportunityId;
 		ID = iD;
 		this.title = title;
 		this.description = description;
-		this.creation = creation;
-		this.expectedFollowUp = expectedFollowUp;
+		this.eventDate = eventDate;
 		this.type = type;
 		this.contactId = contactId;
 		this.attachedDocumentId = attachedDocumentId;
+		this.note = note;
+		this.done = done;
 	}
 	
 	static Vector<LogEntryType> logTypeTable = null;

@@ -48,6 +48,7 @@ public class ContentUserOpportunity implements EntryPoint {
 	final HTML panelDescriptionContent = new HTML("");
 
 	final Lang lang = GWT.create(Lang.class);
+	final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
 
 	private void setUserOpportunity(UserOpportunity opp)
 	{
@@ -416,7 +417,7 @@ public class ContentUserOpportunity implements EntryPoint {
 		grid_1.setWidget(0, 1, label_1);
 		label_1.setWidth("100%");
 
-		Label labelCreated = new Label(lang._TextCreated());
+		Label labelCreated = new Label(langLogEntry._TextCreated());
 		labelCreated.setStyleName("summary-title");
 		grid_1.setWidget(1, 0, labelCreated);
 

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -22,6 +23,7 @@ public class TestContentUserLog implements EntryPoint {
 		result.setYear(year - 1900);
 		return result;
 	}
+	
 	/**
 	 * This is the entry point method.
 	 */
@@ -35,12 +37,12 @@ public class TestContentUserLog implements EntryPoint {
 			hp.setStyleName("mainpage-content");
 			root.add(hp);
 			hp.setSize("100%", "100%");
-			UserOpportunity opp = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 2, 1),
+			UserOpportunity opp = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 1, 1),
 					"title1", "description1", "companyId1",
 					"contractType1",  1,  
 					getDate(2000, 1, 1), getDate(2000, 1, 1),
 					false, "source1", "url1", "location1",
-					UserOpportunity.ApplicationStatus.APPLIED);
+					UserOpportunity.ApplicationStatus.APPLIED, "note1");
 			
 			ContentUserLog cud = new ContentUserLog(
 					hp, 

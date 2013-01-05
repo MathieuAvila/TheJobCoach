@@ -25,7 +25,6 @@ public class TheJobCoach implements EntryPoint {
 	
 	public void onModuleLoad()
 	{
-		LocaleInfo.getLocaleCookieName();
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		if ((locale == null) || (locale.equals("default")))
 		{

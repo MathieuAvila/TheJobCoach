@@ -78,6 +78,16 @@
 		<url-pattern>/thejobcoach/DownloadServlet</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>downloadReport</servlet-name>
+		<servlet-class>com.TheJobCoach.webapp.userpage.server.DownloadReport</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>downloadReport</servlet-name>
+		<url-pattern>/thejobcoach/DownloadReport</url-pattern>
+	</servlet-mapping>
+	
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>TheJobCoach.html</welcome-file>

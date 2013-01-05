@@ -41,6 +41,11 @@ public class DialogBlockOkCancel extends HorizontalPanel {
 	{
 		return btnOk;
 	}
+
+	public Button getCancel()
+	{
+		return btnCancel;
+	}
 	
 	public void setEnabled(boolean value)
 	{		

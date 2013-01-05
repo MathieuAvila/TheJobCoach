@@ -1,7 +1,12 @@
-#Mon Dec 12 08:22:08 CET 2011
+#Sat Jan 05 04:07:20 CET 2013
 eclipse.preferences.version=1
 encoding//src/com/TheJobCoach/webapp/mainpage/client/Lang.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/mainpage/client/Lang_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/LangLogEntry.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/LangLogEntry_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/LangMyReports.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/LangMyReports_en.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/LangMyReports_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang_en.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang_fr.properties=UTF-8
