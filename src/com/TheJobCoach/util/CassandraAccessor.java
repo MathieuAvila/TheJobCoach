@@ -67,7 +67,7 @@ public class CassandraAccessor {
 	{
 		if (myCluster == null)
 		{
-			System.out.println("Get cluster from: " + location);
+			//System.out.println("Get cluster from: " + location);
 			myCluster = HFactory.getOrCreateCluster(CLUSTERNAME, location);
 		}
 		return myCluster;
@@ -106,7 +106,7 @@ public class CassandraAccessor {
 		ColumnFamilyUpdater<String, String> updater = cfTemplate.createUpdater(key);
 		for(Map.Entry<String, String> e : mapUpdate.entrySet())
 		{
-			System.out.println("Try update for table: " +  cfTemplate.getColumnFamily() + " from key:" + key  + " column: " + e.getKey() + " value: " + e.getValue());
+			//System.out.println("Try update for table: " +  cfTemplate.getColumnFamily() + " from key:" + key  + " column: " + e.getKey() + " value: " + e.getValue());
 			updater.setString(e.getKey(), e.getValue());
 		}
 		//updater.setLong("time", System.currentTimeMillis());		
@@ -146,7 +146,7 @@ public class CassandraAccessor {
 			return null;
 		}
 		if (r == null) return null;
-		System.out.println("CF=" + CF + " KEY=" + key +" COL=" + columnName + " RESULT=" + r.get());
+		//System.out.println("CF=" + CF + " KEY=" + key +" COL=" + columnName + " RESULT=" + r.get());
 		HColumn<String, String> c = r.get();
 		if (c == null) return null;
 		return  c.getValue();
@@ -220,109 +220,6 @@ public class CassandraAccessor {
 		}
 		return true;
 	}
-	/*
-	public static boolean createCompositeColumnFamily(String name, String type)
-	{
-		ColumnFamilyDefinition cfDef = null;		
-		cfDef = HFactory.createColumnFamilyDefinition(
-				CassandraAccessor.KEYSPACENAME,                              
-				name, 
-				ComparatorType.COMPOSITETYPE);
-		cfDef.setComparatorTypeAlias("(UTF8Type)");
-		try{
-			CassandraAccessor.getCluster().addColumnFamily(cfDef);
-		}
-		catch(Exception e)
-		{ 
-			//e.printStackTrace();
-			return false;
-		} 
-		return true;
-	}
-
-	static public boolean updateCompositeColumn(ColumnFamilyTemplate<String, Composite> cfTemplate, String key, Composite colKey, String colValue)
-	{	
-		ColumnFamilyUpdater<String, Composite> updater = cfTemplate.createUpdater(key);
-		updater.setString(colKey, colValue);		
-		//System.out.println("Update from key:" + key  + " column: " + colKey + " value " + colValue);
-		try 
-		{
-			cfTemplate.update(updater);
-		} 
-		catch (HectorException e) 
-		{
-			// do something ...
-			System.out.println("Updater error");
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-
-	static public boolean updateCompositeColumn(String CF, String key, Composite colKey, String colValue)
-	{
-		ColumnFamilyTemplate<String, Composite> cfTemplate = new ThriftColumnFamilyTemplate<String, Composite>(CassandraAccessor.getKeyspace(),
-				CF, 
-				se,        
-				ce);
-		return updateCompositeColumn(cfTemplate, key, colKey, colValue);
-	}
-
-	public class CompositeColumnEntry {
-		public Composite key;
-		public String value;
-		CompositeColumnEntry(Composite _key, String _value) { key=_key; value = _value;}
-	}
-
-	static public boolean getCompositeColumnsRange(String CFName, String mainKey, Composite keyStart, Composite keyEnd, List<CompositeColumnEntry> result)
-	{
-		// get value
-		SliceQuery<String, Composite, String> q = HFactory.createSliceQuery(getKeyspace(), se, ce, se);
-		q.setColumnFamily(CFName);
-		q.setRange(keyStart, keyEnd, false, 10);
-		q.setKey(mainKey);
-		QueryResult<ColumnSlice<Composite, String>> r = null;
-		try
-		{
-			r = q.execute();
-		}
-		catch (Exception e)
-		{
-			System.out.println("Error to get columns in SCF");
-			e.printStackTrace();
-			return false;
-		}	    
-		ColumnSlice<Composite, String> columns = r.get();
-		//System.out.println(columns);
-		if (columns == null)
-			return false;
-		for (HColumn<Composite, String> col: columns.getColumns())
-		{
-			//System.out.println(col.getName());
-			//System.out.println(col.getValue());
-			CompositeColumnEntry entry = current.new CompositeColumnEntry(col.getName(), col.getValue());
-			result.add(entry);
-		}
-		return true;
-	}
-
-	static public boolean deleteCompositeColumn(String CF, String key, Composite col)
-	{
-		Mutator<String> mutator = HFactory.createMutator(CassandraAccessor.getKeyspace(), se);
-		//System.out.println("Delete CF: " + CF + " COL: " + col+ " ROW: " + key);
-		mutator.delete(key, CF, col, ce);
-		try
-		{
-			mutator.execute();			
-		}
-		catch (Exception e)
-		{
-			return false;
-		}
-		return true;
-	}	
-	 */
 
 	static public void deleteColumn(String CF, String key, String col) throws CassandraException
 	{
@@ -412,7 +309,7 @@ public class CassandraAccessor {
 			return null;
 		}
 		if (r == null) return null;
-		System.out.println("CF=" + CF + " KEY=" + key +" COL=" + columnName + " RESULT=" + r.get());
+		//System.out.println("CF=" + CF + " KEY=" + key +" COL=" + columnName + " RESULT=" + r.get());
 		HColumn<String, byte[]> c = r.get();
 		if (c == null) return null;
 		return c.getValue();

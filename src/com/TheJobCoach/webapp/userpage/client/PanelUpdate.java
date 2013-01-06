@@ -36,7 +36,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint {
 	          // Wait for next run.
 	    	  connectSec+=5;
 	    	  long total = connectSec + previousTime;
-	    	  System.out.println("Total time: " + total);
+	    	  //System.out.println("Total time: " + total);
 	    	  long h = total / 60 / 60;
 	    	  long m = total / 60 - h * 60;
 	    	  long s = total % 60;

@@ -114,6 +114,19 @@ public class TestNews
 		}			
 		assertEquals(4, result.size());
 	}
+	
+	@Test
+	public void testGetNewsNormal()
+	{	
+		try 
+		{
+			news.getLatestNews();
+		} 
+		catch (CassandraException e) 
+		{
+			e.printStackTrace();
+		}
+	}
 
 	@Test
 	public void testDeleteNews()

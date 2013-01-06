@@ -3,6 +3,7 @@ package com.TheJobCoach.admindata;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -100,9 +101,9 @@ public class News {
 		{
 			startMonth = nextMonth; 
 			startYear = nextYear;			
-			//System.out.println("YEAR " + startYear + " MONTH " + startMonth + " EYEAR " + endYear + " EMONTH " + endMonth);
+			System.out.println("YEAR " + startYear + " MONTH " + startMonth + " EYEAR " + endYear + " EMONTH " + endMonth);
 			String colDate = startYear + "-" + startMonth;
-			//System.out.println("COLDATE: " + colDate);
+			System.out.println("COLDATE: " + colDate);
 			
 			Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATE, colDate);
 			if (result != null)
@@ -139,19 +140,28 @@ public class News {
 	
 	public Vector<NewsInformation> getLatestNews() throws CassandraException
 	{
-		Date first = new Date();
-		Calendar date = Calendar.getInstance();		
-		date.add(Calendar.MONTH, -3);
-		first = date.getTime();
-		
-		date = Calendar.getInstance();		
-		date.add(Calendar.MONTH, 12);
-		date.add(Calendar.DAY_OF_MONTH, 30);
-		Date end = date.getTime();
-		
-		Vector<NewsInformation> result = getNews(first, end);
-		while (result.size() > 10)
-			result.remove(10);
+		Calendar first = Calendar.getInstance();		
+		Vector<NewsInformation> result = new Vector<NewsInformation>();
+		Set<String> foundList = new HashSet<String>();
+		int loop = 0;
+		while ((result.size() < 10)&&(loop < 24))
+		{
+			Calendar end = (Calendar) first.clone();
+			end.add(Calendar.MONTH, +1);
+			Vector<NewsInformation> resultLocal = getNews(first.getTime(), end.getTime());
+			//System.out.println("Found ... "+ resultLocal.size());
+			for (NewsInformation ni: resultLocal)
+			{
+				//System.out.println("Found ... "+ ni.ID + " .... " + foundList.contains(ni.ID));				
+				if (!foundList.contains(ni.ID))
+				{
+					foundList.add(ni.ID);
+					result.add(ni);
+				}
+			}
+			first.add(Calendar.MONTH, -1);
+			loop++;
+		}
 		return result;
 	}
 }

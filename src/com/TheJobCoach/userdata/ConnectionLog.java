@@ -30,7 +30,7 @@ public class ConnectionLog {
 		if (userName != null)
 		{
 			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONNECTIONLOG, userName);
-			System.out.println("DELETED CONNECTION LOG: " + userName);
+			//System.out.println("DELETED CONNECTION LOG: " + userName);
 		}
 	}
 

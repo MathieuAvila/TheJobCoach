@@ -85,7 +85,10 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException
 	{
-		return news.getLatestNews();
+		System.out.println("Request News2....");	
+		Vector<NewsInformation> result = news.getLatestNews();
+		System.out.println("Request News3....");
+		return result;
 	}
 
 	@Override

@@ -59,6 +59,7 @@ public class ContentNews implements EntryPoint {
 			}
 		};
 		try {
+			System.out.println("Request News....");
 			userService.getNews(user, callback);
 		} catch (CassandraException e) {
 			MessageBox.messageBoxException(rootPanel, e);
