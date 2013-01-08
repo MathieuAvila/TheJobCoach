@@ -221,9 +221,13 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 				new FieldUpdater<UserDocument, String>() {
 					@Override
 					public void update(int index, UserDocument object, String value) {
-						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.ID) + "&userid=" + URL.encode(user.userName)+ "&token=" + URL.encode(user.token);
-						DownloadIFrame iframe = new DownloadIFrame(copyURL);
-						simplePanelCenter.add(iframe);
+						if (object.revisions.size() != 0)
+						{
+							String id = object.revisions.get(object.revisions.size() - 1).ID;
+							String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(id) + "&userid=" + URL.encode(user.userName)+ "&token=" + URL.encode(user.token);
+							DownloadIFrame iframe = new DownloadIFrame(copyURL);
+							simplePanelCenter.add(iframe);
+						}
 					}},
 					new GetValue<String, UserDocument>() {
 						@Override

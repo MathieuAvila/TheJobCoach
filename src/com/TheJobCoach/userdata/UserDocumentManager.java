@@ -156,7 +156,14 @@ public class UserDocumentManager {
 			System.out.println("doc is null");
 			return null;  // this means it was deleted.
 		}
-		UserDocumentRevision rev =  doc.revisions.get(doc.revisions.size()-1);
+		UserDocumentRevision rev = null;
+		for (UserDocumentRevision revIndex: doc.revisions)
+		{
+			if (revIndex.ID.equals(id))
+			{
+				rev = revIndex;
+			}
+		}
 		if (rev == null)
 		{
 			System.out.println("rev is null" + doc.revisions.size() );

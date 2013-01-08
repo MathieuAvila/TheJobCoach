@@ -110,6 +110,7 @@ public class ComponentDocumentList extends VerticalPanel
 					new GetValue<String, UserDocumentId>() {
 						@Override
 						public String getValue(UserDocumentId contact) {
+							System.out.println("Add document in list: " + contact.fileName + " Master:" + contact.ID + " Sub:" + contact.updateId);
 							return contact.fileName;
 						}},
 						lang._TextFilename());
