@@ -79,14 +79,17 @@ public class UserDocumentManager {
 			return result;
 		for (String oppId: resultReq.keySet())
 		{
-			UserDocumentId opp = getUserDocumentId(id, oppId);
-			if (opp == null)
+			UserDocument opp = getUserDocument(id, oppId);
+			if ((opp == null)||(opp.revisions.size() == 0))
 			{
 				deleteUserDocument(id, oppId);
 				deleteUserDocumentFromList(id, oppId);
 			}
 			else 
-				result.add(opp);
+			{
+				UserDocumentRevision rev = opp.revisions.get(opp.revisions.size()-1);
+				result.add(new UserDocumentId(opp.ID, rev.ID, opp.name, rev.fileName, rev.date, rev.date));
+			}
 		}
 		return result;
 	}
@@ -159,14 +162,15 @@ public class UserDocumentManager {
 		UserDocumentRevision rev = null;
 		for (UserDocumentRevision revIndex: doc.revisions)
 		{
-			if (revIndex.ID.equals(id))
+			System.out.println(revIndex.ID + "  " + ID);
+			if (revIndex.ID.equals(ID))
 			{
 				rev = revIndex;
 			}
 		}
 		if (rev == null)
 		{
-			System.out.println("rev is null" + doc.revisions.size() );
+			System.out.println("rev is null " + doc.revisions.size() );
 			return null;  // this means it was deleted.
 		}
 		return new UserDocumentId(doc.ID, rev.ID, doc.name, rev.fileName, doc.lastUpdate, rev.date);

@@ -103,6 +103,8 @@ public class TestUserDocumentManager {
 	@Test
 	public void testgetUserDocument() throws CassandraException 
 	{
+		
+		
 		UserDocument copy_ud1 = manager.getUserDocument(id, ud1_id);
 		UserDocument copy_ud2 = manager.getUserDocument(id, ud2_id);
 		UserDocument copy_ud21 = manager.getUserDocument(id2, ud21_id);
@@ -144,6 +146,7 @@ public class TestUserDocumentManager {
 	@Test
 	public void testSetDocumentContent() throws CassandraException
 	{
+		System.out.println("====================================== testSetDocumentContent");
 		manager.setUserDocumentContent(id, ud1_id, "f1", c1);
 		manager.setUserDocumentContent(id, ud2_id, "f2", c2);
 		manager.setUserDocumentContent(id2, ud21_id, "f21", c21);
@@ -152,15 +155,20 @@ public class TestUserDocumentManager {
 	@Test
 	public void testGetDocumentContent() throws CassandraException
 	{
-		UserDocumentId udid = manager.getUserDocumentId(id, ud1_id);
+		System.out.println("====================================== testGetDocumentContent");
+		UserDocument copy_ud = manager.getUserDocument(id, ud1_id);
+		
+		UserDocumentId udid = manager.getUserDocumentId(id, copy_ud.revisions.get(copy_ud.revisions.size() - 1).ID);
 		byte[] c1_t = manager.getUserDocumentContent(id, udid.updateId);
 		checkContentEquality(c1_t, c1);
 		
-		udid = manager.getUserDocumentId(id, ud2_id);
+		copy_ud = manager.getUserDocument(id, ud2_id);
+		udid = manager.getUserDocumentId(id, copy_ud.revisions.get(copy_ud.revisions.size() - 1).ID);
 		byte[] c2_t = manager.getUserDocumentContent(id, udid.updateId);
 		checkContentEquality(c2_t, c2);
 		
-		udid = manager.getUserDocumentId(id2, ud21_id);
+		copy_ud = manager.getUserDocument(id2, ud21_id);
+		udid = manager.getUserDocumentId(id2, copy_ud.revisions.get(copy_ud.revisions.size() - 1).ID);
 		byte[] c21_t = manager.getUserDocumentContent(id2, udid.updateId);
 		checkContentEquality(c21_t, c21);
 	}
@@ -179,7 +187,8 @@ public class TestUserDocumentManager {
 		manager.setUserDocument(id, ud4);
 		manager.setUserDocumentContent(id, ud4_id, "myfile4", c1);
 		
-		UserDocumentId udid = manager.getUserDocumentId(id, ud4_id);
+		UserDocument copy_ud = manager.getUserDocument(id, ud4_id);
+		UserDocumentId udid = manager.getUserDocumentId(id, copy_ud.revisions.get(copy_ud.revisions.size() - 1).ID);
 		byte[] c1_t = manager.getUserDocumentContent(id, udid.updateId);
 		checkContentEquality(c1_t, c1);
 		UserDocument ud = manager.getUserDocument(id, ud4_id);
@@ -202,6 +211,7 @@ public class TestUserDocumentManager {
 				
 		UserDocumentId docId = manager.getUserDocumentId(id, rev1);
 		assertEquals(ud4_id, docId.ID);
+		assertEquals(rev1, docId.updateId);
 		
 		assertTrue(manager.checkDocExist(ud4_id, id));
 		assertTrue(manager.checkDocExist(rev0, id));
@@ -220,6 +230,8 @@ public class TestUserDocumentManager {
 		assertFalse(manager.checkDocExist(rev0, id));
 		assertFalse(manager.checkDocExist(rev1, id));
 		assertFalse(manager.checkDocExist(rev2, id));
+		
+		
 	}
 	
 }

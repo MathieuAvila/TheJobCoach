@@ -296,11 +296,12 @@ public class Account implements AccountInterface {
 	public void sendComment(UserId id, String comment) throws CassandraException
 	{
 		UserReport report = getUserReport(id);
-		System.out.println("Comment from " + report.mail);
+		System.out.println("Comment from: " + report.mail);
+		System.out.println("Message: '" + comment + "'");
 		MailerFactory.getMailer().sendEmail("mathieu.avila@laposte.net", 
 				"Comment on TheJobCoach from '" + report.mail + "' user '" + report.userName + "'", 
 				report.mail + "\n" + comment, 
-				"noreply@www.thejobcoach.fr");
+				report.mail);
 	}
 
 	public Boolean lostCredentials(String email, String lang) throws CassandraException 

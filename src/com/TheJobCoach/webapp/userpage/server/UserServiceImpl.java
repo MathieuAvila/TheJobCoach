@@ -85,9 +85,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException
 	{
-		System.out.println("Request News2....");	
 		Vector<NewsInformation> result = news.getLatestNews();
-		System.out.println("Request News3....");
 		return result;
 	}
 
@@ -144,7 +142,6 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public String sendComment(UserId user, String value) throws CassandraException 
 	{
-		System.out.println("send comment '" + value + "' to trash");
 		account.sendComment(user, value);
 		return null;
 	}

@@ -24,7 +24,7 @@ public class CreateTestDefault {
 			account.deleteAccount("user");
 			CreateAccountStatus status = account.createAccountWithToken(
 					new UserId("user","mytoken", UserType.USER_TYPE_SEEKER),
-					new UserInformation("nom", "prenom", "password", "toto@toto.com"), "en");
+					new UserInformation("nom", "toto@toto.com", "password", "prenom"), "en");
 			System.out.println("Created account returned: " + status.toString());
 			ValidateAccountStatus validate = account.validateAccount("user", "mytoken");
 			System.out.println("Validate account returned: " + validate.toString());

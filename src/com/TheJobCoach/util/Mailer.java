@@ -7,15 +7,32 @@ import java.util.Properties;
 
 public class Mailer implements MailerInterface {
 	
+	private class AuthenticatorX extends javax.mail.Authenticator {
+		private PasswordAuthentication authentication;
+		public AuthenticatorX() {
+			String username = "contact@thejobcoach.fr";
+			String password = "jeparsencrete";
+			authentication = new PasswordAuthentication(username, password);
+		}
+		protected PasswordAuthentication getPasswordAuthentication() {
+
+			return authentication;
+		}
+	}
 	public boolean sendEmail(String _dstMail, String _subject, String _body, String _src)
 	{
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
-		props.setProperty("mail.host", "smtp.free.fr");
-		props.setProperty("mail.user", "mathieu.avila");
-		props.setProperty("mail.password", "lvveumda");
+		props.setProperty("mail.host", "smtp.thejobcoach.fr");
+		props.setProperty("mail.smtp.host", "smtp.thejobcoach.fr"); 
+		props.setProperty("mail.user", "contact@thejobcoach.fr");
+		props.setProperty("mail.password", "jeparsencrete");
+		props.setProperty("mail.smtp.port", "587"); 
+		props.setProperty("mail.smtp.auth", "true");
+		props.setProperty("mail.smtp.starttls.enable", "true");
 
-		Session mailSession = Session.getDefaultInstance(props, null);
+		Session mailSession = Session.getDefaultInstance(props, new AuthenticatorX());
+		
 		Transport transport;
 		try {
 			transport = mailSession.getTransport();
@@ -37,25 +54,25 @@ public class Mailer implements MailerInterface {
 			message.setContent(_body, "text/plain");
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(_dstMail));
 			
-			/*message.setFrom(new InternetAddress("contact@wwwthejobcoach.fr"));
-			message.setSender(new InternetAddress("contact@wwwthejobcoach.fr"));
-			*/
-			message.setFrom(new InternetAddress(_src));
-			message.setSender(new InternetAddress(_src));			
+			Address reply[] = new InternetAddress[1];
+			reply[0] = new InternetAddress(_src);
+			message.setReplyTo(reply);
+			message.setFrom(new InternetAddress("contact@thejobcoach.fr"));
+			message.setSender(new InternetAddress("contact@thejobcoach.fr"));			
 			
 			transport.connect();
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-			//transport.send(message);
-			transport.close();
+			transport.close();			
 		} 
 		catch (MessagingException e)
 		{
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
 		catch (Exception e)
 		{
-			System.out.println("Excpetion à la con");
+			System.out.println("Exception à la con");
 			e.printStackTrace();
 			return false;			
 		}
