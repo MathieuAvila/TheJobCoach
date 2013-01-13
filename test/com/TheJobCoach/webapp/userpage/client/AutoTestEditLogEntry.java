@@ -15,8 +15,8 @@ import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.TestFormatUtil;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.octo.gwt.test.GwtCreateHandler;
-import com.octo.gwt.test.GwtTest;
+import com.googlecode.gwt.test.GwtCreateHandler;
+import com.googlecode.gwt.test.GwtTest;
 
 import static org.junit.Assert.*;
 
@@ -97,6 +97,7 @@ public class AutoTestEditLogEntry extends GwtTest {
 	
 	private EditLogEntry cud;
 
+	
 	@Override
 	public String getModuleName() {		
 		return "com.TheJobCoach.webapp.userpage.UserPage";

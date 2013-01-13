@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="test/lib/gwt-test-utils-0.35.jar"/>
+	<classpathentry kind="lib" path="test/lib/gwt-test-utils-0.39.jar"/>
 	<classpathentry kind="lib" path="test/lib/javassist-3.12.1.GA.jar"/>
 	<classpathentry kind="lib" path="test/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry exported="true" kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
@@ -131,5 +131,10 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/advanced-components-2.0.7.jar"/>
+	<classpathentry kind="lib" path="test/lib/fest-assert-core-2.0M8.jar"/>
+	<classpathentry kind="lib" path="test/lib/fest-util-1.2.3.jar"/>
+	<classpathentry kind="lib" path="test/lib/javaparser-1.0.8.jar"/>
+	<classpathentry kind="lib" path="test/lib/paranamer-2.5.2.jar"/>
+	<classpathentry kind="lib" path="test/lib/slf4j-api-1.6.6.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

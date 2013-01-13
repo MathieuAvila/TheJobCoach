@@ -8,14 +8,15 @@ import org.junit.Test;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.octo.gwt.test.GwtCreateHandler;
-import com.octo.gwt.test.GwtTest;
+import com.googlecode.gwt.test.GwtCreateHandler;
+import com.googlecode.gwt.test.GwtTest;
 
 public class TestComponentDocumentList extends GwtTest {
 
 	
 	private ComponentDocumentList cdl;
 
+	
 	@Override
 	public String getModuleName() {		
 		return "com.TheJobCoach.webapp.userpage.UserPage";
@@ -49,8 +50,6 @@ public class TestComponentDocumentList extends GwtTest {
 				new UserId()
 				);
 		cdl.onModuleLoad();		
-
-		// Some pre-assertions
 
 	}
 	

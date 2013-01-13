@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.octo.gwt.test.GwtTest;
+import com.googlecode.gwt.test.GwtTest;
 
 public class TestMessageBox extends GwtTest {
 
@@ -14,7 +14,7 @@ public class TestMessageBox extends GwtTest {
 	public String getModuleName() {		
 		return "com.TheJobCoach.webapp.util.Util";
 	}
-
+	
 	@Test
 	public void testMessageBox()
 	{
