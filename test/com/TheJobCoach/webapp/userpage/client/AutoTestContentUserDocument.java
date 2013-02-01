@@ -16,10 +16,8 @@ import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
-//import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 
-//@GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestContentUserDocument extends GwtTest {
 
 

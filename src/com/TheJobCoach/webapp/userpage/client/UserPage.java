@@ -197,7 +197,7 @@ public class UserPage implements EntryPoint {
 		if (
 				!menu.equals("account") &&
 				!menu.equals("goals") &&
-				//!menu.equals("myreports") &&
+				!menu.equals("myreports") &&
 				!menu.equals("news") &&
 				!menu.equals("myjobboards") &&
 				!menu.equals("mydocuments") &&

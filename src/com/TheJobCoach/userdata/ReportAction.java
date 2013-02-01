@@ -23,14 +23,14 @@ public class ReportAction
 	}
 	
 	void opportunityHeader(UserOpportunity opp, boolean includeOpportunityDetail, boolean includeLogDetail)
-	{		
+	{
 	}
 	
 	void opportunityFooter(UserOpportunity opp, boolean includeOpportunityDetail)
 	{
 	}
 	
-	void logHeader(UserLogEntry log, boolean includeLogDetail) 
+	void logHeader(UserLogEntry log, boolean includeLogDetail, boolean inSpanDate) 
 	{
 		
 	}
@@ -48,13 +48,29 @@ public class ReportAction
 				oppManager.getOpportunitiesShortList(user, UserOpportunityManager.MANAGED_LIST);
 		for (UserOpportunity opp: oppList)
 		{
-			opportunityHeader(opp, includeOpportunityDetail, includeLogDetail);
 			Vector<UserLogEntry> logList = logManager.getLogList(user, opp.ID);
+			boolean add = false;
 			for (UserLogEntry log: logList)
 			{
-				logHeader(log, includeLogDetail);
+				if (log.eventDate.after(start) && log.eventDate.before(end))
+				{
+					add = true;
+					break;
+				}
+			}
+			if (add)
+			{
+				opportunityHeader(opp, includeOpportunityDetail, includeLogDetail);
+				for (UserLogEntry log: logList)
+				{
+					boolean inSpanDate = (log.eventDate.after(start) && log.eventDate.before(end));
+					if (onlyLogOnPeriod || inSpanDate)
+						logHeader(log, includeLogDetail, inSpanDate);
+				}
+				opportunityFooter(opp, includeOpportunityDetail);
 			}
 		}
+		endDocument();
 		return content.getBytes();
 	}	
 
