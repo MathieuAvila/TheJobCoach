@@ -2,24 +2,16 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Vector;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserDocument;
-import com.TheJobCoach.webapp.userpage.shared.UserDocumentRevision;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.ConstantsMyReports;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.gwt.test.GwtCreateHandler;

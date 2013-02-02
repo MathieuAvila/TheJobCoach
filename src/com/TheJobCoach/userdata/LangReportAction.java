@@ -115,5 +115,9 @@ public class LangReportAction
 	{
 		return currentWebappCommonProperties.getProperty("ApplicationStatus_" + applicationStatus);
 	}
-	
+
+	public String getFilename()
+	{
+		return currentWebappProperties.getProperty("attachedfiles");
+	}
 }

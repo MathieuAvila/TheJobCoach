@@ -54,6 +54,7 @@ public class ReportAction
 			{
 				if (log.eventDate.after(start) && log.eventDate.before(end))
 				{
+					//System.out.println("Log: " + log.ID + " date " + log.eventDate + " after " + start + " before " + end);
 					add = true;
 					break;
 				}
@@ -72,7 +73,7 @@ public class ReportAction
 		}
 		endDocument();
 		return content.getBytes();
-	}	
+	}
 
 	public ReportAction(UserId user, String lang)
 	{

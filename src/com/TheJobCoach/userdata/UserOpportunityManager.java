@@ -56,7 +56,7 @@ public class UserOpportunityManager {
 		{
 			return null;  // this means it was deleted.
 		}
-		System.out.println("found opp " + ID + " with firstseen " + resultReq.get("firstseen"));
+		//System.out.println("found opp " + ID + " with firstseen " + resultReq.get("firstseen"));
 		return new UserOpportunity(
 				ID,
 				Convertor.toDate(resultReq.get("firstseen")),

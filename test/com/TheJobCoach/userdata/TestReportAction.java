@@ -19,6 +19,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
 
 public class TestReportAction {
 
@@ -93,34 +94,94 @@ public class TestReportAction {
 		
 	}
 	
+	private class ReportActionLocal extends ReportAction
+	{
+		public ReportActionLocal(UserId user, String lang)
+		{
+			super(user, lang);
+		}
+
+		Date Start;
+		Date end;
+		
+		int header = 0;
+		int footer = 0;
+		
+		@Override
+		void includeTitle(Date Start, Date end)
+		{
+			this.Start = Start; this.end = end;
+		}
+		
+		@Override
+		void endDocument()
+		{
+			assertEquals(header, footer);
+		}
+		
+		public Vector<UserOpportunity> opps = new Vector<UserOpportunity>();
+		public Vector<UserLogEntry> logs = new Vector<UserLogEntry>();;
+		
+		@Override
+		void opportunityHeader(UserOpportunity opp, boolean includeOpportunityDetail, boolean includeLogDetail)
+		{
+			header++;
+			opps.add(opp);
+			System.out.println("Added opp: " + opp.ID);
+		}
+		
+		@Override
+		void opportunityFooter(UserOpportunity opp, boolean includeOpportunityDetail)
+		{
+			footer++;
+			assertEquals(opps.get(opps.size() -1 ).ID, opp.ID);
+		}
+		
+		@Override
+		void logHeader(UserLogEntry log, boolean includeLogDetail, boolean inSpanDate) 
+		{
+			logs.add(log);
+			System.out.println("Added log: " + log.ID);
+		}
+	}
+	
 	@Before
 	public void prepareUserContext() throws CassandraException
 	{
 		 prepareUserContextStatic();
 	}
-	
-	@Test
-	public void testOpportunityHeader() {
-		ReportActionHtml report = new ReportActionHtml(user, "FR");
-		report.opportunityHeader(opportunity1, true, true);
-		//System.out.println(report.content);
-		assertEquals(true, report.content.contains("title1"));
-		assertEquals(true, report.content.contains("description1"));
-	}
-
-	@Test
-	public void testLogHeader() {
-		ReportActionHtml report = new ReportActionHtml(user, "FR");
-		report.logHeader(userLog11, true, true);
-		System.out.println("LOG HEADER...." + report.content);
-		assertEquals(true, report.content.contains("title1"));
-		assertEquals(true, report.content.contains("description1"));
-	}
 
 	@Test
 	public void testFull() throws CassandraException, UnsupportedEncodingException {
-		ReportActionHtml report = new ReportActionHtml(user, "FR");
-		byte[] result = report.getReport(getDate(2000, 1, 1), getDate(2100, 1, 1), true, true, true);
-		System.out.println(new String(result, "UTF-8"));
+		ReportActionLocal report = new ReportActionLocal(user, "FR");
+		Date start = FormatUtil.startOfTheDay(getDate(2000, 1, 1));
+		Date end = FormatUtil.endOfTheDay(getDate(2000, 1, 2));
+		report.getReport(start, end, true, true, true);
+		assertEquals(1, report.opps.size());
+		assertEquals(report.opps.get(0).ID, "opp1");
+		assertEquals(1, report.logs.size());
+		assertEquals(report.logs.get(0).ID, "log11");
+		assertEquals(report.Start, start);
+		assertEquals(report.end, end);
+		
+		report = new ReportActionLocal(user, "FR");
+		report.getReport(start, end, true, true, false);
+		assertEquals(1, report.opps.size());
+		assertEquals(report.opps.get(0).ID, "opp1");
+		assertEquals(2, report.logs.size());
+		assertEquals(report.logs.get(0).ID, "log11");
+		assertEquals(report.logs.get(1).ID, "log12");
+		
+		end = FormatUtil.endOfTheDay(getDate(2000, 2, 2));
+		report = new ReportActionLocal(user, "FR");
+		report.getReport(start, end, true, true, false);
+		assertEquals(2, report.opps.size());
+		assertEquals(report.opps.get(0).ID, "opp1");
+		assertEquals(report.opps.get(1).ID, "opp2");
+		assertEquals(4, report.logs.size());
+		assertEquals(report.logs.get(0).ID, "log11");
+		assertEquals(report.logs.get(1).ID, "log12");
+		assertEquals(report.logs.get(2).ID, "log21");
+		assertEquals(report.logs.get(3).ID, "log22");
 	}
 }

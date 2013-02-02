@@ -3,6 +3,7 @@ package com.TheJobCoach.userdata;
 import java.util.Date;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
@@ -23,7 +24,7 @@ public class ReportActionHtml extends ReportAction {
 		String dates = "";
 		if (!FormatUtil.getDateString(Start).equals(FormatUtil.getDateString(FormatUtil.startOfTheUniverse())))
 			dates = " (" + ReportHtml.getDate(super.lang, Start) + " - " + ReportHtml.getDate(super.lang, end) + ")";
-		content += ReportHtml.getHead() + "<H1>" + lang.getTimeReport() + dates + "</H1>\n";
+		content += ReportHtml.getHead() + "<H1>www.TheJobCoach.com - " + lang.getTimeReport() + dates + "</H1>\n";
 	}
 		
 	@Override
@@ -42,14 +43,15 @@ public class ReportActionHtml extends ReportAction {
 		if (includeLogDetail)
 		{
 			logHeader = 
-					"<TD>" + lang.getDescription() + "</TD>" +
-					"<TD>" + lang.getDone() + "</TD>";
+					"<TH>" + lang.getDescription() + "</TH>"
+							+		"<TH>" + lang.getDone() + "</TH>"
+							+		"<TH>" + lang.getFilename() + "</TH>";
 		}
 		content += detail;
 		content += "<TABLE CELLPADDING=8 BORDER=2 WIDTH=\"100%\"><TR BGCOLOR=red>"
-				+ "<TD>" + lang.getDate() + "</TD>"
-				+ "<TD>" + lang.getType() + "</TD>"
-				+ "<TD>" + lang.getAction() + "</TD>"
+				+ "<TH>" + lang.getDate() + "</TH>"
+				+ "<TH>" + lang.getType() + "</TH>"
+				+ "<TH>" + lang.getAction() + "</TH>"
 				+ logHeader
 				+ "</TR>\n";
 	}
@@ -63,13 +65,18 @@ public class ReportActionHtml extends ReportAction {
 	@Override
 	void logHeader(UserLogEntry log, boolean includeLogDetail, boolean inSpanDate) 
 	{ 
-		String BGCOLOR = inSpanDate ? "#CCCC99" : "";
+		String BGCOLOR = inSpanDate ? "orange" : "brown";
 		String logDetail = "";
 		if (includeLogDetail)
 		{
 			logDetail = 
 					"<TD>" + ReportHtml.writeToString(log.description) + "</TD>" + 
-					"<TD>" + (log.done ? "X": "") + "</TD>";
+					"<TD>" + (log.done ? "X": "") + "</TD><TD>";
+			for (UserDocumentId file: log.attachedDocumentId)
+			{
+				logDetail += file.name + "(" + file.fileName + ")<br/>";
+			}
+			logDetail+="</TD>";
 		}
 		content += "<TR BGCOLOR=\"" + BGCOLOR + "\">"
 				+ "<TD>" + ReportHtml.getDate(super.lang, log.eventDate) + "</TD>"

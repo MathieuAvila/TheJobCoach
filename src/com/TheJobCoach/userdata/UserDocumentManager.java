@@ -156,7 +156,7 @@ public class UserDocumentManager {
 		UserDocument doc = getUserDocument(id, ID);
 		if (doc == null)
 		{
-			System.out.println("doc is null");
+			//System.out.println("doc is null");
 			return null;  // this means it was deleted.
 		}
 		UserDocumentRevision rev = null;

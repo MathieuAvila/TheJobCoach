@@ -2,12 +2,10 @@ package com.TheJobCoach.userdata;
 
 import static org.junit.Assert.*;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
@@ -18,7 +16,6 @@ import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentType;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class TestReportActionHtml {
 
@@ -35,7 +32,7 @@ public class TestReportActionHtml {
 	static UserId user = new UserId("user", "password", UserId.UserType.USER_TYPE_SEEKER);
 	
 	static UserOpportunity opportunity1 = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 2, 1),
-			"title1", "description1", "companyId1",
+			"oppTitle1", "oppDescription1", "companyId1",
 			"contractType1",  1,  
 			getDate(2000, 1, 1), getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
@@ -57,36 +54,56 @@ public class TestReportActionHtml {
 	
 	static UserLogEntry userLog2 = new UserLogEntry("opp1", "log2", "title2", "description2", 
 			getDate(2000, 2, 2),
-			LogEntryType.RECALL, null, docIdList, "", false);
-	
-	@Before
-	public void prepareUserContext() throws CassandraException
-	{
-		TestReportAction.prepareUserContextStatic();		
-	}
-	
+			LogEntryType.RECALL, null, docIdList_less, "", true);
+		
 	@Test
 	public void testOpportunityHeader() {
 		ReportActionHtml report = new ReportActionHtml(user, "FR");
 		report.opportunityHeader(opportunity1, true, true);
 		//System.out.println(report.content);
-		assertEquals(true, report.content.contains("title1"));
-		assertEquals(true, report.content.contains("description1"));
+		assertEquals(true, report.content.contains(opportunity1.title));
+		assertEquals(true, report.content.contains(opportunity1.description));
 	}
 
 	@Test
 	public void testLogHeader() {
+		
+		// With detail
 		ReportActionHtml report = new ReportActionHtml(user, "FR");
 		report.logHeader(userLog1, true, true);
 		System.out.println("LOG HEADER...." + report.content);
 		assertEquals(true, report.content.contains("title1"));
 		assertEquals(true, report.content.contains("description1"));
-	}
+		assertEquals(true, report.content.contains("Ev&egrave;nement"));
+		
+		assertEquals(true, report.content.contains("name1"));
+		assertEquals(true, report.content.contains("name2"));
+		assertEquals(true, report.content.contains("fileName1"));
+		assertEquals(true, report.content.contains("fileName2"));
+		
+		// NO detail
+		report = new ReportActionHtml(user, "FR");
+		report.logHeader(userLog1, false, true);
+		System.out.println("LOG HEADER...." + report.content);
+		assertEquals(true, report.content.contains("title1"));
+		assertEquals(false, report.content.contains("description1"));
 
-	@Test
-	public void testFull() throws CassandraException, UnsupportedEncodingException {
-		ReportActionHtml report = new ReportActionHtml(user, "FR");
-		byte[] result = report.getReport(getDate(2000, 1, 1), getDate(2100, 1, 1), true, true, true);
-		System.out.println(new String(result, "UTF-8"));
+		assertEquals(false, report.content.contains("name1"));
+		assertEquals(false, report.content.contains("name2"));
+		assertEquals(false, report.content.contains("fileName1"));
+		assertEquals(false, report.content.contains("fileName2"));
+
+		// With detail & done
+		report = new ReportActionHtml(user, "FR");
+		report.logHeader(userLog2, true, true);
+		System.out.println("LOG HEADER...." + report.content);
+		assertEquals(true, report.content.contains("X"));
+		assertEquals(true, report.content.contains("orange"));
+		
+		// Outside date span
+		report = new ReportActionHtml(user, "FR");
+		report.logHeader(userLog2, false, false);
+		System.out.println("LOG HEADER...." + report.content);
+		assertEquals(true, report.content.contains("brown"));
 	}
 }
