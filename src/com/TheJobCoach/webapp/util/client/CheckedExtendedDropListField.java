@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.ListBox;
@@ -47,7 +48,10 @@ public class CheckedExtendedDropListField implements IExtendedField {
 		{
 			//System.out.println("VALUE "+ value + "+"+tb.getValue(i));
 			if (tb.getValue(i).equals(value))
+			{
+				//System.out.println("FOUND");
 				tb.setSelectedIndex(i);
+			}
 		}
 		checkUserValue(true);
 	}

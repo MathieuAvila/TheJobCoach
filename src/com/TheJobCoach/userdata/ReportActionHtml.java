@@ -1,13 +1,11 @@
 package com.TheJobCoach.userdata;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Date;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
-import org.apache.commons.lang.StringEscapeUtils;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
 
 public class ReportActionHtml extends ReportAction {
 
@@ -22,7 +20,10 @@ public class ReportActionHtml extends ReportAction {
 	@Override
 	void includeTitle(Date Start, Date end)
 	{
-		content += ReportHtml.getHead() + "<H1>" + lang.getTimeReport() + "</H1>\n";
+		String dates = "";
+		if (!FormatUtil.getDateString(Start).equals(FormatUtil.getDateString(FormatUtil.startOfTheUniverse())))
+			dates = " (" + ReportHtml.getDate(super.lang, Start) + " - " + ReportHtml.getDate(super.lang, end) + ")";
+		content += ReportHtml.getHead() + "<H1>" + lang.getTimeReport() + dates + "</H1>\n";
 	}
 		
 	@Override
@@ -30,17 +31,26 @@ public class ReportActionHtml extends ReportAction {
 	{
 		String detail = "";
 		detail = ReportHtml.addWithSeparator(detail, ReportHtml.writeToString(opp.location), " - ");
-		content += "<H2>" + ReportHtml.writeToString(opp.title) + "</H2>";
+		content += "<H2>" + ReportHtml.writeToString(opp.title) + " - " + lang.getOpportunityStatusName(UserOpportunity.applicationStatusToString(opp.status)) + "</H2>";
 		if (includeOpportunityDetail)
 		{
 			detail = ReportHtml.addWithSeparator(detail, ReportHtml.writeToString(opp.description), "", "</BR>");
 			detail = ReportHtml.addWithSeparator(detail, ReportHtml.writeToString(opp.url), "", "</BR>");
+			detail = ReportHtml.addWithSeparator(detail, ReportHtml.writeToString(opp.location), "", "</BR>");
+		}
+		String logHeader = "";
+		if (includeLogDetail)
+		{
+			logHeader = 
+					"<TD>" + lang.getDescription() + "</TD>" +
+					"<TD>" + lang.getDone() + "</TD>";
 		}
 		content += detail;
 		content += "<TABLE CELLPADDING=8 BORDER=2 WIDTH=\"100%\"><TR BGCOLOR=red>"
 				+ "<TD>" + lang.getDate() + "</TD>"
 				+ "<TD>" + lang.getType() + "</TD>"
 				+ "<TD>" + lang.getAction() + "</TD>"
+				+ logHeader
 				+ "</TR>\n";
 	}
 	
@@ -54,10 +64,18 @@ public class ReportActionHtml extends ReportAction {
 	void logHeader(UserLogEntry log, boolean includeLogDetail, boolean inSpanDate) 
 	{ 
 		String BGCOLOR = inSpanDate ? "#CCCC99" : "";
+		String logDetail = "";
+		if (includeLogDetail)
+		{
+			logDetail = 
+					"<TD>" + ReportHtml.writeToString(log.description) + "</TD>" + 
+					"<TD>" + (log.done ? "X": "") + "</TD>";
+		}
 		content += "<TR BGCOLOR=\"" + BGCOLOR + "\">"
 				+ "<TD>" + ReportHtml.getDate(super.lang, log.eventDate) + "</TD>"
 				+ "<TD>" + ReportHtml.writeToString(lang.getActionName(UserLogEntry.entryTypeToString(log.type))) + "</TD>"
-				+ "<TD>" + ReportHtml.writeToString((log.title + (includeLogDetail ? log.description : "" )))
+				+ "<TD>" + ReportHtml.writeToString(log.title)
+				+ logDetail
 				+ "</TD></TR>\n";
 	}
 

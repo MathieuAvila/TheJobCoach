@@ -11,9 +11,11 @@ public class LangReportAction
 	String lang;
 	Properties currentProperties;
 	Properties currentWebappProperties;
-	
+	Properties currentWebappCommonProperties;
+
 	static HashMap<String, Properties> langProp = new HashMap<String, Properties>();
 	static HashMap<String, Properties> langPropWebapp = new HashMap<String, Properties>();
+	static HashMap<String, Properties> langPropCommonWebapp = new HashMap<String, Properties>();
 	
 	static {
 		langProp.put("fr", new Properties());
@@ -21,6 +23,9 @@ public class LangReportAction
 
 		langPropWebapp.put("fr", new Properties());
 		langPropWebapp.put("en", new Properties());
+
+		langPropCommonWebapp.put("fr", new Properties());
+		langPropCommonWebapp.put("en", new Properties());
 
 		try {
 			InputStreamReader isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("LangReportAction_fr.properties"), "UTF-8");
@@ -32,6 +37,11 @@ public class LangReportAction
 			langPropWebapp.get("fr").load(isr);
 			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/LangLogEntry_en.properties"), "UTF-8");
 			langPropWebapp.get("en").load(isr);
+
+			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/Lang_fr.properties"), "UTF-8");
+			langPropCommonWebapp.get("fr").load(isr);
+			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/Lang_en.properties"), "UTF-8");
+			langPropCommonWebapp.get("en").load(isr);
 		} 
 		catch (FileNotFoundException e) 
 		{			
@@ -63,6 +73,7 @@ public class LangReportAction
 		this.lang = lang;
 		currentProperties = getLangProp(lang);
 		currentWebappProperties = langPropWebapp.get(getLang(lang));
+		currentWebappCommonProperties = langPropCommonWebapp.get(getLang(lang));
 	}	
 
 	String getTimeReport()
@@ -88,6 +99,21 @@ public class LangReportAction
 	String getActionName(String action)
 	{
 		return currentWebappProperties.getProperty("logEntryStatus_" + action);
+	}
+
+	public String getDescription()
+	{
+		return currentWebappCommonProperties.getProperty("description");
+	}
+
+	public String getDone()
+	{
+		return currentWebappProperties.getProperty("done");
+	}
+
+	public String getOpportunityStatusName(String applicationStatus)
+	{
+		return currentWebappCommonProperties.getProperty("ApplicationStatus_" + applicationStatus);
 	}
 	
 }

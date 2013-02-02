@@ -82,7 +82,19 @@ public class FormatUtil
 		return r;
 	}
 	
-	
+	@SuppressWarnings("deprecation")
+	public static Date startOfTheUniverse()
+	{
+		Date r = new Date();
+		r.setHours(0);
+		r.setMinutes(0);
+		r.setSeconds(0);
+		r.setYear(0);
+		r.setMonth(0);
+		r.setDate(1);
+		return r;
+	}
+
 	public static String trueString = "1";
 	public static String falseString = "0";
 }

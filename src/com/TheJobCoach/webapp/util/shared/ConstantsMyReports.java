@@ -14,12 +14,14 @@ public class ConstantsMyReports
 	public final static String PERIOD_LAST_MONTH                              = "MONTH";
 	public final static String PERIOD_LAST_2MONTHS                            = "2MONTHS";
 	public final static String PERIOD_SET                                     = "SET";
+	public final static String PERIOD_ALL                                     = "ALL";
 	public final static List<String> PERIOD_LIST  = Arrays.asList(
 			PERIOD_LAST_WEEK,
 			PERIOD_LAST_2WEEKS,
 			PERIOD_LAST_MONTH,
 			PERIOD_LAST_2MONTHS,
-			PERIOD_SET);
+			PERIOD_SET,
+			PERIOD_ALL);
 	
 	public final static String INCLUDE_LOG_OPPORTUNITY                        = "HTML";
 

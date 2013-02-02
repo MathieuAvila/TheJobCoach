@@ -34,6 +34,8 @@ public class DownloadReport extends HttpServlet {
 		Date startDate = FormatUtil.getStringDate(start);
 		String end = request.getParameter("end");
 		Date endDate = FormatUtil.getStringDate(end);
+		System.out.println("Start is: " + start + " converted to:" + startDate);
+		System.out.println("End is: " + end + " converted to:" + endDate);
 		String detailOpp = request.getParameter("detailopp");
 		boolean includeOppDetail = FormatUtil.trueString.equals(detailOpp);
 		String detailLog = request.getParameter("detaillog");

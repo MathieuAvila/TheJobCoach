@@ -1,5 +1,7 @@
-#Sat Jan 05 04:07:20 CET 2013
+#Fri Feb 01 15:42:25 CET 2013
 eclipse.preferences.version=1
+encoding//src/com/TheJobCoach/userdata/LangReportAction_en.properties=UTF-8
+encoding//src/com/TheJobCoach/userdata/LangReportAction_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/mainpage/client/Lang.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/mainpage/client/Lang_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang.properties=UTF-8

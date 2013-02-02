@@ -1,5 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
+import java.util.Date;
+
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
@@ -11,6 +13,8 @@ import com.TheJobCoach.webapp.util.shared.ConstantsMyReports;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
@@ -19,6 +23,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -52,6 +57,8 @@ public class ContentMyReports implements EntryPoint {
 
 	final CheckedDate tfEndDate = new CheckedDate();
 	Label clEndDate = new Label(langMyReports.endDate());
+	
+	ButtonImageText buttonActivityReport = new ButtonImageText(ButtonImageText.Type.NEW, "Obtenir mon rapport d'activité");
 
 	public ContentMyReports(Panel rootPanel, UserId user) {
 		this.user = user;
@@ -67,7 +74,64 @@ public class ContentMyReports implements EntryPoint {
 		rootPanel = panel;
 	}
 
+	public String getStartDate()
+	{
+		System.out.println("Période " + tfPeriod.getValue());
+		if (tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_LAST_WEEK))
+		{
+			Date d = new Date();
+			CalendarUtil.addDaysToDate(d, -7);
+			return FormatUtil.getDateString(FormatUtil.startOfTheDay(d));			
+		} 
+		else if (tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_LAST_2WEEKS))
+		{
+			Date d = new Date();
+			CalendarUtil.addDaysToDate(d, -7 * 2);
+			return FormatUtil.getDateString(FormatUtil.startOfTheDay(d));			
+		}
+		else if (tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_LAST_MONTH))
+		{
+			Date d = new Date();
+			CalendarUtil.addMonthsToDate(d, -1);
+			return FormatUtil.getDateString(FormatUtil.startOfTheDay(d));			
+		}
+		else if (tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_LAST_2MONTHS))
+		{
+			Date d = new Date();
+			CalendarUtil.addMonthsToDate(d, -2);
+			return FormatUtil.getDateString(FormatUtil.startOfTheDay(d));			
+		}
+		else if (tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_SET))
+		{
+			return tfStartDate.getValue();	
+		};		
+		//else (tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_ALL)
+		return FormatUtil.getDateString(FormatUtil.startOfTheUniverse());	
+	}
+	
+	public String getEndDate()
+	{
+		System.out.println("Période fin " + tfPeriod.getValue());
+		if (tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_SET))
+		{
+			return FormatUtil.getDateString(FormatUtil.endOfTheDay(tfEndDate.getItem().getValue()));	
+		};
+		Date d = new Date();
+		return FormatUtil.getDateString(FormatUtil.endOfTheDay(d));		
+	}
 
+	private void updateDateSelector()
+	{
+		boolean enable = tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_SET);
+		tfStartDate.getItem().setEnabled(enable);
+		tfEndDate.getItem().setEnabled(enable);
+		tfStartDate.setValue(getStartDate());
+		tfEndDate.setValue(getEndDate());
+		
+		System.out.println("Set start to : " + getStartDate());
+		System.out.println("Set end to : " + getEndDate());
+	}
+	
 	/**
 	 * This is the entry point method.
 	 * @wbp.parser.entryPoint
@@ -108,9 +172,20 @@ public class ContentMyReports implements EntryPoint {
 
 		grid0.setWidget(6,0, clLogPeriod);
 		grid0.setWidget(6,1, tfLogPeriod.getItem());
-
-		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, "Obtenir mon rapport d'activité");
-		button.addClickHandler(new ClickHandler()
+		
+		tfStartDate.getItem().setValue(new Date());
+		tfEndDate.getItem().setValue(new Date());
+		
+		tfPeriod.getItem().addChangeHandler(new ChangeHandler()
+		{
+			@Override
+			public void onChange(ChangeEvent event)
+			{
+				updateDateSelector();
+			}			
+		});
+		
+		buttonActivityReport.addClickHandler(new ClickHandler()
 		{			
 			public void onClick(ClickEvent event)
 			{
@@ -120,8 +195,8 @@ public class ContentMyReports implements EntryPoint {
 						+ "&detailopp=" + URL.encode(tfDetailOpp.getValue())
 						+ "&detaillog=" + URL.encode(tfDetailLog.getValue())
 						+ "&logperiod=" + URL.encode(tfLogPeriod.getValue())
-						+ "&start=" + URL.encode(tfStartDate.getValue()) 
-						+ "&end=" + URL.encode(tfEndDate.getValue())
+						+ "&start=" + URL.encode(getStartDate()) 
+						+ "&end=" + URL.encode(getEndDate())
 						+ "&format=" + URL.encode(tfFormat.getValue())
 						+ "&lang=" + URL.encode(cookieLang)
 						+ "&userid=" + URL.encode(user.userName)
@@ -131,6 +206,8 @@ public class ContentMyReports implements EntryPoint {
 				simplePanelCenter.add(iframe);
 			}
 		});
-		simplePanelCenter.add(button);
+		simplePanelCenter.add(buttonActivityReport);
+		tfPeriod.setValue(ConstantsMyReports.PERIOD_LAST_WEEK);
+		updateDateSelector();
 	}
 }

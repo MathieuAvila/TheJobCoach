@@ -64,7 +64,7 @@ public class ReportAction
 				for (UserLogEntry log: logList)
 				{
 					boolean inSpanDate = (log.eventDate.after(start) && log.eventDate.before(end));
-					if (onlyLogOnPeriod || inSpanDate)
+					if (!onlyLogOnPeriod || inSpanDate)
 						logHeader(log, includeLogDetail, inSpanDate);
 				}
 				opportunityFooter(opp, includeOpportunityDetail);
