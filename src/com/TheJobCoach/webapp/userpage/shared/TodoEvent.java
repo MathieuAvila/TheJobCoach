@@ -40,6 +40,10 @@ public class TodoEvent implements Serializable {
 		this.color = color;
 		this.x = x;
 		this.y = y;
-	}	
+	}
+	
+	public TodoEvent()
+	{
+	}
 }
 

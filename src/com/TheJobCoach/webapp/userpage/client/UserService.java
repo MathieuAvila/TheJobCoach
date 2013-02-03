@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
@@ -43,4 +44,8 @@ public interface UserService extends RemoteService
 	public String deleteUserLogEntry(UserId id, String logId) throws CassandraException;
 	
 	public String sendComment(UserId user, String value) throws CassandraException;
+	
+	public Vector<TodoEvent> getTodoEventList(UserId id, String lang) throws CassandraException;
+	public Boolean setTodoEvent(UserId id, TodoEvent todo) throws CassandraException;
+	public Boolean deleteTodoEvent(UserId id, TodoEvent todo) throws CassandraException;
 }

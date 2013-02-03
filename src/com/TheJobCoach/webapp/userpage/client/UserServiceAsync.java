@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
@@ -41,4 +42,8 @@ public interface UserServiceAsync {
 	public void deleteUserLogEntry(UserId id, String logId, AsyncCallback<String> callback) throws CassandraException;
 	
 	public void sendComment(UserId user, String value, AsyncCallback<String> callback);
+	
+	public void getTodoEventList(UserId id, String lang, AsyncCallback<Vector<TodoEvent>> callback);
+	public void setTodoEvent(UserId id, TodoEvent todo, AsyncCallback<Boolean> callback);
+	public void deleteTodoEvent(UserId id, TodoEvent todo, AsyncCallback<Boolean> callback);
 }

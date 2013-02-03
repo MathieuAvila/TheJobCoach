@@ -31,6 +31,7 @@
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentMyReports" />
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentMyAccount'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentNews'/>
+	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentTodoEvent'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestUiComponentDocumentList'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestComponentChooseDocument'/>
 	<entry-point class='com.TheJobCoach.webapp.adminpage.client.TestContentUsers'/>

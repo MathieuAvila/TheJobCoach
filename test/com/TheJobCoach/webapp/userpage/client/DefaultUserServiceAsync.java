@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
@@ -126,6 +127,27 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 	@Override
 	public void sendComment(UserId user, String value,
 			AsyncCallback<String> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void getTodoEventList(UserId id, String lang,
+			AsyncCallback<Vector<TodoEvent>> callback)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setTodoEvent(UserId id, TodoEvent todo,
+			AsyncCallback<Boolean> callback)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void deleteTodoEvent(UserId id, TodoEvent todo,
+			AsyncCallback<Boolean> callback)
+	{
 		// TODO Auto-generated method stub
 		
 	}

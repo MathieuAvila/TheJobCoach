@@ -51,6 +51,8 @@ public class TodoList
 		public String getSubscriberId();
 		public void event(TodoEvent event);
 		public boolean isEventValid(TodoEvent event);
+		public void eventDone(TodoEvent event);
+		public String getText(TodoEvent event, String lang);
 	}
 	
 	static ColumnFamilyDefinition cfDef = null;
@@ -67,7 +69,7 @@ public class TodoList
 	
 	static private HashMap<String, TodoListSubscriber> subscriberMap = new HashMap<String, TodoListSubscriber>();
 		
-	public void registerTodoListSubscriber(TodoListSubscriber subscriber)
+	static public void registerTodoListSubscriber(TodoListSubscriber subscriber)
 	{
 		if (!subscriberMap.containsKey(subscriber.getSubscriberId()))
 		{
@@ -75,7 +77,17 @@ public class TodoList
 		}
 	}
 
-	public TodoEvent getTodoEvent(UserId id, String ID) throws CassandraException 
+	private String getText(TodoEvent event, String lang)
+	{
+		TodoListSubscriber sub = subscriberMap.get(event.eventSubscriber);
+		if (sub != null)
+		{
+			return sub.getText(event, lang);
+		}
+		return event.text;
+	}
+	
+	public TodoEvent getTodoEvent(UserId id, String ID, String lang) throws CassandraException 
 	{
 		String reqId = id.userName + "_" + ID;
 		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
@@ -83,8 +95,10 @@ public class TodoList
 		{
 			throw new CassandraException(); 
 		}
-		return new TodoEvent(
+		
+		TodoEvent te = new TodoEvent(
 				ID, 
+				Convertor.toString(resultReq.get("text")),
 				Convertor.toString(resultReq.get("text")),
 				Convertor.toString(resultReq.get("subscriber")),
 				string2Priority.get(Convertor.toString(resultReq.get("priority"))),
@@ -93,6 +107,8 @@ public class TodoList
 				Convertor.toInt(resultReq.get("x")),
 				Convertor.toInt(resultReq.get("y"))
 				);
+		te.trText = getText(te, lang);
+		return te;
 	}
 	
 	public void setTodoEvent(UserId id, TodoEvent result) throws CassandraException 
@@ -114,7 +130,7 @@ public class TodoList
 				.get());		
 	}
 
-	public Vector<TodoEvent> getTodoEventList(UserId id) throws CassandraException
+	public Vector<TodoEvent> getTodoEventList(UserId id, String lang) throws CassandraException
 	{
 		Vector<TodoEvent> result = new Vector<TodoEvent>();
 		Map<String,String> resultReq = null;
@@ -126,7 +142,7 @@ public class TodoList
 		{
 			try
 			{
-				TodoEvent todo = getTodoEvent(id, key);
+				TodoEvent todo = getTodoEvent(id, key, lang);
 				result.add(todo);
 			}
 			catch (CassandraException e) // Happens if key does not exist anymore in table. Purge bad entry. 

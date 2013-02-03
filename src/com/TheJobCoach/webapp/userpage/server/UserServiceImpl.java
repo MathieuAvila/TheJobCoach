@@ -6,6 +6,7 @@ import java.util.Vector;
 import com.TheJobCoach.admindata.News;
 import com.TheJobCoach.userdata.Account;
 import com.TheJobCoach.userdata.AccountInterface;
+import com.TheJobCoach.userdata.TodoList;
 import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.userdata.UserJobSiteManager;
 import com.TheJobCoach.userdata.UserLogManager;
@@ -13,6 +14,7 @@ import com.TheJobCoach.userdata.UserOpportunityManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
@@ -33,6 +35,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	static private UserOpportunityManager userOpportunityManager = new UserOpportunityManager();
 	static private UserLogManager userLogManager = new UserLogManager();
 	static private UserDocumentManager userDocumentManager = UserDocumentManager.getInstance();
+	static private TodoList todoList = new TodoList();
 
 	@Override
 	public List<String> getUserSiteList(UserId id) throws CassandraException 
@@ -150,5 +153,28 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	public Vector<UserDocumentId> getUserDocumentIdList(UserId userId)
 			throws CassandraException {
 		return userDocumentManager.getUserDocumentIdList(userId);
+	}
+
+	@Override
+	public Vector<TodoEvent> getTodoEventList(UserId id, String lang)
+			throws CassandraException
+	{
+		return todoList.getTodoEventList(id, lang);
+	}
+
+	@Override
+	public Boolean setTodoEvent(UserId id, TodoEvent todo)
+			throws CassandraException
+	{
+		todoList.setTodoEvent(id, todo);
+		return new Boolean(true);
+	}
+
+	@Override
+	public Boolean deleteTodoEvent(UserId id, TodoEvent todo)
+			throws CassandraException
+	{
+		todoList.deleteTodoEvent(id, todo.ID);
+		return new Boolean(true);
 	}
 }
