@@ -11,7 +11,7 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
-public class TestTodoList {
+public class TestTodoList implements TodoList.TodoListSubscriber{
 	
 	static TodoList manager = new TodoList();
 	
@@ -26,24 +26,56 @@ public class TestTodoList {
 	static String todoeventid22 = "2";
 	static String todoeventid32 = "3";
 
-	static TodoEvent todoevent1 = new TodoEvent(todoeventid1, "todo1", "eventsub1", TodoEvent.Priority.URGENT,  new Date(1), TodoEvent.EventColor.BLUE, 11, 1);
-	static TodoEvent todoevent2 = new TodoEvent(todoeventid2, "todo2", "eventsub2", TodoEvent.Priority.NORMAL,  new Date(2), TodoEvent.EventColor.GREEN, 12, 2);
-	static TodoEvent todoevent3 = new TodoEvent(todoeventid3, "todo3", "eventsub3", TodoEvent.Priority.WARNING,  new Date(3), TodoEvent.EventColor.RED, 13, 3);
+	static TodoEvent todoevent1 = new TodoEvent(todoeventid1, "todo1", "todo1#test#FR",  "test", TodoEvent.Priority.URGENT,  new Date(1), TodoEvent.EventColor.BLUE, 11, 1);
+	static TodoEvent todoevent2 = new TodoEvent(todoeventid2, "todo2", "todo2",  "", TodoEvent.Priority.NORMAL,  new Date(2), TodoEvent.EventColor.GREEN, 12, 2);
+	static TodoEvent todoevent3 = new TodoEvent(todoeventid3, "todo3", "todo3",  "", TodoEvent.Priority.WARNING,  new Date(3), TodoEvent.EventColor.RED, 13, 3);
 
-	static TodoEvent todoevent21 = new TodoEvent(todoeventid12, "todo21", "eventsub21", TodoEvent.Priority.URGENT,  new Date(1), TodoEvent.EventColor.BLUE, 11, 1);
-	static TodoEvent todoevent22 = new TodoEvent(todoeventid22, "todo22", "eventsub22", TodoEvent.Priority.NORMAL,  new Date(2), TodoEvent.EventColor.GREEN, 12, 2);
-	static TodoEvent todoevent23 = new TodoEvent(todoeventid32, "todo23", "eventsub23", TodoEvent.Priority.WARNING,  new Date(3), TodoEvent.EventColor.RED, 13, 3);
+	static TodoEvent todoevent21 = new TodoEvent(todoeventid12, "todo21", "todo21#test#FR",  "test", TodoEvent.Priority.URGENT,  new Date(1), TodoEvent.EventColor.BLUE, 11, 1);
+	static TodoEvent todoevent22 = new TodoEvent(todoeventid22, "todo22", "todo22",  "", TodoEvent.Priority.NORMAL,  new Date(2), TodoEvent.EventColor.GREEN, 12, 2);
+	static TodoEvent todoevent23 = new TodoEvent(todoeventid32, "todo23", "todo23", "", TodoEvent.Priority.WARNING,  new Date(3), TodoEvent.EventColor.RED, 13, 3);
+	
+
+	@Override
+	public String getSubscriberId()
+	{
+		return "test";
+	}
+
+	@Override
+	public void event(TodoEvent event)
+	{
+		System.out.println("Event: " + event.ID);
+	}
+
+	@Override
+	public boolean isEventValid(TodoEvent event)
+	{
+		System.out.println("Is event valid: " + event.ID);
+		return true;
+	}
+
+	@Override
+	public void eventDone(TodoEvent event)
+	{
+		System.out.println("Event done: " + event.ID);
+	}
+
+	@Override
+	public String getText(TodoEvent event, String lang)
+	{
+		return event.text + "#test#" + lang;
+	}
 	
 	@Test
 	public void testCleanUserSite() throws CassandraException
 	{
-		Vector<TodoEvent> result = manager.getTodoEventList(id);
+		Vector<TodoEvent> result = manager.getTodoEventList(id, "FR");
 		for (TodoEvent site: result)
 		{
 			//System.out.println("Try delete previous site: " + site);
 			manager.deleteTodoEvent(id, site.ID);
 		}
-		result = manager.getTodoEventList(id2);
+		result = manager.getTodoEventList(id2, "FR");
 		for (TodoEvent site: result)
 		{
 			//System.out.println("Try delete previous site2: " + site);
@@ -60,14 +92,14 @@ public class TestTodoList {
 	
 	@Test
 	public void testgetTodoEventList() throws CassandraException {
-		Vector<TodoEvent> result = manager.getTodoEventList(id);
+		Vector<TodoEvent> result = manager.getTodoEventList(id, "FR");
 		//System.out.println("***************** GET 1 " + result);
 		assertEquals(3, result.size());
 		assertTrue(result.get(0).ID.equals(todoeventid1));
 		assertTrue(result.get(1).ID.equals(todoeventid2));
 		assertTrue(result.get(2).ID.equals(todoeventid3));
 
-		Vector<TodoEvent> result2 = manager.getTodoEventList(id2);
+		Vector<TodoEvent> result2 = manager.getTodoEventList(id2, "FR");
 		//System.out.println("***************** GET 2 " + result2);
 		assertEquals(3, result2.size());
 		assertTrue(result.get(0).ID.equals(todoeventid12));
@@ -86,9 +118,11 @@ public class TestTodoList {
 	@Test
 	public void testgetTodoEvent() throws CassandraException 
 	{
-		TodoEvent copy_todoevent1 = manager.getTodoEvent(id, todoeventid1);
-		TodoEvent copy_todoevent2 = manager.getTodoEvent(id, todoeventid2);
-		TodoEvent copy_todoevent3 = manager.getTodoEvent(id, todoeventid3);
+		TodoList.registerTodoListSubscriber(this);
+		
+		TodoEvent copy_todoevent1 = manager.getTodoEvent(id, todoeventid1, "FR");
+		TodoEvent copy_todoevent2 = manager.getTodoEvent(id, todoeventid2, "FR");
+		TodoEvent copy_todoevent3 = manager.getTodoEvent(id, todoeventid3, "FR");
 		
 		assertEquals(todoevent1.text, copy_todoevent1.text);
 		assertEquals(todoevent1.eventSubscriber,       copy_todoevent1.eventSubscriber);
@@ -98,6 +132,7 @@ public class TestTodoList {
 		assertEquals(todoevent1.ID,          copy_todoevent1.ID);
 		assertEquals(todoevent1.x,          copy_todoevent1.x);
 		assertEquals(todoevent1.y,          copy_todoevent1.y);
+		assertEquals(todoevent1.trText,          copy_todoevent1.trText);
 
 		assertEquals(todoevent2.text, copy_todoevent2.text);
 		assertEquals(todoevent2.eventSubscriber,       copy_todoevent2.eventSubscriber);
@@ -107,6 +142,7 @@ public class TestTodoList {
 		assertEquals(todoevent2.ID,          copy_todoevent2.ID);
 		assertEquals(todoevent2.x,          copy_todoevent2.x);
 		assertEquals(todoevent2.y,          copy_todoevent2.y);
+		assertEquals(todoevent2.trText,          copy_todoevent2.trText);
 
 		assertEquals(todoevent3.text, copy_todoevent3.text);
 		assertEquals(todoevent3.eventSubscriber,       copy_todoevent3.eventSubscriber);
@@ -116,6 +152,7 @@ public class TestTodoList {
 		assertEquals(todoevent3.ID,          copy_todoevent3.ID);
 		assertEquals(todoevent3.x,          copy_todoevent3.x);
 		assertEquals(todoevent3.y,          copy_todoevent3.y);
+		assertEquals(todoevent3.trText,          copy_todoevent3.trText);
 	}
 
 	@Test
@@ -124,17 +161,16 @@ public class TestTodoList {
 		manager.deleteTodoEvent(id, todoeventid1);
 		manager.deleteTodoEvent(id2, todoeventid12);
 		
-		Vector<TodoEvent> result = manager.getTodoEventList(id);
+		Vector<TodoEvent> result = manager.getTodoEventList(id, "FR");
 		//	System.out.println("***************** GET 1 " + result);
 		assertEquals(2, result.size());
 		assertTrue(result.get(0).ID.equals(todoeventid2));
 		assertTrue(result.get(1).ID.equals(todoeventid3));
 
-		Vector<TodoEvent> result2 = manager.getTodoEventList(id2);
+		Vector<TodoEvent> result2 = manager.getTodoEventList(id2, "FR");
 		//System.out.println("***************** GET 2 " + result2);
 		assertEquals(2, result2.size());
 		assertTrue(result.get(0).ID.equals(todoeventid22));
 		assertTrue(result.get(1).ID.equals(todoeventid32));		
-	}
-	
+	}	
 }

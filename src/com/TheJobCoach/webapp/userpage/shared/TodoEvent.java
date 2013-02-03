@@ -20,18 +20,20 @@ public class TodoEvent implements Serializable {
 
 	public String ID;
 	public String text;
+	public String trText;
 	public String eventSubscriber;
 	public Priority priority;
 	public Date eventDate;
 	public EventColor color;
 	public int x, y;		
 
-	public TodoEvent(String ID, String text, String eventSubscriber,
+	public TodoEvent(String ID, String text, String trText, String eventSubscriber,
 			Priority priority, Date eventDate, EventColor color, int x,
 			int y)
 	{
 		this.ID = ID;
 		this.text = text;
+		this.trText = trText;
 		this.eventSubscriber = eventSubscriber;
 		this.priority = priority;
 		this.eventDate = eventDate;
