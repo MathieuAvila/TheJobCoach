@@ -15,7 +15,20 @@ public class UserJobSite implements Serializable {
 	public String login;
 	public String password;
 	public Date lastVisit;
-
+	public int needUpdateDays;
+	
+	public UserJobSite(String _ID, String _name, String _URL, String _description, String _login, String _password, Date _lastVisit, int needUpdateDays)
+	{
+		ID = _ID;
+		name = _name;
+		URL = _URL;
+		description = _description;
+		login = _login;
+		password = _password;
+		lastVisit = _lastVisit;
+		this.needUpdateDays = needUpdateDays;
+	}
+	
 	public UserJobSite(String _ID, String _name, String _URL, String _description, String _login, String _password, Date _lastVisit)
 	{
 		ID = _ID;
@@ -25,6 +38,7 @@ public class UserJobSite implements Serializable {
 		login = _login;
 		password = _password;
 		lastVisit = _lastVisit;
+		this.needUpdateDays = 0;
 	}
 	
 	public UserJobSite()

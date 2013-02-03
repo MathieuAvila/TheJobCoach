@@ -16,6 +16,13 @@ public class Convertor {
 		return "";
 	}
 
+	@SuppressWarnings("deprecation")
+	static public String toString(Date val)
+	{
+		if (val != null) return String.valueOf(val.getTime());
+		return String.valueOf(Date.UTC(0, 0, 0, 0, 0, 0));
+	}
+
 	static public Date toDate(String val)
 	{
 		if (val != null)
