@@ -68,26 +68,6 @@
 			<attribute name="javadoc_location" value="file:/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/docs/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/lib/shared/appengine-local-runtime-shared.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/lib/user/appengine-api-1.0-sdk-1.5.5.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/lib/user/appengine-api-labs-1.5.5.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/lib/user/appengine-jsr107cache-1.5.5.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/lib/user/jsr107cache-1.1.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/docs/javadoc/"/>
@@ -119,11 +99,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/lib/user/orm/datanucleus-core-1.1.5.jar" sourcepath="/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/src/orm/datanucleus-core-1.1.5-src.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/lib/appengine-tools-api.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/home/avila/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.5.r37v201110112027/appengine-java-sdk-1.5.5/docs/javadoc/"/>
 		</attributes>
