@@ -31,6 +31,8 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -82,7 +84,7 @@ public class ContentTodo implements EntryPoint {
 		
 		private class TodoEventView extends SimplePanel implements
 		MouseUpHandler, MouseDownHandler, MouseMoveHandler,
-		ValueChangeHandler<String>
+		ValueChangeHandler<String>, KeyUpHandler
 		{
 			private final TodoEvent myTodoEvent;
 
@@ -123,6 +125,7 @@ public class ContentTodo implements EntryPoint {
 
 				content.setStyleName("TodoEvent-content");
 				content.addValueChangeHandler(this);
+				content.addKeyUpHandler(this);
 
 				content.addMouseUpHandler(this);
 
@@ -292,6 +295,17 @@ public class ContentTodo implements EntryPoint {
 			{
 				myTodoEvent.text = event.getValue();
 				updateTodoEvent();
+			}
+			
+			@Override
+			public void onKeyUp(KeyUpEvent event)
+			{
+				if (!myTodoEvent.text.equals(content.getValue()))
+				{
+					myTodoEvent.text = content.getValue();			
+					myTodoEvent.trText = content.getValue();			
+					updateTodoEvent();
+				}
 			}
 		}
 
