@@ -69,6 +69,9 @@ public interface Lang extends Constants {
 	@Key("actionagenda")
 	String _TextAgenda();
 
+	@Key("todo")
+	String _TextTodo();
+
 	@Key("archivedapplications")
 	String _TextArchivedApplications();
 

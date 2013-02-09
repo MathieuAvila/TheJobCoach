@@ -145,7 +145,8 @@ public class MessageBox implements EntryPoint {
 			}
 		});
 		rootPanel.add(dBox);
-		dBox.center();		
+		dBox.center();
+		dBox.getElement().getStyle().setProperty("zIndex", "10000" );
 	}
 
 	public static MessageBox messageBox(Panel rootPanel, TYPE type, String title, String message)

@@ -2,6 +2,7 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -11,10 +12,8 @@ import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
-import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -24,14 +23,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-
-
 
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
@@ -47,10 +41,10 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.WidgetCollection;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -58,7 +52,7 @@ import com.google.gwt.user.client.ui.WidgetCollection;
 public class ContentTodo implements EntryPoint {
 
 	final Lang lang = GWT.create(Lang.class);
-	
+
 	UserId user;
 
 	final ExtendedCellTable<TodoEvent> cellTable = new ExtendedCellTable<TodoEvent>();
@@ -69,19 +63,10 @@ public class ContentTodo implements EntryPoint {
 		this.rootPanel = rootPanel;
 	}
 
-	private void setTodoEvent(TodoEvent TodoEvent)
-	{
-		currentTodoEvent = TodoEvent;
-	}
-	
-	public void setUserParameters(UserId _user)
-	{
-		user = _user;
-	}
-
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
+	int currentZ;
 
 	public void setRootPanel(Panel panel)
 	{
@@ -94,187 +79,276 @@ public class ContentTodo implements EntryPoint {
 	 *
 	 */
 	class SurfaceView extends FlowPanel {
+		
+		private class TodoEventView extends SimplePanel implements
+		MouseUpHandler, MouseDownHandler, MouseMoveHandler,
+		ValueChangeHandler<String>
+		{
+			private final TodoEvent myTodoEvent;
 
-	  /**
-	   * A widget for displaying a single {@link TodoEvent}.
-	   */
-	  private class TodoEventView extends SimplePanel implements //TodoEvent.Observer,
-	      MouseUpHandler, MouseDownHandler, MouseMoveHandler,
-	      ValueChangeHandler<String> {
-	    private final TodoEvent TodoEvent;
+			private final DivElement titleElement;
+			private final DivElement bcolor;
+			private final DivElement done;
 
-	    private final DivElement titleElement;
+			private final TextArea content = new TextArea();
 
-	    private final TextArea content = new TextArea();
+			private boolean dragging;
 
-	    private boolean dragging;
+			private int dragOffsetX, dragOffsetY;
 
-	    private int dragOffsetX, dragOffsetY;
+			private int org_x, org_y, org_w, org_h;
+			
+			private SurfaceView surface;
+			/**
+			 * @param TodoEvent
+			 *          the TodoEvent to render
+			 */
+			public TodoEventView(TodoEvent TodoEvent, SurfaceView surface) 
+			{
+				this.surface = surface;
+				this.myTodoEvent = TodoEvent;
+				setStyleName("TodoEvent");
 
-	    private int orgX, orgY;
-	    
-	    /**
-	     * @param TodoEvent
-	     *          the TodoEvent to render
-	     */
-	    public TodoEventView(TodoEvent TodoEvent) {
-	      this.TodoEvent = TodoEvent;
-	      setStyleName("TodoEvent");
-	      //TodoEvent.setObserver(this);
+				final Element elem = getElement();
+				elem.getStyle().setProperty("position", "absolute");
+				
+				HorizontalPanel hp = new HorizontalPanel();
+				SimplePanel titlePanel = new SimplePanel();
+				titlePanel.setWidth("100%");
+				hp.add(titlePanel);
+				hp.setWidth("100%");
+				elem.appendChild(hp.getElement());
+				titleElement = titlePanel.getElement().appendChild(Document.get().createDivElement());
+				titleElement.setClassName("TodoEvent-title");
 
-	      final Element elem = getElement();
-	      elem.getStyle().setProperty("position", "absolute");
-	      //elem.getStyle().setProperty("position", "relative");
-	      titleElement = elem.appendChild(Document.get().createDivElement());
-	      titleElement.setClassName("TodoEvent-title");
+				content.setStyleName("TodoEvent-content");
+				content.addValueChangeHandler(this);
 
-	      content.setStyleName("TodoEvent-content");
-	      content.addValueChangeHandler(this);
-	      setWidget(content);
+				content.addMouseUpHandler(this);
 
-	      render();
+				setPixelPosition(myTodoEvent.x, myTodoEvent.y);
+				setPixelSize(myTodoEvent.w, myTodoEvent.h);
+				
+				this.setWidget(content);
 
-	      addDomHandler(this, MouseDownEvent.getType());
-	      addDomHandler(this, MouseMoveEvent.getType());
-	      addDomHandler(this, MouseUpEvent.getType());
-	      
-	      final Style style = getElement().getStyle();
-	      orgX = Integer.parseInt(style.getLeft().substring(0, (style.getLeft().length() - 2)));
-	      orgY = Integer.parseInt(style.getTop().substring(0, (style.getTop().length() - 2)));
-	      System.out.println("OrgX : " + orgX + " OrgY : " + orgY);
-	    }
+				addDomHandler(this, MouseDownEvent.getType());
+				addDomHandler(this, MouseMoveEvent.getType());
+				addDomHandler(this, MouseUpEvent.getType());
+				
 
-	    public void onMouseDown(MouseDownEvent event) {
-	      SurfaceView.this.select(this);
-	      
-	      final EventTarget target = event.getNativeEvent().getEventTarget();
-	      assert Element.is(target);
-	      if (!Element.is(target)) {
-	        return;
-	      }
+				checkForChange();
+				
+				SimplePanel colorPanel = new SimplePanel();
+				colorPanel.setWidth("2em");
+				hp.add(colorPanel);
+				hp.setCellWidth(colorPanel, "2em");
+				bcolor = colorPanel.getElement().appendChild(Document.get().createDivElement());
+				bcolor.setClassName("TodoEvent-title");
+				bcolor.setInnerHTML("C");
+				colorPanel.getElement().appendChild(bcolor);
+				
+				SimplePanel donePanel = new SimplePanel();
+				donePanel.setWidth("2em");
+				hp.add(donePanel);
+				hp.setCellWidth(donePanel, "2em");
+				done = donePanel.getElement().appendChild(Document.get().createDivElement());
+				done.setClassName("TodoEvent-title");
+				done.setInnerHTML("X");
+				donePanel.getElement().appendChild(done);
+								
+				render();
+			}
 
-	      if (titleElement.isOrHasChild(Element.as(target))) {
-	        dragging = true;
-	        final Element elem = getElement().cast();
-	        dragOffsetX = event.getX();
-	        dragOffsetY = event.getY();
-	        DOM.setCapture(elem);
-	        event.preventDefault();
-	      }
-	    }
+			private boolean checkForChange()
+			{
+				final Style style = getElement().getStyle();
+				int new_org_x = Integer.parseInt(style.getLeft().substring(0, (style.getLeft().length() - 2)));
+				int new_org_y = Integer.parseInt(style.getTop().substring(0, (style.getTop().length() - 2)));
+				
+				int new_org_w = content.getOffsetWidth() -1;
+				int new_org_h = content.getOffsetHeight() -1;
+				
+				boolean result = (new_org_x != org_x) || (new_org_y != org_y) || (new_org_h != org_h) || (new_org_w != org_w);
+				
+				org_x = new_org_x;
+				org_y = new_org_y;
+				org_w = new_org_w;
+				org_h = new_org_h;
+				
+				return result;
+			}
 
-	    public void onMouseMove(MouseMoveEvent event) {
-	      if (dragging) {
-	    	  
-	    	  final Style style = getElement().getStyle();
-	    	  orgX = Integer.parseInt(style.getLeft().substring(0, (style.getLeft().length() - 2)));
-	    	  orgY = Integer.parseInt(style.getTop().substring(0, (style.getTop().length() - 2)));
-	    	  System.out.println("OrgX : " + orgX + " OrgY : " + orgY);
+			void updateTodoEvent()
+			{
+				myTodoEvent.x = org_x;
+				myTodoEvent.y = org_y;
+				myTodoEvent.w = org_w;
+				myTodoEvent.h = org_h;
+				userService.setTodoEvent(user, myTodoEvent, new AsyncCallback<Boolean>() {
+					public void onFailure(Throwable caught) 
+					{
+						
+					}
+					public void onSuccess(Boolean result)
+					{	
+						// Really ? ... Don't care.
+					}
+				});
+			}
 
-	        //setPixelPosition(event.getX() + getAbsoluteLeft() - dragOffsetX - orgX,
-	        //    event.getY() + getAbsoluteTop() - dragOffsetY - orgY);
-	    	setPixelPosition(event.getX() + orgX - dragOffsetX,
-		                     event.getY() + orgY - dragOffsetY);
-	        event.preventDefault();
-	      }
-	    }
+			public void onMouseDown(MouseDownEvent event) {
+				SurfaceView.this.select(this);
 
-	    public void onMouseUp(MouseUpEvent event) {
-	      if (dragging) {
-	        dragging = false;
-	        DOM.releaseCapture(getElement());
-	        event.preventDefault();
-	        //model.updateTodoEventPosition(TodoEvent, getAbsoluteLeft(), getAbsoluteTop(),
-	        //    TodoEvent.getWidth(), TodoEvent.getHeight());
-	      }
-	    }
+				final EventTarget target = event.getNativeEvent().getEventTarget();
+				assert Element.is(target);
+				if (!Element.is(target)) {
+					return;
+				}
+				if (bcolor.isOrHasChild(Element.as(target))) 
+				{
+					System.out.println("Button !");
+					myTodoEvent.color = myTodoEvent.getNextColor();
+					render();
+					updateTodoEvent();
+					return;
+				}
+				if (done.isOrHasChild(Element.as(target))) 
+				{
+					System.out.println("Done !");
+					surface.onRemoveTodoEvent(myTodoEvent);
+					return;
+				}
+				if (titleElement.isOrHasChild(Element.as(target))) {
+					dragging = true;
+					final Element elem = getElement().cast();
+					dragOffsetX = event.getX();
+					dragOffsetY = event.getY();
+					DOM.setCapture(elem);
+					event.preventDefault();
+				}
+			}
 
-	    public void onUpdate(TodoEvent TodoEvent) {
-	      render();
-	    }
+			public void onMouseMove(MouseMoveEvent event) {
+				if (dragging)
+				{	    	  
+					final Style style = getElement().getStyle();
+					int orgX = Integer.parseInt(style.getLeft().substring(0, (style.getLeft().length() - 2)));
+					int orgY = Integer.parseInt(style.getTop().substring(0, (style.getTop().length() - 2)));
+					setPixelPosition(event.getX() + orgX - dragOffsetX,
+							event.getY() + orgY - dragOffsetY);
+					event.preventDefault();
+				}
+			}
 
-	    public void onValueChange(ValueChangeEvent<String> event) {
-	      //model.updateTodoEventContent(TodoEvent, event.getValue());
-	    }
+			public void onMouseUp(MouseUpEvent event) {
+				if (dragging)
+				{
+					dragging = false;
+					DOM.releaseCapture(getElement());
+					event.preventDefault();					
+				}
+				if (checkForChange())
+				{
+					updateTodoEvent();
+				}
+			}
 
-	    public void setPixelPosition(int x, int y) {
-	      final Style style = getElement().getStyle();
-	      style.setPropertyPx("left", x);
-	      style.setPropertyPx("top", y);
-	    }
+			public void setPixelPosition(int x, int y) {
+				final Style style = getElement().getStyle();
+				style.setPropertyPx("left", x);
+				style.setPropertyPx("top", y);
+			}
 
-	    public void setPixelSize(int width, int height) {
-	      content.setPixelSize(width, height);
-	    }
+			public void setPixelSize(int width, int height) {
+				content.setPixelSize(width, height);
+			}
 
-	    private void render() {
-	      setPixelPosition(TodoEvent.x, TodoEvent.y);
+			private void render() {
+				setPixelPosition(myTodoEvent.x, myTodoEvent.y);
+				//setPixelSize(myTodoEvent.w, myTodoEvent.h);
+				titleElement.setInnerHTML("Todo");
+				final String TodoEventContent = myTodoEvent.trText;
+				content.setText((TodoEventContent == null) ? "" : TodoEventContent);
 
-	      setPixelSize(100, 100);
+				System.out.println(
+						" X:" + myTodoEvent.x +
+						" Y:" + myTodoEvent.y +
+						" W:" + myTodoEvent.w +
+						" H:" + myTodoEvent.h +
+						" Color:" + myTodoEvent.color
+						);
+				
+				getElement().getStyle().setBackgroundColor(myTodoEvent.getHtmlColor());
+				bcolor.getStyle().setBackgroundColor(myTodoEvent.getHtmlColor(myTodoEvent.getNextColor()));
+				
+			}
 
-	      titleElement.setInnerHTML("Todo");
+			private void select(int zIndex) {
+				getElement().getStyle().setProperty("zIndex", "" + zIndex );
+			}
 
-	      final String TodoEventContent = TodoEvent.trText;
-	      content.setText((TodoEventContent == null) ? "" : TodoEventContent);	      
-	    }
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event)
+			{
+				myTodoEvent.text = event.getValue();
+				updateTodoEvent();
+			}
+		}
 
-	    private void select() {
-	      getElement().getStyle().setProperty("zIndex", "" + 1 ); //nextZIndex());
-	    }
-	  }
+		private TodoEventView selectedTodoEventView;
 
-	  //private final Model model;
+		private int zIndex = 1;
 
-	  private TodoEventView selectedTodoEventView;
+		private HashMap<String, TodoEventView> content = new HashMap<String, TodoEventView>();
+		
+		private final ContentTodo contentTodo;
+		
+		public SurfaceView(ContentTodo contentTodo) {
+			final Element elem = getElement();
+			elem.setId("surface");
+			elem.getStyle().setProperty("position", "absolute");
+			this.contentTodo = contentTodo;
+		}
 
-	  private int zIndex = 1;
 
-	  /**
-	   * @param model
-	   *          the model to which the Ui will bind itself
-	   */
-	  public SurfaceView() { //Model model) {
-	    //this.model = model;
-	    final Element elem = getElement();
-	    elem.setId("surface");
-	    elem.getStyle().setProperty("position", "absolute");
-	   // model.addDataObserver(this);
-	  }
+		public void onTodoEventReceived(TodoEvent TodoEvent) {
+			final TodoEventView view = new TodoEventView(TodoEvent, this);
+			add(view);
+			select(view);
+			content.put(TodoEvent.ID, view);
+		}
 
-	  public void onTodoEventCreated(TodoEvent TodoEvent) {
-	    final TodoEventView view = new TodoEventView(TodoEvent);
-	    add(view);
-	    select(view);
-	  }
+		public void onTodoEventCreated(TodoEvent TodoEvent) {
+			onTodoEventReceived(TodoEvent);
+			content.get(TodoEvent.ID).updateTodoEvent();
+		}
 
-	  public void onSurfaceTodoEventsReceived(TodoEvent[] TodoEvents) {
-	    removeAllTodoEvents();
-	    for (int i = 0, n = TodoEvents.length; i < n; ++i) {
-	      add(new TodoEventView(TodoEvents[i]));
-	    }
-	  }
+		public void onRemoveTodoEvent(TodoEvent id) {			
+				//this.remove(content.get(id.ID));
+				//content.remove(id.ID);
+				contentTodo.deleteTodoEvent(id);
+		}
 
-	  private void removeAllTodoEvents() {
-	    final WidgetCollection kids = getChildren();
-	    while (kids.size() > 0) {
-	      remove(kids.size() - 1);
-	    }
-	  }
-
-	  private void select(TodoEventView TodoEventView) {
-	    assert TodoEventView != null;
-	    if (selectedTodoEventView != TodoEventView) {
-	      TodoEventView.select();
-	      selectedTodoEventView = TodoEventView;
-	    }
-	  }
+		public void confirmRemoveTodoEvent(TodoEvent id)
+		{
+			this.remove(content.get(id.ID));
+			content.remove(id.ID);
+		}
+		
+		private void select(TodoEventView TodoEventView) {
+			assert TodoEventView != null;
+			if (selectedTodoEventView != TodoEventView) {
+				TodoEventView.select(zIndex++);
+				selectedTodoEventView = TodoEventView;
+			}
+		}
 	}
 
 	// The list of data to display.
 	private List<TodoEvent> userTodoEventList = new ArrayList<TodoEvent>();
 
-	SurfaceView surface = new SurfaceView();
-	
+	SurfaceView surface = new SurfaceView(this);
+
 	// Create a data provider.
 	AsyncDataProvider<TodoEvent> dataProvider = new AsyncDataProvider<TodoEvent>() {
 		@Override
@@ -284,7 +358,6 @@ public class ContentTodo implements EntryPoint {
 			int start = range.getStart();
 			int end = start + range.getLength();
 			if (end >= userTodoEventList.size() ) end = userTodoEventList.size();
-			System.out.println("Sizes: " + userTodoEventList.size());
 			if (userTodoEventList.size() != 0)
 			{
 				List<TodoEvent> dataInRange = userTodoEventList.subList(start, end);
@@ -309,70 +382,69 @@ public class ContentTodo implements EntryPoint {
 				userTodoEventList.addAll(result);
 				dataProvider.updateRowCount(userTodoEventList.size(), true);
 				dataProvider.updateRowData(0, userTodoEventList.subList(0, userTodoEventList.size()));
-				
+
 				cellTable.redraw();
 
 				for (TodoEvent todo: userTodoEventList)
 				{
-					surface.onTodoEventCreated(todo);
+					surface.onTodoEventReceived(todo);
 				}
 			}
 		};
 		userService.getTodoEventList(user, "FR", callback);
 	}
 
-
 	void deleteTodoEvent(final TodoEvent currentTodoEvent)
 	{
 		MessageBox mb = new MessageBox(rootPanel, true, true, MessageBox.TYPE.QUESTION, 
 				"Confirmation", "Vraiment supprimer ?", new MessageBox.ICallback() {
-					
-					public void complete(boolean ok) {
-						if(ok)
-						{
-							userService.deleteTodoEvent(user, currentTodoEvent, new AsyncCallback<Boolean>() {
-								public void onFailure(Throwable caught) {
-									// Show the RPC error message to the user
-									MessageBox.messageBoxException(rootPanel, caught.toString());										
-								}
-								public void onSuccess(Boolean result)
-								{
-									getAllContent();
-								}
-							});
+
+			public void complete(boolean ok) {
+				if(ok)
+				{
+					userService.deleteTodoEvent(user, currentTodoEvent, new AsyncCallback<Boolean>() {
+						public void onFailure(Throwable caught) {
+							// Show the RPC error message to the user
+							MessageBox.messageBoxException(rootPanel, caught.toString());										
 						}
-					}
-				});
-	mb.onModuleLoad();
+						public void onSuccess(Boolean result)
+						{
+							surface.confirmRemoveTodoEvent(currentTodoEvent);
+						}
+					});
+				}
+			}
+		});
+		mb.onModuleLoad();
 	}
 
 	public void newTodoEvent()
 	{
-		TodoEvent event = new TodoEvent("id" + SiteUUID.getDateUuid(), "todo1", "todo1#test#FR",  "test", TodoEvent.Priority.URGENT,  new Date(1), TodoEvent.EventColor.BLUE, 11, 1);		
-		userService.setTodoEvent(user, event, new AsyncCallback<Boolean>() {
-			public void onFailure(Throwable caught) {
-				// Show the RPC error message to the user
-				Window.alert(caught.toString());
-				//connectButton.setEnabled(true);
-			}
-			public void onSuccess(Boolean result)
-			{
-				getAllContent();
-			}
-		});
-	}
+		TodoEvent.EventColor color = TodoEvent.EventColor.YELLOW;
+		int colorInt = Random.nextInt(10);
+		switch (colorInt)
+		{
+		case 0: color = TodoEvent.EventColor.WHITE; break;
+		case 1: color = TodoEvent.EventColor.GREEN; break;
+		case 2: color = TodoEvent.EventColor.BLUE; break;
+		case 3: color = TodoEvent.EventColor.RED; break;
+		case 4: color = TodoEvent.EventColor.LIGHTGREEN; break;
+		case 5: color = TodoEvent.EventColor.LIGHTBLUE; break;
+		case 6: color = TodoEvent.EventColor.LIGHTRED; break;
+		case 7: color = TodoEvent.EventColor.YELLOW; break;
+		case 8: color = TodoEvent.EventColor.ORANGE; break;		
+		}
+		TodoEvent event = new TodoEvent("id" + SiteUUID.getDateUuid(), "", "", "", TodoEvent.Priority.URGENT,  new Date(1), color , 11, 1, 100, 100);
+		surface.onTodoEventCreated(event);
 
-	void updateTodoEvent(TodoEvent currentTodoEvent)
-	{
-		userService.setTodoEvent(user, currentTodoEvent, new AsyncCallback<Boolean>() {
-			public void onFailure(Throwable caught) {
-				// Show the RPC error message to the user
-				Window.alert(caught.toString());
-				//connectButton.setEnabled(true);
+		userService.setTodoEvent(user, event, new AsyncCallback<Boolean>() {
+			public void onFailure(Throwable caught) 
+			{
+				MessageBox.messageBoxException(rootPanel, caught.getLocalizedMessage());
 			}
 			public void onSuccess(Boolean result)
 			{
-				getAllContent();
+				// Get away.
 			}
 		});
 	}
@@ -390,8 +462,9 @@ public class ContentTodo implements EntryPoint {
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 
-		ContentHelper.insertTitlePanel(simplePanelCenter, "Reste à faire", ClientImageBundle.INSTANCE.newsContent());
-		
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextTodo(), ClientImageBundle.INSTANCE.todoContent());
+
+		/*
 		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<TodoEvent, String>() {
 			@Override
 			public void update(int index, TodoEvent object, String value) {
@@ -399,13 +472,6 @@ public class ContentTodo implements EntryPoint {
 			}}	
 				);
 
-		cellTable.addColumnWithIcon(IconCellSingle.IconType.UPDATE, new FieldUpdater<TodoEvent, String>() {
-			@Override
-			public void update(int index, TodoEvent object, String value) {
-				updateTodoEvent(object);
-			}}	
-				);
-		
 		// Create text column.
 		TextColumn<TodoEvent> textColumn = new TextColumn<TodoEvent>() 	{
 			@Override
@@ -426,10 +492,10 @@ public class ContentTodo implements EntryPoint {
 
 		textColumn.setSortable(true);
 		eventDateColumn.setSortable(true);
-		
+
 		cellTable.addColumn(textColumn, lang._TextName());
 		cellTable.addColumn(eventDateColumn, lang._TextDescription());
-		
+
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<TodoEvent> selectionModel = new SingleSelectionModel<TodoEvent>();
 		cellTable.setSelectionModel(selectionModel);
@@ -444,7 +510,7 @@ public class ContentTodo implements EntryPoint {
 				}
 			}
 		});
-
+		 */
 		dataProvider.addDataDisplay(cellTable);
 		dataProvider.updateRowCount(userTodoEventList.size(), true);
 
@@ -453,9 +519,9 @@ public class ContentTodo implements EntryPoint {
 		cellTable.setRowData(0, userTodoEventList);
 		cellTable.setRowCount(userTodoEventList.size(), true);
 		cellTable.addColumnSortHandler(columnSortHandler);
-		
-		simplePanelCenter.add(cellTable);
-		
+
+		//simplePanelCenter.add(cellTable);
+
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");

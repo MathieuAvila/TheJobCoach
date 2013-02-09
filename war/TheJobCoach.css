@@ -356,3 +356,31 @@ font-size:18px;
 .datePickerNextButton {
      text-align: right; 
 }
+
+
+/* TodoEvents */
+.TodoEvent {
+  font-size: 80%;
+  background-color: #fef49e;
+  border: 1px solid #d0c98d;
+  -webkit-box-shadow: -8px 5px 5px rgba(0, 0, 0, 0.3);
+}
+.TodoEvent-title {
+  margin: 5px 5px 0 5px;
+  padding: 4px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background-color: #d0c98d;
+}
+.TodoEvent-content {
+  margin: 5px;
+  background: transparent;
+  border: none;
+  overflow: hidden;
+  min-height:100px;
+  min-width:100px;
+}
+.TodoEvent-content:focus {
+  outline: 1px solid #d0c98d;
+  overflow: auto;
+}

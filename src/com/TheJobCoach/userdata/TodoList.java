@@ -105,7 +105,9 @@ public class TodoList
 				Convertor.toDate(resultReq.get("eventdate")),
 				string2EventColor.get(Convertor.toString(resultReq.get("color"))),
 				Convertor.toInt(resultReq.get("x")),
-				Convertor.toInt(resultReq.get("y"))
+				Convertor.toInt(resultReq.get("y")),
+				Convertor.toInt(resultReq.get("w")),
+				Convertor.toInt(resultReq.get("h"))
 				);
 		te.trText = getText(te, lang);
 		return te;
@@ -127,6 +129,8 @@ public class TodoList
 				.add("color", eventColor2String.get(result.color))
 				.add("x", result.x)
 				.add("y", result.y)
+				.add("w", result.w)
+				.add("h", result.h)
 				.get());		
 	}
 

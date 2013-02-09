@@ -377,6 +377,8 @@ font-size:18px;
   background: transparent;
   border: none;
   overflow: hidden;
+  min-height:100px;
+  min-width:100px;
 }
 .TodoEvent-content:focus {
   outline: 1px solid #d0c98d;

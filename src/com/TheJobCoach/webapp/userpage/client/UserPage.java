@@ -82,6 +82,24 @@ public class UserPage implements EntryPoint {
 				}
 			});
 		};
+		if (menu.equals("todo"))
+		{
+			GWT.runAsync(new RunAsyncCallback() 
+			{
+				@Override
+				public void onFailure(Throwable reason) 
+				{
+					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
+				}
+				@Override
+				public void onSuccess() 
+				{
+					ContentTodo contentTodo = new ContentTodo(simplePanelContent, userId);
+					contentTodo.onModuleLoad();
+				}			
+			});
+
+		}
 		if (menu.equals("mydocuments"))
 		{
 			GWT.runAsync(new RunAsyncCallback() 
@@ -196,6 +214,7 @@ public class UserPage implements EntryPoint {
 		label.setStyleName("userpage-label-normal");
 		if (
 				!menu.equals("account") &&
+				!menu.equals("todo") &&
 				!menu.equals("goals") &&
 				!menu.equals("myreports") &&
 				!menu.equals("news") &&
@@ -362,6 +381,10 @@ public class UserPage implements EntryPoint {
 		VerticalPanel verticalPanelMySearch = new VerticalPanel();
 		stackPanelMyApplication.add(verticalPanelMySearch, lang._TextMySearch(), false);
 		verticalPanelMySearch.setSize("100%", "100%");
+
+		final Label label_ActionsTodo = new Label(lang._TextTodo());
+		setLabelMenu(label_ActionsTodo, "todo");
+		verticalPanelMySearch.add(label_ActionsTodo);
 
 		final Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
 		setLabelMenu(lblNewLabel_AddressBook, "addressbook");

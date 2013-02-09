@@ -72,6 +72,9 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("news_32.png")
 	ImageResource newsContent();
 
+	@Source("todo-32.png")
+	ImageResource todoContent();
+
 	@Source("sites-32.png")
 	ImageResource userJobSiteContent();
 
@@ -93,6 +96,6 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("log-32.png")
 	ImageResource userLogContent();
 
-	@Source("log-32.png")
+	@Source("goals-32.png")
 	ImageResource userVirtualCoachGoals();
 }
