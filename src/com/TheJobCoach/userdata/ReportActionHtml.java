@@ -31,7 +31,6 @@ public class ReportActionHtml extends ReportAction {
 	void opportunityHeader(UserOpportunity opp, boolean includeOpportunityDetail, boolean includeLogDetail)
 	{
 		String detail = "";
-		detail = ReportHtml.addWithSeparator(detail, ReportHtml.writeToString(opp.location), " - ");
 		content += "<H2>" + ReportHtml.writeToString(opp.title) + " - " + lang.getOpportunityStatusName(UserOpportunity.applicationStatusToString(opp.status)) + "</H2>";
 		if (includeOpportunityDetail)
 		{
