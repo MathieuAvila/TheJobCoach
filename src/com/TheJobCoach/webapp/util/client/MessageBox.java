@@ -69,7 +69,8 @@ public class MessageBox implements EntryPoint {
 		dBox.setText(title);
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
-
+		dBox.setModal(true);
+        
 		FlexTable flexTable = new FlexTable();
 		dBox.setWidget(flexTable);
 		flexTable.setSize("100%", "100%");
@@ -144,9 +145,8 @@ public class MessageBox implements EntryPoint {
 					callback.complete(false);				
 			}
 		});
-		rootPanel.add(dBox);
+		dBox.getElement().getStyle().setProperty("zIndex", "10" );
 		dBox.center();
-		dBox.getElement().getStyle().setProperty("zIndex", "10000" );
 	}
 
 	public static MessageBox messageBox(Panel rootPanel, TYPE type, String title, String message)
