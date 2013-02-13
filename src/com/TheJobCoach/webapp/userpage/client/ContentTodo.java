@@ -209,16 +209,16 @@ public class ContentTodo implements EntryPoint {
 				}
 				if (bcolor.isOrHasChild(Element.as(target))) 
 				{
-					System.out.println("Button !");
 					myTodoEvent.color = myTodoEvent.getNextColor();
 					render();
 					updateTodoEvent();
+					event.preventDefault();
 					return;
 				}
 				if (done.isOrHasChild(Element.as(target))) 
 				{
-					System.out.println("Done !");
 					surface.onRemoveTodoEvent(myTodoEvent);
+					event.preventDefault();
 					return;
 				}
 				if (titleElement.isOrHasChild(Element.as(target))) {
@@ -248,12 +248,13 @@ public class ContentTodo implements EntryPoint {
 				{
 					dragging = false;
 					DOM.releaseCapture(getElement());
-					event.preventDefault();					
-				}
-				if (checkForChange())
-				{
-					updateTodoEvent();
-				}
+					event.preventDefault();
+					if (checkForChange())
+					{
+						updateTodoEvent();
+					}
+					return;
+				}				
 			}
 
 			public void setPixelPosition(int x, int y) {
@@ -311,8 +312,6 @@ public class ContentTodo implements EntryPoint {
 
 		private TodoEventView selectedTodoEventView;
 
-		private int zIndex = 1;
-
 		private HashMap<String, TodoEventView> content = new HashMap<String, TodoEventView>();
 		
 		private final ContentTodo contentTodo;
@@ -349,11 +348,16 @@ public class ContentTodo implements EntryPoint {
 			content.remove(id.ID);
 		}
 		
-		private void select(TodoEventView TodoEventView) {
+		private void select(TodoEventView TodoEventView) 
+		{			
 			assert TodoEventView != null;
-			if (selectedTodoEventView != TodoEventView) {
-				TodoEventView.select(zIndex++);
+			if (selectedTodoEventView != TodoEventView)
+			{
 				selectedTodoEventView = TodoEventView;
+				for (TodoEventView view: content.values())
+				{
+					view.select(TodoEventView == view ? 1 : 0);				
+				}
 			}
 		}
 	}
@@ -407,13 +411,13 @@ public class ContentTodo implements EntryPoint {
 		};
 		userService.getTodoEventList(user, "FR", callback);
 	}
-
+	
 	void deleteTodoEvent(final TodoEvent currentTodoEvent)
 	{
 		MessageBox mb = new MessageBox(rootPanel, true, true, MessageBox.TYPE.QUESTION, 
 				"Confirmation", "Vraiment supprimer ?", new MessageBox.ICallback() {
 
-			public void complete(boolean ok) {
+			public void complete(boolean ok) {				
 				if(ok)
 				{
 					userService.deleteTodoEvent(user, currentTodoEvent, new AsyncCallback<Boolean>() {
@@ -423,7 +427,7 @@ public class ContentTodo implements EntryPoint {
 						}
 						public void onSuccess(Boolean result)
 						{
-							surface.confirmRemoveTodoEvent(currentTodoEvent);
+							surface.confirmRemoveTodoEvent(currentTodoEvent);							
 						}
 					});
 				}
