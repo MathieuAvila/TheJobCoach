@@ -254,6 +254,11 @@ public class ContentTodo implements EntryPoint {
 						updateTodoEvent();
 					}
 					return;
+				}
+				// Also check for resize.
+				if (checkForChange())
+				{
+					updateTodoEvent();
 				}				
 			}
 
