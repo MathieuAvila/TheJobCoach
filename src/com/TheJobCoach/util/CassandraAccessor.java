@@ -106,7 +106,7 @@ public class CassandraAccessor {
 		ColumnFamilyUpdater<String, String> updater = cfTemplate.createUpdater(key);
 		for(Map.Entry<String, String> e : mapUpdate.entrySet())
 		{
-			System.out.println("Try update for table: " +  cfTemplate.getColumnFamily() + " from key:" + key  + " column: " + e.getKey() + " value: " + e.getValue());
+			//System.out.println("Try update for table: " +  cfTemplate.getColumnFamily() + " from key:" + key  + " column: " + e.getKey() + " value: " + e.getValue());
 			updater.setString(e.getKey(), e.getValue());
 		}
 		//updater.setLong("time", System.currentTimeMillis());		
