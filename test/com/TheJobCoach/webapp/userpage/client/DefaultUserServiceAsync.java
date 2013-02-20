@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
@@ -147,6 +148,28 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 	@Override
 	public void deleteTodoEvent(UserId id, TodoEvent todo,
 			AsyncCallback<Boolean> callback)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void getExternalContactList(UserId id,
+			AsyncCallback<Vector<ExternalContact>> callback)
+			throws CassandraException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setExternalContact(UserId id, ExternalContact contact,
+			AsyncCallback<String> callback) throws CassandraException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void deleteExternalContact(UserId id, String contact,
+			AsyncCallback<String> callback) throws CassandraException
 	{
 		// TODO Auto-generated method stub
 		

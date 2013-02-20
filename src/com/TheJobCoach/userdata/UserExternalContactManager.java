@@ -72,6 +72,7 @@ public class UserExternalContactManager {
 				Convertor.toString(resultReq.get("firstName")),
 				Convertor.toString(resultReq.get("lastName")),
 				Convertor.toString(resultReq.get("email")),
+				Convertor.toString(resultReq.get("phone")),
 				Convertor.toString(resultReq.get("personalNote")),
 				Convertor.toString(resultReq.get("organization")),
 				UpdatePeriodAccessor.fromCassandra(resultReq));
@@ -83,6 +84,7 @@ public class UserExternalContactManager {
 		String reqId = id.userName + "_" + result.ID;
 		ShortMap sm = new ShortMap()
 		.add("email", result.email)
+		.add("phone", result.phone)
 		.add("firstName", result.firstName)
 		.add("lastName", result.lastName)
 		.add("organization", result.organization)

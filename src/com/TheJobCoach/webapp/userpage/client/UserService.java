@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.List;
 import java.util.Vector;
 
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
@@ -38,6 +39,10 @@ public interface UserService extends RemoteService
 	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException;
 	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException;
 	
+	public Vector<ExternalContact> getExternalContactList(UserId id) throws CassandraException;
+	public String setExternalContact(UserId id, ExternalContact contact) throws CassandraException;
+	public String deleteExternalContact(UserId id, String contact) throws CassandraException;
+
 	public Vector<UserLogEntry> getUserLogEntryList(UserId id, String oppId) throws CassandraException;
 	public UserLogEntry getUserLogEntry(UserId id, String logId) throws CassandraException;
 	public String setUserLogEntry(UserId id, UserLogEntry opp) throws CassandraException;

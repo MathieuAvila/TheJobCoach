@@ -8,11 +8,13 @@ import com.TheJobCoach.userdata.Account;
 import com.TheJobCoach.userdata.AccountInterface;
 import com.TheJobCoach.userdata.TodoList;
 import com.TheJobCoach.userdata.UserDocumentManager;
+import com.TheJobCoach.userdata.UserExternalContactManager;
 import com.TheJobCoach.userdata.UserJobSiteManager;
 import com.TheJobCoach.userdata.UserLogManager;
 import com.TheJobCoach.userdata.UserOpportunityManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserService;
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
@@ -35,6 +37,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	static private UserOpportunityManager userOpportunityManager = new UserOpportunityManager();
 	static private UserLogManager userLogManager = new UserLogManager();
 	static private UserDocumentManager userDocumentManager = UserDocumentManager.getInstance();
+	static private UserExternalContactManager userExternalContactManager = new UserExternalContactManager();
 	static private TodoList todoList = new TodoList();
 
 	@Override
@@ -176,5 +179,28 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	{
 		todoList.deleteTodoEvent(id, todo.ID);
 		return new Boolean(true);
+	}
+
+	@Override
+	public Vector<ExternalContact> getExternalContactList(UserId id)
+			throws CassandraException
+	{
+		return userExternalContactManager.getExternalContactList(id);
+	}
+
+	@Override
+	public String setExternalContact(UserId id, ExternalContact contact)
+			throws CassandraException
+	{
+		userExternalContactManager.setExternalContact(id, contact);
+		return "";
+	}
+
+	@Override
+	public String deleteExternalContact(UserId id, String contact)
+			throws CassandraException
+	{
+		userExternalContactManager.deleteExternalContact(id, contact);
+		return "";
 	}
 }

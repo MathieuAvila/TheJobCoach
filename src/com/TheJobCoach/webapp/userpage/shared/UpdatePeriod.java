@@ -14,6 +14,8 @@ public class UpdatePeriod implements Serializable {
 	
 	public UpdatePeriod()
 	{
+		periodType = PeriodType.DAY;
+		last = new Date();
 	}
 
 	public UpdatePeriod(Date last, int length, PeriodType periodType)

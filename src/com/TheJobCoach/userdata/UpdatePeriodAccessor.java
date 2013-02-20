@@ -10,6 +10,7 @@ public class UpdatePeriodAccessor
 {
 	public static String periodTypeToString(UpdatePeriod.PeriodType period)
 	{
+		System.out.println("TOTO" + period);
 		switch(period)
 		{
 		case DAY: return "d";

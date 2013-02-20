@@ -98,4 +98,7 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("goals-32.png")
 	ImageResource userVirtualCoachGoals();
+
+	@Source("addressbook-32.png")
+	ImageResource userExternalContact();
 }

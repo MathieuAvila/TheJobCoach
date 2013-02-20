@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
@@ -35,6 +36,10 @@ public interface UserServiceAsync {
 	public void getUserOpportunity(UserId id, String oppId, AsyncCallback<UserOpportunity> callback) throws CassandraException;
 	public void setUserOpportunity(UserId id, String list, UserOpportunity opp, AsyncCallback<String> callback) throws CassandraException;
 	public void deleteUserOpportunity(UserId id, String oppId, AsyncCallback<String> callback) throws CassandraException;
+	
+	public void getExternalContactList(UserId id, AsyncCallback<Vector<ExternalContact>> callback) throws CassandraException;
+	public void setExternalContact(UserId id, ExternalContact contact, AsyncCallback<String> callback) throws CassandraException;
+	public void deleteExternalContact(UserId id, String contact, AsyncCallback<String> callback) throws CassandraException;
 		
 	public void getUserLogEntryList(UserId id, String oppId, AsyncCallback<Vector<UserLogEntry>> callback) throws CassandraException;
 	public void getUserLogEntry(UserId id, String logId, AsyncCallback<UserLogEntry> callback) throws CassandraException;

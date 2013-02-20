@@ -12,12 +12,13 @@ public class ExternalContact implements Serializable {
 	public String firstName;
 	public String lastName;
 	public String email;
+	public String phone;
 	public String personalNote;
 	public String organization;
 	public UpdatePeriod update;
 
 	public ExternalContact(String iD, String firstName, String lastName,
-			String email, String personalNote, String organization,
+			String email, String phone, String personalNote, String organization,
 			UpdatePeriod update)
 	{
 		super();
@@ -25,6 +26,7 @@ public class ExternalContact implements Serializable {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.phone = phone;
 		this.personalNote = personalNote;
 		this.organization = organization;
 		this.update = update;
