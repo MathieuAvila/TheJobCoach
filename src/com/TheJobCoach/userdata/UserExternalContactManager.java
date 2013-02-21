@@ -62,7 +62,7 @@ public class UserExternalContactManager {
 		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
 		if (resultReq == null)
 		{
-			throw new CassandraException(); 
+			return null;
 		}	
 		/*public ExternalContact(String iD, String firstName, String lastName,
 				String email, String personalNote, String organization,
