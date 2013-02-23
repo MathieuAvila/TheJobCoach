@@ -1,4 +1,4 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.MyReports;
 
 import java.util.Map;
 

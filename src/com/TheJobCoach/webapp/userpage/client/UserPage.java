@@ -1,6 +1,8 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 
+import com.TheJobCoach.webapp.userpage.client.MyGoals.ContentMyGoals;
+import com.TheJobCoach.webapp.userpage.client.MyReports.ContentMyReports;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.client.MainPage;
