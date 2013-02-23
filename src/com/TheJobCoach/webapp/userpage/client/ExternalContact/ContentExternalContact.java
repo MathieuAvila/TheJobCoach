@@ -230,8 +230,8 @@ public class ContentExternalContact implements EntryPoint {
 				updateExternalContact(object);
 			}});
 
-		// Create title column.
-		TextColumn<ExternalContact> titleColumn = new TextColumn<ExternalContact>() 	{
+		// Create first name column.
+		TextColumn<ExternalContact> firstNameColumn = new TextColumn<ExternalContact>() 	{
 			@Override
 			public String getValue(ExternalContact ExternalContact) 
 			{
@@ -239,8 +239,8 @@ public class ContentExternalContact implements EntryPoint {
 			}
 		};
 
-		// Create description column.
-		TextColumn<ExternalContact> companyColumn = new TextColumn<ExternalContact>() {
+		// Create last name column.
+		TextColumn<ExternalContact> lastColumn = new TextColumn<ExternalContact>() {
 			@Override
 			public String getValue(ExternalContact ExternalContact) 
 			{
@@ -249,7 +249,7 @@ public class ContentExternalContact implements EntryPoint {
 		};
 
 		// Create location column.
-		TextColumn<ExternalContact> locationColumn = new TextColumn<ExternalContact>() {
+		TextColumn<ExternalContact> organizationColumn = new TextColumn<ExternalContact>() {
 			@Override
 			public String getValue(ExternalContact ExternalContact) 
 			{
@@ -257,22 +257,35 @@ public class ContentExternalContact implements EntryPoint {
 			}
 		};
 
-		titleColumn.setSortable(true);
-		companyColumn.setSortable(true);
-		locationColumn.setSortable(true);
-		
-		cellTable.addColumn(titleColumn, lang._TextName());
-		cellTable.addColumn(companyColumn, lang._TextCompany());
-		cellTable.addColumn(locationColumn, lang._TextLocation());
-		cellTable.getColumnSortList().push(titleColumn);	
-		cellTable.setStyleName("filecelltable");
-
-
-		cellTable.addColumnWithIcon(IconCellSingle.IconType.RIGHT, new FieldUpdater<ExternalContact, String>() {
+		// Create location column.
+		TextColumn<ExternalContact> emailColumn = new TextColumn<ExternalContact>() {
 			@Override
-			public void update(int index, ExternalContact object, String value) {
-				//editLog(object);
-			}});
+			public String getValue(ExternalContact ExternalContact) 
+			{
+				return ExternalContact.email;
+			}
+		};
+
+		// Create phone column.
+		TextColumn<ExternalContact> phoneColumn = new TextColumn<ExternalContact>() {
+			@Override
+			public String getValue(ExternalContact ExternalContact) 
+			{
+				return ExternalContact.phone;
+			}
+		};
+
+		firstNameColumn.setSortable(true);
+		lastColumn.setSortable(true);
+		organizationColumn.setSortable(true);
+		
+		cellTable.addColumn(firstNameColumn, langExternalContact._TextFirstName());
+		cellTable.addColumn(lastColumn, langExternalContact._TextLastName());
+		cellTable.addColumn(organizationColumn, langExternalContact._Text_Organization());
+		cellTable.addColumn(emailColumn, langExternalContact._Text_Email());
+		cellTable.addColumn(phoneColumn, langExternalContact._Text_Phone());
+		cellTable.getColumnSortList().push(firstNameColumn);	
+		cellTable.setStyleName("filecelltable");
 
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<ExternalContact> selectionModel = new SingleSelectionModel<ExternalContact>();
