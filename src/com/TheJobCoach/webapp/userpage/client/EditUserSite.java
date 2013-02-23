@@ -62,11 +62,11 @@ public class EditUserSite implements EntryPoint, IChanged {
 		if (currentUserSite != null)
 		{
 			currentUserSite = opp;
-			textBoxName.setText(opp.name);		
-			textAreaDescription.setText(opp.description);
-			textBoxUrl.setText(opp.URL);
-			textBoxLogin.setText(opp.login);
-			textBoxPassword.setText(opp.password);
+			textBoxName.setValue(opp.name);		
+			textAreaDescription.setHTML(opp.description);
+			textBoxUrl.setValue(opp.URL);
+			textBoxLogin.setValue(opp.login);
+			textBoxPassword.setValue(opp.password);
 			datePickerLastVisit.setValue(opp.lastVisit);
 		}
 	}
