@@ -14,6 +14,8 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Position;
 
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -261,7 +263,17 @@ public class UserPage implements EntryPoint {
 		});
 		label.setStyleName("userpage-label-normal");
 	}
-
+	
+	void addLabelWithImage(Panel p, Label l, ImageResource imageResource)
+	{
+		HorizontalPanel hp = new HorizontalPanel();
+		Image image = new Image(imageResource);
+		hp.add(image);
+		hp.setCellWidth(image, "40px");
+		hp.add(l);
+		p.add(hp);
+	}
+	
 	/**
 	 * This is the entry point method.
 	 */
@@ -353,8 +365,8 @@ public class UserPage implements EntryPoint {
 
 		VerticalPanel verticalPanel_2 = new VerticalPanel();
 		horizontalPanel_1.add(verticalPanel_2);
-		horizontalPanel_1.setCellWidth(verticalPanel_2, "200px");
-		verticalPanel_2.setWidth("200px");
+		horizontalPanel_1.setCellWidth(verticalPanel_2, "300px");
+		verticalPanel_2.setWidth("300px");
 
 		StackPanel stackPanelAccount = new StackPanel();
 		verticalPanel_2.add(stackPanelAccount);
@@ -366,8 +378,8 @@ public class UserPage implements EntryPoint {
 
 		final Label label_Parameters = new Label(lang._TextMyAccount());
 		setLabelMenu(label_Parameters, "account");
-		verticalPanelAccount.add(label_Parameters);
-
+		addLabelWithImage(verticalPanelAccount, label_Parameters, ClientImageBundle.INSTANCE.parametersContent());
+		
 		final Label label_Profile = new Label(lang._TextMyProfile());
 		setLabelMenu(label_Profile, "profile");
 		verticalPanelAccount.add(label_Profile);
@@ -386,23 +398,28 @@ public class UserPage implements EntryPoint {
 
 		final Label label_ActionsTodo = new Label(lang._TextTodo());
 		setLabelMenu(label_ActionsTodo, "todo");
-		verticalPanelMySearch.add(label_ActionsTodo);
+		addLabelWithImage(verticalPanelMySearch, label_ActionsTodo, ClientImageBundle.INSTANCE.todoContent());
+		//verticalPanelMySearch.add(label_ActionsTodo);
 
 		final Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
 		setLabelMenu(lblNewLabel_AddressBook, "addressbook");
-		verticalPanelMySearch.add(lblNewLabel_AddressBook);
+		addLabelWithImage(verticalPanelMySearch, lblNewLabel_AddressBook, ClientImageBundle.INSTANCE.userExternalContact());
+		//verticalPanelMySearch.add(lblNewLabel_AddressBook);
 		
 		final Label lblNewLabel_JobBoards = new Label(lang._TextMyJobBoards());
 		setLabelMenu(lblNewLabel_JobBoards, "myjobboards");
-		verticalPanelMySearch.add(lblNewLabel_JobBoards);
+		addLabelWithImage(verticalPanelMySearch, lblNewLabel_JobBoards, ClientImageBundle.INSTANCE.userJobSiteContent());
+		//verticalPanelMySearch.add(lblNewLabel_JobBoards);
 		
 		final Label lblNewLabel_Documents = new Label(lang._TextMyDocuments());
 		setLabelMenu(lblNewLabel_Documents, "mydocuments");
-		verticalPanelMySearch.add(lblNewLabel_Documents);
+		addLabelWithImage(verticalPanelMySearch, lblNewLabel_Documents, ClientImageBundle.INSTANCE.userDocumentContent());
+		//verticalPanelMySearch.add(lblNewLabel_Documents);
 
 		final Label label_MyApplications = new Label(lang._TextApplicationFollowUp());
 		setLabelMenu(label_MyApplications, "applications");
-		verticalPanelMySearch.add(label_MyApplications);
+		addLabelWithImage(verticalPanelMySearch, label_MyApplications, ClientImageBundle.INSTANCE.opportunityContent());
+		//verticalPanelMySearch.add(label_MyApplications);
 
 		final Label label_ActionsAgenda = new Label(lang._TextAgenda());
 		setLabelMenu(label_ActionsAgenda, "agenda");
@@ -422,14 +439,16 @@ public class UserPage implements EntryPoint {
 
 		final Label label_Bilans = new Label(lang._TextBilans());
 		setLabelMenu(label_Bilans, "myreports");
-		verticalPanelStats.add(label_Bilans);
-
+		addLabelWithImage(verticalPanelStats, label_Bilans, ClientImageBundle.INSTANCE.userMyReports());
+		
 		final Label lblNewLabel_MyGoals = new Label(lang._TextMyGoals());
 		setLabelMenu(lblNewLabel_MyGoals, "goals");
-		verticalPanelStats.add(lblNewLabel_MyGoals);
+		addLabelWithImage(verticalPanelStats, lblNewLabel_MyGoals, ClientImageBundle.INSTANCE.userVirtualCoachGoals());
+		//verticalPanelStats.add(lblNewLabel_MyGoals);
 		
 		final Label label_Statistics = new Label(lang._TextPerformance());
 		setLabelMenu(label_Statistics, "statistiques");
+		//addLabelWithImage(verticalPanelStats, label_Statistics, ClientImageBundle.INSTANCE.());
 		verticalPanelStats.add(label_Statistics);
 
 		SimplePanel simplePanel_3 = new SimplePanel();
@@ -470,11 +489,13 @@ public class UserPage implements EntryPoint {
 
 		final Label label_Report = new Label(lang._TextReport());
 		setLabelMenu(label_Report, "report");
-		verticalPanelShares.add(label_Report);
+		addLabelWithImage(verticalPanelShares, label_Report, ClientImageBundle.INSTANCE.sendComment());
+//		verticalPanelShares.add(label_Report);
 
 		final Label label_News = new Label(lang._TextNews());
 		setLabelMenu(label_News, "news");
-		verticalPanelShares.add(label_News);
+		//verticalPanelShares.add(label_News);
+		addLabelWithImage(verticalPanelShares, label_News, ClientImageBundle.INSTANCE.newsContent());
 
 		SimplePanel simplePanel_CentralInter = new SimplePanel();
 		simplePanel_CentralInter.setWidth("30px");
