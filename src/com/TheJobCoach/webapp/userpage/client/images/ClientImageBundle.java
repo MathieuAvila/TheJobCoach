@@ -101,4 +101,7 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("addressbook-32.png")
 	ImageResource userExternalContact();
+
+	@Source("myreports-32.png")
+	ImageResource userMyReports();
 }

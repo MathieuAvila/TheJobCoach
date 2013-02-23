@@ -146,7 +146,7 @@ public class ContentMyReports implements EntryPoint {
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 
-		ContentHelper.insertTitlePanel(simplePanelCenter, "Mes rapports", ClientImageBundle.INSTANCE.userJobSiteContent());
+		ContentHelper.insertTitlePanel(simplePanelCenter, "Mes rapports", ClientImageBundle.INSTANCE.userMyReports());
 		
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Rapport d'activité");
 
