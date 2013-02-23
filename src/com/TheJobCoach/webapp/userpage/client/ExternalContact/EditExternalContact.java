@@ -7,6 +7,7 @@ import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
+import com.TheJobCoach.webapp.util.client.IChanged;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -20,7 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class EditExternalContact implements EntryPoint {
+public class EditExternalContact implements EntryPoint, IChanged {
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
@@ -36,11 +37,11 @@ public class EditExternalContact implements EntryPoint {
 	CheckedLabel lblFirstName = new CheckedLabel(langExternalContact._TextFirstName(), true, textBoxFirstName);
 	CheckedTextField textBoxLastName = new CheckedTextField(".+");
 	CheckedLabel lblLastName = new CheckedLabel(langExternalContact._TextLastName(), true, textBoxLastName);
-	CheckedTextField textBoxEmail = new CheckedTextField(".+");
+	CheckedTextField textBoxEmail = new CheckedTextField(".+@.+|");
 	CheckedLabel lblEmail = new CheckedLabel(langExternalContact._Text_Email(), true, textBoxEmail);
-	CheckedTextField textBoxPhone = new CheckedTextField(".+");
+	CheckedTextField textBoxPhone = new CheckedTextField("[0-9 \\.]+");
 	CheckedLabel lblPhone = new CheckedLabel(langExternalContact._Text_Phone(), true, textBoxPhone);
-	CheckedTextField textBoxOrganization = new CheckedTextField(".+");
+	CheckedTextField textBoxOrganization = new CheckedTextField(".*");
 	CheckedLabel lblOrganization = new CheckedLabel(langExternalContact._Text_Organization(), true, textBoxOrganization);
 	RichTextArea textAreaPersonalNote = new RichTextArea();
 	Label lblPersonalNote = new Label(langExternalContact._Text_PersonalNote());
@@ -51,25 +52,33 @@ public class EditExternalContact implements EntryPoint {
 	
 	DialogBlockOkCancel okCancel;
 	
-	public EditExternalContact(Panel panel, ExternalContact _currentUserSite, UserId _user, EditExternalContactResult editExternalContactResult)
+	public EditExternalContact(Panel panel, ExternalContact _currentExternalContact, UserId _user, EditExternalContactResult editExternalContactResult)
 	{
 		rootPanel = panel;
-		currentExternalContact = _currentUserSite;
+		currentExternalContact = _currentExternalContact;
 		result = editExternalContactResult;
 		user = _user;
 	}
 
-	private void setExternalContact(ExternalContact contact)
+	private void setExternalContact()
 	{
 		if (currentExternalContact != null)
 		{
-			currentExternalContact = contact;
-			textBoxFirstName.setText(contact.firstName);		
-			textBoxLastName.setText(contact.lastName);
-			textBoxEmail.setText(contact.email);
-			textBoxPhone.setText(contact.email);
-			textBoxOrganization.setText(contact.organization);
-			textAreaPersonalNote.setHTML(contact.personalNote);
+			textBoxFirstName.setValue(currentExternalContact.firstName);		
+			textBoxLastName.setValue(currentExternalContact.lastName);
+			textBoxEmail.setValue(currentExternalContact.email);
+			textBoxPhone.setValue(currentExternalContact.phone);
+			textBoxOrganization.setValue(currentExternalContact.organization);
+			textAreaPersonalNote.setHTML(currentExternalContact.personalNote);
+		}
+		else
+		{
+			textBoxFirstName.setValue("");		
+			textBoxLastName.setValue("");
+			textBoxEmail.setValue("");
+			textBoxPhone.setValue("");
+			textBoxOrganization.setValue("");
+			textAreaPersonalNote.setHTML("");
 		}
 	}
 
@@ -128,7 +137,7 @@ public class EditExternalContact implements EntryPoint {
 		grid.setWidget(5, 1, textAreaPersonalNote);
 		textAreaPersonalNote.setWidth("100%");
 
-		setExternalContact(currentExternalContact);
+		setExternalContact();
 
 		okCancel = new DialogBlockOkCancel(null, dBox);
 		okCancel.getOk().addClickHandler(new ClickHandler() {
@@ -141,6 +150,28 @@ public class EditExternalContact implements EntryPoint {
 		});		
 		vp.add(okCancel);
 		dBox.center();
+		
+		textBoxFirstName.registerListener(this);
+		textBoxLastName.registerListener(this);
+		textBoxEmail.registerListener(this);
+		textBoxPhone.registerListener(this);
+		textBoxOrganization.registerListener(this);
+		
+		changed(false, true, false);
+	}
+
+	@Override
+	public void changed(boolean ok, boolean changed, boolean init)
+	{
+		if (init) return;
+		okCancel.getOk().setEnabled(false);
+		boolean setOk = true;
+		setOk = setOk && textBoxFirstName.isValid();
+		setOk = setOk && textBoxLastName.isValid();
+		setOk = setOk && textBoxEmail.isValid();
+		setOk = setOk && textBoxPhone.isValid();
+		setOk = setOk && textBoxOrganization.isValid();
+		okCancel.getOk().setEnabled(setOk);	
 	}
 
 }

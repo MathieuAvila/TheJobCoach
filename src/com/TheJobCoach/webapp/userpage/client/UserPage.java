@@ -1,13 +1,16 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 
+import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
 import com.TheJobCoach.webapp.userpage.client.MyGoals.ContentMyGoals;
 import com.TheJobCoach.webapp.userpage.client.MyReports.ContentMyReports;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.client.MainPage;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -53,16 +56,9 @@ public class UserPage implements EntryPoint {
 	{
 		if (menu.equals("myjobboards"))
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(simplePanelContent, reason.toString());
-				}
-
-				@Override
-				public void onSuccess() 
+				public void Open()
 				{
 					ContentUserSite contentUserSite = new ContentUserSite(simplePanelContent, userId);
 					contentUserSite.onModuleLoad();
@@ -71,15 +67,9 @@ public class UserPage implements EntryPoint {
 		};
 		if (menu.equals("news"))
 		{			
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(simplePanelContent, reason.toString());
-				}
-				@Override
-				public void onSuccess() 
+				public void Open()
 				{
 					ContentNews contentNews = new ContentNews(simplePanelContent, userId);				
 					contentNews.onModuleLoad();
@@ -88,15 +78,9 @@ public class UserPage implements EntryPoint {
 		};
 		if (menu.equals("todo"))
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
-				}
-				@Override
-				public void onSuccess() 
+				public void Open()
 				{
 					ContentTodo contentTodo = new ContentTodo(simplePanelContent, userId);
 					contentTodo.onModuleLoad();
@@ -106,15 +90,9 @@ public class UserPage implements EntryPoint {
 		}
 		if (menu.equals("mydocuments"))
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
-				}
-				@Override
-				public void onSuccess() 
+				public void Open()
 				{
 					ContentUserDocument contentMyDocuments = new ContentUserDocument(simplePanelContent, userId);
 					contentMyDocuments.onModuleLoad();
@@ -124,15 +102,9 @@ public class UserPage implements EntryPoint {
 		}
 		if (menu.equals("applications"))
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
-				}
-				@Override
-				public void onSuccess() 
+				public void Open()
 				{
 					ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity();
 					contentUserOpportunity.setRootPanel(simplePanelContent);
@@ -143,15 +115,9 @@ public class UserPage implements EntryPoint {
 		}
 		if (menu.equals("report"))
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
-				}
-				@Override
-				public void onSuccess() 
+				public void Open()
 				{
 					ContentReport contentReport = new ContentReport();				
 					contentReport.setRootPanel(simplePanelContent);
@@ -162,15 +128,9 @@ public class UserPage implements EntryPoint {
 		}
 		if (menu.equals("account"))
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
-				}
-				@Override
-				public void onSuccess() 
+				public void Open()
 				{
 					ContentAccount contentAccount = new ContentAccount(simplePanelContent, userId);
 					contentAccount.onModuleLoad();
@@ -179,15 +139,9 @@ public class UserPage implements EntryPoint {
 		}
 		if (menu.equals("goals"))
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
-				}
-				@Override
-				public void onSuccess() 
+				public void Open()
 				{
 					ContentMyGoals contentGoals = new ContentMyGoals(simplePanelContent, userId);
 					contentGoals.onModuleLoad();
@@ -196,19 +150,24 @@ public class UserPage implements EntryPoint {
 		}
 		if (menu.equals("myreports"))
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(simplePanelContent, reason.toString());					
-				}
-				@Override
-				public void onSuccess() 
+				public void Open()
 				{
 					ContentMyReports contentMyReports = new ContentMyReports(simplePanelContent, userId);
 					contentMyReports.onModuleLoad();
 				}			
+			});
+		}
+		if (menu.equals("addressbook"))
+		{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
+				@Override
+				public void Open()
+				{
+					ContentExternalContact contentExternalContact = new ContentExternalContact(simplePanelContent, userId);
+					contentExternalContact.onModuleLoad();
+				}	
 			});
 		}
 	}
@@ -225,6 +184,7 @@ public class UserPage implements EntryPoint {
 				!menu.equals("myjobboards") &&
 				!menu.equals("mydocuments") &&
 				!menu.equals("report") &&
+				!menu.equals("addressbook") &&
 				!menu.equals("applications")
 				)
 		{
