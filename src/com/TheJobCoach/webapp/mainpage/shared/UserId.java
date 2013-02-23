@@ -3,7 +3,8 @@ package com.TheJobCoach.webapp.mainpage.shared;
 import java.io.Serializable;
 
 public class UserId implements Serializable {
-	private static final long serialVersionUID = 5023720505251872867L;
+	
+	private static final long serialVersionUID = 5013720505251872867L;
 	public String userName;
 	public String token;
 	public enum UserType
