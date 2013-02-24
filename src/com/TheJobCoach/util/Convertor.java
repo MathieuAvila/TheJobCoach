@@ -53,6 +53,16 @@ public class Convertor {
 		return Integer.decode(string);
 	}
 	
+	static public double toDouble(String string) {
+		if ("".equals(string))
+		{
+			return 0;
+		}
+		if (string == null) return 0;
+		System.out.println("String: " + string + " converted to: " + Float.valueOf(string));
+		return Float.valueOf(string);
+	}
+	
 	static public boolean toBoolean(String v)
 	{
 		return "1".equals(v);

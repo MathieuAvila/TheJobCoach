@@ -45,6 +45,13 @@ public class ShortMap {
 		map.put(k, Integer.toString(v));		
 		return this;
 	}
+
+	public ShortMap add(String k, double v)
+	{
+		System.out.println("Double: " + v + " converted to: " + Double.toString(v));	
+		map.put(k, Double.toString(v));		
+		return this;
+	}
 	
 	public ShortMap add(String k, Date v)
 	{

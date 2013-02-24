@@ -13,8 +13,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
@@ -41,14 +41,16 @@ public class EditOpportunity implements EntryPoint {
 	TextBox txtbxTitle = new TextBox();
 	TextBox txtbxCompany = new TextBox();
 	TextBox txtbxContractType = new TextBox();
-	IntegerBox txtbxSalary = new IntegerBox();
+	DoubleBox txtbxSalary = new DoubleBox();
 	TextBox txtbxSource = new TextBox();
 	TextBox txtbxUrl = new TextBox();
 	TextBox txtbxLocation = new TextBox();
 	ListBox comboBoxStatus = new ListBox();
 	String id = null;
 	DialogBlockOkCancel okCancel;
-	
+	DateBox dateBoxStart;
+	DateBox dateBoxEndDate;
+
 	public EditOpportunity(Panel panel, UserId _user, UserOpportunity _currentOpportunity, EditOpportunityResult _result)
 	{	
 		user = _user;
@@ -72,16 +74,21 @@ public class EditOpportunity implements EntryPoint {
 		txtbxSource.setText(opp.source);
 		txtbxUrl.setText(opp.url);
 		txtbxLocation.setText(opp.location);
+		dateBoxStart.setValue(opp.startDate);
+		dateBoxEndDate.setValue(opp.endDate);
 	}
 	
 	public UserOpportunity getOpportunity()
 	{
-		int salary = 0;
+		double salary = 0;
 		if (txtbxSalary.getValue() != null) salary = txtbxSalary.getValue();
-		if (id == null) id = SiteUUID.getDateUuid();		
-		return new UserOpportunity(id, new Date(), new Date(),
+		System.out.println("Get value: " + txtbxSalary.getValue() + " means: " + salary);
+		if (id == null) id = SiteUUID.getDateUuid();
+		return new UserOpportunity(id, 
+				new Date(), 
+				(currentOpportunity != null) ? currentOpportunity.firstSeen : new Date(),
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), txtbxCompany.getValue(),
-				txtbxContractType.getText(), salary, new Date(), new Date(),
+				txtbxContractType.getText(), salary, dateBoxStart.getValue(), dateBoxEndDate.getValue(),
 				false, txtbxSource.getText(), txtbxUrl.getText(), txtbxLocation.getText(), 
 				UserOpportunity.applicationStatusToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex())), "");
 	}
@@ -155,14 +162,14 @@ public class EditOpportunity implements EntryPoint {
 		Label lblStartDate = new Label(lang._TextStartDate());
 		grid.setWidget(6, 0, lblStartDate);
 		
-		DateBox dateBoxStart = new DateBox();
+		dateBoxStart = new DateBox();
 		grid.setWidget(6, 1, dateBoxStart);
 		dateBoxStart.setWidth("95%");
 				
 		Label lblEndDate = new Label(lang._TextEndDate());
 		grid.setWidget(7, 0, lblEndDate);
 		
-		DateBox dateBoxEndDate = new DateBox();
+		dateBoxEndDate = new DateBox();
 		grid.setWidget(7, 1, dateBoxEndDate);
 		dateBoxEndDate.setWidth("95%");
 		

@@ -1,5 +1,6 @@
 package com.TheJobCoach.webapp.userpage.client;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -20,6 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
@@ -317,7 +319,8 @@ public class ContentUserOpportunity implements EntryPoint {
 			@Override
 			public String getValue(UserOpportunity userOpportunity) 
 			{
-				return Integer.toString(userOpportunity.salary);
+				String result = NumberFormat.getFormat("0.00").format(userOpportunity.salary);				
+				return result;
 			}
 		};
 
