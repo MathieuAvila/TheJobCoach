@@ -16,10 +16,11 @@ import com.TheJobCoach.webapp.util.shared.TestFormatUtil;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
+import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 
 import static org.junit.Assert.*;
-
+@GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestEditLogEntry extends GwtTest {
 	
 	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
@@ -96,12 +97,6 @@ public class AutoTestEditLogEntry extends GwtTest {
 	}
 	
 	private EditLogEntry cud;
-
-	
-	@Override
-	public String getModuleName() {		
-		return "com.TheJobCoach.webapp.userpage.UserPage";
-	}
 
 	@Before
 	public void beforeEditLogEntry()

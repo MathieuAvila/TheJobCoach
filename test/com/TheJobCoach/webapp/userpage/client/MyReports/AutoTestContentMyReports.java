@@ -17,8 +17,10 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.gwt.test.GwtCreateHandler;
+import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 
+@GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestContentMyReports extends GwtTest {
 
 
@@ -42,11 +44,6 @@ public class AutoTestContentMyReports extends GwtTest {
 	}
 
 	SpecialUserServiceAsync userService = new SpecialUserServiceAsync();
-	
-	@Override
-	public String getModuleName() {		
-		return "com.TheJobCoach.webapp.userpage.UserPage";
-	}
 	
 	HorizontalPanel p;
 	
