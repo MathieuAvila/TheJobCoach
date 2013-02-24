@@ -339,11 +339,11 @@ public class UserPage implements EntryPoint {
 		final Label label_Parameters = new Label(lang._TextMyAccount());
 		setLabelMenu(label_Parameters, "account");
 		addLabelWithImage(verticalPanelAccount, label_Parameters, ClientImageBundle.INSTANCE.parametersContent());
-		
+		/*
 		final Label label_Profile = new Label(lang._TextMyProfile());
 		setLabelMenu(label_Profile, "profile");
 		verticalPanelAccount.add(label_Profile);
-
+*/
 		SimplePanel simplePanel_4 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_4);
 		simplePanel_4.setHeight("10px");
@@ -380,11 +380,11 @@ public class UserPage implements EntryPoint {
 		setLabelMenu(label_MyApplications, "applications");
 		addLabelWithImage(verticalPanelMySearch, label_MyApplications, ClientImageBundle.INSTANCE.opportunityContent());
 		//verticalPanelMySearch.add(label_MyApplications);
-
+/*
 		final Label label_ActionsAgenda = new Label(lang._TextAgenda());
 		setLabelMenu(label_ActionsAgenda, "agenda");
 		verticalPanelMySearch.add(label_ActionsAgenda);
-	
+	*/
 		SimplePanel simplePanel_2 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_2);
 		simplePanel_2.setHeight("10px");
@@ -406,19 +406,22 @@ public class UserPage implements EntryPoint {
 		addLabelWithImage(verticalPanelStats, lblNewLabel_MyGoals, ClientImageBundle.INSTANCE.userVirtualCoachGoals());
 		//verticalPanelStats.add(lblNewLabel_MyGoals);
 		
+		/*
 		final Label label_Statistics = new Label(lang._TextPerformance());
 		setLabelMenu(label_Statistics, "statistiques");
 		//addLabelWithImage(verticalPanelStats, label_Statistics, ClientImageBundle.INSTANCE.());
 		verticalPanelStats.add(label_Statistics);
+*/
 
+		/*
 		SimplePanel simplePanel_3 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_3);
 		simplePanel_3.setHeight("10px");
-
+		
 		StackPanel stackPanelAdvices = new StackPanel();
 		verticalPanel_2.add(stackPanelAdvices);
 		stackPanelAdvices.setWidth("100%");
-
+		
 		VerticalPanel verticalPanelAdvices = new VerticalPanel();
 		stackPanelAdvices.add(verticalPanelAdvices, lang._TextLibrary(), false);
 		verticalPanelAdvices.setSize("100%", "100%");
@@ -434,7 +437,7 @@ public class UserPage implements EntryPoint {
 		SimplePanel simplePanel_5 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_5);
 		simplePanel_5.setHeight("10px");
-
+*/
 		StackPanel stackPanelShares = new StackPanel();
 		verticalPanel_2.add(stackPanelShares);
 		stackPanelShares.setWidth("100%");
@@ -443,9 +446,10 @@ public class UserPage implements EntryPoint {
 		stackPanelShares.add(verticalPanelShares, lang._TextCommunity(), false);
 		verticalPanelShares.setSize("100%", "100%");
 
-		final Label label_Forum = new Label(lang._TextForum());
-		setLabelMenu(label_Forum, "forum");
-		verticalPanelShares.add(label_Forum);
+
+		//final Label label_Forum = new Label(lang._TextForum());
+		//setLabelMenu(label_Forum, "forum");
+		//verticalPanelShares.add(label_Forum);
 
 		final Label label_Report = new Label(lang._TextReport());
 		setLabelMenu(label_Report, "report");
