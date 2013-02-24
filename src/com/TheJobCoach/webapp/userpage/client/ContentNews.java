@@ -80,7 +80,7 @@ public class ContentNews implements EntryPoint {
 		simplePanelCenter.setWidth("100%");
 		rootPanel.add(simplePanelCenter);
 		
-		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextNews(), ClientImageBundle.INSTANCE.newsContent());
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextNews(), ClientImageBundle.INSTANCE.newsContentContent());
 
 		getNews();
 	}

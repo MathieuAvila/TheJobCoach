@@ -69,39 +69,44 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("web_24.png")
 	ImageResource urlLink();
 
-	@Source("news_32.png")
-	ImageResource newsContent();
-
-	@Source("todo-32.png")
-	ImageResource todoContent();
-
-	@Source("sites-32.png")
-	ImageResource userJobSiteContent();
-
-	@Source("documents-32.png")
-	ImageResource userDocumentContent();
-
-	@Source("parameters-32.png")
-	ImageResource parametersContent();
-
 	@Source("logout_32.png")
 	ImageResource urlLogout();
 
-	@Source("comment-32.png")
-	ImageResource sendComment();
 	
-	@Source("opportunity-32.png")
+	
+	
+	
+	@Source("content-comment-32.png")
+	ImageResource sendCommentContent();
+	
+	@Source("content-opportunity-32.png")
 	ImageResource opportunityContent();
 
-	@Source("log-32.png")
+	@Source("content-log-32.png")
 	ImageResource userLogContent();
 
-	@Source("goals-32.png")
-	ImageResource userVirtualCoachGoals();
+	@Source("content-goals-32.png")
+	ImageResource userVirtualCoachGoalsContent();
 
-	@Source("addressbook-32.png")
-	ImageResource userExternalContact();
+	@Source("content-addressbook-32.png")
+	ImageResource userExternalContactContent();
 
-	@Source("myreports-32.png")
-	ImageResource userMyReports();
+	@Source("content-myreports-32.png")
+	ImageResource userMyReportsContent();
+
+	@Source("content-news-32.png")
+	ImageResource newsContentContent();
+
+	@Source("content-todo-32.png")
+	ImageResource todoContent();
+
+	@Source("content-sites-32.png")
+	ImageResource userJobSiteContent();
+
+	@Source("content-documents-32.png")
+	ImageResource userDocumentContent();
+
+	@Source("content-parameters-32.png")
+	ImageResource parametersContent();
+
 }

@@ -18,6 +18,7 @@ import com.google.gwt.dom.client.Style.Position;
 
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -231,6 +232,7 @@ public class UserPage implements EntryPoint {
 		hp.add(image);
 		hp.setCellWidth(image, "40px");
 		hp.add(l);
+		hp.setCellVerticalAlignment(l, HasVerticalAlignment.ALIGN_MIDDLE);
 		p.add(hp);
 	}
 	
@@ -363,7 +365,7 @@ public class UserPage implements EntryPoint {
 
 		final Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
 		setLabelMenu(lblNewLabel_AddressBook, "addressbook");
-		addLabelWithImage(verticalPanelMySearch, lblNewLabel_AddressBook, ClientImageBundle.INSTANCE.userExternalContact());
+		addLabelWithImage(verticalPanelMySearch, lblNewLabel_AddressBook, ClientImageBundle.INSTANCE.userExternalContactContent());
 		//verticalPanelMySearch.add(lblNewLabel_AddressBook);
 		
 		final Label lblNewLabel_JobBoards = new Label(lang._TextMyJobBoards());
@@ -399,11 +401,11 @@ public class UserPage implements EntryPoint {
 
 		final Label label_Bilans = new Label(lang._TextBilans());
 		setLabelMenu(label_Bilans, "myreports");
-		addLabelWithImage(verticalPanelStats, label_Bilans, ClientImageBundle.INSTANCE.userMyReports());
+		addLabelWithImage(verticalPanelStats, label_Bilans, ClientImageBundle.INSTANCE.userMyReportsContent());
 		
 		final Label lblNewLabel_MyGoals = new Label(lang._TextMyGoals());
 		setLabelMenu(lblNewLabel_MyGoals, "goals");
-		addLabelWithImage(verticalPanelStats, lblNewLabel_MyGoals, ClientImageBundle.INSTANCE.userVirtualCoachGoals());
+		addLabelWithImage(verticalPanelStats, lblNewLabel_MyGoals, ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent());
 		//verticalPanelStats.add(lblNewLabel_MyGoals);
 		
 		/*
@@ -453,13 +455,13 @@ public class UserPage implements EntryPoint {
 
 		final Label label_Report = new Label(lang._TextReport());
 		setLabelMenu(label_Report, "report");
-		addLabelWithImage(verticalPanelShares, label_Report, ClientImageBundle.INSTANCE.sendComment());
+		addLabelWithImage(verticalPanelShares, label_Report, ClientImageBundle.INSTANCE.sendCommentContent());
 //		verticalPanelShares.add(label_Report);
 
 		final Label label_News = new Label(lang._TextNews());
 		setLabelMenu(label_News, "news");
 		//verticalPanelShares.add(label_News);
-		addLabelWithImage(verticalPanelShares, label_News, ClientImageBundle.INSTANCE.newsContent());
+		addLabelWithImage(verticalPanelShares, label_News, ClientImageBundle.INSTANCE.newsContentContent());
 
 		SimplePanel simplePanel_CentralInter = new SimplePanel();
 		simplePanel_CentralInter.setWidth("30px");

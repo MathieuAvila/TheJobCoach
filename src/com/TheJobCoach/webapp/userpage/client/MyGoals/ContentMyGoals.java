@@ -97,7 +97,7 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 
-		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextMyGoals(), ClientImageBundle.INSTANCE.userVirtualCoachGoals());
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextMyGoals(), ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent());
 
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Ma période d'évaluation");
 		Grid gridPeriod = new Grid(1, 2);

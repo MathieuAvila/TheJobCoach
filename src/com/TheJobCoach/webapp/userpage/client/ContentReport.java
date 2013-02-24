@@ -75,7 +75,7 @@ public class ContentReport implements EntryPoint {
 		VerticalPanel uberPanel = new VerticalPanel();
 		rootPanel.add(uberPanel);
 
-		ContentHelper.insertTitlePanel(uberPanel, lang._TextMakeComment(), ClientImageBundle.INSTANCE.sendComment());
+		ContentHelper.insertTitlePanel(uberPanel, lang._TextMakeComment(), ClientImageBundle.INSTANCE.sendCommentContent());
 		uberPanel.add(simplePanelCenter);
 
 		Label labelExplanation = new Label(lang._TextAboutComment());

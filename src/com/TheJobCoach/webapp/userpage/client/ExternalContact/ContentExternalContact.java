@@ -215,7 +215,7 @@ public class ContentExternalContact implements EntryPoint {
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 
-		ContentHelper.insertTitlePanel(simplePanelCenter, langExternalContact._TextExternalContactTitle(), ClientImageBundle.INSTANCE.userExternalContact());
+		ContentHelper.insertTitlePanel(simplePanelCenter, langExternalContact._TextExternalContactTitle(), ClientImageBundle.INSTANCE.userExternalContactContent());
 
 
 		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<ExternalContact, String>() {
