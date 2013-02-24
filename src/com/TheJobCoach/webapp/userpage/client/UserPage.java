@@ -435,11 +435,11 @@ public class UserPage implements EntryPoint {
 		final Label label_Advices = new Label(lang._TextAdvices());
 		setLabelMenu(label_Advices, "advices");
 		verticalPanelAdvices.add(label_Advices);
-
+*/
 		SimplePanel simplePanel_5 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_5);
 		simplePanel_5.setHeight("10px");
-*/
+
 		StackPanel stackPanelShares = new StackPanel();
 		verticalPanel_2.add(stackPanelShares);
 		stackPanelShares.setWidth("100%");
