@@ -1,8 +1,9 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.Account;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedTextField;
@@ -52,34 +53,34 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 	
 	CheckedExtendedDropListField tfModel = new CheckedExtendedDropListField(
 			UserValuesConstantsAccount.ACCOUNT_MODEL_LIST, langAccount.accountTypeMap(), "accountTypeMap_");
-	CheckedLabel clModel = new CheckedLabel("Type de compte", false, tfModel);
+	CheckedLabel clModel = new CheckedLabel(langAccount.Text_AccountType(), false, tfModel);
 	
 	CheckedTextField tfTitle = new CheckedTextField(".*");
-	CheckedLabel clTitle = new CheckedLabel("Mon métier (ou nom de poste) visé", false, tfTitle);
+	CheckedLabel clTitle = new CheckedLabel(langAccount.Text_JobTitle(), false, tfTitle);
 	
 	CheckedExtendedDropListField tfStatus = new CheckedExtendedDropListField(
 			UserValuesConstantsAccount.ACCOUNT_STATUS_LIST, langAccount.accountStatusMap(), "accountStatusMap_");
-	CheckedLabel clStatus = new CheckedLabel("Statut actuel", false, tfStatus);
+	CheckedLabel clStatus = new CheckedLabel(langAccount.Text_ActualStatus(), false, tfStatus);
 	
-	CheckedExtendedTextField tfKeywords = new CheckedExtendedTextField(new TextArea(), ".*");
-	CheckedLabel clKeywords = new CheckedLabel("Mes compétences clés", false, tfKeywords);
+	CheckedExtendedTextField tfKeywords = new CheckedExtendedTextField(new TextArea(), "[a-zA-Z0-9-\\.\\n ]*");
+	CheckedLabel clKeywords = new CheckedLabel(langAccount.Text_Skills(), false, tfKeywords);
 	
 	CheckedExtendedDropListField tfVirtualCoach = new CheckedExtendedDropListField(
 			UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR_LIST, langAccount.coachNameMap(), "coachNameMap_");
-	CheckedLabel clVirtualCoach = new CheckedLabel("Mon coach virtuel", false, tfVirtualCoach);
+	CheckedLabel clVirtualCoach = new CheckedLabel(langAccount.Text_MyVirtualCoach(), false, tfVirtualCoach);
 	DynamicLabel dlVirtualCoach = new DynamicLabel(tfVirtualCoach, langAccount.coachDescriptionMap(), "coachDescriptionMap_");
 	
 	CheckedExtendedDropListField tfPublishSeeker = new CheckedExtendedDropListField(
 			UserValuesConstantsAccount.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
-	CheckedLabel clPublishSeeker = new CheckedLabel("Rendre mon profil visible aux autres chercheurs d'emploi", false, tfPublishSeeker);
+	CheckedLabel clPublishSeeker = new CheckedLabel(langAccount.Text_VisibleProfileSeeker(), false, tfPublishSeeker);
 
 	CheckedExtendedDropListField tfPublishCoach = new CheckedExtendedDropListField(
 			UserValuesConstantsAccount.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
-	CheckedLabel clPublishCoach = new CheckedLabel("Rendre mon profil visible aux coachs emploi", false, tfPublishCoach);
+	CheckedLabel clPublishCoach = new CheckedLabel(langAccount.Text_VisibleProfileCoach(), false, tfPublishCoach);
 
 	CheckedExtendedDropListField tfPublishRecruiter = new CheckedExtendedDropListField(
 			UserValuesConstantsAccount.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
-	CheckedLabel clPublishRecruiter = new CheckedLabel("Rendre mon profil visible aux recruteurs", false, tfPublishRecruiter);
+	CheckedLabel clPublishRecruiter = new CheckedLabel(langAccount.Text_VisibleProfileRecruiter(), false, tfPublishRecruiter);
 	
 	void getValues()
 	{	
@@ -103,7 +104,7 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextMyAccount(), ClientImageBundle.INSTANCE.parametersContent());
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mon mode d'inscription");
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitleAccount());
 
 		Grid grid0 = new Grid(1, 2);
 		simplePanelCenter.add(grid0);
@@ -113,7 +114,7 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 
 		fields.put(UserValuesConstantsAccount.ACCOUNT_MODEL, tfModel);
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mes informations personnelles");
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitlePersonalInformation());
 
 		Grid grid1 = new Grid(3, 2);
 		simplePanelCenter.add(grid1);
@@ -131,7 +132,7 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 		fields.put(UserValuesConstantsAccount.ACCOUNT_STATUS, tfStatus);
 		fields.put(UserValuesConstantsAccount.ACCOUNT_KEYWORDS, tfKeywords);
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Mon coach virtuel personnel");
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitleCoach());
 
 		Grid grid2 = new Grid(1, 4);
 		simplePanelCenter.add(grid2);
@@ -151,7 +152,7 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 		
 		fields.put(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, tfVirtualCoach);
 
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Visibilité de mon profil");
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitleVisibility());
 
 		Grid grid3 = new Grid(3, 2);
 		simplePanelCenter.add(grid3);
@@ -191,7 +192,6 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 		{
 			if (testKey.equals(key))
 			{
-				//System.out.println("REcevied key " + testKey + " with value " + value);
 				fields.get(testKey).setDefault(value);
 				fields.get(testKey).setValue(value);
 			}

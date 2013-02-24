@@ -32,6 +32,7 @@ public class CheckedExtendedTextField implements IExtendedField {
 	public boolean isValid()
 	{
 		if (getValue() == null) return false;
+		System.out.println("A" + getValue() + "A");
 		return getValue().matches(regexp);
 	}
 

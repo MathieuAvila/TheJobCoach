@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 
+import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
 import com.TheJobCoach.webapp.userpage.client.MyGoals.ContentMyGoals;
 import com.TheJobCoach.webapp.userpage.client.MyReports.ContentMyReports;
