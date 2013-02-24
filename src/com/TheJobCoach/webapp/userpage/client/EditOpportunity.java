@@ -5,43 +5,54 @@ import java.util.Date;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
+import com.TheJobCoach.webapp.util.client.CheckedLabel;
+import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
+import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DoubleBox;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class EditOpportunity implements EntryPoint {
+public class EditOpportunity implements EntryPoint, IChanged {
 
 	public interface EditOpportunityResult
 	{
 		public void setResult(UserOpportunity result);
 	}
 	
+	static final Lang lang = GWT.create(Lang.class);
+    
 	UserId user;
 	
 	RichTextArea richTextAreaDescription = new RichTextArea();
-	TextBox txtbxTitle = new TextBox();
+	
+	CheckedTextField txtbxTitle = new CheckedTextField(CheckedTextField.ALLBUTVOID);
+	CheckedLabel lblTitle = new CheckedLabel(lang._TextPositionName(), true, txtbxTitle);
+	
 	TextBox txtbxCompany = new TextBox();
 	TextBox txtbxContractType = new TextBox();
-	DoubleBox txtbxSalary = new DoubleBox();
+	
+	CheckedTextField txtbxSalary = new CheckedTextField("[0-9]+[,.]?[0-9]*");
+	CheckedLabel lblSalary = new CheckedLabel(lang._TextSalary(), false, txtbxSalary);
+
 	TextBox txtbxSource = new TextBox();
 	TextBox txtbxUrl = new TextBox();
 	TextBox txtbxLocation = new TextBox();
@@ -66,22 +77,23 @@ public class EditOpportunity implements EntryPoint {
 	private void setOpportunity(UserOpportunity opp)
 	{
 		id = opp.ID;
-		txtbxTitle.setText(opp.title);
+		txtbxTitle.setValue(opp.title);
 		richTextAreaDescription.setHTML(opp.description);
 		txtbxCompany.setText(opp.companyId);
 		txtbxContractType.setText(opp.contractType);
-		txtbxSalary.setValue(opp.salary);
+		txtbxSalary.setValue(NumberFormat.getFormat("0.00").format(opp.salary));
 		txtbxSource.setText(opp.source);
 		txtbxUrl.setText(opp.url);
 		txtbxLocation.setText(opp.location);
 		dateBoxStart.setValue(opp.startDate);
 		dateBoxEndDate.setValue(opp.endDate);
+		
 	}
 	
 	public UserOpportunity getOpportunity()
 	{
 		double salary = 0;
-		if (txtbxSalary.getValue() != null) salary = txtbxSalary.getValue();
+		if (txtbxSalary.getValue() != null) salary = Double.parseDouble(txtbxSalary.getValue().replace(",", "."));
 		System.out.println("Get value: " + txtbxSalary.getValue() + " means: " + salary);
 		if (id == null) id = SiteUUID.getDateUuid();
 		return new UserOpportunity(id, 
@@ -98,10 +110,7 @@ public class EditOpportunity implements EntryPoint {
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad()
-	{	
-		Lang lang = GWT.create(Lang.class);
-	    System.out.println("Locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-	
+	{		
 		final DialogBox dBox = new DialogBox();
 		dBox.setText(currentOpportunity == null ? lang._TextNewOpportunity(): lang._TextUpdateOpportunity());
 		dBox.setGlassEnabled(true);
@@ -114,7 +123,6 @@ public class EditOpportunity implements EntryPoint {
 		dBox.add(vp);		
 		grid.setWidth("95%");
 		
-		Label lblTitle = new Label(lang._TextPositionName());
 		grid.setWidget(0, 0, lblTitle);		
 		grid.setWidget(0, 1, txtbxTitle);
 		grid.getCellFormatter().setWidth(0, 1, "100%");
@@ -153,12 +161,12 @@ public class EditOpportunity implements EntryPoint {
 		grid.getCellFormatter().setWidth(4, 1, "100%");
 		txtbxContractType.setWidth("95%");
 			
-		Label lblSalary = new Label(lang._TextSalary());
 		grid.setWidget(5, 0, lblSalary);		
 		grid.setWidget(5, 1, txtbxSalary);
 		grid.getCellFormatter().setWidth(5, 1, "100%");
 		txtbxSalary.setWidth("95%");
-		
+		txtbxSalary.setValue("0.0");
+
 		Label lblStartDate = new Label(lang._TextStartDate());
 		grid.setWidget(6, 0, lblStartDate);
 		
@@ -195,8 +203,6 @@ public class EditOpportunity implements EntryPoint {
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		grid.setWidget(11, 1, horizontalPanel);
 
-		if (currentOpportunity != null) setOpportunity(currentOpportunity);
-
 		vp.add(grid);		
 		
 		okCancel = new DialogBlockOkCancel(null, dBox);
@@ -210,6 +216,22 @@ public class EditOpportunity implements EntryPoint {
 		});		
 		vp.add(okCancel);
 		
+		txtbxTitle.registerListener(this);
+		txtbxSalary.registerListener(this);
+		
+		if (currentOpportunity != null) setOpportunity(currentOpportunity);
+
 		dBox.center();
+	}
+
+	@Override
+	public void changed(boolean ok, boolean isDefault, boolean init)
+	{		
+		if (init) return;
+		okCancel.getOk().setEnabled(false);
+		boolean setOk = true;
+		setOk = setOk && txtbxTitle.isValid();
+		setOk = setOk && txtbxSalary.isValid();
+		okCancel.getOk().setEnabled(setOk);	
 	}
 }

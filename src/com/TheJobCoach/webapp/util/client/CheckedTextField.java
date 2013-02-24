@@ -14,6 +14,8 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 	String regexp;
 	String defaultValue = null;
 	
+	static public final String ALLBUTVOID = "NV"; 
+	
 	@Override
 	public boolean getIsDefault()
 	{
@@ -24,6 +26,8 @@ public class CheckedTextField extends TextBox implements IExtendedField {
 	@Override
 	public boolean isValid()
 	{
+		if (regexp.equals(ALLBUTVOID)) 
+			return !"".equals(getValue()); 
 		if (getValue() == null) return false;
 		return getValue().matches(regexp);
 	}
