@@ -340,7 +340,7 @@ public class UserPage implements EntryPoint {
 
 		final Label label_Parameters = new Label(lang._TextMyAccount());
 		setLabelMenu(label_Parameters, "account");
-		addLabelWithImage(verticalPanelAccount, label_Parameters, ClientImageBundle.INSTANCE.parametersContent());
+		addLabelWithImage(verticalPanelAccount, label_Parameters, ClientImageBundle.INSTANCE.parametersContent_menu());
 		/*
 		final Label label_Profile = new Label(lang._TextMyProfile());
 		setLabelMenu(label_Profile, "profile");
@@ -360,27 +360,27 @@ public class UserPage implements EntryPoint {
 
 		final Label label_ActionsTodo = new Label(lang._TextTodo());
 		setLabelMenu(label_ActionsTodo, "todo");
-		addLabelWithImage(verticalPanelMySearch, label_ActionsTodo, ClientImageBundle.INSTANCE.todoContent());
+		addLabelWithImage(verticalPanelMySearch, label_ActionsTodo, ClientImageBundle.INSTANCE.todoContent_menu());
 		//verticalPanelMySearch.add(label_ActionsTodo);
 
 		final Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
 		setLabelMenu(lblNewLabel_AddressBook, "addressbook");
-		addLabelWithImage(verticalPanelMySearch, lblNewLabel_AddressBook, ClientImageBundle.INSTANCE.userExternalContactContent());
+		addLabelWithImage(verticalPanelMySearch, lblNewLabel_AddressBook, ClientImageBundle.INSTANCE.userExternalContactContent_menu());
 		//verticalPanelMySearch.add(lblNewLabel_AddressBook);
 		
 		final Label lblNewLabel_JobBoards = new Label(lang._TextMyJobBoards());
 		setLabelMenu(lblNewLabel_JobBoards, "myjobboards");
-		addLabelWithImage(verticalPanelMySearch, lblNewLabel_JobBoards, ClientImageBundle.INSTANCE.userJobSiteContent());
+		addLabelWithImage(verticalPanelMySearch, lblNewLabel_JobBoards, ClientImageBundle.INSTANCE.userJobSiteContent_menu());
 		//verticalPanelMySearch.add(lblNewLabel_JobBoards);
 		
 		final Label lblNewLabel_Documents = new Label(lang._TextMyDocuments());
 		setLabelMenu(lblNewLabel_Documents, "mydocuments");
-		addLabelWithImage(verticalPanelMySearch, lblNewLabel_Documents, ClientImageBundle.INSTANCE.userDocumentContent());
+		addLabelWithImage(verticalPanelMySearch, lblNewLabel_Documents, ClientImageBundle.INSTANCE.userDocumentContent_menu());
 		//verticalPanelMySearch.add(lblNewLabel_Documents);
 
 		final Label label_MyApplications = new Label(lang._TextApplicationFollowUp());
 		setLabelMenu(label_MyApplications, "applications");
-		addLabelWithImage(verticalPanelMySearch, label_MyApplications, ClientImageBundle.INSTANCE.opportunityContent());
+		addLabelWithImage(verticalPanelMySearch, label_MyApplications, ClientImageBundle.INSTANCE.opportunityContent_menu());
 		//verticalPanelMySearch.add(label_MyApplications);
 /*
 		final Label label_ActionsAgenda = new Label(lang._TextAgenda());
@@ -401,11 +401,11 @@ public class UserPage implements EntryPoint {
 
 		final Label label_Bilans = new Label(lang._TextBilans());
 		setLabelMenu(label_Bilans, "myreports");
-		addLabelWithImage(verticalPanelStats, label_Bilans, ClientImageBundle.INSTANCE.userMyReportsContent());
+		addLabelWithImage(verticalPanelStats, label_Bilans, ClientImageBundle.INSTANCE.userMyReportsContent_menu());
 		
 		final Label lblNewLabel_MyGoals = new Label(lang._TextMyGoals());
 		setLabelMenu(lblNewLabel_MyGoals, "goals");
-		addLabelWithImage(verticalPanelStats, lblNewLabel_MyGoals, ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent());
+		addLabelWithImage(verticalPanelStats, lblNewLabel_MyGoals, ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent_menu());
 		//verticalPanelStats.add(lblNewLabel_MyGoals);
 		
 		/*
@@ -455,13 +455,13 @@ public class UserPage implements EntryPoint {
 
 		final Label label_Report = new Label(lang._TextReport());
 		setLabelMenu(label_Report, "report");
-		addLabelWithImage(verticalPanelShares, label_Report, ClientImageBundle.INSTANCE.sendCommentContent());
+		addLabelWithImage(verticalPanelShares, label_Report, ClientImageBundle.INSTANCE.sendCommentContent_menu());
 //		verticalPanelShares.add(label_Report);
 
 		final Label label_News = new Label(lang._TextNews());
 		setLabelMenu(label_News, "news");
 		//verticalPanelShares.add(label_News);
-		addLabelWithImage(verticalPanelShares, label_News, ClientImageBundle.INSTANCE.newsContentContent());
+		addLabelWithImage(verticalPanelShares, label_News, ClientImageBundle.INSTANCE.newsContent_menu());
 
 		SimplePanel simplePanel_CentralInter = new SimplePanel();
 		simplePanel_CentralInter.setWidth("30px");

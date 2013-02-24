@@ -95,7 +95,7 @@ public interface ClientImageBundle extends ClientBundle
 	ImageResource userMyReportsContent();
 
 	@Source("content-news-32.png")
-	ImageResource newsContentContent();
+	ImageResource newsContent();
 
 	@Source("content-todo-32.png")
 	ImageResource todoContent();
@@ -108,5 +108,40 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("content-parameters-32.png")
 	ImageResource parametersContent();
+
+	
+
+	@Source("content-comment-24.png")
+	ImageResource sendCommentContent_menu();
+	
+	@Source("content-opportunity-24.png")
+	ImageResource opportunityContent_menu();
+
+	@Source("content-log-24.png")
+	ImageResource userLogContent_menu();
+
+	@Source("content-goals-24.png")
+	ImageResource userVirtualCoachGoalsContent_menu();
+
+	@Source("content-addressbook-24.png")
+	ImageResource userExternalContactContent_menu();
+
+	@Source("content-myreports-24.png")
+	ImageResource userMyReportsContent_menu();
+
+	@Source("content-news-24.png")
+	ImageResource newsContent_menu();
+
+	@Source("content-todo-24.png")
+	ImageResource todoContent_menu();
+
+	@Source("content-sites-24.png")
+	ImageResource userJobSiteContent_menu();
+
+	@Source("content-documents-24.png")
+	ImageResource userDocumentContent_menu();
+
+	@Source("content-parameters-24.png")
+	ImageResource parametersContent_menu();
 
 }
