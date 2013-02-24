@@ -4,19 +4,23 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.TestFormatUtil;
 
 public class TestConnectionLog
 {
 	
-	String userName = "**";
+	static String userName = "toto";
+	static String user_no_mistakeName = "totoXX";
 	ConnectionLog cl = new ConnectionLog();
+	static UserId user = new UserId(userName, "password", UserId.UserType.USER_TYPE_SEEKER);
+	static UserId user_no_mistake = new UserId(user_no_mistakeName, "password", UserId.UserType.USER_TYPE_SEEKER);
 	
 	@Test
 	public void testDeleteAccount() throws CassandraException
 	{
-		cl.deleteAccount(userName);
+		cl.deleteUser(user);
 	}
 
 	@Test
@@ -36,20 +40,20 @@ public class TestConnectionLog
 		cl.addLogTimeDay(userName, TestFormatUtil.getDate(2240, 5, 7, 1, 11, 21), 1000); // very very far
 		cl.addLogTimeDay(userName, TestFormatUtil.getDate(1840, 5, 7, 1, 11, 21), 1000); // very very past
 		
-		cl.addLogTimeDay(userName + "no_mistake", TestFormatUtil.getDate(2012, 5, 7, 1, 10, 21), 100);  // another user
+		cl.addLogTimeDay(user_no_mistakeName, TestFormatUtil.getDate(2012, 5, 7, 1, 10, 21), 100);  // another user
 		 
-		assertEquals(100, cl.getLogTimeDay(userName + "no_mistake", TestFormatUtil.getDate(2012, 5, 7, 1, 10, 20)));		
+		assertEquals(100, cl.getLogTimeDay(user_no_mistakeName, TestFormatUtil.getDate(2012, 5, 7, 1, 10, 20)));		
 		
 		assertEquals(2, cl.getLogDays(userName, TestFormatUtil.getDate(2012, 5, 6, 1, 11, 20), TestFormatUtil.getDate(2012, 5, 7, 1, 5, 20)));
 		assertEquals(4, cl.getLogDays(userName, TestFormatUtil.getDate(1912, 5, 6, 1, 11, 20), TestFormatUtil.getDate(2112, 5, 7, 1, 5, 20)));
 		
-		cl.deleteAccount(userName);
-		assertEquals(100, cl.getLogTimeDay(userName + "no_mistake", TestFormatUtil.getDate(2012, 5, 7, 1, 10, 20)));		
+		cl.deleteUser(user);
+		assertEquals(100, cl.getLogTimeDay(user_no_mistakeName, TestFormatUtil.getDate(2012, 5, 7, 1, 10, 20)));		
 		assertEquals(0, cl.getLogDays(userName, TestFormatUtil.getDate(1912, 5, 6, 1, 11, 20), TestFormatUtil.getDate(2112, 5, 7, 1, 5, 20)));
 		
-		cl.deleteAccount(userName + "no_mistake");
+		cl.deleteUser(user_no_mistake);
 		assertEquals(0, cl.getLogDays(userName, TestFormatUtil.getDate(1912, 5, 6, 1, 11, 20), TestFormatUtil.getDate(2112, 5, 7, 1, 5, 20)));
-		assertEquals(0, cl.getLogDays(userName + "no_mistake", TestFormatUtil.getDate(1912, 5, 6, 1, 11, 20), TestFormatUtil.getDate(2112, 5, 7, 1, 5, 20)));
+		assertEquals(0, cl.getLogDays(user_no_mistakeName, TestFormatUtil.getDate(1912, 5, 6, 1, 11, 20), TestFormatUtil.getDate(2112, 5, 7, 1, 5, 20)));
 		
 	}
 }

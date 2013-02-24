@@ -315,12 +315,10 @@ public class Account implements AccountInterface {
 		return new Boolean(true);
 	}
 
-	public void deleteUser(UserId id) throws CassandraException
+	public void deleteUserAccount(UserId id) throws CassandraException
 	{
-		oppManager.deleteUser(id);
-		valuesManager.deleteUser(id);
-		siteManager.deleteUser(id);
 		deleteAccount(id.userName);
+		UserDataCentralManager.deleteUser(id);
 	}
 	
 	protected Map<String, String> getTestAccountList() throws CassandraException
@@ -348,7 +346,7 @@ public class Account implements AccountInterface {
 			{
 				String userName = testAccountList.get(key);				
 				System.out.println("Too old, delete: " + userName);
-				deleteUser(new UserId(userName, "", UserId.UserType.USER_TYPE_SEEKER));
+				deleteUserAccount(new UserId(userName, "", UserId.UserType.USER_TYPE_SEEKER));
 				CassandraAccessor.deleteColumn(COLUMN_FAMILY_TEST_LIST, CONSTANT_TEST_LIST_ROW, key);
 			}
 		}
@@ -399,6 +397,7 @@ public class Account implements AccountInterface {
 				Lang.getTestLastName(langStr));
 		createAccountWithTokenNoMail(result, info, langStr);
 		validateAccount(userName, userName);
+		UserDataCentralManager.createTestUser(result, langStr);
 		return result;
 	}
 

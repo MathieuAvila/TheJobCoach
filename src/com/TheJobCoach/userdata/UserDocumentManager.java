@@ -16,7 +16,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentRevision;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 
-public class UserDocumentManager {
+public class UserDocumentManager implements IUserDataManager {
 
 	final static String COLUMN_FAMILY_NAME_LIST = "documentlist";
 	final static String COLUMN_FAMILY_NAME_DATA = "documentdata";
@@ -25,6 +25,18 @@ public class UserDocumentManager {
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
 	static ColumnFamilyDefinition cfDefContent = null;
+
+	static UserDocumentManager instance = new UserDocumentManager();
+
+	public static UserDocumentManager getInstance() 
+	{
+		return instance;
+	}
+
+	static 
+	{
+		UserDataCentralManager.addManager(instance);
+	}
 
 	UserDocumentManager()
 	{
@@ -314,11 +326,27 @@ public class UserDocumentManager {
 		return (resultReq != null);
 	}
 
-	static UserDocumentManager docManager = null;
-	public static UserDocumentManager getInstance() 
+	@Override
+	public void createUser(UserId user)
 	{
-		if (docManager == null)
-			docManager = new UserDocumentManager();
-		return docManager;
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteUser(UserId user) throws CassandraException
+	{
+		Vector<UserDocumentId> list = getUserDocumentIdList(user);
+		for (UserDocumentId doc: list) 
+		{
+			deleteUserDocument(user, doc.ID);
+		}
+	}
+
+	@Override
+	public void createTestUser(UserId user, String lang)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

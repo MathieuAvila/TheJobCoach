@@ -8,13 +8,14 @@ import java.util.Map;
 import java.util.Set;
 
 import com.TheJobCoach.util.CassandraAccessor;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
 
-public class ConnectionLog {
+public class ConnectionLog implements IUserDataManager {
 
 	static ColumnFamilyDefinition cfDef = null;
 
@@ -25,11 +26,19 @@ public class ConnectionLog {
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_CONNECTIONLOG, cfDef);
 	}
 	
-	public void deleteAccount(String userName) throws CassandraException
+	static ConnectionLog instance = new ConnectionLog();
+	
+	static 
 	{
-		if (userName != null)
+		UserDataCentralManager.addManager(instance);
+	}
+	
+	@Override
+	public void deleteUser(UserId user) throws CassandraException
+	{
+		if (user != null)
 		{
-			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONNECTIONLOG, userName);
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONNECTIONLOG, user.userName);
 			//System.out.println("DELETED CONNECTION LOG: " + userName);
 		}
 	}
@@ -72,5 +81,16 @@ public class ConnectionLog {
 			count += Integer.parseInt(v);
 		}
 		return count;
+	}
+
+	@Override
+	public void createUser(UserId user)
+	{
+		
+	}
+	@Override
+	public void createTestUser(UserId user, String lang)
+	{
+		
 	}
 }
