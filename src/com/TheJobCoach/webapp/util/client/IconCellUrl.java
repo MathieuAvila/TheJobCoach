@@ -50,8 +50,7 @@ public class IconCellUrl implements Cell<String> {
     SafeHtml imageWrapperTop(String direction, SafeHtml image);
   }
   
-  static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
-  static ImageResource res = wpImageBundle.urlLink();
+  private static final ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
   
   /**
    * The default spacing between the icon and the text in pixels.
@@ -68,16 +67,38 @@ public class IconCellUrl implements Cell<String> {
   private final int imageWidth;
 
   private final SafeHtml placeHolderHtml;
-
-  /**
-   * Construct a new {@link IconCellDecorator}. The icon and the content will be
-   * middle aligned by default.
-   * 
-   * @param icon the icon to use
-   * @param cell the cell to decorate
-   */
+  
+  private static final ImageResource defaultImage =  wpImageBundle.urlLink();
+  private ImageResource image = defaultImage;
+  
+  public interface IUrlBuilder
+  {
+	  String getUrlFromValue(String value);
+	  String getTextFromValue(String value);
+  }
+ 
+  private static IUrlBuilder defaultBuilder = new IUrlBuilder()
+  {
+	@Override
+	public String getUrlFromValue(String value)
+	{
+		return value;
+	}
+	@Override
+	public String getTextFromValue(String value)
+	{
+		return null;
+	}	  
+  };
+ 
+  private IUrlBuilder myUrlBuilder = defaultBuilder;
+  
   public IconCellUrl(Cell<String> cell) {
-    this(cell, HasVerticalAlignment.ALIGN_MIDDLE, DEFAULT_SPACING);
+	  this(cell, HasVerticalAlignment.ALIGN_MIDDLE, DEFAULT_SPACING, defaultBuilder, defaultImage);
+  }
+
+  public IconCellUrl(Cell<String> cell, IUrlBuilder builder, ImageResource image) {
+	  this(cell, HasVerticalAlignment.ALIGN_MIDDLE, DEFAULT_SPACING, builder, image);
   }
 
   /**
@@ -89,13 +110,15 @@ public class IconCellUrl implements Cell<String> {
    * @param spacing the pixel space between the icon and the cell
    */
   public IconCellUrl(Cell<String> cell,
-      VerticalAlignmentConstant valign, int spacing) {
+      VerticalAlignmentConstant valign, int spacing, IUrlBuilder builder, ImageResource image) {
     if (template == null) {
       template = GWT.create(Template.class);
     }
+    this.image = image; 
     this.cell = cell;
-    this.imageWidth = res.getWidth() + spacing;
-    this.placeHolderHtml = getImageHtml(res, valign, true);
+    this.imageWidth = image.getWidth() + spacing;
+    this.placeHolderHtml = getImageHtml(image, valign, true);
+    myUrlBuilder = builder;    
   }
 
   public boolean dependsOnSelection() {
@@ -140,10 +163,15 @@ public class IconCellUrl implements Cell<String> {
 
   protected SafeHtml getIconHtml(String value) 
   {
-	  SafeHtml iconHTML = getImageHtml(wpImageBundle.urlLink(), HasVerticalAlignment.ALIGN_MIDDLE, false); 
-	  SafeHtml linkHtml = SafeHtmlUtils.fromSafeConstant("<a style='cursor: pointer;' onClick='javascript:window.open(\"" + value + "\", \"opportunity\")'>" + iconHTML.asString() + "</a>") ;
+	  String text = myUrlBuilder.getTextFromValue(value);
+	  if (text != null) text = "<div>"+ text + "</div>"; else text="";
+	  SafeHtml iconHTML = getImageHtml(image, HasVerticalAlignment.ALIGN_MIDDLE, false); 
+	  SafeHtml linkHtml = SafeHtmlUtils.fromSafeConstant("<a style='cursor: pointer;' onClick='javascript:window.open(\"" 
+	  + myUrlBuilder.getUrlFromValue(value) 
+	  + "\", \"opportunity\")'>" 
+	  + iconHTML.asString() 
+	  + text + "</a>") ;
 	return linkHtml;
-   // return getImageHtml(wpImageBundle.urlLink(), HasVerticalAlignment.ALIGN_MIDDLE, false);
   }
 
   protected boolean isIconUsed(String value) {

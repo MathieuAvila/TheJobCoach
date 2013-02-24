@@ -1,15 +1,19 @@
 package com.TheJobCoach.webapp.util.client;
 
+import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 
 public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 
-	enum COLUMN_TYPE {URL, DELETE, UPDATE, RIGHT};
-
+	enum COLUMN_TYPE {URL, DELETE, UPDATE, RIGHT, EMAIL};
+	
+	static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
+	  
 	public interface GetValue<C, D> {
 		C getValue(D contact);
 	}
@@ -37,6 +41,35 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		};
 		IconCellUrl iconCellUrl = new IconCellUrl(anchorcolumn);
 		Column<DocType, String> columnUrl = specialAddColumn(iconCellUrl, getter,
+				new FieldUpdater<DocType, String>() {
+			public void update(int index, DocType object, String value) {				
+			}
+		});
+		addColumn(columnUrl, "");
+		setColumnWidth(columnUrl, "20px");
+	}
+
+	public void addColumnEmail(GetValue<String, DocType> getter)
+	{
+		// Create URL column.
+		ClickableTextCell anchorcolumn = new ClickableTextCell()
+		{			
+		};
+		IconCellUrl iconCellEmail = new IconCellUrl(anchorcolumn, new IconCellUrl.IUrlBuilder()
+		{			
+			@Override
+			public String getUrlFromValue(String value)
+			{
+				return "mailto:" + value;
+			}
+
+			@Override
+			public String getTextFromValue(String value)
+			{				
+				return value;
+			}
+		}, wpImageBundle.emailLink());
+		Column<DocType, String> columnUrl = specialAddColumn(iconCellEmail, getter,
 				new FieldUpdater<DocType, String>() {
 			public void update(int index, DocType object, String value) {				
 			}

@@ -13,6 +13,7 @@ import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -248,21 +249,12 @@ public class ContentExternalContact implements EntryPoint {
 			}
 		};
 
-		// Create location column.
+		// Create organization column.
 		TextColumn<ExternalContact> organizationColumn = new TextColumn<ExternalContact>() {
 			@Override
 			public String getValue(ExternalContact ExternalContact) 
 			{
 				return ExternalContact.organization;
-			}
-		};
-
-		// Create location column.
-		TextColumn<ExternalContact> emailColumn = new TextColumn<ExternalContact>() {
-			@Override
-			public String getValue(ExternalContact ExternalContact) 
-			{
-				return ExternalContact.email;
 			}
 		};
 
@@ -282,7 +274,13 @@ public class ContentExternalContact implements EntryPoint {
 		cellTable.addColumn(firstNameColumn, langExternalContact._TextFirstName());
 		cellTable.addColumn(lastColumn, langExternalContact._TextLastName());
 		cellTable.addColumn(organizationColumn, langExternalContact._Text_Organization());
-		cellTable.addColumn(emailColumn, langExternalContact._Text_Email());
+		cellTable.addColumnEmail(new GetValue<String, ExternalContact>() {
+			@Override
+			public String getValue(ExternalContact contact)
+			{				
+				return contact.email;
+			}			
+		});
 		cellTable.addColumn(phoneColumn, langExternalContact._Text_Phone());
 		cellTable.getColumnSortList().push(firstNameColumn);	
 		cellTable.setStyleName("filecelltable");

@@ -68,6 +68,9 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("web_24.png")
 	ImageResource urlLink();
+	
+	@Source("email-24.png")
+	ImageResource emailLink();
 
 	@Source("logout_32.png")
 	ImageResource urlLogout();
