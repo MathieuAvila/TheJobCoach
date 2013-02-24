@@ -70,7 +70,7 @@ public class TestUserOpportunitiesManager {
 		assertEquals(op1.url, opRef.url);
 		assertEquals(op1.companyId, opRef.companyId);
 		assertEquals(op1.contractType, opRef.contractType);
-		assertEquals(op1.salary, opRef.salary);
+		assertEquals(op1.salary, opRef.salary, 0.1);
 		assertEquals(op1.startDate, opRef.startDate);
 		assertEquals(op1.endDate, opRef.endDate);
 		assertEquals(op1.location, opRef.location);
