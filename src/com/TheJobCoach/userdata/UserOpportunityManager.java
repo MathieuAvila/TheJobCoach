@@ -28,7 +28,7 @@ public class UserOpportunityManager {
 		cfDefData = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_DATA, cfDefData);
 	}
 
-	public Vector<UserOpportunity> getOpportunitiesShortList(UserId id, String listName) throws CassandraException 
+	public Vector<UserOpportunity> getOpportunitiesList(UserId id, String listName) throws CassandraException 
 	{	
 		String key = id.userName + "#" + listName;
 		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_LIST, key);
@@ -37,7 +37,7 @@ public class UserOpportunityManager {
 			return result;
 		for (String oppId: resultReq.keySet())
 		{
-			UserOpportunity opp = getOpportunityShort(id, oppId);
+			UserOpportunity opp = getOpportunityLong(id, oppId);
 			if (opp == null)
 			{
 				deleteUserOpportunityFromList(id, oppId, listName);

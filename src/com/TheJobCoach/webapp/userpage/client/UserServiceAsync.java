@@ -32,7 +32,7 @@ public interface UserServiceAsync {
 
 	public void getNews(UserId id, AsyncCallback<Vector<NewsInformation>> callback) throws CassandraException;
 	
-	public void getUserOpportunityShortList(UserId id, String list, AsyncCallback<Vector<UserOpportunity>> callback) throws CassandraException;
+	public void getUserOpportunityList(UserId id, String list, AsyncCallback<Vector<UserOpportunity>> callback) throws CassandraException;
 	public void getUserOpportunity(UserId id, String oppId, AsyncCallback<UserOpportunity> callback) throws CassandraException;
 	public void setUserOpportunity(UserId id, String list, UserOpportunity opp, AsyncCallback<String> callback) throws CassandraException;
 	public void deleteUserOpportunity(UserId id, String oppId, AsyncCallback<String> callback) throws CassandraException;

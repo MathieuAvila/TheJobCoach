@@ -45,7 +45,7 @@ public class ReportAction
 		UserLogManager logManager = new UserLogManager();
 		includeTitle(start, end);
 		Vector<UserOpportunity> oppList = 
-				oppManager.getOpportunitiesShortList(user, UserOpportunityManager.MANAGED_LIST);
+				oppManager.getOpportunitiesList(user, UserOpportunityManager.MANAGED_LIST);
 		for (UserOpportunity opp: oppList)
 		{
 			Vector<UserLogEntry> logList = logManager.getLogList(user, opp.ID);

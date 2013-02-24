@@ -81,12 +81,12 @@ public class TestUserOpportunitiesManager {
 	@Test
 	public void testCleanup() throws CassandraException
 	{
-		Vector<UserOpportunity> idList = manager.getOpportunitiesShortList(id, "managed");
+		Vector<UserOpportunity> idList = manager.getOpportunitiesList(id, "managed");
 		for (UserOpportunity oppId : idList)
 		{
 			manager.deleteUserOpportunity(id, oppId.ID);
 		}
-		idList = manager.getOpportunitiesShortList(id2, "managed");
+		idList = manager.getOpportunitiesList(id2, "managed");
 		for (UserOpportunity oppId : idList)
 		{
 			manager.deleteUserOpportunity(id2, oppId.ID);
@@ -103,11 +103,11 @@ public class TestUserOpportunitiesManager {
 	
 	@Test
 	public void testGetUserOpportunityList() throws CassandraException {
-		Vector<UserOpportunity> result = manager.getOpportunitiesShortList(id, "managed");
+		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
 		assertEquals(2, result.size());
 		assertEquals(result.get(0).ID, "opp1");
 		assertEquals(result.get(1).ID, "opp2");
-		result = manager.getOpportunitiesShortList(id2, "managed");
+		result = manager.getOpportunitiesList(id2, "managed");
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "opp3");		
 	}
@@ -135,7 +135,7 @@ public class TestUserOpportunitiesManager {
 	@Test
 	public void testDeleteUserOpportunity() throws CassandraException {
 		manager.deleteUserOpportunity(id, "opp1");
-		Vector<UserOpportunity> result = manager.getOpportunitiesShortList(id, "managed");
+		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
 		System.out.println(result);
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "opp2");
@@ -143,11 +143,11 @@ public class TestUserOpportunitiesManager {
 	
 	@Test
 	public void testDeleteUser() throws CassandraException {
-		Vector<UserOpportunity> result = manager.getOpportunitiesShortList(id, "managed");
+		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
 		System.out.println(result);
 		assertEquals(1, result.size());
 		manager.deleteUser(id);
-		result = manager.getOpportunitiesShortList(id, "managed");
+		result = manager.getOpportunitiesList(id, "managed");
 		System.out.println(result);
 		assertEquals(0, result.size());		
 	}

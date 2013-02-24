@@ -34,7 +34,7 @@ public interface UserService extends RemoteService
 
 	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException;
 	
-	public Vector<UserOpportunity> getUserOpportunityShortList(UserId id, String list) throws CassandraException;
+	public Vector<UserOpportunity> getUserOpportunityList(UserId id, String list) throws CassandraException;
 	public UserOpportunity getUserOpportunity(UserId id, String oppId) throws CassandraException;
 	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException;
 	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException;

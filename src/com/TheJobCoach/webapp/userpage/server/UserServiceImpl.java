@@ -96,9 +96,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 
 	@Override
-	public Vector<UserOpportunity> getUserOpportunityShortList(UserId id,
+	public Vector<UserOpportunity> getUserOpportunityList(UserId id,
 			String list) throws CassandraException {
-		return userOpportunityManager.getOpportunitiesShortList(id, list);
+		return userOpportunityManager.getOpportunitiesList(id, list);
 	}
 
 	@Override

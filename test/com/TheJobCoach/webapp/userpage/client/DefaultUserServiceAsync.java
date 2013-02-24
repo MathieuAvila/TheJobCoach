@@ -74,7 +74,7 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 		
 	}
 	@Override
-	public void getUserOpportunityShortList(UserId id, String list,
+	public void getUserOpportunityList(UserId id, String list,
 			AsyncCallback<Vector<UserOpportunity>> callback)
 			throws CassandraException {
 		// TODO Auto-generated method stub

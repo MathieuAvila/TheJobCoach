@@ -78,7 +78,7 @@ public class TestReportAction {
 	public static void prepareUserContextStatic() throws CassandraException
 	{
 		UserOpportunityManager manager = new UserOpportunityManager();	
-		Vector<UserOpportunity> idList = manager.getOpportunitiesShortList(user, "managed");
+		Vector<UserOpportunity> idList = manager.getOpportunitiesList(user, "managed");
 		for (UserOpportunity oppId : idList)
 		{
 			manager.deleteUserOpportunity(user, oppId.ID);

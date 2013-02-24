@@ -127,7 +127,7 @@ public class ContentUserOpportunity implements EntryPoint {
 			}
 		};
 		try {
-			userService.getUserOpportunityShortList(user, "managed", callback);
+			userService.getUserOpportunityList(user, "managed", callback);
 		}
 		catch (CassandraException e) 
 		{
