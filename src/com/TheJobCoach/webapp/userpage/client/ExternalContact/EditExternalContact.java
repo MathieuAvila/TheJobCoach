@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -38,11 +39,11 @@ public class EditExternalContact implements EntryPoint, IChanged {
 	CheckedTextField textBoxLastName = new CheckedTextField(".+");
 	CheckedLabel lblLastName = new CheckedLabel(langExternalContact._TextLastName(), true, textBoxLastName);
 	CheckedTextField textBoxEmail = new CheckedTextField(".+@.+|");
-	CheckedLabel lblEmail = new CheckedLabel(langExternalContact._Text_Email(), true, textBoxEmail);
-	CheckedTextField textBoxPhone = new CheckedTextField("[0-9 \\.]+");
-	CheckedLabel lblPhone = new CheckedLabel(langExternalContact._Text_Phone(), true, textBoxPhone);
-	CheckedTextField textBoxOrganization = new CheckedTextField(".*");
-	CheckedLabel lblOrganization = new CheckedLabel(langExternalContact._Text_Organization(), true, textBoxOrganization);
+	CheckedLabel lblEmail = new CheckedLabel(langExternalContact._Text_Email(), false, textBoxEmail);
+	CheckedTextField textBoxPhone = new CheckedTextField("[0-9 \\.]*");
+	CheckedLabel lblPhone = new CheckedLabel(langExternalContact._Text_Phone(), false, textBoxPhone);
+	TextBox textBoxOrganization = new TextBox();
+	Label lblOrganization = new Label(langExternalContact._Text_Organization());
 	RichTextArea textAreaPersonalNote = new RichTextArea();
 	Label lblPersonalNote = new Label(langExternalContact._Text_PersonalNote());
 
@@ -155,7 +156,6 @@ public class EditExternalContact implements EntryPoint, IChanged {
 		textBoxLastName.registerListener(this);
 		textBoxEmail.registerListener(this);
 		textBoxPhone.registerListener(this);
-		textBoxOrganization.registerListener(this);
 		
 		changed(false, true, false);
 	}
@@ -170,7 +170,6 @@ public class EditExternalContact implements EntryPoint, IChanged {
 		setOk = setOk && textBoxLastName.isValid();
 		setOk = setOk && textBoxEmail.isValid();
 		setOk = setOk && textBoxPhone.isValid();
-		setOk = setOk && textBoxOrganization.isValid();
 		okCancel.getOk().setEnabled(setOk);	
 	}
 
