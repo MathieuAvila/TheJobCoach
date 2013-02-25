@@ -103,7 +103,7 @@ public class ComponentDocumentList extends VerticalPanel
 				new FieldUpdater<UserDocumentId, String>() {
 					@Override
 					public void update(int index, UserDocumentId object, String value) {
-						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encode(object.updateId) + "&userid=" + URL.encode(userId.userName)+ "&token=" + URL.encode(userId.token);
+						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encodeQueryString(object.updateId) + "&userid=" + URL.encodeQueryString(userId.userName)+ "&token=" + URL.encodeQueryString(userId.token);
 						DownloadIFrame iframe = new DownloadIFrame(copyURL);
 						simplePanelCenter.add(iframe);
 					}},

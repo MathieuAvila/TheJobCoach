@@ -192,16 +192,16 @@ public class ContentMyReports implements EntryPoint {
 			{
 				String cookie = LocaleInfo.getLocaleCookieName();
 				String cookieLang = com.google.gwt.user.client.Cookies.getCookie(cookie);
-				String copyURL = GWT.getModuleBaseURL() + "DownloadReport?reporttype="+URL.encode("reportaction")
-						+ "&detailopp=" + URL.encode(tfDetailOpp.getValue())
-						+ "&detaillog=" + URL.encode(tfDetailLog.getValue())
-						+ "&logperiod=" + URL.encode(tfLogPeriod.getValue())
-						+ "&start=" + URL.encode(getStartDate()) 
-						+ "&end=" + URL.encode(getEndDate())
-						+ "&format=" + URL.encode(tfFormat.getValue())
-						+ "&lang=" + URL.encode(cookieLang)
-						+ "&userid=" + URL.encode(user.userName)
-						+ "&token=" + URL.encode(user.token);
+				String copyURL = GWT.getModuleBaseURL() + "DownloadReport?reporttype="+URL.encodeQueryString("reportaction")
+						+ "&detailopp=" + URL.encodeQueryString(tfDetailOpp.getValue())
+						+ "&detaillog=" + URL.encodeQueryString(tfDetailLog.getValue())
+						+ "&logperiod=" + URL.encodeQueryString(tfLogPeriod.getValue())
+						+ "&start=" + URL.encodeQueryString(getStartDate()) 
+						+ "&end=" + URL.encodeQueryString(getEndDate())
+						+ "&format=" + URL.encodeQueryString(tfFormat.getValue())
+						+ "&lang=" + URL.encodeQueryString(cookieLang)
+						+ "&userid=" + URL.encodeQueryString(user.userName)
+						+ "&token=" + URL.encodeQueryString(user.token);
 				System.out.println(copyURL);
 				DownloadIFrame iframe = new DownloadIFrame(copyURL);
 				simplePanelCenter.add(iframe);
