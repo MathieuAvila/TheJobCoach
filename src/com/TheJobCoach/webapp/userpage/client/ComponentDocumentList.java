@@ -88,17 +88,7 @@ public class ComponentDocumentList extends VerticalPanel
 			}
 		};
 		cellTable.addColumn(nameColumn, lang._TextName());
-		
-		// Create file column.
-		TextColumn<UserDocumentId> fileColumn = new TextColumn<UserDocumentId>() 	{
-			@Override
-			public String getValue(UserDocumentId document) 
-			{
-				return document.fileName;
-			}
-		};
-		cellTable.addColumn(fileColumn, lang._TextFilename());
-		
+
 		cellTable.addColumnWithIconCellFile(
 				new FieldUpdater<UserDocumentId, String>() {
 					@Override
