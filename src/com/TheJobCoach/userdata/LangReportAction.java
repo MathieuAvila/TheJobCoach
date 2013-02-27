@@ -33,9 +33,9 @@ public class LangReportAction
 			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("LangReportAction_en.properties"), "UTF-8");
 			langProp.get("en").load(isr);
 
-			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/LangLogEntry_fr.properties"), "UTF-8");
+			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/Opportunity/LangLogEntry_fr.properties"), "UTF-8");
 			langPropWebapp.get("fr").load(isr);
-			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/LangLogEntry_en.properties"), "UTF-8");
+			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/Opportunity/LangLogEntry_en.properties"), "UTF-8");
 			langPropWebapp.get("en").load(isr);
 
 			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/Lang_fr.properties"), "UTF-8");
