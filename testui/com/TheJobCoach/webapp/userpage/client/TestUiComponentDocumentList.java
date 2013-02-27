@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.Document.ComponentDocumentList;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;

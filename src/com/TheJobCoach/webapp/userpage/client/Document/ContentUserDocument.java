@@ -1,11 +1,15 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.client.EditUserDocument.EditUserDocumentResult;
+import com.TheJobCoach.webapp.userpage.client.DownloadIFrame;
+import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.UserService;
+import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Document.EditUserDocument.EditUserDocumentResult;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;

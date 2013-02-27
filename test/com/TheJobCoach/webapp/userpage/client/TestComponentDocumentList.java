@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.Document.ComponentDocumentList;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
