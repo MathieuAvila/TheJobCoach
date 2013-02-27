@@ -13,8 +13,10 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
+import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 
+@GwtModule("com.TheJobCoach.webapp.util.Util")
 public class TestClientUserValuesUtils extends GwtTest 
 {
 

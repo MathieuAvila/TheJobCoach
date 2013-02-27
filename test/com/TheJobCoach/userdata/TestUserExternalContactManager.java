@@ -13,18 +13,10 @@ import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.CoachTestUtils;
 
 public class TestUserExternalContactManager {
 	
-	@SuppressWarnings("deprecation")
-	static Date getDate(int year, int month, int day)
-	{
-		Date result = new Date();
-		result.setDate(day);
-		result.setMonth(month);
-		result.setYear(year - 1900);
-		return result;
-	}
 	static UserExternalContactManager manager = new UserExternalContactManager();
 	
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
@@ -38,13 +30,13 @@ public class TestUserExternalContactManager {
 	static String contact22 = "contact2";
 	static String contact32 = "contact3";
 
-	static ExternalContact ujs1 = new ExternalContact(contact1, "firstName1", "lastName1", "email1", "phone1", "personalNote1", "organization1", new UpdatePeriod(getDate(2000, 1, 1), 2, PeriodType.DAY));
-	static ExternalContact ujs2 = new ExternalContact(contact2, "firstName2", "lastName2", "email2", "phone2", "personalNote2", "organization2", new UpdatePeriod(getDate(2000, 1, 1), 2, PeriodType.DAY));
-	static ExternalContact ujs3 = new ExternalContact(contact3, "firstName3", "lastName3", "email3", "phone3", "personalNote3", "organization3", new UpdatePeriod(getDate(2000, 1, 1), 2, PeriodType.DAY));
+	static ExternalContact ujs1 = new ExternalContact(contact1, "firstName1", "lastName1", "email1", "phone1", "personalNote1", "organization1", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
+	static ExternalContact ujs2 = new ExternalContact(contact2, "firstName2", "lastName2", "email2", "phone2", "personalNote2", "organization2", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
+	static ExternalContact ujs3 = new ExternalContact(contact3, "firstName3", "lastName3", "email3", "phone3", "personalNote3", "organization3", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
 	
-	static ExternalContact ujs21 = new ExternalContact(contact12, "firstName12", "lastName12", "email12", "phone21", "personalNote12", "organization12", new UpdatePeriod(getDate(2000, 1, 1), 2, PeriodType.DAY));
-	static ExternalContact ujs22 = new ExternalContact(contact22, "firstName22", "lastName22", "email22", "phone22", "personalNote22", "organization22", new UpdatePeriod(getDate(2000, 1, 1), 2, PeriodType.DAY));
-	static ExternalContact ujs23 = new ExternalContact(contact32, "firstName32", "lastName32", "email32", "phone23", "personalNote32", "organization32", new UpdatePeriod(getDate(2000, 1, 1), 2, PeriodType.DAY));
+	static ExternalContact ujs21 = new ExternalContact(contact12, "firstName12", "lastName12", "email12", "phone21", "personalNote12", "organization12", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
+	static ExternalContact ujs22 = new ExternalContact(contact22, "firstName22", "lastName22", "email22", "phone22", "personalNote22", "organization22", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
+	static ExternalContact ujs23 = new ExternalContact(contact32, "firstName32", "lastName32", "email32", "phone23", "personalNote32", "organization32", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
 	
 	@Test
 	public void testCleanUsercontact() throws CassandraException

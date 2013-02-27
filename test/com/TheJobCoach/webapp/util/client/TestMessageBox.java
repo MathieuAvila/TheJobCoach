@@ -6,6 +6,7 @@ import org.junit.Test;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
+
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class TestMessageBox extends GwtTest {
 

@@ -245,7 +245,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		cellTable.addColumn(nameColumn, lang._TextName());
 		cellTable.addColumn(descriptionColumn, lang._TextDescription());
 		cellTable.addColumn(downloadLastUpdate, lang._TextLastUpdate());
-		cellTable.getColumnSortList().push(nameColumn);		
+		//cellTable.getColumnSortList().push(nameColumn);		
 
 		dataProvider.addDataDisplay(cellTable);
 		dataProvider.updateRowCount(userDocumentList.size(), true);
