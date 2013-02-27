@@ -1,8 +1,12 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.ComponentDocumentList;
+import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.UserService;
+import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
@@ -58,12 +62,12 @@ public class EditLogEntry implements EntryPoint {
 	String oppId;
 	Vector<UserDocumentId> userDocumentList;
 	
-	public EditLogEntry(Panel panel, UserLogEntry _currentLogEntry, String _oppId, UserId _user, EditLogEntryResult _result)
+	public EditLogEntry(Panel panel, UserLogEntry _currentLogEntry, String _oppId, UserId _user, com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry.EditLogEntryResult editLogEntryResult)
 	{
 		user = _user;
 		rootPanel = panel;
 		currentLogEntry = _currentLogEntry;
-		result = _result;
+		result = editLogEntryResult;
 		oppId = _oppId;
 	}
 

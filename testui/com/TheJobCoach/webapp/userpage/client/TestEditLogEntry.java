@@ -2,7 +2,8 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
-import com.TheJobCoach.webapp.userpage.client.EditLogEntry.EditLogEntryResult;
+import com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry;
+import com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry.EditLogEntryResult;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.HorizontalPanel;

@@ -1,19 +1,19 @@
 package com.TheJobCoach.userdata;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 import org.junit.Test;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.TheJobCoach.CoachTestUtils;
 
 public class TestUserExternalContactManager {
 	

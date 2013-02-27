@@ -1,4 +1,4 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;

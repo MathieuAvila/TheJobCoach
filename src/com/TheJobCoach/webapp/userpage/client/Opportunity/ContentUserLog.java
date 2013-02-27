@@ -1,10 +1,12 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
 import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.client.EditLogEntry.EditLogEntryResult;
+import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.UserService;
+import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
@@ -149,7 +151,7 @@ public class ContentUserLog implements EntryPoint {
 	{
 		public void onClick(ClickEvent event)
 		{
-			EditLogEntry eus = new EditLogEntry(rootPanel, null, editedOpportunity.ID, user, new EditLogEntryResult() 
+			EditLogEntry eus = new EditLogEntry(rootPanel, null, editedOpportunity.ID, user, new EditLogEntry.EditLogEntryResult() 
 			{
 				@Override
 				public void setResult(UserLogEntry result) {
@@ -167,7 +169,7 @@ public class ContentUserLog implements EntryPoint {
 
 	void updateLogEntry(UserLogEntry currentLogEntry)
 	{
-		EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, editedOpportunity.ID, user, new EditLogEntryResult() {
+		EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, editedOpportunity.ID, user, new EditLogEntry.EditLogEntryResult() {
 			@Override
 			public void setResult(UserLogEntry result) {
 				System.out.println("Updated new log entry " + result);

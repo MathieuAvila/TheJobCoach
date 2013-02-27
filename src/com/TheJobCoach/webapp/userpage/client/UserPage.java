@@ -5,6 +5,7 @@ import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
 import com.TheJobCoach.webapp.userpage.client.MyGoals.ContentMyGoals;
 import com.TheJobCoach.webapp.userpage.client.MyReports.ContentMyReports;
+import com.TheJobCoach.webapp.userpage.client.Opportunity.ContentUserOpportunity;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.client.MainPage;

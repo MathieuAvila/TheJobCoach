@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.Date;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.Opportunity.ContentUserLog;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.HorizontalPanel;
