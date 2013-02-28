@@ -28,5 +28,12 @@ public interface LangLogEntry extends Constants {
 	String _TextFiles();
 	
 	@Key("done")
-	String _TextDone();	
+	String _TextDone();
+	
+	@Key("questiondeleteeditlogtitle")
+	String _Text_DeleteEditLogTitle();
+
+	@Key("questiondeleteeditlog")
+	String _Text_DeleteEditLog();
+
 }

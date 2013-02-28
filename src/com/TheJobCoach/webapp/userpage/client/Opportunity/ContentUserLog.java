@@ -120,8 +120,8 @@ public class ContentUserLog implements EntryPoint {
 	void deleteLogEntry(final UserLogEntry currentLogEntry)
 	{
 		MessageBox mb = new MessageBox(
-				rootPanel, true, true, MessageBox.TYPE.QUESTION, "Delete user log entry ?", 
-				"Are you sure you wish to delete user log entry " + currentLogEntry.title, new MessageBox.ICallback() {
+				rootPanel, true, true, MessageBox.TYPE.QUESTION, langLogEntry._Text_DeleteEditLogTitle(), 
+				langLogEntry._Text_DeleteEditLog() + currentLogEntry.title + " ? ", new MessageBox.ICallback() {
 					@Override
 					public void complete(boolean ok) {
 						if (ok == true)
@@ -155,7 +155,6 @@ public class ContentUserLog implements EntryPoint {
 			{
 				@Override
 				public void setResult(UserLogEntry result) {
-					System.out.println("Commited new log entry " + result);
 					if (result != null)
 					{
 						getAllContent();
@@ -172,7 +171,6 @@ public class ContentUserLog implements EntryPoint {
 		EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, editedOpportunity.ID, user, new EditLogEntry.EditLogEntryResult() {
 			@Override
 			public void setResult(UserLogEntry result) {
-				System.out.println("Updated new log entry " + result);
 				if (result != null)
 				{					
 					getAllContent();
@@ -188,9 +186,6 @@ public class ContentUserLog implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{			
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		//RootPanel rootPanel = RootPanel.get("centercontent");
 		rootPanel.setSize("100%", "100%");
 		rootPanel.clear();
 
@@ -214,7 +209,6 @@ public class ContentUserLog implements EntryPoint {
 			@Override
 			public String getValue(UserLogEntry userLog) 
 			{
-				System.out.println("USER LOG TYPE " + userLog.type);
 				return langLogEntry.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(userLog.type));
 			}
 		};
@@ -348,13 +342,6 @@ public class ContentUserLog implements EntryPoint {
 		HTML htmlDescriptionhtml = new HTML("", true);
 		simplePanelCenter.add(htmlDescriptionhtml);
 		htmlDescriptionhtml.setSize("100%", "100%");
-
-		Grid grid = new Grid(2, 1);
-		simplePanelCenter.add(grid);
-		grid.setWidth("100%");
-
-		Label lblSource = new Label(lang._TextSource());
-		grid.setWidget(0, 0, lblSource);
 
 		// Add a handler to the new button.
 		NewLogEntryHandler newHandler = new NewLogEntryHandler();
