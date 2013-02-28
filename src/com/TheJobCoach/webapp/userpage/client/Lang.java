@@ -303,4 +303,21 @@ public interface Lang extends Constants {
 	// Personal note
 	@Key("note")
 	String _TextPersonalNote();
+	
+	// Update period
+	@Key("updateperiodtitle")
+	String _TextPeriodTitle();
+	
+	@Key("frequencytype")
+	String _TextPeriodUpdatePeriodFrequencyType();
+	
+	@Key("frequencytypeMap")
+	Map<String, String> frequencyTypeMap();
+	
+	@Key("frequencycount")
+	String _TextPeriodUpdatePeriodFrequencyCount();
+	
+	@Key("lastupdate")
+	String _TextPeriodLastUpdate();
+	
 }
