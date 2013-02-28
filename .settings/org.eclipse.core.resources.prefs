@@ -1,14 +1,18 @@
-#Fri Feb 01 15:42:25 CET 2013
 eclipse.preferences.version=1
 encoding//src/com/TheJobCoach/userdata/LangReportAction_en.properties=UTF-8
 encoding//src/com/TheJobCoach/userdata/LangReportAction_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/mainpage/client/Lang.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/mainpage/client/Lang_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/Account/LangAccount.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/Account/LangAccount_en.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/Account/LangAccount_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/ExternalContact/LangExternalContact.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/ExternalContact/LangExternalContact_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang.properties=UTF-8
-encoding//src/com/TheJobCoach/webapp/userpage/client/LangLogEntry.properties=UTF-8
-encoding//src/com/TheJobCoach/webapp/userpage/client/LangLogEntry_fr.properties=UTF-8
-encoding//src/com/TheJobCoach/webapp/userpage/client/LangMyReports.properties=UTF-8
-encoding//src/com/TheJobCoach/webapp/userpage/client/LangMyReports_en.properties=UTF-8
-encoding//src/com/TheJobCoach/webapp/userpage/client/LangMyReports_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang_en.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/MyReports/LangMyReports.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/MyReports/LangMyReports_en.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/MyReports/LangMyReports_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/Opportunity/LangLogEntry.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/Opportunity/LangLogEntry_fr.properties=UTF-8
