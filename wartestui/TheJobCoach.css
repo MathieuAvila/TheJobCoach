@@ -51,7 +51,7 @@
 
 .label-username
 {
-	font-size: 15px;
+	font-size: 1.0em;
 	font-weight:bold;
 	color:darkred;
 }
@@ -70,27 +70,27 @@
 
 .label-status-ok-c
 {
-	font-size: 15px;
+	font-size: 1.0em;
 	color:black;
 	font-weight:bold;
 }
 
 .label-status-ok-nc
 {
-	font-size: 15px;
+	font-size: 1.0em;
 	color:black;
 }
 
 .label-status-error-c
 {
-	font-size: 15px;
+	font-size: 1.0em;
 	color:red;
 	font-weight:bold;
 }
 
 .label-status-error-nc
 {
-	font-size: 15px;
+	font-size: 1.0em;
 	color:red;
 }
 
@@ -126,7 +126,7 @@ size:24px;
 
 .sendButton {
   display: block;
-  font-size: 16pt;
+  font-size: 1.0em;
 }
 
 .serverResponseLabelError {
@@ -141,17 +141,17 @@ h1 {
   text-align: center;
 }
 .mainpage-label-slogan {
-	font-size: 15px;
+	font-size: 1.0em;
 }
 .mainpage-label-userpass {
-	font-size: 15px;
+	font-size: 1.0em;
 }
 .mainpage-connect {
 	color: Black;
-	font-size: 14px;
+	font-size: 1.0em;
 }
 .mainpage.basdepage {
-	font-size: 12px;
+	font-size: 0.9em;
 	color:green;
 }
 mainpage-content {
@@ -383,4 +383,9 @@ font-size:18px;
 .TodoEvent-content:focus {
   outline: 1px solid #d0c98d;
   overflow: auto;
+}
+
+.gwt-Label {
+	font-size: 1.0em;
+	color:black;
 }
