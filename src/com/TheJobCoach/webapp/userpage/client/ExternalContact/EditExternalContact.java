@@ -146,7 +146,7 @@ public class EditExternalContact implements EntryPoint, IChanged {
 			{
 				okCancel.setEnabled(false);
 				dBox.hide();
-				result.setResult(getExternalContact());	
+				result.setResult(getExternalContact());				
 			}
 		});		
 		vp.add(okCancel);

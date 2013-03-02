@@ -30,8 +30,6 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 /**
@@ -42,7 +40,6 @@ public class ContentExternalContact implements EntryPoint {
 	UserId user;
 
 	final ExtendedCellTable<ExternalContact> cellTable = new ExtendedCellTable<ExternalContact>();
-	ExternalContact currentExternalContact = null;
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
@@ -185,7 +182,6 @@ public class ContentExternalContact implements EntryPoint {
 							}
 							public void onSuccess(String result)
 							{
-								System.out.println("Updated contact: " + result);
 								getAllContent();
 							}
 						});
@@ -193,7 +189,7 @@ public class ContentExternalContact implements EntryPoint {
 				}
 				catch (CassandraException e)
 				{
-					System.out.println(e);
+					MessageBox.messageBoxException(rootPanel, e);
 				}
 			}
 		});
@@ -282,23 +278,8 @@ public class ContentExternalContact implements EntryPoint {
 			}			
 		});
 		cellTable.addColumn(phoneColumn, langExternalContact._Text_Phone());
-		cellTable.getColumnSortList().push(firstNameColumn);	
+		//cellTable.getColumnSortList().push(firstNameColumn);	
 		cellTable.setStyleName("filecelltable");
-
-		// Add a selection model to handle user selection.
-		final SingleSelectionModel<ExternalContact> selectionModel = new SingleSelectionModel<ExternalContact>();
-		cellTable.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler()
-		{
-			public void onSelectionChange(SelectionChangeEvent event) 
-			{
-				ExternalContact selected = selectionModel.getSelectedObject();
-				if (selected != null) 
-				{
-					//setExternalContact(selected);					
-				}
-			}
-		});
 
 		dataProvider.addDataDisplay(cellTable);
 
