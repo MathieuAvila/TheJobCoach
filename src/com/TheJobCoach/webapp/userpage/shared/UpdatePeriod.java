@@ -12,6 +12,25 @@ public class UpdatePeriod implements Serializable {
 	public int length;
 	public PeriodType periodType;
 	
+	static public String periodType2String(PeriodType period)
+	{
+		switch(period)
+		{
+		case DAY: return "DAY";
+		case WEEK:return "WEEK";
+		case MONTH:return "MONTH";
+		}
+		return "DAY";
+	}
+	
+	static public PeriodType string2PeriodType(String period)
+	{
+		if (period.equals("DAY")) return PeriodType.DAY;
+		if (period.equals("WEEK")) return PeriodType.WEEK;
+		if (period.equals("MONTH")) return PeriodType.MONTH;
+		return PeriodType.DAY;
+	}
+	
 	public UpdatePeriod()
 	{
 		periodType = PeriodType.DAY;

@@ -6,8 +6,6 @@ public class ExternalContact implements Serializable {
 
 	private static final long serialVersionUID = 1115255124512443730L;
 
-	public enum PeriodType { DAYS, WEEKS, MONTHS };
-	
 	public String ID;
 	public String firstName;
 	public String lastName;
