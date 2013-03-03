@@ -10,7 +10,6 @@ public class UpdatePeriodAccessor
 {
 	public static String periodTypeToString(UpdatePeriod.PeriodType period)
 	{
-		System.out.println("TOTO" + period);
 		switch(period)
 		{
 		case DAY: return "d";
@@ -33,7 +32,8 @@ public class UpdatePeriodAccessor
 		return new UpdatePeriod(
 				Convertor.toDate(resultReq.get("period_date")), 
 				Convertor.toInt(resultReq.get("period_length")), 
-				periodTypeFromString(resultReq.get("period_type"))
+				periodTypeFromString(resultReq.get("period_type")),
+				Convertor.toBoolean(resultReq.get("period_needrecall"), true)
 				);
 	}
 	
@@ -42,6 +42,7 @@ public class UpdatePeriodAccessor
 		return map
 				.add("period_date", period.last)
 				.add("period_length", period.length)
-				.add("period_type", periodTypeToString(period.periodType));
+				.add("period_type", periodTypeToString(period.periodType))
+				.add("period_needrecall", period.needRecall);
 	}
 }

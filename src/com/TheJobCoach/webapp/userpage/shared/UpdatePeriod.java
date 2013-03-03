@@ -3,11 +3,13 @@ package com.TheJobCoach.webapp.userpage.shared;
 import java.io.Serializable;
 import java.util.Date;
 
-public class UpdatePeriod implements Serializable {
+public class UpdatePeriod implements Serializable  {
 
 	private static final long serialVersionUID = 1116255124512443730L;
 
+	
 	public enum PeriodType { DAY, WEEK, MONTH };
+	public boolean needRecall;
 	public Date last;
 	public int length;
 	public PeriodType periodType;
@@ -33,16 +35,29 @@ public class UpdatePeriod implements Serializable {
 	
 	public UpdatePeriod()
 	{
-		periodType = PeriodType.DAY;
+		periodType = PeriodType.MONTH;
+		length = 1;
 		last = new Date();
+		needRecall = true;
 	}
 
-	public UpdatePeriod(Date last, int length, PeriodType periodType)
+	public UpdatePeriod(Date last, int length, PeriodType periodType, boolean needRecall)
 	{
 		super();
-		this.last = last;
+		init(last, length, periodType, needRecall);
+	}
+
+	public UpdatePeriod(UpdatePeriod update) 
+	{
+		init(update.last, update.length, update.periodType, update.needRecall);
+	}
+
+	void init(Date last, int length, PeriodType periodType, boolean needRecall) 
+	{
+		this.last = (Date) last.clone();
 		this.length = length;
 		this.periodType = periodType;
+		this.needRecall = needRecall;
 	}
 
 }

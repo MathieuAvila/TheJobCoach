@@ -1,9 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client.ExternalContact;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.ComponentUpdatePeriod;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
-import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
@@ -52,6 +52,8 @@ public class EditExternalContact implements EntryPoint, IChanged {
 	ExternalContact currentExternalContact;
 	
 	DialogBlockOkCancel okCancel;
+
+	ComponentUpdatePeriod updatePeriod;
 	
 	public EditExternalContact(Panel panel, ExternalContact _currentExternalContact, UserId _user, EditExternalContactResult editExternalContactResult)
 	{
@@ -92,7 +94,8 @@ public class EditExternalContact implements EntryPoint, IChanged {
 				textBoxEmail.getText(), 
 				textBoxPhone.getText(), 
 				textAreaPersonalNote.getHTML(),
-				textBoxOrganization.getText(), new UpdatePeriod());
+				textBoxOrganization.getText(),
+				currentExternalContact.update);
 	}
 
 	/**
@@ -103,6 +106,10 @@ public class EditExternalContact implements EntryPoint, IChanged {
 	{			
 		final DialogBox dBox = new DialogBox();
 		dBox.setText(currentExternalContact == null ? langExternalContact._TextNewExternalContact() : langExternalContact._TextUpdateExternalContact());
+
+		// Spawn one external contact if necessary
+		currentExternalContact = (ExternalContact) (currentExternalContact == null ? new ExternalContact() : new ExternalContact(currentExternalContact));
+		
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
@@ -148,7 +155,13 @@ public class EditExternalContact implements EntryPoint, IChanged {
 				dBox.hide();
 				result.setResult(getExternalContact());				
 			}
-		});		
+		});
+
+		updatePeriod = new ComponentUpdatePeriod(currentExternalContact.update);
+		updatePeriod.onModuleLoad();
+
+		vp.add(updatePeriod);
+		
 		vp.add(okCancel);
 		dBox.center();
 		

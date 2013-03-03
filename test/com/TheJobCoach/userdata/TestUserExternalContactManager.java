@@ -30,13 +30,13 @@ public class TestUserExternalContactManager {
 	static String contact22 = "contact2";
 	static String contact32 = "contact3";
 
-	static ExternalContact ujs1 = new ExternalContact(contact1, "firstName1", "lastName1", "email1", "phone1", "personalNote1", "organization1", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
-	static ExternalContact ujs2 = new ExternalContact(contact2, "firstName2", "lastName2", "email2", "phone2", "personalNote2", "organization2", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
-	static ExternalContact ujs3 = new ExternalContact(contact3, "firstName3", "lastName3", "email3", "phone3", "personalNote3", "organization3", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
+	static ExternalContact ujs1 = new ExternalContact(contact1, "firstName1", "lastName1", "email1", "phone1", "personalNote1", "organization1", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
+	static ExternalContact ujs2 = new ExternalContact(contact2, "firstName2", "lastName2", "email2", "phone2", "personalNote2", "organization2", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, false));
+	static ExternalContact ujs3 = new ExternalContact(contact3, "firstName3", "lastName3", "email3", "phone3", "personalNote3", "organization3", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
 	
-	static ExternalContact ujs21 = new ExternalContact(contact12, "firstName12", "lastName12", "email12", "phone21", "personalNote12", "organization12", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
-	static ExternalContact ujs22 = new ExternalContact(contact22, "firstName22", "lastName22", "email22", "phone22", "personalNote22", "organization22", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
-	static ExternalContact ujs23 = new ExternalContact(contact32, "firstName32", "lastName32", "email32", "phone23", "personalNote32", "organization32", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY));
+	static ExternalContact ujs21 = new ExternalContact(contact12, "firstName12", "lastName12", "email12", "phone21", "personalNote12", "organization12", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
+	static ExternalContact ujs22 = new ExternalContact(contact22, "firstName22", "lastName22", "email22", "phone22", "personalNote22", "organization22", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
+	static ExternalContact ujs23 = new ExternalContact(contact32, "firstName32", "lastName32", "email32", "phone23", "personalNote32", "organization32", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
 	
 	@Test
 	public void testCleanUsercontact() throws CassandraException
@@ -118,6 +118,7 @@ public class TestUserExternalContactManager {
 		assertEquals(ujs1.update.length, copy_ujs1.update.length);
 		assertEquals(ujs1.update.last, copy_ujs1.update.last);
 		assertEquals(ujs1.update.periodType, copy_ujs1.update.periodType);
+		assertEquals(ujs1.update.needRecall, copy_ujs1.update.needRecall);
 		
 		assertEquals(ujs2.ID, copy_ujs2.ID);
 		assertEquals(ujs2.firstName, copy_ujs2.firstName);
@@ -129,6 +130,7 @@ public class TestUserExternalContactManager {
 		assertEquals(ujs2.update.length, copy_ujs2.update.length);
 		assertEquals(ujs2.update.last, copy_ujs2.update.last);
 		assertEquals(ujs2.update.periodType, copy_ujs2.update.periodType);
+		assertEquals(ujs2.update.needRecall, copy_ujs2.update.needRecall);
 		
 		assertEquals(ujs3.ID, copy_ujs3.ID);
 		assertEquals(ujs3.firstName, copy_ujs3.firstName);
@@ -140,8 +142,7 @@ public class TestUserExternalContactManager {
 		assertEquals(ujs3.update.length, copy_ujs3.update.length);
 		assertEquals(ujs3.update.last, copy_ujs3.update.last);
 		assertEquals(ujs3.update.periodType, copy_ujs3.update.periodType);
-		
-		
+		assertEquals(ujs3.update.needRecall, copy_ujs3.update.needRecall);
 	}
 
 	@Test

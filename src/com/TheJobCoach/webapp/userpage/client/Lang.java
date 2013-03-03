@@ -308,6 +308,9 @@ public interface Lang extends Constants {
 	@Key("updateperiodtitle")
 	String _TextPeriodTitle();
 	
+	@Key("updateperiodneedrecall")
+	String _TextPeriodUpdateNeedRecall();
+	
 	@Key("frequencytype")
 	String _TextPeriodUpdatePeriodFrequencyType();
 	
