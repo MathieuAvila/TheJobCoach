@@ -29,9 +29,14 @@ public class ComponentUpdatePeriod extends CaptionPanel
 	
 	UpdatePeriod obj;
 	
-	public ComponentUpdatePeriod(UpdatePeriod obj)
+	public enum RecallType { RECONTACT, UPDATE };
+	
+	RecallType recontactOrUpdate;
+	
+	public ComponentUpdatePeriod(UpdatePeriod obj, RecallType recontactOrUpdate)
 	{
 		this.obj = obj;
+		this.recontactOrUpdate = recontactOrUpdate;
 	}
 
 	private void checkNeedRecall()
@@ -46,7 +51,7 @@ public class ComponentUpdatePeriod extends CaptionPanel
 	 */
 	public void onModuleLoad()
 	{		
-		setCaptionText(lang._TextPeriodTitle());
+		setCaptionText(recontactOrUpdate ==  RecallType.RECONTACT ? lang._TextPeriodTitleRecall() : lang._TextPeriodTitleUpdate());
 		
 		Grid grid = new Grid(3, 2);
 		grid.setBorderWidth(0);
@@ -108,6 +113,7 @@ public class ComponentUpdatePeriod extends CaptionPanel
 				obj.last = event.getValue();
 			}});
 		dateBox.setValue(obj.last);
+		dateBox.setWidth("100%");
 		checkNeedRecall();
 		setContentWidget(grid);					
 	}

@@ -157,7 +157,7 @@ public class EditExternalContact implements EntryPoint, IChanged {
 			}
 		});
 
-		updatePeriod = new ComponentUpdatePeriod(currentExternalContact.update);
+		updatePeriod = new ComponentUpdatePeriod(currentExternalContact.update, ComponentUpdatePeriod.RecallType.RECONTACT);
 		updatePeriod.onModuleLoad();
 
 		vp.add(updatePeriod);

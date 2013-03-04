@@ -305,8 +305,12 @@ public interface Lang extends Constants {
 	String _TextPersonalNote();
 	
 	// Update period
-	@Key("updateperiodtitle")
-	String _TextPeriodTitle();
+
+	@Key("updateperiodtitlerecall")
+	String _TextPeriodTitleRecall();
+	
+	@Key("updateperiodtitleupdate")
+	String _TextPeriodTitleUpdate();
 	
 	@Key("updateperiodneedrecall")
 	String _TextPeriodUpdateNeedRecall();
