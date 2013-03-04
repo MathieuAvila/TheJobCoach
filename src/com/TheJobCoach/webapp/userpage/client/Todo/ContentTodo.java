@@ -1,4 +1,4 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.Todo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,30 +7,23 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.UserService;
+import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
-import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -44,21 +37,24 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ContentTodo implements EntryPoint {
 
-	final Lang lang = GWT.create(Lang.class);
+	final static Lang lang = GWT.create(Lang.class);
+	final static LangTodo langTodo = GWT.create(LangTodo.class);
 
 	UserId user;
-
-	final ExtendedCellTable<TodoEvent> cellTable = new ExtendedCellTable<TodoEvent>();
-	TodoEvent currentTodoEvent = null;
 
 	public ContentTodo(Panel rootPanel, UserId user) {
 		this.user = user;
@@ -372,25 +368,6 @@ public class ContentTodo implements EntryPoint {
 
 	SurfaceView surface = new SurfaceView(this);
 
-	// Create a data provider.
-	AsyncDataProvider<TodoEvent> dataProvider = new AsyncDataProvider<TodoEvent>() {
-		@Override
-		protected void onRangeChanged(HasData<TodoEvent> display) 
-		{
-			final com.google.gwt.view.client.Range range = display.getVisibleRange();
-			int start = range.getStart();
-			int end = start + range.getLength();
-			if (end >= userTodoEventList.size() ) end = userTodoEventList.size();
-			if (userTodoEventList.size() != 0)
-			{
-				List<TodoEvent> dataInRange = userTodoEventList.subList(start, end);
-				// Push the data back into the list.
-				cellTable.setRowData(start, dataInRange);
-				System.out.println("datainrange: " + dataInRange);
-			}
-		}
-	};
-
 	void getAllContent()
 	{		
 		AsyncCallback<Vector<TodoEvent>> callback = new AsyncCallback<Vector<TodoEvent>>() {
@@ -402,12 +379,7 @@ public class ContentTodo implements EntryPoint {
 			public void onSuccess(Vector<TodoEvent> result) {
 				System.out.println(result);
 				userTodoEventList.clear();
-				userTodoEventList.addAll(result);
-				dataProvider.updateRowCount(userTodoEventList.size(), true);
-				dataProvider.updateRowData(0, userTodoEventList.subList(0, userTodoEventList.size()));
-
-				cellTable.redraw();
-
+				userTodoEventList.addAll(result);				
 				for (TodoEvent todo: userTodoEventList)
 				{
 					surface.onTodoEventReceived(todo);
@@ -420,7 +392,7 @@ public class ContentTodo implements EntryPoint {
 	void deleteTodoEvent(final TodoEvent currentTodoEvent)
 	{
 		MessageBox mb = new MessageBox(rootPanel, true, true, MessageBox.TYPE.QUESTION, 
-				"Confirmation", "Vraiment supprimer ?", new MessageBox.ICallback() {
+				langTodo._TextConfirmDeleteTitle(), langTodo._TextConfirmDelete(), new MessageBox.ICallback() {
 
 			public void complete(boolean ok) {				
 				if(ok)
@@ -487,69 +459,13 @@ public class ContentTodo implements EntryPoint {
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextTodo(), ClientImageBundle.INSTANCE.todoContent());
 
-		/*
-		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<TodoEvent, String>() {
-			@Override
-			public void update(int index, TodoEvent object, String value) {
-				deleteTodoEvent(object);
-			}}	
-				);
-
-		// Create text column.
-		TextColumn<TodoEvent> textColumn = new TextColumn<TodoEvent>() 	{
-			@Override
-			public String getValue(TodoEvent TodoEvent) 
-			{
-				return TodoEvent.trText;
-			}
-		};
-
-		// Create eventDate column.
-		TextColumn<TodoEvent> eventDateColumn = new TextColumn<TodoEvent>() {
-			@Override
-			public String getValue(TodoEvent TodoEvent) 
-			{
-				return TodoEvent.eventDate.toString();
-			}
-		};
-
-		textColumn.setSortable(true);
-		eventDateColumn.setSortable(true);
-
-		cellTable.addColumn(textColumn, lang._TextName());
-		cellTable.addColumn(eventDateColumn, lang._TextDescription());
-
-		// Add a selection model to handle user selection.
-		final SingleSelectionModel<TodoEvent> selectionModel = new SingleSelectionModel<TodoEvent>();
-		cellTable.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler()
-		{
-			public void onSelectionChange(SelectionChangeEvent event) 
-			{
-				TodoEvent selected = selectionModel.getSelectedObject();
-				if (selected != null) 
-				{
-					setTodoEvent(selected);
-				}
-			}
-		});
-		 */
-		dataProvider.addDataDisplay(cellTable);
-		dataProvider.updateRowCount(userTodoEventList.size(), true);
-
-		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
 		getAllContent();
-		cellTable.setRowData(0, userTodoEventList);
-		cellTable.setRowCount(userTodoEventList.size(), true);
-		cellTable.addColumnSortHandler(columnSortHandler);
-
-		//simplePanelCenter.add(cellTable);
-
+		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
 
-		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, "Nouveau post-it");
+		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, langTodo._TextNewPostIt());
 		button.addClickHandler(new ClickHandler()
 		{			
 			public void onClick(ClickEvent event) {
