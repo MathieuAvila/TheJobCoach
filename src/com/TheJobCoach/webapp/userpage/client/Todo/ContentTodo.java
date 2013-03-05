@@ -174,6 +174,9 @@ public class ContentTodo implements EntryPoint {
 				org_w = new_org_w;
 				org_h = new_org_h;
 				
+				if (org_w < 120) org_w = 120;
+				if (org_h < 120) org_h = 120;
+				
 				return result;
 			}
 
@@ -404,6 +407,7 @@ public class ContentTodo implements EntryPoint {
 						}
 						public void onSuccess(Boolean result)
 						{
+							userTodoEventList.remove(currentTodoEvent);
 							surface.confirmRemoveTodoEvent(currentTodoEvent);							
 						}
 					});
@@ -429,7 +433,8 @@ public class ContentTodo implements EntryPoint {
 		case 7: color = TodoEvent.EventColor.YELLOW; break;
 		case 8: color = TodoEvent.EventColor.ORANGE; break;		
 		}
-		TodoEvent event = new TodoEvent("id" + SiteUUID.getDateUuid(), "", "", "", TodoEvent.Priority.URGENT,  new Date(1), color , 11, 1, 100, 100);
+		TodoEvent event = new TodoEvent("id" + SiteUUID.getDateUuid(), "", "", "", TodoEvent.Priority.URGENT,  new Date(1), color , 11, 1, 120, 120);
+		TodoEvent.orderOneTodoEvent(userTodoEventList, event, 1000);
 		surface.onTodoEventCreated(event);
 
 		userService.setTodoEvent(user, event, new AsyncCallback<Boolean>() {
