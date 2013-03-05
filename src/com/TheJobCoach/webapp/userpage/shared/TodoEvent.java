@@ -10,6 +10,8 @@ public class TodoEvent implements Serializable {
 	private static final long serialVersionUID = 1115255124511443730L;
 
 	public static int NO_PLACE = -10000;
+	public static int MINIMUM_PLACE = 20;
+	public static int SHIFT_QUANTUM = 50;
 	
 	public enum Priority { 
 		URGENT, 
@@ -105,8 +107,8 @@ public class TodoEvent implements Serializable {
 	 **/
 	public static void orderOneTodoEvent(Collection<TodoEvent> actual, TodoEvent newOne, int maxPageSize)
 	{
-		newOne.x = 0;
-		newOne.y = 0;
+		newOne.x = MINIMUM_PLACE;
+		newOne.y = MINIMUM_PLACE;
 		while (true)
 		{
 			boolean ok = true;
@@ -127,10 +129,10 @@ public class TodoEvent implements Serializable {
 				actual.add(newOne);
 				return;
 			}
-			newOne.x += 50;
+			newOne.x += SHIFT_QUANTUM;
 			if (newOne.x > maxPageSize)
 			{
-				newOne.x = 0;
+				newOne.x = MINIMUM_PLACE;
 				newOne.y += 50;
 			}
 		}
