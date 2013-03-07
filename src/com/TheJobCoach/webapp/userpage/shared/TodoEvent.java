@@ -9,10 +9,12 @@ public class TodoEvent implements Serializable {
 
 	private static final long serialVersionUID = 1115255124511443730L;
 
-	public static int NO_PLACE = -10000;
-	public static int MINIMUM_PLACE = 20;
-	public static int SHIFT_QUANTUM = 50;
-	
+	public static final int NO_PLACE = -10000;
+	public static final int MINIMUM_PLACE = 5;
+	public static final int SHIFT_QUANTUM = 30;
+	public static final int MARGIN_X = 30; // Must include header
+	public static final int MARGIN_Y = 50; // Must include header
+
 	public enum Priority { 
 		URGENT, 
 		WARNING, 
@@ -44,6 +46,25 @@ public class TodoEvent implements Serializable {
 		this.priority = priority;
 		this.eventDate = eventDate;
 		this.color = color;
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+	}
+	
+	// For test purposes
+	public TodoEvent(int x,	int y, int w, int h)
+	{		
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+	}
+
+	// For test purposes
+	public TodoEvent(String ID, int x,	int y, int w, int h)
+	{		
+		this.ID = ID;
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -92,13 +113,12 @@ public class TodoEvent implements Serializable {
 		};
 		return EventColor.GREEN;
 	}
-	
-	static final private int MARGIN = 100;
-	
-	private static boolean checkCol(int p1, int w1, int p2, int w2)
+		
+	private static boolean checkCol(int p1, int w1, int p2, int w2, int margin)
 	{
-		if ((p1 - MARGIN <= p2) && (p1+w1 > p2 - MARGIN)) return true;
-		if ((p2 - MARGIN <= p1) && (p2+w2 > p1 - MARGIN)) return true;
+		System.out.println("checkCol " + p1 + " " + w1 + " " + p2 + " " + w2); 
+		if ((p1 - margin <= p2) && (p1+w1 > p2 - margin)) return true;
+		if ((p2 - margin <= p1) && (p2+w2 > p1 - margin)) return true;
 		return false;
 	}
 	
@@ -111,19 +131,26 @@ public class TodoEvent implements Serializable {
 		newOne.y = MINIMUM_PLACE;
 		while (true)
 		{
+			System.out.println("CHECK " + newOne.x+ " " + newOne.y + " " + newOne.w+ " " +   newOne.h);
+			
 			boolean ok = true;
 			// Is this a valid place to be ? Check against every existing note
+			int counter = 0;
 			for (TodoEvent index: actual)
 			{
-				System.out.println(index.x+ " " +   index.w+ " " +   newOne.x+ " " +   newOne.w + " " +   index.y+ " " +    index.h+ " " +   newOne.y+ " " +   newOne.h);
-				System.out.println(checkCol(index.x, index.w, newOne.x, newOne.w) + " " + checkCol(index.y, index.h, newOne.y, newOne.h));
-				if (checkCol(index.x, index.w, newOne.x, newOne.w) && 
-					checkCol(index.y, index.h, newOne.y, newOne.h))
+				System.out.println("COUNTER ===================== " + counter);
+				System.out.println(index.x+ " " +   index.y+ " " +   index.w+ " " +    index.h);
+				System.out.println(checkCol(index.x, index.w, newOne.x, newOne.w, MARGIN_X) + " " + checkCol(index.y, index.h, newOne.y, newOne.h, MARGIN_Y));
+				if (checkCol(index.x, index.w, newOne.x, newOne.w, MARGIN_X) && 
+					checkCol(index.y, index.h, newOne.y, newOne.h, MARGIN_Y))
 				{
 					ok = false;
 					break;
-				}					
+				}
+				counter++;
 			}
+			System.out.println(" OK : " + ok);
+			
 			if (ok)
 			{
 				actual.add(newOne);
@@ -133,7 +160,7 @@ public class TodoEvent implements Serializable {
 			if (newOne.x > maxPageSize)
 			{
 				newOne.x = MINIMUM_PLACE;
-				newOne.y += 50;
+				newOne.y += SHIFT_QUANTUM;
 			}
 		}
 	}

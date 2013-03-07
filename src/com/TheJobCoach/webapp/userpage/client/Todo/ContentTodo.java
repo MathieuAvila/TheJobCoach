@@ -54,8 +54,8 @@ public class ContentTodo implements EntryPoint {
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangTodo langTodo = GWT.create(LangTodo.class);
 
-	final static int MINIMUM_SIZE_W = 150;
-	final static int MINIMUM_SIZE_H = 150;
+	final static int MINIMUM_SIZE_W = 120;
+	final static int MINIMUM_SIZE_H = 120;
 	
 	UserId user;
 
@@ -276,7 +276,7 @@ public class ContentTodo implements EntryPoint {
 
 			private void render() {
 				setPixelPosition(myTodoEvent.x, myTodoEvent.y);
-				//setPixelSize(myTodoEvent.w, myTodoEvent.h);
+				setPixelSize(myTodoEvent.w, myTodoEvent.h);
 				titleElement.setInnerHTML("Todo");
 				final String TodoEventContent = myTodoEvent.trText;
 				content.setText((TodoEventContent == null) ? "" : TodoEventContent);
