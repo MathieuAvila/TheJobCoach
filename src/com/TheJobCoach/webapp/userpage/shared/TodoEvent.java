@@ -12,7 +12,7 @@ public class TodoEvent implements Serializable {
 	public static final int NO_PLACE = -10000;
 	public static final int MINIMUM_PLACE = 5;
 	public static final int SHIFT_QUANTUM = 30;
-	public static final int MARGIN_X = 30; // Must include header
+	public static final int MARGIN_X = 30;
 	public static final int MARGIN_Y = 50; // Must include header
 
 	public enum Priority { 
@@ -28,20 +28,20 @@ public class TodoEvent implements Serializable {
 
 	public String ID;
 	public String text;
-	public String trText;
+	public String systemText;
 	public String eventSubscriber;
 	public Priority priority;
 	public Date eventDate;
 	public EventColor color;
 	public int x, y, w, h;		
 
-	public TodoEvent(String ID, String text, String trText, String eventSubscriber,
+	public TodoEvent(String ID, String text, String systemText, String eventSubscriber,
 			Priority priority, Date eventDate, EventColor color, 
 			int x,	int y, int w, int h)
 	{
 		this.ID = ID;
 		this.text = text;
-		this.trText = trText;
+		this.systemText = systemText;
 		this.eventSubscriber = eventSubscriber;
 		this.priority = priority;
 		this.eventDate = eventDate;

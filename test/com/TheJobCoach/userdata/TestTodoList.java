@@ -60,12 +60,6 @@ public class TestTodoList implements TodoList.TodoListSubscriber{
 		System.out.println("Event done: " + event.ID);
 	}
 
-	@Override
-	public String getText(TodoEvent event, String lang)
-	{
-		return event.text + "#test#" + lang;
-	}
-
 	@Test
 	public void testCleanUserSite() throws CassandraException
 	{
@@ -134,7 +128,7 @@ public class TestTodoList implements TodoList.TodoListSubscriber{
 		assertEquals(todoevent1.y,          copy_todoevent1.y);
 		assertEquals(todoevent1.w,          copy_todoevent1.w);
 		assertEquals(todoevent1.h,          copy_todoevent1.h);
-		assertEquals(todoevent1.trText,          copy_todoevent1.trText);
+		assertEquals(todoevent1.systemText,          copy_todoevent1.systemText);
 
 		assertEquals(todoevent2.text, copy_todoevent2.text);
 		assertEquals(todoevent2.eventSubscriber,       copy_todoevent2.eventSubscriber);
@@ -146,7 +140,7 @@ public class TestTodoList implements TodoList.TodoListSubscriber{
 		assertEquals(todoevent2.y,          copy_todoevent2.y);
 		assertEquals(todoevent2.w,          copy_todoevent1.w);
 		assertEquals(todoevent2.h,          copy_todoevent1.h);
-		assertEquals(todoevent2.trText,          copy_todoevent2.trText);
+		assertEquals(todoevent2.systemText,          copy_todoevent2.systemText);
 
 		assertEquals(todoevent3.text, copy_todoevent3.text);
 		assertEquals(todoevent3.eventSubscriber,       copy_todoevent3.eventSubscriber);
@@ -158,7 +152,7 @@ public class TestTodoList implements TodoList.TodoListSubscriber{
 		assertEquals(todoevent3.y,          copy_todoevent3.y);
 		assertEquals(todoevent3.w,          copy_todoevent1.w);
 		assertEquals(todoevent3.h,          copy_todoevent1.h);
-		assertEquals(todoevent3.trText,          copy_todoevent3.trText);
+		assertEquals(todoevent3.systemText,          copy_todoevent3.systemText);
 	}
 
 	@Test

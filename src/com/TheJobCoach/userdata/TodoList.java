@@ -52,7 +52,6 @@ public class TodoList
 		public void event(TodoEvent event);
 		public boolean isEventValid(TodoEvent event);
 		public void eventDone(TodoEvent event);
-		public String getText(TodoEvent event, String lang);
 	}
 	
 	static ColumnFamilyDefinition cfDef = null;
@@ -77,16 +76,6 @@ public class TodoList
 		}
 	}
 
-	private String getText(TodoEvent event, String lang)
-	{
-		TodoListSubscriber sub = subscriberMap.get(event.eventSubscriber);
-		if (sub != null)
-		{
-			return sub.getText(event, lang);
-		}
-		return event.text;
-	}
-	
 	public TodoEvent getTodoEvent(UserId id, String ID, String lang) throws CassandraException 
 	{
 		String reqId = id.userName + "_" + ID;
@@ -99,7 +88,7 @@ public class TodoList
 		TodoEvent te = new TodoEvent(
 				ID, 
 				Convertor.toString(resultReq.get("text")),
-				Convertor.toString(resultReq.get("text")),
+				Convertor.toString(resultReq.get("systemtext")),
 				Convertor.toString(resultReq.get("subscriber")),
 				string2Priority.get(Convertor.toString(resultReq.get("priority"))),
 				Convertor.toDate(resultReq.get("eventdate")),
@@ -109,7 +98,6 @@ public class TodoList
 				Convertor.toInt(resultReq.get("w")),
 				Convertor.toInt(resultReq.get("h"))
 				);
-		te.trText = getText(te, lang);
 		return te;
 	}
 	
@@ -123,6 +111,7 @@ public class TodoList
 				(new ShortMap())
 				.add("id", result.ID)
 				.add("text", result.text)
+				.add("systemtext", result.systemText)
 				.add("subscriber", result.eventSubscriber)
 				.add("priority", priority2String.get(result.priority))
 				.add("eventdate", Convertor.toString(result.eventDate))

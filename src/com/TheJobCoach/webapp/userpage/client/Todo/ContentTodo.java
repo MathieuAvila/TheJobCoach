@@ -278,7 +278,7 @@ public class ContentTodo implements EntryPoint {
 				setPixelPosition(myTodoEvent.x, myTodoEvent.y);
 				setPixelSize(myTodoEvent.w, myTodoEvent.h);
 				titleElement.setInnerHTML("Todo");
-				final String TodoEventContent = myTodoEvent.trText;
+				final String TodoEventContent = myTodoEvent.text;
 				content.setText((TodoEventContent == null) ? "" : TodoEventContent);
 
 				System.out.println(
@@ -311,7 +311,6 @@ public class ContentTodo implements EntryPoint {
 				if (!myTodoEvent.text.equals(content.getValue()))
 				{
 					myTodoEvent.text = content.getValue();			
-					myTodoEvent.trText = content.getValue();			
 					updateTodoEvent();
 				}
 			}
