@@ -3,6 +3,7 @@ package com.TheJobCoach.util;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public class ShortMap {
 	
@@ -77,5 +78,31 @@ public class ShortMap {
 	{
 		Date d = new Date(Long.decode(v));
 		return d;
+	}
+	
+	public Vector<String> getVector(String v)
+	{
+		Vector<String> result = new Vector<String>();
+		String countStr = map.get(v);
+		int total = Convertor.toInt(countStr);
+		for (int c = 0; c != total; c++)
+		{
+			String tmp = map.get(v + "#" + String.valueOf(c));
+			if (tmp == null) tmp = "";
+			result.add(tmp);
+		}
+		return result;
+	}
+	
+	public ShortMap addVector(String v, Vector<String> list)
+	{
+		map.put(v, Integer.toString(list.size()));
+		int count = 0;
+		for (String str: list)
+		{
+			map.put(v + "#" + Integer.toString(count), str);
+			count++;
+		}
+		return this;
 	}
 }
