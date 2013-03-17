@@ -436,7 +436,7 @@ public class ContentTodo implements EntryPoint {
 		case 8: color = TodoEvent.EventColor.ORANGE; break;		
 		}
 		TodoEvent event = new TodoEvent(
-				SiteUUID.getDateUuid(), "", "", "", TodoEvent.Priority.URGENT,  new Date(), color, 
+				SiteUUID.getDateUuid(), "", new HashMap<String,String>(), "", TodoEvent.Priority.URGENT,  new Date(), color, 
 				TodoEvent.NO_PLACE, TodoEvent.NO_PLACE, MINIMUM_SIZE_W, MINIMUM_SIZE_H);
 		TodoEvent.orderOneTodoEvent(userTodoEventList, event, 1000);
 		surface.onTodoEventCreated(event);

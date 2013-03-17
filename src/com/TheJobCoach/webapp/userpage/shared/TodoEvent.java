@@ -3,6 +3,8 @@ package com.TheJobCoach.webapp.userpage.shared;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class TodoEvent implements Serializable {
@@ -28,14 +30,14 @@ public class TodoEvent implements Serializable {
 
 	public String ID;
 	public String text;
-	public String systemText;
+	public HashMap<String, String> systemText;
 	public String eventSubscriber;
 	public Priority priority;
 	public Date eventDate;
 	public EventColor color;
 	public int x, y, w, h;		
 
-	public TodoEvent(String ID, String text, String systemText, String eventSubscriber,
+	public TodoEvent(String ID, String text, HashMap<String, String> systemText, String eventSubscriber,
 			Priority priority, Date eventDate, EventColor color, 
 			int x,	int y, int w, int h)
 	{
@@ -184,6 +186,11 @@ public class TodoEvent implements Serializable {
 			orderOneTodoEvent(resultOk, index, maxPageSize);
 		origin.clear();
 		origin.addAll(resultOk);
+	}
+	
+	public static String scramble(Map<String, String> map)
+	{
+		return "";		
 	}
 	
 }

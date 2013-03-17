@@ -7,7 +7,17 @@ import java.util.Vector;
 
 public class ShortMap {
 	
-	Map<String, String> map = new HashMap<String,String>();
+	Map<String, String> map;
+	
+	public ShortMap()
+	{
+		map = new HashMap<String,String>();
+	}
+			
+	public ShortMap(Map<String,String> from)
+	{
+		map = from;
+	}
 	
 	public ShortMap add(String k, String v)
 	{
@@ -63,6 +73,12 @@ public class ShortMap {
 		return this;
 	}
 	
+	public String getString(String key)
+	{
+		return Convertor.toString(map.get(key));
+	}
+	
+	/*
 	public static boolean getBoolean(String v)
 	{
 		return v.equals("1");
@@ -73,11 +89,15 @@ public class ShortMap {
 		if (v == null) return def;
 		return v.equals("1");
 	}
-	
-	public static Date getDate(String v)
+	*/
+	public Date getDate(String key)
 	{
-		Date d = new Date(Long.decode(v));
-		return d;
+		return Convertor.toDate(map.get(key));
+	}
+	
+	public int getInt(String key)
+	{
+		return Convertor.toInt(map.get(key));
 	}
 	
 	public Vector<String> getVector(String v)

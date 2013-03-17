@@ -176,7 +176,7 @@ public class Account implements AccountInterface {
 		String validatedStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "validated");
 		if (validatedStr == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
-		boolean validated = ShortMap.getBoolean(validatedStr);
+		boolean validated = Convertor.toBoolean(validatedStr);
 		if (!validated) return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
 		String passwordStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "password");
 		if (passwordStr == null)
@@ -230,7 +230,7 @@ public class Account implements AccountInterface {
 				stringToUserType(result.get("type")),
 				Convertor.toDate(result.get("date")),
 				Convertor.toDate(result.get("date")), 
-				ShortMap.getBoolean(result.get("validated"), true)
+				Convertor.toBoolean(result.get("validated"), true)
 				);
 	}
 

@@ -130,8 +130,6 @@ public class TestShortMap
 		t_void = sm.getMap("str_null");
 		assertNotNull(t_void);
 		assertEquals(0, t_void.size());
-		
-		
 	}
 
 }

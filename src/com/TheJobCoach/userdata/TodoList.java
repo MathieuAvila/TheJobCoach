@@ -79,24 +79,19 @@ public class TodoList
 	public TodoEvent getTodoEvent(UserId id, String ID, String lang) throws CassandraException 
 	{
 		String reqId = id.userName + "_" + ID;
-		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
-		if (resultReq == null)
-		{
-			throw new CassandraException(); 
-		}
-		
+		ShortMap resultReq = new ShortMap(CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId));
 		TodoEvent te = new TodoEvent(
 				ID, 
-				Convertor.toString(resultReq.get("text")),
-				Convertor.toString(resultReq.get("systemtext")),
-				Convertor.toString(resultReq.get("subscriber")),
-				string2Priority.get(Convertor.toString(resultReq.get("priority"))),
-				Convertor.toDate(resultReq.get("eventdate")),
-				string2EventColor.get(Convertor.toString(resultReq.get("color"))),
-				Convertor.toInt(resultReq.get("x")),
-				Convertor.toInt(resultReq.get("y")),
-				Convertor.toInt(resultReq.get("w")),
-				Convertor.toInt(resultReq.get("h"))
+				Convertor.toString(resultReq.getString("text")),
+				resultReq.getMap("sysmap"),
+				resultReq.getString("subscriber"),
+				string2Priority.get(resultReq.getString("priority")),
+				resultReq.getDate("eventdate"),
+				string2EventColor.get(Convertor.toString(resultReq.getString("color"))),
+				resultReq.getInt("x"),
+				resultReq.getInt("y"),
+				resultReq.getInt("w"),
+				resultReq.getInt("h")
 				);
 		return te;
 	}
@@ -111,7 +106,7 @@ public class TodoList
 				(new ShortMap())
 				.add("id", result.ID)
 				.add("text", result.text)
-				.add("systemtext", result.systemText)
+				.addMap("sysmap", result.systemText)
 				.add("subscriber", result.eventSubscriber)
 				.add("priority", priority2String.get(result.priority))
 				.add("eventdate", Convertor.toString(result.eventDate))

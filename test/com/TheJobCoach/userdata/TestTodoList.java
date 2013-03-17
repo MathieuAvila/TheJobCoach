@@ -3,6 +3,7 @@ package com.TheJobCoach.userdata;
 import static org.junit.Assert.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.google.common.collect.ImmutableMap;
 
 public class TestTodoList implements TodoList.TodoListSubscriber{
 
@@ -25,14 +27,23 @@ public class TestTodoList implements TodoList.TodoListSubscriber{
 	static String todoeventid12 = "1";
 	static String todoeventid22 = "2";
 	static String todoeventid32 = "3";
+	
+	static HashMap<String, String> systemlist1 = new HashMap<String, String>(ImmutableMap.of(
+	        "b", "b_v",
+	        "a", "a_v",
+	        "c", "c_v"
+	        ));
+	static HashMap<String, String> systemlist2 = new HashMap<String, String>(ImmutableMap.of(
+	        "b", "b_v2",
+	        "a", "a_v2"
+	        ));
+	static TodoEvent todoevent1 = new TodoEvent(todoeventid1, "todo1", systemlist1,  "test", TodoEvent.Priority.URGENT,  new Date(1), TodoEvent.EventColor.BLUE, 11, 1, 2,3);
+	static TodoEvent todoevent2 = new TodoEvent(todoeventid2, "todo2", systemlist2,  "", TodoEvent.Priority.NORMAL,  new Date(2), TodoEvent.EventColor.GREEN, 12, 2, 2,3);
+	static TodoEvent todoevent3 = new TodoEvent(todoeventid3, "todo3", new HashMap<String, String>(),  "", TodoEvent.Priority.WARNING,  new Date(3), TodoEvent.EventColor.RED, 13, 3, 2,3);
 
-	static TodoEvent todoevent1 = new TodoEvent(todoeventid1, "todo1", "todo1#test#FR",  "test", TodoEvent.Priority.URGENT,  new Date(1), TodoEvent.EventColor.BLUE, 11, 1, 2,3);
-	static TodoEvent todoevent2 = new TodoEvent(todoeventid2, "todo2", "todo2",  "", TodoEvent.Priority.NORMAL,  new Date(2), TodoEvent.EventColor.GREEN, 12, 2, 2,3);
-	static TodoEvent todoevent3 = new TodoEvent(todoeventid3, "todo3", "todo3",  "", TodoEvent.Priority.WARNING,  new Date(3), TodoEvent.EventColor.RED, 13, 3, 2,3);
-
-	static TodoEvent todoevent21 = new TodoEvent(todoeventid12, "todo21", "todo21#test#FR",  "test", TodoEvent.Priority.URGENT,  new Date(1), TodoEvent.EventColor.BLUE, 11, 1, 2,3);
-	static TodoEvent todoevent22 = new TodoEvent(todoeventid22, "todo22", "todo22",  "", TodoEvent.Priority.NORMAL,  new Date(2), TodoEvent.EventColor.GREEN, 12, 2, 2,3);
-	static TodoEvent todoevent23 = new TodoEvent(todoeventid32, "todo23", "todo23", "", TodoEvent.Priority.WARNING,  new Date(3), TodoEvent.EventColor.RED, 13, 3, 2,3);
+	static TodoEvent todoevent21 = new TodoEvent(todoeventid12, "todo21", new HashMap<String, String>(),  "test", TodoEvent.Priority.URGENT,  new Date(1), TodoEvent.EventColor.BLUE, 11, 1, 2,3);
+	static TodoEvent todoevent22 = new TodoEvent(todoeventid22, "todo22", new HashMap<String, String>(),  "", TodoEvent.Priority.NORMAL,  new Date(2), TodoEvent.EventColor.GREEN, 12, 2, 2,3);
+	static TodoEvent todoevent23 = new TodoEvent(todoeventid32, "todo23", new HashMap<String, String>(), "", TodoEvent.Priority.WARNING,  new Date(3), TodoEvent.EventColor.RED, 13, 3, 2,3);
 
 
 	@Override
