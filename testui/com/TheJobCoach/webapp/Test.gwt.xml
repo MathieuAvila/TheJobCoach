@@ -34,7 +34,7 @@
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentTodoEvent'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestUiComponentDocumentList'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestComponentChooseDocument'/>
-	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentExternalContact'/>
+	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestExternalContact'/>
 	<entry-point class='com.TheJobCoach.webapp.adminpage.client.TestContentUsers'/>
 	
 	<source path="util/client"/>	

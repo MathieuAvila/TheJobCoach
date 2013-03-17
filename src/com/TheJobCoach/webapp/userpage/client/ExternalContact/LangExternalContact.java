@@ -35,5 +35,13 @@ public interface LangExternalContact extends Constants {
 	String _TextUpdateExternalContact();
 
 	@Key("phone")
-	String _Text_Phone();	
+	String _Text_Phone();
+	
+	@Key("chooseexternalcontact")
+	String _Text_ChooseExternalContact();
+
+	@Key("addexternalcontact")
+	String _Text_AddExternalContact();
+	
+	
 }
