@@ -105,4 +105,28 @@ public class ShortMap {
 		}
 		return this;
 	}
+	
+
+	public HashMap<String, String> getMap(String v)
+	{
+		HashMap<String, String> result = new HashMap<String, String>();
+		Vector<String> vector = getVector(v);
+		for (int count = 0; count < vector.size(); count+=2)
+		{
+			result.put(vector.elementAt(count), vector.elementAt(count + 1));
+		}
+		return result;
+	}
+	
+	public ShortMap addMap(String v, HashMap<String, String> localMap)
+	{
+		Vector<String> vector = new Vector<String>();
+		for (String k: localMap.keySet())
+		{
+			vector.add(k);
+			vector.add(localMap.get(k));
+		}
+		addVector(v, vector);
+		return this;
+	}
 }

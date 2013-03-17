@@ -4,9 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.junit.Test;
+
+import com.google.common.collect.ImmutableMap;
 
 public class TestShortMap
 {
@@ -90,6 +93,45 @@ public class TestShortMap
 		Vector<String> t_void = sm.getVector("void");
 		assertNotNull(t_void);
 		assertEquals(0, t_void.size());
+	}
+	
+	@Test
+	public void test_AddMap_GetMap()
+	{
+		HashMap<String, String> map1 = new HashMap<String, String>(ImmutableMap.of(
+	        "b", "b_v",
+	        "a", "a_v",
+	        "c", "c_v"
+	        ));
+		HashMap<String, String> map2 = new HashMap<String, String>(ImmutableMap.of(
+		        "b", "b_v",
+		        "a", "a_v",
+		        "c", "c3_v",
+		        "d", "d_v"
+		        ));
+		
+		HashMap<String, String> map_void = new HashMap<String, String>();
+		
+		ShortMap sm = new ShortMap();
+		sm.addMap("str1", map1);
+		sm.addMap("str2", map2);
+		sm.addMap("str3", map_void);
+
+		HashMap<String, String> t1_result = sm.getMap("str1");
+		assertEquals(t1_result, map1);
+		
+		HashMap<String, String> t2_result = sm.getMap("str2");
+		assertEquals(t2_result, map2);
+		
+		HashMap<String, String> t_void = sm.getMap("str3");
+		assertNotNull(t_void);
+		assertEquals(0, t_void.size());
+
+		t_void = sm.getMap("str_null");
+		assertNotNull(t_void);
+		assertEquals(0, t_void.size());
+		
+		
 	}
 
 }
