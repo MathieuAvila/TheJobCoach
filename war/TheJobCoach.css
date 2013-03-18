@@ -1,20 +1,20 @@
 .label-content {
-	font-size: 25px;
-	bgcolor: blue;
+	font-size: 1.5em;
 	font-family: "Trebuchet MS", sans-serif;
 	text-decoration: underline;
+	font-weight	: bold;
 }
 
 .label-content-subtitle {
-	font-size: 20px;
-	bgcolor: darkblue;
+	font-size: 1.2em;
 	font-family: "Trebuchet MS", sans-serif;
 	border-bottom:	20px solid #FFFFFF;
 	border-top:	20px solid #FFFFFF;
+	font-weight	: bold;
 }
 
 #content {
-	font-size: 20px;
+	font-size: 1.2em;
 	bgcolor: blue;
 	font-family: "Trebuchet MS", sans-serif
 }
@@ -231,8 +231,8 @@ mainpage-content {
 	font-size: 15px;
 }
 .filecelltable {
-	font-size: 15px;	
-	line-height:30px;
+	font-size: 1.1em;
+	line-height:1.7em;
 	border:10px solid #FFFFFF;
 	-moz-border-radius: 20px;
 	border-radius: 20px;
