@@ -21,6 +21,13 @@ public class UserExternalContactManager {
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
 	
+	static UserExternalContactManager instance = new UserExternalContactManager();
+
+	public static UserExternalContactManager getInstance() 
+	{
+		return instance;
+	}
+
 	public UserExternalContactManager()
 	{
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);

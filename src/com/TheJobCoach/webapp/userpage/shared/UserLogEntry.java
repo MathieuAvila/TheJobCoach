@@ -36,8 +36,8 @@ public class UserLogEntry implements Serializable {
 	/** In case of Interview or Recall, set to TRUE if action was performed */
 	public boolean done;
 	
-	public Vector<String> contactId;
 	public Vector<UserDocumentId> attachedDocumentId;
+	public Vector<ExternalContact> linkedExternalContact;
 	
 	static public String entryTypeToString(LogEntryType t)
 	{
@@ -72,7 +72,7 @@ public class UserLogEntry implements Serializable {
 
 	public UserLogEntry(String opportunityId, String iD, String title,
 			String description, Date eventDate, LogEntryType type,
-			Vector<String> contactId, Vector<UserDocumentId> attachedDocumentId,
+			Vector<ExternalContact> linkedExternalContact, Vector<UserDocumentId> attachedDocumentId,
 			String note,
 			boolean done) {
 		super();
@@ -82,7 +82,7 @@ public class UserLogEntry implements Serializable {
 		this.description = description;
 		this.eventDate = eventDate;
 		this.type = type;
-		this.contactId = contactId;
+		this.linkedExternalContact = linkedExternalContact;
 		this.attachedDocumentId = attachedDocumentId;
 		this.note = note;
 		this.done = done;

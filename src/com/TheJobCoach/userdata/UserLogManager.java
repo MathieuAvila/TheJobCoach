@@ -4,10 +4,11 @@ import java.util.Map;
 import java.util.Vector;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
+
 import com.TheJobCoach.util.CassandraAccessor;
-import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -49,33 +50,39 @@ public class UserLogManager {
 	public UserLogEntry getLogEntryLong(UserId id, String ID) throws CassandraException 
 	{
 		String reqId = ID;
-		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
-		if (resultReq == null)
+		Map<String, String> resultMap = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
+		if (resultMap == null)
 		{
 			return null;  // this means it was deleted.
-		}
-		int count = 0;
-		String countStr = resultReq.get("doccount");
-		if (countStr != null)
-		{
-			count = Integer.parseInt(countStr);
-		}	
+		}		
+		ShortMap resultReq = new ShortMap(resultMap);
+
 		Vector<UserDocumentId> docIdList = new Vector<UserDocumentId>();
-		for (int i=0; i != count; i++)
+		Vector<String> docIdVector = resultReq.getVector("vdoc");	
+		for (String d: docIdVector)
 		{
-			UserDocumentId docId = UserDocumentManager.getInstance().getUserDocumentId(id, resultReq.get("d#" + i));
-			if (docId != null) docIdList.add(docId);
+			UserDocumentId docId = UserDocumentManager.getInstance().getUserDocumentId(id, d);
+			if (docId != null) docIdList.add(docId);			
 		}
+		
+		Vector<ExternalContact> finalContactVector = new Vector<ExternalContact>();
+		Vector<String> contactVector = resultReq.getVector("vcontact");			
+		for (String contactId: contactVector)
+		{
+			ExternalContact contact = UserExternalContactManager.getInstance().getExternalContact(id, contactId);
+			if (contact != null) finalContactVector.add(contact);
+		}
+		
 		return new UserLogEntry(
-				Convertor.toString(resultReq.get("opportunityid")),
+				resultReq.getString("opportunityid"),
 				ID,
-				Convertor.toString(resultReq.get("title")),
-				Convertor.toString(resultReq.get("description")),
-				Convertor.toDate(resultReq.get("creation")),
-				UserLogEntry.entryTypeToString(resultReq.get("status")),
-				null, docIdList,
-				Convertor.toString(resultReq.get("note")),
-				Convertor.toBoolean(resultReq.get("done")));
+				resultReq.getString("title"),
+				resultReq.getString("description"),
+				resultReq.getDate("creation"),
+				UserLogEntry.entryTypeToString(resultReq.getString("status")),
+				finalContactVector, docIdList,
+				resultReq.getString("note"),
+				resultReq.getBoolean("done"));
 	}
 
 	public void setUserLogEntry(UserId id, UserLogEntry result) throws CassandraException 
@@ -94,14 +101,23 @@ public class UserLogManager {
 				.add("description", result.description)				
 				.add("status", UserLogEntry.entryTypeToString(result.type))
 				.add("note", result.note).add("done", result.done);
-		int count = 0;
+		
+		Vector<String> docIdVector = new Vector<String>();		
 		if (result.attachedDocumentId != null)
-		for (UserDocumentId d: result.attachedDocumentId)
-		{
-			update.add("d#" + Integer.toString(count), d.updateId);
-			count++;
-		}
-		update.add("doccount", count);
+			for (UserDocumentId d: result.attachedDocumentId)
+			{
+				docIdVector.add(d.updateId);				
+			}		
+		update.addVector("vdoc", docIdVector);
+		
+		Vector<String> contactVector = new Vector<String>();		
+		if (result.linkedExternalContact != null)
+			for (ExternalContact d: result.linkedExternalContact)
+			{
+				docIdVector.add(d.ID);				
+			}		
+		update.addVector("vcontact", contactVector);
+		
 		boolean resultReq = CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_DATA, 
 				result.ID, 

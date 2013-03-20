@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry;
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
@@ -51,12 +52,12 @@ public class AutoTestEditLogEntry extends GwtTest {
 	
 	UserLogEntry ule = new UserLogEntry("oppId", "logId", "title",
 			"description", TestFormatUtil.getDate(2000, 1, 1, 12, 02, 03), LogEntryType.EVENT,
-			new Vector<String>(), new Vector<UserDocumentId>(),
+			new Vector<ExternalContact>(), new Vector<UserDocumentId>(),
 			"note", true);
 	
 	UserLogEntry ule_modified = new UserLogEntry("oppId", "logId", "title2",
 			"description2", TestFormatUtil.getDate(2001, 1, 1, 12, 02, 03), LogEntryType.INFO, // first
-			new Vector<String>(), new Vector<UserDocumentId>(),
+			new Vector<ExternalContact>(), new Vector<UserDocumentId>(),
 			"note2", false);
 		
 	class EditLogEntryResultTest implements EditLogEntry.EditLogEntryResult
