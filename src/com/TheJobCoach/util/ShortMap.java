@@ -78,12 +78,12 @@ public class ShortMap {
 		return Convertor.toString(map.get(key));
 	}
 	
-	/*
-	public static boolean getBoolean(String v)
-	{
-		return v.equals("1");
-	}
 	
+	public boolean getBoolean(String v)
+	{
+		return Convertor.toBoolean(map.get(v));
+	}
+	/*
 	public static boolean getBoolean(String v, boolean def)
 	{
 		if (v == null) return def;
