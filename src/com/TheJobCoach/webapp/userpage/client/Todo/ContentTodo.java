@@ -67,8 +67,7 @@ public class ContentTodo implements EntryPoint {
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
-	int currentZ;
-
+	
 	public void setRootPanel(Panel panel)
 	{
 		rootPanel = panel;
@@ -93,7 +92,7 @@ public class ContentTodo implements EntryPoint {
 
 			private final TextArea content = new TextArea();
 
-			private boolean dragging;
+			private boolean dragging, colorChange;
 
 			private int dragOffsetX, dragOffsetY;
 
@@ -167,8 +166,8 @@ public class ContentTodo implements EntryPoint {
 				int new_org_x = Integer.parseInt(style.getLeft().substring(0, (style.getLeft().length() - 2)));
 				int new_org_y = Integer.parseInt(style.getTop().substring(0, (style.getTop().length() - 2)));
 				
-				int new_org_w = content.getOffsetWidth() -1;
-				int new_org_h = content.getOffsetHeight() -1;
+				int new_org_w = content.getOffsetWidth() - 2;
+				int new_org_h = content.getOffsetHeight() - 2;
 				
 				boolean result = (new_org_x != org_x) || (new_org_y != org_y) || (new_org_h != org_h) || (new_org_w != org_w);
 				
@@ -209,12 +208,14 @@ public class ContentTodo implements EntryPoint {
 				if (!Element.is(target)) {
 					return;
 				}
+				colorChange = false;				
 				if (bcolor.isOrHasChild(Element.as(target))) 
 				{
 					myTodoEvent.color = myTodoEvent.getNextColor();
 					render();
 					updateTodoEvent();
 					event.preventDefault();
+					colorChange = true;
 					return;
 				}
 				if (done.isOrHasChild(Element.as(target))) 
@@ -245,7 +246,15 @@ public class ContentTodo implements EntryPoint {
 				}
 			}
 
-			public void onMouseUp(MouseUpEvent event) {
+			public void onMouseUp(MouseUpEvent event) 
+			{
+				if (colorChange)
+				{
+					System.out.println("Color Change is true");
+					colorChange = false;
+					event.preventDefault();
+					return;
+				}
 				if (dragging)
 				{
 					dragging = false;
@@ -256,7 +265,7 @@ public class ContentTodo implements EntryPoint {
 						updateTodoEvent();
 					}
 					return;
-				}
+				}				
 				// Also check for resize.
 				if (checkForChange())
 				{
