@@ -70,10 +70,7 @@ public class UserExternalContactManager {
 		if (resultReq == null)
 		{
 			return null;
-		}	
-		/*public ExternalContact(String iD, String firstName, String lastName,
-				String email, String personalNote, String organization,
-				UpdatePeriod update)*/
+		}		
 		return new ExternalContact(
 				ID, 
 				Convertor.toString(resultReq.get("firstName")),

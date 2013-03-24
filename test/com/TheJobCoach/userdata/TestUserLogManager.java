@@ -6,13 +6,18 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentType;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
@@ -21,6 +26,7 @@ import com.TheJobCoach.webapp.util.shared.CassandraException;
 public class TestUserLogManager {
 	
 	static UserLogManager manager = new UserLogManager();
+	static UserExternalContactManager contactManager = new UserExternalContactManager();
 	
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	
@@ -33,20 +39,31 @@ public class TestUserLogManager {
 		result.setYear(year - 1900);
 		return result;
 	}
+	
+	static String contact1 = "contact1";
+	static String contact2 = "contact2";
+	static String contact3 = "contact3";
+	static ExternalContact external_contact1 = new ExternalContact(contact1, "firstName1", "lastName1", "email1", "phone1", "personalNote1", "organization1", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
+	static ExternalContact external_contact2 = new ExternalContact(contact2, "firstName2", "lastName2", "email2", "phone2", "personalNote2", "organization2", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, false));
+	static ExternalContact external_contact3 = new ExternalContact(contact3, "firstName3", "lastName3", "email3", "phone3", "personalNote3", "organization3", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, false));
+	static Vector<ExternalContact> externalContactList_void = new Vector<ExternalContact>();
+	static Vector<ExternalContact> externalContactList = new Vector<ExternalContact>(Arrays.asList(external_contact1, external_contact2, external_contact3));
+	static Vector<ExternalContact> externalContactList_Filtered = new Vector<ExternalContact>(Arrays.asList(external_contact1, external_contact3));
+
 	static UserOpportunity opportunity1 = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 2, 1),
 			"title1", "description1", "companyId1",
 			"contractType1",  1,  
 			getDate(2000, 1, 1), getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "note1");
-	
+
 	static UserOpportunity opportunity2 = new UserOpportunity("opp2", getDate(2000, 1, 2), getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  2,  
 			getDate(2000, 1, 2), getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.NEW, "note2");
-	
+
 	static UserDocumentId docId1 = new UserDocumentId("id1", "id1", "name1", "fileName1", new Date(), new Date());
 	static UserDocumentId docId2 = new UserDocumentId("id2", "id2", "name2", "fileName2", new Date(), new Date());
 	static UserDocumentId docId3 = new UserDocumentId("id3", "id3", "name3", "fileName3", new Date(), new Date());
@@ -59,21 +76,30 @@ public class TestUserLogManager {
 	
 	static UserLogEntry userLog1 = new UserLogEntry("opp1", "log1", "title1", "description1", 
 			getDate(2000, 2, 1),
-			LogEntryType.INFO, null, docIdList, "note1", false);
+			LogEntryType.INFO, externalContactList, docIdList, "note1", false);
 	
 	static UserLogEntry userLog1_less = new UserLogEntry("opp1", "log1", "title1", "description1", 
 			getDate(2000, 2, 1),
-			LogEntryType.INFO, null, docIdList_less, "note1_less", false);
+			LogEntryType.INFO, externalContactList_void, docIdList_less, "note1_less", false);
 	
 	static UserLogEntry userLog2 = new UserLogEntry("opp1", "log2", "title2", "description2", 
 			getDate(2000, 2, 1),
-			LogEntryType.INFO, null, docIdListVoid, "note2", false);
+			LogEntryType.INFO, externalContactList_void, docIdListVoid, "note2", false);
 		
 	static UserLogEntry userLog3 = new UserLogEntry("opp2", "log3", "title3", "description3", 
 			getDate(2000, 2, 1),
-			LogEntryType.INFO, null, docIdListVoid, "note3", true);
-		
-	private void checkUserLogEntry(UserLogEntry op1, UserLogEntry opRef)
+			LogEntryType.INFO, externalContactList_void, docIdListVoid, "note3", true);
+	
+	private void checkContactList(Vector<ExternalContact> op1, Vector<ExternalContact> op2)
+	{
+		assertEquals(op1.size(), op2.size());
+		for (int count = 0; count != op1.size(); count++)
+		{
+			assertEquals(op1.get(count).ID, op2.get(count).ID);
+		}
+	}
+
+	private void checkUserLogEntry(UserLogEntry op1, UserLogEntry opRef, boolean checkContact)
 	{
 		assertEquals(op1.ID, opRef.ID);
 		assertEquals(op1.eventDate, opRef.eventDate);
@@ -101,6 +127,21 @@ public class TestUserLogManager {
 			assertEquals(found.updateId, doc.updateId);
 			assertEquals(found.fileName, doc.fileName);
 		}
+		
+		if (checkContact)
+		{
+			checkContactList(op1.linkedExternalContact, opRef.linkedExternalContact);
+		}
+	}
+	
+	@Before
+	public void setTest() throws CassandraException
+	{
+		// Create necessary external contact
+		contactManager.deleteUser(id);
+		contactManager.setExternalContact(id, external_contact1);
+		contactManager.setExternalContact(id, external_contact2);
+		contactManager.setExternalContact(id, external_contact3);
 	}
 	
 	@Test
@@ -132,22 +173,22 @@ public class TestUserLogManager {
 	@Test
 	public void testGetUserLogEntryLong() throws CassandraException {
 		UserLogEntry opp1 = manager.getLogEntryLong(id, userLog1.ID);
-		checkUserLogEntry(opp1, userLog1);		
+		checkUserLogEntry(opp1, userLog1, true);		
 		UserLogEntry opp2 = manager.getLogEntryLong(id, userLog2.ID);
-		checkUserLogEntry(opp2, userLog2);		
+		checkUserLogEntry(opp2, userLog2, true);		
 		UserLogEntry opp3 = manager.getLogEntryLong(id, userLog3.ID);
-		checkUserLogEntry(opp3, userLog3);	
+		checkUserLogEntry(opp3, userLog3, true);	
 	}
 	
 	@Test
 	public void testGetUserLogEntryLong_less() throws CassandraException {
 		manager.setUserLogEntry(id, userLog1_less);
 		UserLogEntry opp1 = manager.getLogEntryLong(id, userLog1.ID);
-		checkUserLogEntry(opp1, userLog1_less);		
+		checkUserLogEntry(opp1, userLog1_less, true);		
 		
 		manager.setUserLogEntry(id, userLog1);
 		opp1 = manager.getLogEntryLong(id, userLog1.ID);
-		checkUserLogEntry(opp1, userLog1);
+		checkUserLogEntry(opp1, userLog1, true);
 	}
 			
 	@Test
@@ -158,11 +199,21 @@ public class TestUserLogManager {
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "log2");
 	}
+
 	@Test
 	public void testDeleteUserOpportunity() throws CassandraException {
 		manager.deleteOpportunityLogList(id, "opp1");
 		Vector<UserLogEntry> result = manager.getLogList(id, "opp1");
 		System.out.println(result);
 		assertEquals(0, result.size());
+	}
+	
+	@Test
+	public void testDeletedContact() throws CassandraException {
+		manager.setUserLogEntry(id, userLog1);
+		contactManager.deleteExternalContact(id, external_contact2.ID);
+		UserLogEntry log1 = manager.getLogEntryLong(id, userLog1.ID);
+		checkUserLogEntry(log1, userLog1, false);
+		checkContactList(log1.linkedExternalContact, externalContactList_Filtered);	
 	}
 }

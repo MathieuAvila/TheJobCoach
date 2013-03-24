@@ -66,11 +66,21 @@ public class UserLogManager {
 		}
 		
 		Vector<ExternalContact> finalContactVector = new Vector<ExternalContact>();
-		Vector<String> contactVector = resultReq.getVector("vcontact");			
+		Vector<String> contactVector = resultReq.getVector("vcontact");
+		System.out.println("******************** Contact found: " + contactVector.size());
+			
 		for (String contactId: contactVector)
 		{
 			ExternalContact contact = UserExternalContactManager.getInstance().getExternalContact(id, contactId);
-			if (contact != null) finalContactVector.add(contact);
+			if (contact != null) 
+			{
+				//System.out.println("Contact found: " + contactId);
+				finalContactVector.add(contact);
+			}
+			//else
+			//{
+			//	System.out.println("Contact deleted: " + contactId);
+			//}
 		}
 		
 		return new UserLogEntry(
@@ -114,8 +124,9 @@ public class UserLogManager {
 		if (result.linkedExternalContact != null)
 			for (ExternalContact d: result.linkedExternalContact)
 			{
-				docIdVector.add(d.ID);				
-			}		
+				//System.out.println("**** Add external contact: " + d.ID);
+				contactVector.add(d.ID);				
+			}
 		update.addVector("vcontact", contactVector);
 		
 		boolean resultReq = CassandraAccessor.updateColumn(
@@ -138,7 +149,7 @@ public class UserLogManager {
 
 	public void deleteUserLogEntryFromList(UserId id, String ID, String oppId) throws CassandraException
 	{
-		System.out.println("DELETE UserLogEntry " + ID + " from opp " + oppId);
+		//System.out.println("DELETE UserLogEntry " + ID + " from opp " + oppId);
 		String key = id.userName + "#" + oppId;		
 		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_LIST, key, ID);	
 	}

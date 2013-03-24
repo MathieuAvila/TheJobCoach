@@ -121,19 +121,19 @@ public class UserDocumentManager implements IUserDataManager {
 		{
 			ID = masterKey;
 			subKey = id.userName + "#" + masterKey;
-			System.out.println("GET DOC ID MASTER: " + subKey);
+			//System.out.println("GET DOC ID MASTER: " + subKey);
 			resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, subKey);
 		}
 		
-		System.out.println("GET DOC ID: " + ID);
-		System.out.println("GET DOC docId: " + subKey);
-		System.out.println("GET DOC name: " + resultReq.get("name"));
+		//System.out.println("GET DOC ID: " + ID);
+		//System.out.println("GET DOC docId: " + subKey);
+		//System.out.println("GET DOC name: " + resultReq.get("name"));
 
 		/* Build out the list of revisions */
 		Vector<UserDocumentRevision> revisions = new Vector<UserDocumentRevision>();	
 
 		String revisionCount = resultReq.get("revisioncount");
-		System.out.println("Revision count string: " + revisionCount);
+		//System.out.println("Revision count string: " + revisionCount);
 		if (revisionCount != null)
 		{
 			int count = Convertor.toInt(revisionCount);
@@ -141,7 +141,7 @@ public class UserDocumentManager implements IUserDataManager {
 			{
 				// Get the revision information
 				String revInfo = Convertor.toString(resultReq.get("rev#" + index));
-				System.out.println("Revision string: " + revInfo);				
+				//System.out.println("Revision string: " + revInfo);				
 				revisions.add(getUserDocumentRevision(id, revInfo));
 			}
 		}
@@ -174,7 +174,7 @@ public class UserDocumentManager implements IUserDataManager {
 		UserDocumentRevision rev = null;
 		for (UserDocumentRevision revIndex: doc.revisions)
 		{
-			System.out.println(revIndex.ID + "  " + ID);
+			//System.out.println(revIndex.ID + "  " + ID);
 			if (revIndex.ID.equals(ID))
 			{
 				rev = revIndex;
@@ -182,7 +182,7 @@ public class UserDocumentManager implements IUserDataManager {
 		}
 		if (rev == null)
 		{
-			System.out.println("rev is null " + doc.revisions.size() );
+			//System.out.println("rev is null " + doc.revisions.size() );
 			return null;  // this means it was deleted.
 		}
 		return new UserDocumentId(doc.ID, rev.ID, doc.name, rev.fileName, doc.lastUpdate, rev.date);
@@ -191,10 +191,10 @@ public class UserDocumentManager implements IUserDataManager {
 	public void setUserDocument(UserId id, UserDocument result) throws CassandraException 
 	{
 		String docId = id.userName + "#" + result.ID;
-		System.out.println(result.name);
-		System.out.println(result.ID);
-		System.out.println(result.description);
-		System.out.println(result.fileName);
+		//System.out.println(result.name);
+		//System.out.println(result.ID);
+		//System.out.println(result.description);
+		//System.out.println(result.fileName);
 		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_LIST, 
 				id.userName,
@@ -223,18 +223,18 @@ public class UserDocumentManager implements IUserDataManager {
 		{
 			throw new CassandraException();  // this means it is not available.
 		}
-		System.out.println("GET DOC ID: " + masterKey);
-		System.out.println("GET DOC sub docId: " + subIdKey);
-		System.out.println("GET DOC name: " + resultReq.get("name"));
+		//System.out.println("GET DOC ID: " + masterKey);
+		//System.out.println("GET DOC sub docId: " + subIdKey);
+		//System.out.println("GET DOC name: " + resultReq.get("name"));
 
 		String revisionCount = resultReq.get("revisioncount");
-		System.out.println("REVISION COUNT STRING ********************************* : " + revisionCount);
+		//System.out.println("REVISION COUNT STRING ********************************* : " + revisionCount);
 		byte[] checkResultContent = CassandraAccessor.getColumnByte(COLUMN_FAMILY_NAME_CONTENT, masterKey, "content");
 		if ((checkResultContent == null) && (revisionCount == null)) revisionCount = "0";
 		if ((revisionCount != null) || (checkResultContent == null))
 		{
 			int count = Convertor.toInt(revisionCount);
-			System.out.println("CASE UPDATE ********************************* : " + count);
+			//System.out.println("CASE UPDATE ********************************* : " + count);
 			CassandraAccessor.updateColumn(
 					COLUMN_FAMILY_NAME_DATA, 
 					masterKey,
@@ -245,7 +245,6 @@ public class UserDocumentManager implements IUserDataManager {
 		}
 		else
 		{			
-			System.out.println("CASE NOT UPDATE ********************************* : ");
 			newDocId = docId;			
 			subIdKey = masterKey;
 			CassandraAccessor.updateColumn(
@@ -257,9 +256,6 @@ public class UserDocumentManager implements IUserDataManager {
 					.add("rev#0", docId)
 					.add("revisioncount", 2).get());	
 		}
-		
-		System.out.println("GET DOC sub docId: " + subIdKey);
-		
 		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_DATA, 
 				subIdKey, 
@@ -282,17 +278,17 @@ public class UserDocumentManager implements IUserDataManager {
 		byte[] resultReq = CassandraAccessor.getColumnByte(COLUMN_FAMILY_NAME_CONTENT, docId, "content");
 		if (resultReq == null)
 		{
-			System.out.println("Fetched document: " + docId + " has 0 length. Deleted ?");		
+			//System.out.println("Fetched document: " + docId + " has 0 length. Deleted ?");		
 			return new byte[0];  // this means it was deleted.
 		}
-		System.out.println("Fetched document: " + docId + " has length " + resultReq.length);		
+		//System.out.println("Fetched document: " + docId + " has length " + resultReq.length);		
 		return resultReq;
 	}
 
 
 	public void deleteUserDocumentFromList(UserId id, String ID) throws CassandraException
 	{
-		System.out.println("DELETE UserDocument " + ID);		
+		//System.out.println("DELETE UserDocument " + ID);		
 		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_LIST, id.userName, ID);	
 	}
 
@@ -300,16 +296,16 @@ public class UserDocumentManager implements IUserDataManager {
 	{		
 		String IdKey = id.userName + "#" + ID;
 		UserDocument doc = getUserDocument(id, ID);
-		System.out.println("Main delete document: " + ID);
+		//System.out.println("Main delete document: " + ID);
 		if (doc != null)
 		{
 			for (UserDocumentRevision revId: doc.revisions)
 			{
-				System.out.println("Main delete sub document: " + revId);
+				//System.out.println("Main delete sub document: " + revId);
 				if (revId != null)
 				{
 					String subId = id.userName + "#" + revId.ID;
-					System.out.println("Delete document revision: " + subId);
+					//System.out.println("Delete document revision: " + subId);
 					CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONTENT, subId);
 					CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, subId);
 				}
