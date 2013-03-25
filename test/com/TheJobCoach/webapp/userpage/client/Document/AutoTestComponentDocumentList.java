@@ -1,4 +1,4 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.Document;
 
 import java.util.Vector;
 
@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Document.ComponentDocumentList;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -13,7 +14,7 @@ import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
-public class TestComponentDocumentList extends GwtTest {
+public class AutoTestComponentDocumentList extends GwtTest {
 
 	
 	private ComponentDocumentList cdl;
