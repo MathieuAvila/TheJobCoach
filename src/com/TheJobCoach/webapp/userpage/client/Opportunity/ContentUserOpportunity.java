@@ -26,7 +26,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -59,7 +58,7 @@ public class ContentUserOpportunity implements EntryPoint {
 		AsyncCallback<UserOpportunity> callback = new AsyncCallback<UserOpportunity>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				MessageBox.messageBoxException(rootPanel, caught);
 			}
 			@Override
 			public void onSuccess(UserOpportunity result) {
@@ -117,11 +116,10 @@ public class ContentUserOpportunity implements EntryPoint {
 		AsyncCallback<Vector<UserOpportunity>> callback = new AsyncCallback<Vector<UserOpportunity>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				MessageBox.messageBoxException(rootPanel, caught);
 			}
 			@Override
 			public void onSuccess(Vector<UserOpportunity> result) {
-				System.out.println(result);
 				userOpportunityList.clear();
 				userOpportunityList.addAll(result);
 				dataProvider.updateRowCount(userOpportunityList.size(), true);
@@ -151,7 +149,7 @@ public class ContentUserOpportunity implements EntryPoint {
 								userService.deleteUserOpportunity(user, opp.ID, new AsyncCallback<String>() {
 									public void onFailure(Throwable caught) {
 										// Show the RPC error message to the user
-										Window.alert(caught.toString());
+										MessageBox.messageBoxException(rootPanel, caught);
 										//connectButton.setEnabled(true);
 									}
 									public void onSuccess(String result)
@@ -162,7 +160,7 @@ public class ContentUserOpportunity implements EntryPoint {
 							}
 							catch (CassandraException e) 
 							{
-								Window.alert(e.toString());
+								MessageBox.messageBoxException(rootPanel, e);
 							}
 						}}});
 		mb.onModuleLoad();
@@ -184,7 +182,7 @@ public class ContentUserOpportunity implements EntryPoint {
 							userService.setUserOpportunity(user, "managed", result, new AsyncCallback<String>() {
 								public void onFailure(Throwable caught) {
 									// Show the RPC error message to the user
-									Window.alert(caught.toString());
+									MessageBox.messageBoxException(rootPanel, caught);
 									//connectButton.setEnabled(true);
 								}
 								public void onSuccess(String result)
@@ -217,7 +215,7 @@ public class ContentUserOpportunity implements EntryPoint {
 						userService.setUserOpportunity(user, "managed", result, new AsyncCallback<String>() {
 							public void onFailure(Throwable caught) {
 								// Show the RPC error message to the user
-								Window.alert(caught.toString());
+								MessageBox.messageBoxException(rootPanel, caught);
 								//connectButton.setEnabled(true);
 							}
 							public void onSuccess(String result)
