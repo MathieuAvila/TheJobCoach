@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class ComponentChooseExternalContact implements EntryPoint, IChooseExternalContact
@@ -149,9 +150,16 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 		cellTable.setSelectionModel(selectionModel);
 
 		okCancel = new DialogBlockOkCancel(null, dBox);
-		
-		// Can't click when no selection is made.
+		// Can't click on OK when no selection is made.
 		okCancel.getOk().setEnabled(false);
+		// When selecting one, ok is allowed
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler()
+		{
+			public void onSelectionChange(SelectionChangeEvent event) 
+			{
+				okCancel.getOk().setEnabled(true);
+			}
+		});
 
 		okCancel.getOk().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
