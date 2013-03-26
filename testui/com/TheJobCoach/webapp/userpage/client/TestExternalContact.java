@@ -8,6 +8,7 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentChooseExternalContact;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalContactList;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
+import com.TheJobCoach.webapp.userpage.client.ExternalContact.IChooseExternalContact.ChooseExternalContactResult;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
@@ -95,7 +96,11 @@ public class TestExternalContact implements EntryPoint {
 						ExternalContact ujs3 = new ExternalContact(contact3, "firstName3", "lastName3", "email3", "phone3", "personalNote3", "organization3", new UpdatePeriod(getDate(2000, 1, 1), 2, PeriodType.DAY, true));
 						Vector<ExternalContact> external_contact_list = new Vector<ExternalContact>(Arrays.asList(ujs1, ujs2, ujs3));
 
-						ComponentExternalContactList cud = new ComponentExternalContactList(external_contact_list, hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
+						ComponentExternalContactList cud = new ComponentExternalContactList(
+								external_contact_list, 
+								hp, 
+								new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER), 
+								new ComponentChooseExternalContact());
 						cud.onModuleLoad();
 					}
 				});
@@ -126,7 +131,7 @@ public class TestExternalContact implements EntryPoint {
 
 						ComponentChooseExternalContact cud = new ComponentChooseExternalContact(
 								hp, 
-								new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER), new ComponentChooseExternalContact.ComponentChooseDocumentResult()
+								new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER), new ChooseExternalContactResult()
 								{									
 									@Override
 									public void setResult(ExternalContact result)

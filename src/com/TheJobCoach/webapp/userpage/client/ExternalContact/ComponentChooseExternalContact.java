@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Panel;
@@ -26,29 +25,28 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SingleSelectionModel;
 
-public class ComponentChooseExternalContact implements EntryPoint 
+public class ComponentChooseExternalContact implements EntryPoint, IChooseExternalContact
 {
 
 	private final static UserServiceAsync userService = GWT.create(UserService.class);
 	private final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
 	final ExtendedCellTable<ExternalContact> cellTable = new ExtendedCellTable<ExternalContact>();
 	DialogBlockOkCancel okCancel;
-	ComponentChooseDocumentResult result;
-	
-	public interface ComponentChooseDocumentResult
-	{
-		public void setResult(ExternalContact result);
-	}
+	ChooseExternalContactResult result;
 
 	List<ExternalContact> docList = new ArrayList<ExternalContact>();
 	Panel rootPanel;
 	UserId userId;
 	
-	public ComponentChooseExternalContact(Panel rootPanel, UserId userId, ComponentChooseDocumentResult result)
+	public ComponentChooseExternalContact(Panel rootPanel, UserId userId, ChooseExternalContactResult result)
 	{
 		this.rootPanel = rootPanel;
 		this.userId = userId;
 		this.result = result;
+	}
+	
+	public ComponentChooseExternalContact()
+	{		
 	}
 
 	// Create a data provider.
@@ -75,7 +73,7 @@ public class ComponentChooseExternalContact implements EntryPoint
 		AsyncCallback<Vector<ExternalContact>> callback = new AsyncCallback<Vector<ExternalContact>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				MessageBox.messageBoxException(rootPanel, caught);
 			}
 			@Override
 			public void onSuccess(Vector<ExternalContact> result) {
@@ -97,10 +95,10 @@ public class ComponentChooseExternalContact implements EntryPoint
 		cellTable.redraw();
 	}
 	
-	/**
-	 * This is the entry point method.
-	 * @wbp.parser.entryPoint
+	/* (non-Javadoc)
+	 * @see com.TheJobCoach.webapp.userpage.client.ExternalContact.IChooseExternalContact#onModuleLoad()
 	 */
+	@Override
 	public void onModuleLoad()
 	{	
 		final DialogBox dBox = new DialogBox();
@@ -151,6 +149,10 @@ public class ComponentChooseExternalContact implements EntryPoint
 		cellTable.setSelectionModel(selectionModel);
 
 		okCancel = new DialogBlockOkCancel(null, dBox);
+		
+		// Can't click when no selection is made.
+		okCancel.getOk().setEnabled(false);
+
 		okCancel.getOk().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
@@ -165,5 +167,12 @@ public class ComponentChooseExternalContact implements EntryPoint
 		
 		dBox.setWidget(hp);
 		dBox.center();
+	}
+
+	@Override
+	public IChooseExternalContact clone(Panel rootPanel, UserId userId,
+			ChooseExternalContactResult result)
+	{
+		return new ComponentChooseExternalContact(rootPanel, userId, result);
 	}
 }

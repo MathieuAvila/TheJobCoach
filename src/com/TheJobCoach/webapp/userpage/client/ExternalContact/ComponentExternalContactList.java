@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.client.ExternalContact.IChooseExternalContact.ChooseExternalContactResult;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
@@ -23,15 +24,18 @@ public class ComponentExternalContactList extends VerticalPanel
 	private final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
 	final ExtendedCellTable<ExternalContact> cellTable = new ExtendedCellTable<ExternalContact>();
 	
-	Vector<ExternalContact> docList;
+	Vector<ExternalContact> externalContactList;
 	Panel rootPanel;
 	UserId userId;
-	
-	public ComponentExternalContactList(Vector<ExternalContact> docList, Panel rootPanel, UserId userId)
+	ButtonImageText buttonAdd;
+	IChooseExternalContact chooseExternalContact;
+
+	public ComponentExternalContactList(Vector<ExternalContact> docList, Panel rootPanel, UserId userId, IChooseExternalContact chooseExternalContact)
 	{
-		this.docList = docList;
+		this.externalContactList = docList;
 		this.rootPanel = rootPanel;
 		this.userId = userId;
+		this.chooseExternalContact = chooseExternalContact;
 	}
 
 	// Create a data provider.
@@ -42,10 +46,10 @@ public class ComponentExternalContactList extends VerticalPanel
 			final com.google.gwt.view.client.Range range = display.getVisibleRange();
 			int start = range.getStart();
 			int end = start + range.getLength();
-			if (end >= docList.size() ) end = docList.size();
-			if (docList.size() != 0)
+			if (end >= externalContactList.size() ) end = externalContactList.size();
+			if (externalContactList.size() != 0)
 			{
-				List<ExternalContact> dataInRange = docList.subList(start, end);
+				List<ExternalContact> dataInRange = externalContactList.subList(start, end);
 				// Push the data back into the list.
 				cellTable.setRowData(start, dataInRange);
 				cellTable.redraw();				
@@ -53,17 +57,17 @@ public class ComponentExternalContactList extends VerticalPanel
 		}
 	};
 
-	void getAllContent()
+	void printAllContent()
 	{	
-		dataProvider.updateRowCount(docList.size(), true);
-		dataProvider.updateRowData(0, docList.subList(0, docList.size()));
+		dataProvider.updateRowCount(externalContactList.size(), true);
+		dataProvider.updateRowData(0, externalContactList.subList(0, externalContactList.size()));
 		cellTable.redraw();	
 	}
 
-	private void deleteDoc(ExternalContact object) 
+	private void removeContact(ExternalContact object) 
 	{
-		docList.remove(object);
-		getAllContent();
+		externalContactList.remove(object);
+		printAllContent();
 	}
 	
 	/**
@@ -89,7 +93,7 @@ public class ComponentExternalContactList extends VerticalPanel
 			@Override
 			public String getValue(ExternalContact document) 
 			{
-				return document.firstName;
+				return document.lastName;
 			}
 		};
 		cellTable.addColumn(lastNameColumn, langExternalContact._TextLastName());
@@ -108,12 +112,12 @@ public class ComponentExternalContactList extends VerticalPanel
 		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<ExternalContact, String>() {
 			@Override
 			public void update(int index, ExternalContact object, String value) {
-				deleteDoc(object);
+				removeContact(object);
 			}
 			});
 		
 		add(cellTable);		
-		ButtonImageText buttonAdd = new ButtonImageText(ButtonImageText.Type.NEW, langExternalContact._Text_AddExternalContact());		
+		buttonAdd = new ButtonImageText(ButtonImageText.Type.NEW, langExternalContact._Text_AddExternalContact());		
 		add(buttonAdd);
 		
 		buttonAdd.addClickHandler(new ClickHandler()
@@ -121,20 +125,23 @@ public class ComponentExternalContactList extends VerticalPanel
 			@Override
 			public void onClick(ClickEvent event) 
 			{
-				ComponentChooseExternalContact cud = new ComponentChooseExternalContact(rootPanel, userId, new ComponentChooseExternalContact.ComponentChooseDocumentResult() 
+				IChooseExternalContact cud = chooseExternalContact.clone(rootPanel, userId, new ChooseExternalContactResult() 
 				{
 					@Override
 					public void setResult(ExternalContact result) 
 					{
-						docList.add(result);
-						getAllContent();
+						boolean found = false;
+						for (ExternalContact contact: externalContactList) if (contact.ID.equals(result.ID)) found=true;
+						if (!found)
+							externalContactList.add(result);
+						printAllContent();
 					}
 				});
 				cud.onModuleLoad();							
 			}});
 		dataProvider.addDataDisplay(cellTable);
-		dataProvider.updateRowCount(docList.size(), true);
+		dataProvider.updateRowCount(externalContactList.size(), true);
 
-		getAllContent();
+		printAllContent();
 	}
 }
