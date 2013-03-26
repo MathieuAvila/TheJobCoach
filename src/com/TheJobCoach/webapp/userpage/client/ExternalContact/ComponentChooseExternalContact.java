@@ -35,7 +35,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 	DialogBlockOkCancel okCancel;
 	ChooseExternalContactResult result;
 
-	List<ExternalContact> docList = new ArrayList<ExternalContact>();
+	List<ExternalContact> externalContactList = new ArrayList<ExternalContact>();
 	Panel rootPanel;
 	UserId userId;
 	
@@ -58,10 +58,10 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 			final com.google.gwt.view.client.Range range = display.getVisibleRange();
 			int start = range.getStart();
 			int end = start + range.getLength();
-			if (end >= docList.size() ) end = docList.size();
-			if (docList.size() != 0)
+			if (end >= externalContactList.size() ) end = externalContactList.size();
+			if (externalContactList.size() != 0)
 			{
-				List<ExternalContact> dataInRange = docList.subList(start, end);
+				List<ExternalContact> dataInRange = externalContactList.subList(start, end);
 				// Push the data back into the list.
 				cellTable.setRowData(start, dataInRange);
 				cellTable.redraw();				
@@ -78,10 +78,10 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 			}
 			@Override
 			public void onSuccess(Vector<ExternalContact> result) {
-				docList.clear();
-				docList.addAll(result);				
-				dataProvider.updateRowCount(docList.size(), true);
-				dataProvider.updateRowData(0, docList.subList(0, docList.size()));
+				externalContactList.clear();
+				externalContactList.addAll(result);				
+				dataProvider.updateRowCount(externalContactList.size(), true);
+				dataProvider.updateRowData(0, externalContactList.subList(0, externalContactList.size()));
 				cellTable.redraw();				
 			}
 		};
@@ -92,7 +92,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 		{
 			MessageBox.messageBoxException(rootPanel, e);
 		}
-		dataProvider.updateRowCount(docList.size(), true);
+		dataProvider.updateRowCount(externalContactList.size(), true);
 		cellTable.redraw();
 	}
 	
@@ -112,9 +112,9 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 		// Create first name column.
 		TextColumn<ExternalContact> firstNameColumn = new TextColumn<ExternalContact>() 	{
 			@Override
-			public String getValue(ExternalContact document) 
+			public String getValue(ExternalContact externalContact) 
 			{
-				return document.firstName;
+				return externalContact.firstName;
 			}
 		};
 		cellTable.addColumn(firstNameColumn, langExternalContact._TextFirstName());
@@ -122,9 +122,9 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 		// Create first name column.
 		TextColumn<ExternalContact> lastNameColumn = new TextColumn<ExternalContact>() 	{
 			@Override
-			public String getValue(ExternalContact document) 
+			public String getValue(ExternalContact externalContact) 
 			{
-				return document.lastName;
+				return externalContact.lastName;
 			}
 		};
 		cellTable.addColumn(lastNameColumn, langExternalContact._TextLastName());
@@ -132,9 +132,9 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 		// Create organization column.
 		TextColumn<ExternalContact> organizationColumn = new TextColumn<ExternalContact>() 	{
 			@Override
-			public String getValue(ExternalContact document) 
+			public String getValue(ExternalContact externalContact) 
 			{
-				return document.lastName;
+				return externalContact.lastName;
 			}
 		};
 		cellTable.addColumn(organizationColumn, langExternalContact._Text_Organization());
@@ -142,7 +142,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 		hp.add(cellTable);		
 		
 		dataProvider.addDataDisplay(cellTable);
-		dataProvider.updateRowCount(docList.size(), true);
+		dataProvider.updateRowCount(externalContactList.size(), true);
 		getAllContent();
 		
 		// Add a selection model to handle user selection.
@@ -165,9 +165,8 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 			public void onClick(ClickEvent event)
 			{
 				okCancel.setEnabled(false);
-				ExternalContact doc = selectionModel.getSelectedObject();
-				//System.out.println("Selected " + doc);
-				result.setResult(doc);
+				ExternalContact externalContact = selectionModel.getSelectedObject();
+				result.setResult(externalContact);
 				dBox.hide();
 			}
 		});
