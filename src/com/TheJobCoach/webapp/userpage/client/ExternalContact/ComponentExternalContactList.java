@@ -84,6 +84,7 @@ public class ComponentExternalContactList extends CaptionPanel
 		vp.setWidth("100%");
 		vp.setSpacing(5);
 		this.setCaptionText(langExternalContact._TextExternalContactTitle());
+		this.setStyleName("SelectorList-CaptionPanel");
 		
 		// Create first name column.
 		TextColumn<ExternalContact> firstNameColumn = new TextColumn<ExternalContact>() 	{

@@ -86,7 +86,8 @@ public class ComponentDocumentList extends CaptionPanel
 		vp.setWidth("100%");
 		vp.setSpacing(5);
 		this.setCaptionText(langDocument._TextDocumentTitle());
-
+		this.setStyleName("SelectorList-CaptionPanel");
+		
 		
 		// Create name column.
 		TextColumn<UserDocumentId> nameColumn = new TextColumn<UserDocumentId>() 	{
