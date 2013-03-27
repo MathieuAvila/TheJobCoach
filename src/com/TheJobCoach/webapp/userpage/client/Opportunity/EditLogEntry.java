@@ -15,6 +15,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -192,7 +193,7 @@ public class EditLogEntry implements EntryPoint {
 		ecl = new ComponentExternalContactList(contactList, rootPanel, user, new ComponentChooseExternalContact());
 		ecl.onModuleLoad();
 		hp.add(ecl);		
-		
+		hp.add(new VerticalSpacer("10px"));
 		hp.add(okCancel);
 		
 		if (currentLogEntry != null)
