@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
@@ -134,9 +135,11 @@ public class EditLogEntry implements EntryPoint {
 		Label lblTitle = new Label(langLogEntry._TextUserLogTitle());
 		grid.setWidget(0, 0, lblTitle);		
 		grid.setWidget(0, 1, txtbxTitle);
-		grid.getCellFormatter().setWidth(0, 1, "100%");
+		grid.getCellFormatter().setWidth(0, 1, "50%");
+		grid.getCellFormatter().setWidth(0, 0, "50%");
 		txtbxTitle.setWidth("100%");
-
+		lblTitle.setWidth("100%");
+		
 		Label lblStatus = new Label("Status");
 		grid.setWidget(1, 0, lblStatus);
 		grid.setWidget(1, 1, comboBoxStatus);
@@ -156,16 +159,18 @@ public class EditLogEntry implements EntryPoint {
 		
 		grid.getCellFormatter().setWidth(2, 1, "100%");
 		richTextAreaDescription.setWidth("100%");
-
+		richTextAreaDescription.setHeight("5em");
+		
 		Label lblEndDate = new Label(langLogEntry._TextCreated());
 		grid.setWidget(3, 0, lblEndDate);
 		grid.setWidget(3, 1, dateBoxEvent);
-
-		grid.setWidget(4, 0, new Label(langLogEntry._TextDone()));
-		grid.setWidget(4, 1, doneBox);
 		
+		grid.setWidget(3, 0, new Label(langLogEntry._TextDone()));
+		grid.setWidget(3, 1, doneBox);
+
 		grid.setWidget(5, 0, new Label(lang._TextPersonalNote()));
 		grid.setWidget(5, 1, richTextAreaNote);
+		richTextAreaNote.setHeight("5em");
 		
 		okCancel = new DialogBlockOkCancel(null, dBox);
 		okCancel.getOk().addClickHandler(new ClickHandler() {
