@@ -30,9 +30,9 @@ public class ComponentExternalContactList extends VerticalPanel
 	ButtonImageText buttonAdd;
 	IChooseExternalContact chooseExternalContact;
 
-	public ComponentExternalContactList(Vector<ExternalContact> docList, Panel rootPanel, UserId userId, IChooseExternalContact chooseExternalContact)
+	public ComponentExternalContactList(Vector<ExternalContact> contactList, Panel rootPanel, UserId userId, IChooseExternalContact chooseExternalContact)
 	{
-		this.externalContactList = docList;
+		this.externalContactList = contactList;
 		this.rootPanel = rootPanel;
 		this.userId = userId;
 		this.chooseExternalContact = chooseExternalContact;
@@ -81,9 +81,9 @@ public class ComponentExternalContactList extends VerticalPanel
 		// Create first name column.
 		TextColumn<ExternalContact> firstNameColumn = new TextColumn<ExternalContact>() 	{
 			@Override
-			public String getValue(ExternalContact document) 
+			public String getValue(ExternalContact externalContact) 
 			{
-				return document.firstName;
+				return externalContact.firstName;
 			}
 		};
 		cellTable.addColumn(firstNameColumn, langExternalContact._TextFirstName());
@@ -91,9 +91,9 @@ public class ComponentExternalContactList extends VerticalPanel
 		// Create last name column.
 		TextColumn<ExternalContact> lastNameColumn = new TextColumn<ExternalContact>() 	{
 			@Override
-			public String getValue(ExternalContact document) 
+			public String getValue(ExternalContact externalContact) 
 			{
-				return document.lastName;
+				return externalContact.lastName;
 			}
 		};
 		cellTable.addColumn(lastNameColumn, langExternalContact._TextLastName());
@@ -101,9 +101,9 @@ public class ComponentExternalContactList extends VerticalPanel
 		// Create organization column.
 		TextColumn<ExternalContact> organizationColumn = new TextColumn<ExternalContact>() 	{
 			@Override
-			public String getValue(ExternalContact document) 
+			public String getValue(ExternalContact externalContact) 
 			{
-				return document.organization;
+				return externalContact.organization;
 			}
 		};
 		cellTable.addColumn(organizationColumn, langExternalContact._Text_Organization());
