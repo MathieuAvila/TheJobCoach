@@ -7,12 +7,15 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
+import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.TestFormatUtil;
@@ -50,14 +53,23 @@ public class AutoTestEditLogEntry extends GwtTest {
 	UserDocumentId docId2 = new UserDocumentId("ID2", "updateId2", "name2", "fileName2", new Date(), new Date());
 	Vector<UserDocumentId> docIdList = new Vector<UserDocumentId>(Arrays.asList(docId1, docId2));
 	
+	static String contact1 = "contact1";
+	static String contact2 = "contact2";
+	static String contact3 = "contact3";
+	static ExternalContact ec1 = new ExternalContact(contact1, "firstName1", "lastName1", "email1", "phone1", "personalNote1", "organization1", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
+	static ExternalContact ec2 = new ExternalContact(contact2, "firstName2", "lastName2", "email2", "phone2", "personalNote2", "organization2", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, false));
+	static ExternalContact ec3 = new ExternalContact(contact3, "firstName3", "lastName3", "email3", "phone3", "personalNote3", "organization3", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
+	Vector<ExternalContact> contactList =  new Vector<ExternalContact>(Arrays.asList(ec1, ec2, ec3));
+	Vector<ExternalContact> contactList_modified =  new Vector<ExternalContact>(Arrays.asList(ec1, ec3));
+	
 	UserLogEntry ule = new UserLogEntry("oppId", "logId", "title",
 			"description", TestFormatUtil.getDate(2000, 1, 1, 12, 02, 03), LogEntryType.EVENT,
-			new Vector<ExternalContact>(), new Vector<UserDocumentId>(),
+			contactList, new Vector<UserDocumentId>(),
 			"note", true);
 	
 	UserLogEntry ule_modified = new UserLogEntry("oppId", "logId", "title2",
 			"description2", TestFormatUtil.getDate(2001, 1, 1, 12, 02, 03), LogEntryType.INFO, // first
-			new Vector<ExternalContact>(), new Vector<UserDocumentId>(),
+			contactList_modified, new Vector<UserDocumentId>(),
 			"note2", false);
 		
 	class EditLogEntryResultTest implements EditLogEntry.EditLogEntryResult
@@ -94,6 +106,13 @@ public class AutoTestEditLogEntry extends GwtTest {
 				assertEquals(
 						expect.attachedDocumentId.elementAt(index).updateId, 
 						result.attachedDocumentId.elementAt(index).updateId);
+			}
+			assertEquals(expect.linkedExternalContact.size(), result.linkedExternalContact.size());
+			for (index=0; index != expect.linkedExternalContact.size(); index++)
+			{
+				assertEquals(
+						expect.linkedExternalContact.elementAt(index).ID, 
+						result.linkedExternalContact.elementAt(index).ID);
 			}
 			calls++;
 		}
@@ -135,6 +154,7 @@ public class AutoTestEditLogEntry extends GwtTest {
 		cud.richTextAreaNote.setText(ule_modified.note);
 		cud.doneBox.setValue(ule_modified.done);
 		cud.comboBoxStatus.setSelectedIndex(0);
+		cud.contactList = contactList_modified;
 		cud.okCancel.getOk().click();
 		assertEquals(1, userService.calls);
 		assertEquals(1, result.calls);
