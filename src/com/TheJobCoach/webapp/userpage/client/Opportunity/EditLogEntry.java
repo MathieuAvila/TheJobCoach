@@ -7,6 +7,9 @@ import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Document.ComponentDocumentList;
+import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentChooseExternalContact;
+import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalContactList;
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
@@ -51,7 +54,9 @@ public class EditLogEntry implements EntryPoint {
 	TextBox txtbxTitle = new TextBox();
 	ListBox comboBoxStatus = new ListBox();
 	DateBox dateBoxEvent = new DateBox();	
-	CheckBox doneBox = new CheckBox();	
+	CheckBox doneBox = new CheckBox();
+	ComponentDocumentList cdl;
+	ComponentExternalContactList ecl;
 	DialogBlockOkCancel okCancel;
 
 	String id;
@@ -61,6 +66,7 @@ public class EditLogEntry implements EntryPoint {
 	UserLogEntry currentLogEntry;
 	String oppId;
 	Vector<UserDocumentId> userDocumentList;
+	Vector<ExternalContact> contactList = new Vector<ExternalContact>();
 	
 	public EditLogEntry(Panel panel, UserLogEntry _currentLogEntry, String _oppId, UserId _user, com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry.EditLogEntryResult editLogEntryResult)
 	{
@@ -85,7 +91,7 @@ public class EditLogEntry implements EntryPoint {
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), 
 				dateBoxEvent.getValue(),
 				UserLogEntry.entryTypeToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex())),
-				null, userDocumentList, richTextAreaNote.getHTML(), doneBox.getValue().booleanValue());
+				contactList, userDocumentList, richTextAreaNote.getHTML(), doneBox.getValue().booleanValue());
 	}
 
 	private void commit()
@@ -136,7 +142,6 @@ public class EditLogEntry implements EntryPoint {
 		
 		for (LogEntryType e : UserLogEntry.getLogTypeTable())
 		{
-			System.out.println("logEntryStatus_" + UserLogEntry.entryTypeToString(e));
 			comboBoxStatus.addItem(langLogEntry.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(e)), UserLogEntry.entryTypeToString(e));
 			if ((currentLogEntry != null) && (currentLogEntry.type == e))
 			{
@@ -165,7 +170,6 @@ public class EditLogEntry implements EntryPoint {
 		okCancel.getOk().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
-				System.out.println("clicked ok...");
 				okCancel.setEnabled(false);
 				commit();
 				dBox.hide();
@@ -174,21 +178,25 @@ public class EditLogEntry implements EntryPoint {
 		if (currentLogEntry != null)
 		{
 			userDocumentList = currentLogEntry.attachedDocumentId;
+			for (ExternalContact ec: currentLogEntry.linkedExternalContact) 
+				contactList.add(ec);
 		}
 		else
 		{
 			userDocumentList = new Vector<UserDocumentId>();
 		}
-		ComponentDocumentList cdl = new ComponentDocumentList(userDocumentList, rootPanel, user);
+		cdl = new ComponentDocumentList(userDocumentList, rootPanel, user);
 		cdl.onModuleLoad();
 		hp.add(cdl);
+		
+		ecl = new ComponentExternalContactList(contactList, rootPanel, user, new ComponentChooseExternalContact());
+		ecl.onModuleLoad();
+		hp.add(ecl);
 		
 		hp.add(okCancel);
 		
 		if (currentLogEntry != null)
 		{
-			System.out.println("CURRENT + " + currentLogEntry);
-			System.out.println("CURRENT + " + currentLogEntry.title);
 			txtbxTitle.setText(currentLogEntry.title);
 			richTextAreaDescription.setHTML(currentLogEntry.description);
 			richTextAreaNote.setHTML(currentLogEntry.note);

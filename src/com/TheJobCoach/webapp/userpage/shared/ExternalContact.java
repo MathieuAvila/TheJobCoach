@@ -27,6 +27,10 @@ public class ExternalContact implements Serializable {
 				update);
 	}
 
+	public ExternalContact clone()
+	{
+		return new ExternalContact(ID, firstName, lastName,	email,  phone,  personalNote,  organization, update);
+	}
 
 	public ExternalContact()
 	{
