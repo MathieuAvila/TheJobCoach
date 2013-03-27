@@ -191,7 +191,7 @@ public class EditLogEntry implements EntryPoint {
 		
 		ecl = new ComponentExternalContactList(contactList, rootPanel, user, new ComponentChooseExternalContact());
 		ecl.onModuleLoad();
-		hp.add(ecl);
+		hp.add(ecl);		
 		
 		hp.add(okCancel);
 		

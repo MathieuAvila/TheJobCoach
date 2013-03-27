@@ -23,6 +23,12 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("new_24.png")
 	ImageResource createNew();
 
+	@Source("button_add_24.png")
+	ImageResource buttonAdd24();
+
+	@Source("button_add_16.png")
+	ImageResource buttonAdd16();
+
 	@Source("question_64.png")
 	ImageResource createQuestion();
 
@@ -43,5 +49,4 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("email_32.png")
 	ImageResource emailIcon();
-
 }

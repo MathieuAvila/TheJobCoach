@@ -18,14 +18,16 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.ui.CaptionPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
-public class ComponentDocumentList extends VerticalPanel 
+public class ComponentDocumentList extends CaptionPanel 
 {	
 	final Lang lang = GWT.create(Lang.class);
+	final LangDocument langDocument = GWT.create(LangDocument.class);
 	final ExtendedCellTable<UserDocumentId> cellTable = new ExtendedCellTable<UserDocumentId>();
 	
 	Vector<UserDocumentId> docList;
@@ -77,10 +79,15 @@ public class ComponentDocumentList extends VerticalPanel
 	 */
 	public void onModuleLoad()
 	{	
-		final VerticalPanel simplePanelCenter = new VerticalPanel();
-		simplePanelCenter.setSize("0%", "0%");
-		add(simplePanelCenter);
-	
+		rootPanel.add(this);
+
+		final VerticalPanel vp = new VerticalPanel();
+		this.add(vp);
+		vp.setWidth("100%");
+		vp.setSpacing(5);
+		this.setCaptionText(langDocument._TextDocumentTitle());
+
+		
 		// Create name column.
 		TextColumn<UserDocumentId> nameColumn = new TextColumn<UserDocumentId>() 	{
 			@Override
@@ -97,7 +104,7 @@ public class ComponentDocumentList extends VerticalPanel
 					public void update(int index, UserDocumentId object, String value) {
 						String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encodeQueryString(object.updateId) + "&userid=" + URL.encodeQueryString(userId.userName)+ "&token=" + URL.encodeQueryString(userId.token);
 						DownloadIFrame iframe = new DownloadIFrame(copyURL);
-						simplePanelCenter.add(iframe);
+						vp.add(iframe);
 					}},
 					new GetValue<String, UserDocumentId>() {
 						@Override
@@ -125,9 +132,9 @@ public class ComponentDocumentList extends VerticalPanel
 			}
 			});
 		
-		add(cellTable);		
-		ButtonImageText buttonAdd = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextAttachUserDocument());		
-		add(buttonAdd);
+		vp.add(cellTable);		
+		ButtonImageText buttonAdd = new ButtonImageText(ButtonImageText.Type.ADD_16, lang._TextAttachUserDocument());		
+		vp.add(buttonAdd);
 		
 		buttonAdd.addClickHandler(new ClickHandler()
 		{

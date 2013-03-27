@@ -15,11 +15,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.CaptionPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
-public class ComponentExternalContactList extends VerticalPanel 
+public class ComponentExternalContactList extends CaptionPanel 
 {	
 	private final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
 	final ExtendedCellTable<ExternalContact> cellTable = new ExtendedCellTable<ExternalContact>();
@@ -75,9 +76,15 @@ public class ComponentExternalContactList extends VerticalPanel
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad()
-	{	
+	{
 		rootPanel.add(this);
-	
+		
+		VerticalPanel vp = new VerticalPanel();
+		this.add(vp);
+		vp.setWidth("100%");
+		vp.setSpacing(5);
+		this.setCaptionText(langExternalContact._TextExternalContactTitle());
+		
 		// Create first name column.
 		TextColumn<ExternalContact> firstNameColumn = new TextColumn<ExternalContact>() 	{
 			@Override
@@ -116,9 +123,12 @@ public class ComponentExternalContactList extends VerticalPanel
 			}
 			});
 		
-		add(cellTable);		
-		buttonAdd = new ButtonImageText(ButtonImageText.Type.NEW, langExternalContact._Text_AddExternalContact());		
-		add(buttonAdd);
+		vp.add(cellTable);
+		cellTable.setWidth("100%");
+		vp.setCellWidth(cellTable, "100%");
+
+		buttonAdd = new ButtonImageText(ButtonImageText.Type.ADD_16, langExternalContact._Text_AddExternalContact());		
+		vp.add(buttonAdd);
 		
 		buttonAdd.addClickHandler(new ClickHandler()
 		{
