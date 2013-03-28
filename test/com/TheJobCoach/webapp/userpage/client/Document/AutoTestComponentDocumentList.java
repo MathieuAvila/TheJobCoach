@@ -44,7 +44,8 @@ public class AutoTestComponentDocumentList extends GwtTest {
 		cdl = new ComponentDocumentList(
 				docList,
 				p, 
-				new UserId()
+				new UserId(),
+				new ComponentChooseDocument()
 				);
 		cdl.onModuleLoad();		
 

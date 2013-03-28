@@ -99,8 +99,7 @@ public class TestExternalContact implements EntryPoint {
 						ComponentExternalContactList cud = new ComponentExternalContactList(
 								external_contact_list, 
 								hp, 
-								new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER), 
-								new ComponentChooseExternalContact());
+								new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
 						cud.onModuleLoad();
 					}
 				});

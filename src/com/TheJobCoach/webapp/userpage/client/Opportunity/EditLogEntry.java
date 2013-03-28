@@ -7,7 +7,6 @@ import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Document.ComponentDocumentList;
-import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentChooseExternalContact;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalContactList;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
@@ -194,7 +193,7 @@ public class EditLogEntry implements EntryPoint {
 		cdl.onModuleLoad();
 		hp.add(cdl);
 		
-		ecl = new ComponentExternalContactList(contactList, rootPanel, user, new ComponentChooseExternalContact());
+		ecl = new ComponentExternalContactList(contactList, rootPanel, user);
 		ecl.onModuleLoad();
 		hp.add(ecl);		
 		hp.add(new VerticalSpacer("10px"));

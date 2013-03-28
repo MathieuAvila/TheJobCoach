@@ -40,6 +40,15 @@ public class ComponentExternalContactList extends CaptionPanel
 		this.chooseExternalContact = chooseExternalContact;
 	}
 
+	public ComponentExternalContactList(Vector<ExternalContact> contactList,
+			Panel rootPanel, UserId userId)
+	{
+		this.externalContactList = contactList;
+		this.rootPanel = rootPanel;
+		this.userId = userId;
+		this.chooseExternalContact = new ComponentChooseExternalContact();
+	}
+
 	// Create a data provider.
 	AsyncDataProvider<ExternalContact> dataProvider = new AsyncDataProvider<ExternalContact>() {
 		@Override

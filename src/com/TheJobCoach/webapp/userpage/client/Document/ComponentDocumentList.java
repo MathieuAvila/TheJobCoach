@@ -9,9 +9,10 @@ import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
+import com.TheJobCoach.webapp.util.client.IChooseDialogModel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
-import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -34,12 +35,22 @@ public class ComponentDocumentList extends CaptionPanel
 	Vector<UserDocumentId> docList;
 	Panel rootPanel;
 	UserId userId;
+	IChooseDialogModel<UserDocumentId> chooseDocument;
+	
+	public ComponentDocumentList(Vector<UserDocumentId> docList, Panel rootPanel, UserId userId, IChooseDialogModel<UserDocumentId> chooseDocument)
+	{
+		this.docList = docList;
+		this.rootPanel = rootPanel;
+		this.userId = userId;
+		this.chooseDocument = chooseDocument;
+	}
 	
 	public ComponentDocumentList(Vector<UserDocumentId> docList, Panel rootPanel, UserId userId)
 	{
 		this.docList = docList;
 		this.rootPanel = rootPanel;
 		this.userId = userId;
+		this.chooseDocument = new ComponentChooseDocument();
 	}
 
 	// Create a data provider.
@@ -142,7 +153,7 @@ public class ComponentDocumentList extends CaptionPanel
 			@Override
 			public void onClick(ClickEvent event) 
 			{
-				ComponentChooseDocument cud = new ComponentChooseDocument(rootPanel, userId, new IChooseResult<UserDocumentId>() 
+				IChooseDialogModel<UserDocumentId> cud = chooseDocument.clone(rootPanel, userId, new IChooseResult<UserDocumentId>() 
 				{
 					@Override
 					public void setResult(UserDocumentId result) 

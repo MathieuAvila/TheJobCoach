@@ -11,6 +11,7 @@ import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseDialogModel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -28,7 +29,7 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
-public class ComponentChooseDocument implements EntryPoint 
+public class ComponentChooseDocument implements EntryPoint, IChooseDialogModel<UserDocumentId>
 {
 	private final static UserServiceAsync userService = GWT.create(UserService.class);
 	
@@ -48,6 +49,10 @@ public class ComponentChooseDocument implements EntryPoint
 		this.rootPanel = rootPanel;
 		this.userId = userId;
 		this.result = result;
+	}
+
+	public ComponentChooseDocument()
+	{
 	}
 
 	// Create a data provider.
@@ -170,5 +175,12 @@ public class ComponentChooseDocument implements EntryPoint
 		
 		dBox.setWidget(hp);
 		dBox.center();
+	}
+
+	@Override
+	public IChooseDialogModel<UserDocumentId> clone(Panel rootPanel,
+			UserId userId, IChooseResult<UserDocumentId> result)
+	{
+		return new ComponentChooseDocument(rootPanel, userId, result);
 	}
 }
