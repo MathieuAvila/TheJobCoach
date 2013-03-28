@@ -14,6 +14,7 @@ import com.TheJobCoach.webapp.util.client.IChooseDialogModel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -110,7 +111,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseDialog
 		dBox.setAnimationEnabled(true);
 
 		VerticalPanel hp = new VerticalPanel();		
-		
+					
 		// Create first name column.
 		TextColumn<ExternalContact> firstNameColumn = new TextColumn<ExternalContact>() 	{
 			@Override
@@ -136,7 +137,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseDialog
 			@Override
 			public String getValue(ExternalContact externalContact) 
 			{
-				return externalContact.lastName;
+				return externalContact.organization;
 			}
 		};
 		cellTable.addColumn(organizationColumn, langExternalContact._Text_Organization());
@@ -162,7 +163,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseDialog
 				okCancel.getOk().setEnabled(true);
 			}
 		});
-
+		
 		okCancel.getOk().addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event)
 			{
