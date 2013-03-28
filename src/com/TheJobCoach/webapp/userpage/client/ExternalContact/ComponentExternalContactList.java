@@ -7,6 +7,7 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseDialogModel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -29,9 +30,9 @@ public class ComponentExternalContactList extends CaptionPanel
 	Panel rootPanel;
 	UserId userId;
 	ButtonImageText buttonAdd;
-	IChooseExternalContact chooseExternalContact;
+	IChooseDialogModel<ExternalContact> chooseExternalContact;
 
-	public ComponentExternalContactList(Vector<ExternalContact> contactList, Panel rootPanel, UserId userId, IChooseExternalContact chooseExternalContact)
+	public ComponentExternalContactList(Vector<ExternalContact> contactList, Panel rootPanel, UserId userId, IChooseDialogModel<ExternalContact> chooseExternalContact)
 	{
 		this.externalContactList = contactList;
 		this.rootPanel = rootPanel;
@@ -136,7 +137,7 @@ public class ComponentExternalContactList extends CaptionPanel
 			@Override
 			public void onClick(ClickEvent event) 
 			{
-				IChooseExternalContact cud = chooseExternalContact.clone(rootPanel, userId, new IChooseResult<ExternalContact>() 
+				IChooseDialogModel<ExternalContact> cud = chooseExternalContact.clone(rootPanel, userId, new IChooseResult<ExternalContact>() 
 				{
 					@Override
 					public void setResult(ExternalContact result) 

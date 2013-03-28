@@ -10,6 +10,7 @@ import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseDialogModel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -27,7 +28,7 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
-public class ComponentChooseExternalContact implements EntryPoint, IChooseExternalContact
+public class ComponentChooseExternalContact implements EntryPoint, IChooseDialogModel<ExternalContact>
 {
 
 	private final static UserServiceAsync userService = GWT.create(UserService.class);
@@ -178,7 +179,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 	}
 
 	@Override
-	public IChooseExternalContact clone(Panel rootPanel, UserId userId,
+	public IChooseDialogModel<ExternalContact> clone(Panel rootPanel, UserId userId,
 			IChooseResult<ExternalContact> result)
 	{
 		return new ComponentChooseExternalContact(rootPanel, userId, result);
