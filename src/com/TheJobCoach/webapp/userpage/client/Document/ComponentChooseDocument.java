@@ -156,8 +156,10 @@ public class ComponentChooseDocument implements EntryPoint, IChooseDialogModel<U
 		// When selecting one, ok is allowed
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler()
 		{
-			public void onSelectionChange(SelectionChangeEvent event) 
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event)
 			{
+				System.out.println("has selected one element");
 				okCancel.getOk().setEnabled(true);
 			}
 		});
@@ -166,7 +168,6 @@ public class ComponentChooseDocument implements EntryPoint, IChooseDialogModel<U
 			{
 				okCancel.setEnabled(false);
 				UserDocumentId doc = selectionModel.getSelectedObject();
-				//System.out.println("Selected " + doc);
 				result.setResult(doc);
 				dBox.hide();
 			}

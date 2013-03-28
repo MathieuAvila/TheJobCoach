@@ -17,14 +17,12 @@ import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
-import com.googlecode.gwt.test.utils.events.EventBuilder;
+import com.googlecode.gwt.test.utils.events.Browser;
 
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestComponentChooseExternalContact extends GwtTest {
@@ -138,6 +136,7 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 		assertEquals(contact3, ccec.cellTable.getVisibleItem(2).ID);
 		
 		// Check columns values
+		
 		assertEquals(3,                  ccec.cellTable.getColumnCount());
 		assertEquals(ec1.firstName,      ccec.cellTable.getColumn(0).getValue(ec1));
 		assertEquals(ec1.lastName,       ccec.cellTable.getColumn(1).getValue(ec1));
@@ -146,9 +145,10 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 		// ok is disabled
 		assertEquals(false,              ccec.okCancel.getOk().isEnabled());
 		
-		// Click on 2nd element
-		Event event = EventBuilder.create(Event.ONCLICK).build();		
-		ccec.cellTable.getColumn(0).onBrowserEvent(new Cell.Context(1, 0, ec2), ccec.cellTable.getElement(), ec2, event);
+		// Select 2nd element
+		Browser.click(ccec.cellTable, ec2);
+		
+		// Now enabled
 		assertEquals(true,              ccec.okCancel.getOk().isEnabled());
 		
 		// Click on OK.
@@ -160,10 +160,10 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 		ChooseResult result2 = new ChooseResult();
 		ccec = new ComponentChooseExternalContact(
 				p, userId, result2);
-		
 		ccec.onModuleLoad();
-		ccec.okCancel.getOk().click();
-		assertEquals(0, result2.count);
-		assertEquals(null, result2);
+		Browser.click(ccec.cellTable, ccec.cellTable.getVisibleItem(1));
+		assertEquals(true, ccec.okCancel.getOk().isEnabled());		
+		ccec.okCancel.getCancel().click();
+		assertEquals(0, result2.count);		
 	}	
 }
