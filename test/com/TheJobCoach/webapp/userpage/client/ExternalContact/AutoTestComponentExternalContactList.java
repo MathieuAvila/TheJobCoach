@@ -15,6 +15,7 @@ import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.user.client.Event;
@@ -92,9 +93,9 @@ public class AutoTestComponentExternalContactList extends GwtTest {
 	
 	public class Chooser implements IChooseExternalContact
 	{
-		ChooseExternalContactResult result;
+		IChooseResult<ExternalContact> result;
 		
-		public Chooser(ChooseExternalContactResult result)
+		public Chooser(IChooseResult<ExternalContact> result)
 		{
 			this.result = result;
 		}
@@ -105,7 +106,7 @@ public class AutoTestComponentExternalContactList extends GwtTest {
 		
 		@Override
 		public IChooseExternalContact clone(Panel rootPanel, UserId userId,
-				ChooseExternalContactResult result)
+				IChooseResult<ExternalContact> result)
 		{			
 			Chooser localResult = new Chooser(result);
 			chooserList.add(localResult);
