@@ -8,10 +8,10 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentChooseExternalContact;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalContactList;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
-import com.TheJobCoach.webapp.userpage.client.ExternalContact.IChooseExternalContact.ChooseExternalContactResult;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -131,7 +131,7 @@ public class TestExternalContact implements EntryPoint {
 
 						ComponentChooseExternalContact cud = new ComponentChooseExternalContact(
 								hp, 
-								new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER), new ChooseExternalContactResult()
+								new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER), new IChooseResult<ExternalContact>()
 								{									
 									@Override
 									public void setResult(ExternalContact result)
