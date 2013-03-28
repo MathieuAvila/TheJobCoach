@@ -10,6 +10,7 @@ import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.core.client.EntryPoint;
@@ -33,13 +34,13 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 	private final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
 	final ExtendedCellTable<ExternalContact> cellTable = new ExtendedCellTable<ExternalContact>();
 	DialogBlockOkCancel okCancel;
-	ChooseExternalContactResult result;
+	IChooseResult<ExternalContact> result;
 
 	List<ExternalContact> externalContactList = new ArrayList<ExternalContact>();
 	Panel rootPanel;
 	UserId userId;
 	
-	public ComponentChooseExternalContact(Panel rootPanel, UserId userId, ChooseExternalContactResult result)
+	public ComponentChooseExternalContact(Panel rootPanel, UserId userId, IChooseResult<ExternalContact> result)
 	{
 		this.rootPanel = rootPanel;
 		this.userId = userId;
@@ -178,7 +179,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseExtern
 
 	@Override
 	public IChooseExternalContact clone(Panel rootPanel, UserId userId,
-			ChooseExternalContactResult result)
+			IChooseResult<ExternalContact> result)
 	{
 		return new ComponentChooseExternalContact(rootPanel, userId, result);
 	}

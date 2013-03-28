@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.client.ExternalContact.IChooseExternalContact.ChooseExternalContactResult;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
@@ -136,7 +136,7 @@ public class ComponentExternalContactList extends CaptionPanel
 			@Override
 			public void onClick(ClickEvent event) 
 			{
-				IChooseExternalContact cud = chooseExternalContact.clone(rootPanel, userId, new ChooseExternalContactResult() 
+				IChooseExternalContact cud = chooseExternalContact.clone(rootPanel, userId, new IChooseResult<ExternalContact>() 
 				{
 					@Override
 					public void setResult(ExternalContact result) 

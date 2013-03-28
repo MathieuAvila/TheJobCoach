@@ -9,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -141,7 +142,7 @@ public class ComponentDocumentList extends CaptionPanel
 			@Override
 			public void onClick(ClickEvent event) 
 			{
-				ComponentChooseDocument cud = new ComponentChooseDocument(rootPanel, userId, new ComponentChooseDocument.ComponentChooseDocumentResult() 
+				ComponentChooseDocument cud = new ComponentChooseDocument(rootPanel, userId, new IChooseResult<UserDocumentId>() 
 				{
 					@Override
 					public void setResult(UserDocumentId result) 

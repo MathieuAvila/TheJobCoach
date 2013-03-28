@@ -11,6 +11,7 @@ import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,7 +30,6 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 public class ComponentChooseDocument implements EntryPoint 
 {
-
 	private final static UserServiceAsync userService = GWT.create(UserService.class);
 	
 	final Lang lang = GWT.create(Lang.class);
@@ -37,18 +37,13 @@ public class ComponentChooseDocument implements EntryPoint
 	
 	final ExtendedCellTable<UserDocumentId> cellTable = new ExtendedCellTable<UserDocumentId>();
 	DialogBlockOkCancel okCancel;
-	ComponentChooseDocumentResult result;
+	IChooseResult<UserDocumentId> result;
 	
-	public interface ComponentChooseDocumentResult
-	{
-		public void setResult(UserDocumentId result);
-	}
-
 	List<UserDocumentId> docList = new ArrayList<UserDocumentId>();
 	Panel rootPanel;
 	UserId userId;
 	
-	public ComponentChooseDocument(Panel rootPanel, UserId userId, ComponentChooseDocumentResult result)
+	public ComponentChooseDocument(Panel rootPanel, UserId userId, IChooseResult<UserDocumentId> result)
 	{
 		this.rootPanel = rootPanel;
 		this.userId = userId;
