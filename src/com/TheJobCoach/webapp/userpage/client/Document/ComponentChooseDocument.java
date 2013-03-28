@@ -31,7 +31,10 @@ public class ComponentChooseDocument implements EntryPoint
 {
 
 	private final static UserServiceAsync userService = GWT.create(UserService.class);
+	
 	final Lang lang = GWT.create(Lang.class);
+	final LangDocument langDocument = GWT.create(LangDocument.class);
+	
 	final ExtendedCellTable<UserDocumentId> cellTable = new ExtendedCellTable<UserDocumentId>();
 	DialogBlockOkCancel okCancel;
 	ComponentChooseDocumentResult result;
@@ -125,7 +128,7 @@ public class ComponentChooseDocument implements EntryPoint
 				return document.fileName;
 			}
 		};
-		cellTable.addColumn(fileColumn, lang._TextFilename());
+		cellTable.addColumn(fileColumn, langDocument._TextFilename());
 		
 		// Create update date column.
 		TextColumn<UserDocumentId> dateColumn = new TextColumn<UserDocumentId>() 	{
@@ -135,7 +138,7 @@ public class ComponentChooseDocument implements EntryPoint
 				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(document.lastUpdate);
 			}
 		};
-		cellTable.addColumn(dateColumn, lang._TextLastUpdate());
+		cellTable.addColumn(dateColumn, langDocument._TextLastUpdate());
 
 		hp.add(cellTable);		
 		

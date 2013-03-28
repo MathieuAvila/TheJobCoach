@@ -20,11 +20,6 @@ public interface Lang extends Constants {
 	@Key("connectiontime")
 	String _Text_ConnectionTimeToday();
 
-	// Common
-	
-	@Key("type")
-	String  _TextType();
-	
 	// Menu
 	
 	@Key("account")
@@ -234,63 +229,6 @@ public interface Lang extends Constants {
 	@Key("replycomment")
 	String _TextReplyComment();	
 
-	
-	// Document
-	
-	@Key("documentStatusMap")	
-	Map<String, String> documentStatusMap();
-	
-	@Key("documentTypeMap")	
-	Map<String, String> documentTypeMap();
-
-	@Key("downloadfile")
-	String _TextDownloadFile();
-
-	@Key("mydocuments")
-	String _TextUserDocument();
-
-	@Key("editdocument")	
-	String _TextEditUserDocument();
-
-	@Key("updatedocument")
-	String _TextUpdateUserDocument();
-
-	@Key("newdocument")
-	String _TextNewUserDocument();
-
-	@Key("deletedocument")
-	String _TextDeleteUserDocument();
-
-	@Key("filename")
-	String _TextFilename();
-
-	@Key("lastupdate")
-	String _TextLastUpdate();
-	
-	@Key("createanewdocument")
-	String _TextCreateANewUserDocument();
-	
-	@Key("updateadocument")
-	String _TextUpdateANewUserDocument();
-
-	@Key("confirmdeletedocumenttitle")
-	String _TextConfirmDeleteUserDocumentTitle();
-
-	@Key("confirmdeletedocument")
-	String _TextConfirmDeleteUserDocument();
-
-	@Key("uploadinprogress")
-	String _TextUploadInProgress();
-	
-	@Key("selectfile")
-	String _TextSelectFile();
-	
-	@Key("needfile")
-	String _TextNeedFilename();
-	
-	@Key("attachuserdocument")
-	String _TextAttachUserDocument();
-	
 	// Edit user site
 
 	@Key("editusersitetitle")

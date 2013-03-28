@@ -28,7 +28,6 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -41,7 +40,8 @@ import com.google.gwt.view.client.HasData;
 public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 
 	final static Lang lang = GWT.create(Lang.class);
-
+	final static LangDocument langDocument = GWT.create(LangDocument.class);
+	
 	UserId user;
 	final ExtendedCellTable<UserDocument> cellTable = new ExtendedCellTable<UserDocument>();
 	UserDocument currentSite = null;
@@ -81,7 +81,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		AsyncCallback<Vector<UserDocument>> callback = new AsyncCallback<Vector<UserDocument>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				MessageBox.messageBoxException(rootPanel, caught);
 			}
 			@Override
 			public void onSuccess(Vector<UserDocument> result) {
@@ -95,7 +95,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		try {
 			userService.getUserDocumentList(user, callback);
 		} catch (CassandraException e) {
-			e.printStackTrace();
+			MessageBox.messageBoxException(rootPanel, e);
 		}		
 		dataProvider.updateRowCount(userDocumentList.size(), true);
 		cellTable.redraw();
@@ -115,8 +115,8 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 	void deleteDoc(final UserDocument object)
 	{
 		MessageBox mb = new MessageBox(
-				rootPanel, true, true, MessageBox.TYPE.QUESTION, lang._TextConfirmDeleteUserDocumentTitle(), 
-				lang._TextConfirmDeleteUserDocument() + object.fileName, new MessageBox.ICallback() {
+				rootPanel, true, true, MessageBox.TYPE.QUESTION, langDocument._TextConfirmDeleteUserDocumentTitle(), 
+				langDocument._TextConfirmDeleteUserDocument() + object.fileName, new MessageBox.ICallback() {
 
 					@Override
 					public void complete(boolean ok) {
@@ -125,7 +125,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 							AsyncCallback<String> callback = new AsyncCallback<String>() {
 								@Override
 								public void onFailure(Throwable caught) {
-									Window.alert(caught.getMessage());
+									MessageBox.messageBoxException(rootPanel, caught);
 								}
 								@Override
 								public void onSuccess(String result) {
@@ -136,7 +136,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 							try {
 								userService.deleteUserDocument(user, object.ID, callback);
 							} catch (CassandraException e) {
-								e.printStackTrace();
+								MessageBox.messageBoxException(rootPanel, e);
 							}		
 							dataProvider.updateRowCount(userDocumentList.size(), true);
 							cellTable.redraw();							
@@ -159,7 +159,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		simplePanelCenter.setSize("100%", "");
 		rootPanel.add(simplePanelCenter);
 
-		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextUserDocument(), ClientImageBundle.INSTANCE.userDocumentContent());
+		ContentHelper.insertTitlePanel(simplePanelCenter, langDocument._TextUserDocument(), ClientImageBundle.INSTANCE.userDocumentContent());
 
 		// Create name column.
 		TextColumn<UserDocument> nameColumn = new TextColumn<UserDocument>() 	{
@@ -175,7 +175,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 			@Override
 			public String getValue(UserDocument document) 
 			{
-				return lang.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(document.type));
+				return langDocument.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(document.type));
 			}
 		};
 
@@ -185,7 +185,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 			public String getValue(UserDocument document) 
 			{
 				//return UserDocument.documentStatusToString(document.status);
-				return lang.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(document.status));
+				return langDocument.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(document.status));
 			}
 		};
 
@@ -237,18 +237,18 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 						public String getValue(UserDocument contact) {
 							return contact.fileName;
 						}},
-						lang._TextFilename());
+						langDocument._TextFilename());
 
 		statusColumn.setSortable(true);
 		cellTable.addColumn(statusColumn, lang._TextStatus());
-		cellTable.addColumn(typeColumn, lang._TextType());
+		cellTable.addColumn(typeColumn, langDocument._TextType());
 
 		nameColumn.setSortable(true);
 		descriptionColumn.setSortable(true);
 		downloadLastUpdate.setSortable(true);
 		cellTable.addColumn(nameColumn, lang._TextName());
 		cellTable.addColumn(descriptionColumn, lang._TextDescription());
-		cellTable.addColumn(downloadLastUpdate, lang._TextLastUpdate());
+		cellTable.addColumn(downloadLastUpdate, langDocument._TextLastUpdate());
 		//cellTable.getColumnSortList().push(nameColumn);		
 
 		dataProvider.addDataDisplay(cellTable);
@@ -261,7 +261,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		cellTable.addColumnSortHandler(columnSortHandler);
 		simplePanelCenter.add(cellTable);		
 
-		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewUserDocument());
+		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, langDocument._TextNewUserDocument());
 		button.addClickHandler(new ClickHandler()
 		{			
 			public void onClick(ClickEvent event) {

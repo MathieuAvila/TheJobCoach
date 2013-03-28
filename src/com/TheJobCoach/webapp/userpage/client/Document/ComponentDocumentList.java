@@ -110,10 +110,9 @@ public class ComponentDocumentList extends CaptionPanel
 					new GetValue<String, UserDocumentId>() {
 						@Override
 						public String getValue(UserDocumentId contact) {
-							System.out.println("Add document in list: " + contact.fileName + " Master:" + contact.ID + " Sub:" + contact.updateId);
 							return contact.fileName;
 						}},
-						lang._TextFilename());
+						langDocument._TextFilename());
 		
 		// Create update date column.
 		TextColumn<UserDocumentId> dateColumn = new TextColumn<UserDocumentId>() 	{
@@ -123,7 +122,7 @@ public class ComponentDocumentList extends CaptionPanel
 				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(document.lastUpdate);
 			}
 		};
-		cellTable.addColumn(dateColumn, lang._TextLastUpdate());
+		cellTable.addColumn(dateColumn, langDocument._TextLastUpdate());
 
 		// Create remove column.
 		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserDocumentId, String>() {
@@ -134,7 +133,7 @@ public class ComponentDocumentList extends CaptionPanel
 			});
 		
 		vp.add(cellTable);		
-		ButtonImageText buttonAdd = new ButtonImageText(ButtonImageText.Type.ADD_16, lang._TextAttachUserDocument());		
+		ButtonImageText buttonAdd = new ButtonImageText(ButtonImageText.Type.ADD_16, langDocument._TextAttachUserDocument());		
 		vp.add(buttonAdd);
 		
 		buttonAdd.addClickHandler(new ClickHandler()

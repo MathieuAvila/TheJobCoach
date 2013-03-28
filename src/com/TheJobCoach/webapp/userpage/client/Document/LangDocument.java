@@ -1,48 +1,69 @@
 package com.TheJobCoach.webapp.userpage.client.Document;
 
+import java.util.Map;
+
 import com.google.gwt.i18n.client.Constants;
 
 public interface LangDocument extends Constants {
 
+	@Key("type")
+	String _TextType();
+	
 	@Key("documenttitle")
 	String _TextDocumentTitle();
-
-	/*
-	@Key("firstname")
-	String _TextFirstName();
-
-	@Key("lastname")
-	String _TextLastName();
 	
-	@Key("email")
-	String _Text_Email();
-
-	@Key("organization")
-	String _Text_Organization();
-
-	@Key("personalnote")
-	String _Text_PersonalNote();
+	@Key("documentStatusMap")	
+	Map<String, String> documentStatusMap();
 	
-	@Key("deletetitle")
-	String _TextDeleteTitle();	
+	@Key("documentTypeMap")	
+	Map<String, String> documentTypeMap();
 
-	@Key("deletetext")
-	String _TextDeleteText();	
+	@Key("downloadfile")
+	String _TextDownloadFile();
 
-	@Key("newdocument")
-	String _TextNewDocument();	
+	@Key("mydocuments")
+	String _TextUserDocument();
+
+	@Key("editdocument")	
+	String _TextEditUserDocument();
 
 	@Key("updatedocument")
-	String _TextUpdateDocument();
+	String _TextUpdateUserDocument();
 
-	@Key("phone")
-	String _Text_Phone();
+	@Key("newdocument")
+	String _TextNewUserDocument();
+
+	@Key("deletedocument")
+	String _TextDeleteUserDocument();
+
+	@Key("filename")
+	String _TextFilename();
+
+	@Key("lastupdate")
+	String _TextLastUpdate();
 	
-	@Key("choosedocument")
-	String _Text_ChooseDocument();
+	@Key("createanewdocument")
+	String _TextCreateANewUserDocument();
+	
+	@Key("updateadocument")
+	String _TextUpdateANewUserDocument();
 
-	@Key("adddocument")
-	String _Text_AddDocument();
-	*/
+	@Key("confirmdeletedocumenttitle")
+	String _TextConfirmDeleteUserDocumentTitle();
+
+	@Key("confirmdeletedocument")
+	String _TextConfirmDeleteUserDocument();
+
+	@Key("uploadinprogress")
+	String _TextUploadInProgress();
+	
+	@Key("selectfile")
+	String _TextSelectFile();
+	
+	@Key("needfile")
+	String _TextNeedFilename();
+	
+	@Key("attachuserdocument")
+	String _TextAttachUserDocument();
 	
 }

@@ -46,11 +46,13 @@ public class EditUserDocument implements EntryPoint {
 
 	UserId user;
 
-	Lang lang = GWT.create(Lang.class);
-	Label lblType = new Label(lang._TextType());
+	final static Lang lang = GWT.create(Lang.class);
+	final static LangDocument langDocument = GWT.create(LangDocument.class);
+	
+	Label lblType = new Label(langDocument._TextType());
 	Label lblStatus = new Label(lang._TextStatus());
 	Label lblDescription = new Label(lang._TextDescription());
-	Label lblSelectFile = new Label(lang._TextSelectFile());
+	Label lblSelectFile = new Label(langDocument._TextSelectFile());
 
 	RichTextArea richTextAreaDescription = new RichTextArea();
 	TextBox txtbxTitle = new TextBox();
@@ -111,11 +113,10 @@ public class EditUserDocument implements EntryPoint {
 	{
 		if (currentUserDocument == null)
 		{		
-			//System.out.println("FileName '" + upload.getFilename()+ "'");
 			if ("".equals(upload.getFilename()))
 			{
 				// This is not allowed: first insert must set a file.
-				MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR,	lang._TextNeedFilename());
+				MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR,	langDocument._TextNeedFilename());
 				return;
 			}
 		}
@@ -123,17 +124,16 @@ public class EditUserDocument implements EntryPoint {
 		AsyncCallback<String> callback = new AsyncCallback<String>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				//Window.alert(caught.getMessage());
+				MessageBox.messageBoxException(rootPanel, caught);
 			}
 			@Override
 			public void onSuccess(String result) {
-				//System.out.println(result);
 			}
 		};
 		try {
 			userService.setUserDocument(user, ud, callback);
 		} catch (CassandraException e) {
-			e.printStackTrace();
+			MessageBox.messageBoxException(rootPanel, e);
 		}
 		// Now Upload file if necessary.
 		if ("".equals(upload.getFilename()))
@@ -142,12 +142,9 @@ public class EditUserDocument implements EntryPoint {
 			resultInterface.setResult();		
 		}
 		
-		System.out.println("User is: " + user.userName);
-		System.out.println("Token is: " + user.token);
-		
 		String copyURL = GWT.getModuleBaseURL() + "UploadServlet?docid=" + URL.encodeQueryString(ud.ID) + "&userid=" + URL.encodeQueryString(user.userName)+ "&token=" + URL.encodeQueryString(user.token);
 		form.setAction(copyURL);
-		final MessageBox mb = MessageBox.messageBox(rootPanel, MessageBox.TYPE.WAIT, lang._TextUploadInProgress());
+		final MessageBox mb = MessageBox.messageBox(rootPanel, MessageBox.TYPE.WAIT, langDocument._TextUploadInProgress());
 		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() 
 		{		      
 			@Override
@@ -171,7 +168,7 @@ public class EditUserDocument implements EntryPoint {
 		System.out.println("Load Edit User Document, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
 
 		//dBox.setSize("500", "300");
-		dBox.setText(currentUserDocument == null ? lang._TextCreateANewUserDocument() : lang._TextUpdateANewUserDocument());
+		dBox.setText(currentUserDocument == null ? langDocument._TextCreateANewUserDocument() : langDocument._TextUpdateANewUserDocument());
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
@@ -188,7 +185,7 @@ public class EditUserDocument implements EntryPoint {
 		int index = 0;
 		for (DocumentStatus e: UserDocument.DocumentStatus.values() )
 		{
-			comboBoxStatus.addItem(lang.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(e)), UserDocument.documentStatusToString(e));
+			comboBoxStatus.addItem(langDocument.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(e)), UserDocument.documentStatusToString(e));
 			if (currentUserDocument != null)
 			{
 				if (currentUserDocument.status == e)
@@ -201,7 +198,7 @@ public class EditUserDocument implements EntryPoint {
 		index = 0;
 		for (UserDocument.DocumentType e: UserDocument.DocumentType.values() )
 		{
-			comboBoxType.addItem(lang.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(e)), UserDocument.documentTypeToString(e));
+			comboBoxType.addItem(langDocument.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(e)), UserDocument.documentTypeToString(e));
 			if (currentUserDocument != null)
 			{
 				if (currentUserDocument.type == e)
