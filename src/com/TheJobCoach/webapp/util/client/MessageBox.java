@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.Button;
 public class MessageBox implements EntryPoint {
 
 	Panel rootPanel;
+	
+	static final Lang lang = GWT.create(Lang.class);
 
 	public enum TYPE { INFO, WARNING, QUESTION, ERROR, WAIT, NONE };
 	public interface ICallback
@@ -33,7 +35,9 @@ public class MessageBox implements EntryPoint {
 	String title;
 	String message;
 	ICallback callback;
-
+	Button buttonOk;
+	Button buttonCancel;
+	
 	public MessageBox(Panel rootPanel, boolean ok, boolean cancel, TYPE type, String title, String message, ICallback callback)
 	{
 		this.rootPanel = rootPanel;
@@ -59,13 +63,40 @@ public class MessageBox implements EntryPoint {
 		dBox.hide();
 	}
 
+	/* For UT purposes only. 
+	 * This is used to redirect errors to a specific handler. 
+	 * It shouldn't be used in production code. */
+	public interface ErrorCatcher
+	{
+		public void errorEvent(MessageBox error, TYPE type); 
+	}	
+	static private ErrorCatcher currentErrorCatcher = null;
+	static public void registerErrorCatcher(ErrorCatcher catcher)	
+	{
+		currentErrorCatcher = catcher;
+	}
+	public void clickOk()
+	{
+		buttonOk.click();
+	}
+	public void clickCancel()
+	{
+		buttonCancel.click();
+	}
+	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad()
-	{		
-		Lang lang = GWT.create(Lang.class);
-
+	{
+		System.out.println("Error named: '" + title + "', type: " + type + " message is: " + message);
+		
+		if (currentErrorCatcher != null)
+		{
+			System.out.println("SEND OUT ERROR MESSAGE BOX to error catcher - type: " + type + " '" + title + "' type: " + type + " message is: " + message);
+			currentErrorCatcher.errorEvent(this, type);
+		}
+		
 		dBox.setText(title);
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
@@ -114,8 +145,7 @@ public class MessageBox implements EntryPoint {
 		horizontalPanel.add(innerPanel);
 		flexTable.setWidget(2, 2, horizontalPanel);
 
-		Button buttonOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
-
+		buttonOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
 		if (ok) innerPanel.add(buttonOk);
 		buttonOk.addClickHandler(new ClickHandler() 
 		{
@@ -129,7 +159,7 @@ public class MessageBox implements EntryPoint {
 		HorizontalPanel horizontalPanelSpace = new HorizontalPanel();
 		horizontalPanelSpace.setWidth("10px");
 
-		Button buttonCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
+		buttonCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
 		if (cancel) 
 		{
 			innerPanel.add(horizontalPanelSpace);

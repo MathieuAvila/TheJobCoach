@@ -78,20 +78,14 @@ public class AutoTestComponentChooseDocument extends GwtTest {
 	class SpecialUserServiceAsync extends DefaultUserServiceAsync
 	{
 		public int callsGet, callsSet, callsDelete;
-		/*
-		@Override
-		public void getUserDocumentList(UserId id,
-				AsyncCallback<Vector<UserDocument>> callback)
-				throws CassandraException {
-			callback.onSuccess(docList);
-			callsGet++;
-		}*/
 		
 		@Override
 		public void getUserDocumentIdList(UserId userId,
 				AsyncCallback<Vector<UserDocumentId>> callback) {
-			callback.onSuccess(docIdList);
+			Vector<UserDocumentId> result = new Vector<UserDocumentId>();
+			for (UserDocumentId doc: docIdList) result.add(doc);
 			callsGet++;
+			callback.onSuccess(result);
 		}
 	}
 

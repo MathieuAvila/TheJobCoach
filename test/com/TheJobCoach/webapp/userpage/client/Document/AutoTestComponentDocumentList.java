@@ -20,7 +20,7 @@ public class AutoTestComponentDocumentList extends GwtTest {
 	private ComponentDocumentList cdl;
 
 	@Test
-	public void testToto()
+	public void nothing()
 	{
 
 	}
