@@ -9,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
+import com.TheJobCoach.webapp.util.client.IEditResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
@@ -36,9 +37,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class EditUserDocument implements EntryPoint {
 
 	private static final UserServiceAsync userService = GWT.create(UserService.class);
@@ -58,19 +56,17 @@ public class EditUserDocument implements EntryPoint {
 	TextBox txtbxTitle = new TextBox();
 	ListBox comboBoxStatus = new ListBox();
 	ListBox comboBoxType = new ListBox();
+	
+	public String fakeFileName = "";
 	FileUpload upload = new FileUpload();
+	
 	FormPanel form = new FormPanel();
-	EditUserDocumentResult resultInterface;
+	IEditResult<UserDocument> resultInterface;
 	Panel rootPanel;
 	UserDocument currentUserDocument;
 	DialogBlockOkCancel okCancel;
 	
-	public interface EditUserDocumentResult
-	{
-		public void setResult();
-	}
-
-	public EditUserDocument(Panel panel, UserId _user, UserDocument _currentUserDocument, EditUserDocumentResult resultInterface)
+	public EditUserDocument(Panel panel, UserId _user, UserDocument _currentUserDocument, IEditResult<UserDocument> resultInterface)
 	{
 		user = _user;
 		rootPanel = panel;
@@ -97,9 +93,11 @@ public class EditUserDocument implements EntryPoint {
 			stripUserName = currentUserDocument.fileName;
 			iD = currentUserDocument.ID;
 		}
-		if (!"".equals(upload.getFilename()))
+		String fileName = upload.getFilename();
+		if (!fakeFileName.equals("")) fileName = fakeFileName;
+		if (!"".equals(fileName))
 		{
-			stripUserName = stripUserName(upload.getFilename());
+			stripUserName = stripUserName(fileName);
 		}
 		return new UserDocument(
 				iD, 
@@ -113,14 +111,14 @@ public class EditUserDocument implements EntryPoint {
 	{
 		if (currentUserDocument == null)
 		{		
-			if ("".equals(upload.getFilename()))
+			if ("".equals(upload.getFilename()) && (fakeFileName.equals("")))
 			{
 				// This is not allowed: first insert must set a file.
 				MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR,	langDocument._TextNeedFilename());
 				return;
 			}
 		}
-		UserDocument ud = getDocument();
+		final UserDocument ud = getDocument();
 		AsyncCallback<String> callback = new AsyncCallback<String>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -130,19 +128,19 @@ public class EditUserDocument implements EntryPoint {
 			public void onSuccess(String result) {
 			}
 		};
-		try {
+		
+		try {			
 			userService.setUserDocument(user, ud, callback);
 		} catch (CassandraException e) {
 			MessageBox.messageBoxException(rootPanel, e);
 		}
+
 		// Now Upload file if necessary.
-		if ("".equals(upload.getFilename()))
+		if ("".equals(upload.getFilename()) || (!fakeFileName.equals("")))
 		{
-			dBox.hide();
-			resultInterface.setResult();		
-		}
-		
-		String copyURL = GWT.getModuleBaseURL() + "UploadServlet?docid=" + URL.encodeQueryString(ud.ID) + "&userid=" + URL.encodeQueryString(user.userName)+ "&token=" + URL.encodeQueryString(user.token);
+			dBox.hide();	
+		}		
+		final String copyURL = GWT.getModuleBaseURL() + "UploadServlet?docid=" + URL.encodeQueryString(ud.ID) + "&userid=" + URL.encodeQueryString(user.userName)+ "&token=" + URL.encodeQueryString(user.token);
 		form.setAction(copyURL);
 		final MessageBox mb = MessageBox.messageBox(rootPanel, MessageBox.TYPE.WAIT, langDocument._TextUploadInProgress());
 		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() 
@@ -150,13 +148,13 @@ public class EditUserDocument implements EntryPoint {
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event)
 			{
+				System.out.println("Upload completed for URL: " + copyURL );
 				mb.close();
 				dBox.hide();
-				resultInterface.setResult();				
+				resultInterface.setResult(ud);				
 			}
 		});
 		form.submit();
-		mb.onModuleLoad();
 	}
 
 	/**
@@ -182,31 +180,13 @@ public class EditUserDocument implements EntryPoint {
 		grid.getCellFormatter().setWidth(0, 1, "90%");
 		txtbxTitle.setWidth("90%");
 
-		int index = 0;
 		for (DocumentStatus e: UserDocument.DocumentStatus.values() )
 		{
 			comboBoxStatus.addItem(langDocument.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(e)), UserDocument.documentStatusToString(e));
-			if (currentUserDocument != null)
-			{
-				if (currentUserDocument.status == e)
-				{
-					comboBoxStatus.setItemSelected(index, true);
-				}
-			}
-			index++;
 		}
-		index = 0;
 		for (UserDocument.DocumentType e: UserDocument.DocumentType.values() )
 		{
 			comboBoxType.addItem(langDocument.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(e)), UserDocument.documentTypeToString(e));
-			if (currentUserDocument != null)
-			{
-				if (currentUserDocument.type == e)
-				{
-					comboBoxType.setItemSelected(index, true);
-				}
-			}
-			index++;
 		}
 		
 		grid.setWidget(1, 0, lblType);
@@ -252,6 +232,8 @@ public class EditUserDocument implements EntryPoint {
 		{
 			txtbxTitle.setText(currentUserDocument.name);
 			richTextAreaDescription.setHTML(currentUserDocument.description);
+			comboBoxStatus.setItemSelected(currentUserDocument.status.ordinal(), true);
+			comboBoxType.setItemSelected(currentUserDocument.type.ordinal(), true);
 		}
 		
 		okCancel = new DialogBlockOkCancel(null, dBox);

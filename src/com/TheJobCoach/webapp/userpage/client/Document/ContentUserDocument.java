@@ -9,12 +9,12 @@ import com.TheJobCoach.webapp.userpage.client.DownloadIFrame;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
-import com.TheJobCoach.webapp.userpage.client.Document.EditUserDocument.EditUserDocumentResult;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IEditResult;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
@@ -37,7 +37,7 @@ import com.google.gwt.view.client.HasData;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
+public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument> {
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangDocument langDocument = GWT.create(LangDocument.class);
@@ -103,12 +103,7 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 
 	void updateDoc(final UserDocument object)
 	{
-		EditUserDocument eud = new EditUserDocument(rootPanel, user, object, new EditUserDocument.EditUserDocumentResult() {
-			@Override
-			public void setResult() {							
-				getAllContent();
-			}
-		});
+		EditUserDocument eud = new EditUserDocument(rootPanel, user, object, this);
 		eud.onModuleLoad();
 	}
 
@@ -262,17 +257,11 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 		simplePanelCenter.add(cellTable);		
 
 		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, langDocument._TextNewUserDocument());
+		final IEditResult<UserDocument> iEditResult = this;
 		button.addClickHandler(new ClickHandler()
 		{			
 			public void onClick(ClickEvent event) {
-				EditUserDocument eud = new EditUserDocument(rootPanel, user, null, new EditUserDocument.EditUserDocumentResult() {
-
-					@Override
-					public void setResult() {							
-						getAllContent();
-					}
-
-				});
+				EditUserDocument eud = new EditUserDocument(rootPanel, user, null, iEditResult);
 				eud.onModuleLoad();
 			}
 		});
@@ -282,6 +271,8 @@ public class ContentUserDocument implements EntryPoint, EditUserDocumentResult {
 	}
 
 	@Override
-	public void setResult() {
+	public void setResult(UserDocument result)
+	{
+		getAllContent();
 	}
 }

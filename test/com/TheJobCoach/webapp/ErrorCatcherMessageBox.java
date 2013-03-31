@@ -12,6 +12,7 @@ public class ErrorCatcherMessageBox implements MessageBox.ErrorCatcher
 	public void errorEvent(MessageBox error, TYPE type)
 	{
 		currentBox = error;
+		this.type = type;
 	}
 	
 	public boolean hasError()
