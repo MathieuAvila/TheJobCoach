@@ -45,3 +45,5 @@ war/WEB-INF/deploy/**
 .gwt/**
 wartestui/WEB-INF/deploy/**
 wartestui/thejobcoach/thejobcoach.nocache.js
+war/thejobcoach/hosted.html
+.settings/**
