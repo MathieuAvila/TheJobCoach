@@ -4,9 +4,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentChooseExternalContact;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalContactList;
@@ -28,9 +25,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class TestExternalContact implements EntryPoint {
-	
-	Logger logger = LoggerFactory.getLogger(TestExternalContact.class);
-	
+		
 	@SuppressWarnings("deprecation")
 	public static Date getDate(int year, int month, int day)
 	{
@@ -132,7 +127,7 @@ public class TestExternalContact implements EntryPoint {
 									@Override
 									public void setResult(ExternalContact result)
 									{
-										logger.info("ID=" + result.ID);
+										System.out.println("ID=" + result.ID);
 									}
 								});
 						cud.onModuleLoad();
