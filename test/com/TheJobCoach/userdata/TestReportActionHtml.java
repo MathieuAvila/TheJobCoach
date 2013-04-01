@@ -60,7 +60,6 @@ public class TestReportActionHtml {
 	public void testOpportunityHeader() {
 		ReportActionHtml report = new ReportActionHtml(user, "FR");
 		report.opportunityHeader(opportunity1, true, true);
-		//System.out.println(report.content);
 		assertEquals(true, report.content.contains(opportunity1.title));
 		assertEquals(true, report.content.contains(opportunity1.description));
 	}
@@ -71,7 +70,6 @@ public class TestReportActionHtml {
 		// With detail
 		ReportActionHtml report = new ReportActionHtml(user, "FR");
 		report.logHeader(userLog1, true, true);
-		System.out.println("LOG HEADER...." + report.content);
 		assertEquals(true, report.content.contains("title1"));
 		assertEquals(true, report.content.contains("description1"));
 		assertEquals(true, report.content.contains("Ev&egrave;nement"));
@@ -84,7 +82,6 @@ public class TestReportActionHtml {
 		// NO detail
 		report = new ReportActionHtml(user, "FR");
 		report.logHeader(userLog1, false, true);
-		System.out.println("LOG HEADER...." + report.content);
 		assertEquals(true, report.content.contains("title1"));
 		assertEquals(false, report.content.contains("description1"));
 
@@ -96,14 +93,12 @@ public class TestReportActionHtml {
 		// With detail & done
 		report = new ReportActionHtml(user, "FR");
 		report.logHeader(userLog2, true, true);
-		System.out.println("LOG HEADER...." + report.content);
 		assertEquals(true, report.content.contains("X"));
 		assertEquals(true, report.content.contains("orange"));
 		
 		// Outside date span
 		report = new ReportActionHtml(user, "FR");
 		report.logHeader(userLog2, false, false);
-		System.out.println("LOG HEADER...." + report.content);
 		assertEquals(true, report.content.contains("brown"));
 	}
 }

@@ -136,7 +136,6 @@ public class TestUserOpportunitiesManager {
 	public void testDeleteUserOpportunity() throws CassandraException {
 		manager.deleteUserOpportunity(id, "opp1");
 		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
-		System.out.println(result);
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "opp2");
 	}
@@ -144,11 +143,9 @@ public class TestUserOpportunitiesManager {
 	@Test
 	public void testDeleteUser() throws CassandraException {
 		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
-		System.out.println(result);
 		assertEquals(1, result.size());
 		manager.deleteUser(id);
 		result = manager.getOpportunitiesList(id, "managed");
-		System.out.println(result);
 		assertEquals(0, result.size());		
 	}
 }

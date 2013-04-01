@@ -1,15 +1,21 @@
 package com.TheJobCoach.webapp.userpage.client.ExternalContact;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.CoachTestUtils;
+import com.TheJobCoach.webapp.ErrorCatcherMessageBox;
+import com.TheJobCoach.webapp.GwtTestUtilsWrapper;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
@@ -22,11 +28,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
+import com.googlecode.gwt.test.internal.handlers.GwtTestGWTBridge;
 import com.googlecode.gwt.test.utils.events.Browser;
 
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestComponentChooseExternalContact extends GwtTest {
 
+	Logger logger = LoggerFactory.getLogger(AutoTestComponentChooseExternalContact.class);
 
 	@SuppressWarnings("deprecation")
 	static Date getDate(int year, int month, int day)
@@ -37,8 +45,6 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 		result.setYear(year - 1900);
 		return result;
 	}
-	
-	private ComponentChooseExternalContact ccec;
 	
 	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 
@@ -56,13 +62,14 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 	{
 		public int callsGet, callsSet, callsDelete;
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void getExternalContactList(UserId id,
 				AsyncCallback<Vector<ExternalContact>> callback)
 				throws CassandraException
 		{
 			callsGet++;
-			callback.onSuccess(contactList);
+			callback.onSuccess((Vector<ExternalContact>)contactList.clone());
 		}
 
 		@Override
@@ -83,13 +90,14 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 
 	}
 
-	SpecialUserServiceAsync userService = new SpecialUserServiceAsync();
-	
-	HorizontalPanel p;
+	static SpecialUserServiceAsync userService = null;	
 	
 	@Before
-	public void beforeContentExternalContact()
+	public void beforeContentExternalContact() throws Throwable
 	{
+		GwtTestGWTBridge.get().afterTest();
+		if (userService == null) userService = new SpecialUserServiceAsync();
+		
 		addGwtCreateHandler(new GwtCreateHandler () {
 
 			@Override
@@ -100,8 +108,13 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 				}
 				return null;
 			}}
-		);
-		p = new HorizontalPanel();		
+		);		
+	}
+	
+	@After
+	public void afterContentExternalContact() throws Throwable
+	{
+		GwtTestGWTBridge.get().afterTest();
 	}
 	
 	public class ChooseResult implements IChooseResult<ExternalContact>
@@ -119,14 +132,21 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 	@Test
 	public void testGetAll() throws InterruptedException
 	{
+		HorizontalPanel p = new HorizontalPanel();		
+		
+		ErrorCatcherMessageBox catcher = new ErrorCatcherMessageBox();
+
 		userService.callsGet = 0;
 		
 		ChooseResult result = new ChooseResult();
 		
-		ccec = new ComponentChooseExternalContact(
+		ComponentChooseExternalContact ccec = new ComponentChooseExternalContact(
 				p, userId, result);
 		
 		ccec.onModuleLoad();
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());	
+
+		assertNull(catcher.currentBox);	
 		assertEquals(1, userService.callsGet);
 		assertEquals(3, ccec.cellTable.getRowCount());
 		
@@ -153,17 +173,26 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 		
 		// Click on OK.
 		ccec.okCancel.getOk().click();
+		getBrowserSimulator().fireLoopEnd();
 		assertEquals(1, result.count);
 		assertEquals(ec2.ID, result.lastValue.ID);
-		
+	}
+	
+	@Test
+	public void testCancel() throws InterruptedException
+	{
+		HorizontalPanel p = new HorizontalPanel();		
+
 		// Click on cancel
 		ChooseResult result2 = new ChooseResult();
-		ccec = new ComponentChooseExternalContact(
+		ComponentChooseExternalContact ccec = new ComponentChooseExternalContact(
 				p, userId, result2);
 		ccec.onModuleLoad();
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());
 		Browser.click(ccec.cellTable, ccec.cellTable.getVisibleItem(1));
 		assertEquals(true, ccec.okCancel.getOk().isEnabled());		
 		ccec.okCancel.getCancel().click();
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());	
 		assertEquals(0, result2.count);		
 	}	
 }

@@ -73,7 +73,6 @@ public class AutoTestContentUserDocument extends GwtTest {
 		public void getUserDocumentList(UserId id,
 				AsyncCallback<Vector<UserDocument>> callback)
 				throws CassandraException {
-			System.out.println("getUserDocumentList");
 			callback.onSuccess(docIdList);
 			calls++;			
 		}

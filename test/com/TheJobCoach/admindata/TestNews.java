@@ -147,10 +147,6 @@ public class TestNews
 		{
 			e.printStackTrace();
 		}
-		for (NewsInformation ni: result)
-		{
-			System.out.println(ni.ID + "  " + ni.created);			
-		}
 		assertEquals(3, result.size());
 	}
 	

@@ -55,20 +55,17 @@ public class TestTodoList implements TodoList.TodoListSubscriber{
 	@Override
 	public void event(TodoEvent event)
 	{
-		System.out.println("Event: " + event.ID);
 	}
 
 	@Override
 	public boolean isEventValid(TodoEvent event)
 	{
-		System.out.println("Is event valid: " + event.ID);
 		return true;
 	}
 
 	@Override
 	public void eventDone(TodoEvent event)
-	{
-		System.out.println("Event done: " + event.ID);
+	{		
 	}
 
 	@Test
@@ -77,13 +74,11 @@ public class TestTodoList implements TodoList.TodoListSubscriber{
 		Vector<TodoEvent> result = manager.getTodoEventList(id, "FR");
 		for (TodoEvent site: result)
 		{
-			//System.out.println("Try delete previous site: " + site);
 			manager.deleteTodoEvent(id, site.ID);
 		}
 		result = manager.getTodoEventList(id2, "FR");
 		for (TodoEvent site: result)
 		{
-			//System.out.println("Try delete previous site2: " + site);
 			manager.deleteTodoEvent(id2, site.ID);
 		}
 		manager.setTodoEvent(id, todoevent1);
@@ -98,14 +93,12 @@ public class TestTodoList implements TodoList.TodoListSubscriber{
 	@Test
 	public void testgetTodoEventList() throws CassandraException {
 		Vector<TodoEvent> result = manager.getTodoEventList(id, "FR");
-		//System.out.println("***************** GET 1 " + result);
 		assertEquals(3, result.size());
 		assertTrue(result.get(0).ID.equals(todoeventid1));
 		assertTrue(result.get(1).ID.equals(todoeventid2));
 		assertTrue(result.get(2).ID.equals(todoeventid3));
 
 		Vector<TodoEvent> result2 = manager.getTodoEventList(id2, "FR");
-		//System.out.println("***************** GET 2 " + result2);
 		assertEquals(3, result2.size());
 		assertTrue(result.get(0).ID.equals(todoeventid12));
 		assertTrue(result.get(1).ID.equals(todoeventid22));
@@ -173,13 +166,11 @@ public class TestTodoList implements TodoList.TodoListSubscriber{
 		manager.deleteTodoEvent(id2, todoeventid12);
 
 		Vector<TodoEvent> result = manager.getTodoEventList(id, "FR");
-		//	System.out.println("***************** GET 1 " + result);
 		assertEquals(2, result.size());
 		assertTrue(result.get(0).ID.equals(todoeventid2));
 		assertTrue(result.get(1).ID.equals(todoeventid3));
 
 		Vector<TodoEvent> result2 = manager.getTodoEventList(id2, "FR");
-		//System.out.println("***************** GET 2 " + result2);
 		assertEquals(2, result2.size());
 		assertTrue(result.get(0).ID.equals(todoeventid22));
 		assertTrue(result.get(1).ID.equals(todoeventid32));		

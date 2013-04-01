@@ -21,7 +21,6 @@ public class TestUserValues {
 	{
 		// Clear...
 		values.deleteUser(id);
-		System.out.println("Deleted user...");
 		
 		UserValues.addField(new FieldDefinition("test1.test1"));
 		UserValues.addField(new FieldDefinition("test1.test1"));

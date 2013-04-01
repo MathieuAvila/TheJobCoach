@@ -12,7 +12,6 @@ public class MockMailer implements MailerInterface {
 		lastDst = _dstMail;
 		lastSubject = _subject;
 		lastBody = _body;
-		System.out.println( _dstMail +"-"+ _subject +"-"+  _body +"-"+  _src);
 		lastSrc = _src;
 		return true;
 	}

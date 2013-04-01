@@ -195,7 +195,6 @@ public class TestUserLogManager {
 	public void testDeleteLogEntry() throws CassandraException {
 		manager.deleteUserLogEntry(id, "log1");
 		Vector<UserLogEntry> result = manager.getLogList(id, "opp1");
-		System.out.println(result);
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "log2");
 	}
@@ -204,7 +203,6 @@ public class TestUserLogManager {
 	public void testDeleteUserOpportunity() throws CassandraException {
 		manager.deleteOpportunityLogList(id, "opp1");
 		Vector<UserLogEntry> result = manager.getLogList(id, "opp1");
-		System.out.println(result);
 		assertEquals(0, result.size());
 	}
 	

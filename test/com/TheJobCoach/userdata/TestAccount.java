@@ -54,7 +54,6 @@ public class TestAccount
 		String sb1 = mail.substring(mail.indexOf("token=") + new String("token=").length());
 		token = sb1.substring(0, sb1.indexOf("\n\nWe"));
 		assertEquals("mytoken", token);
-		System.out.println("Token:" + token);
 	}
 
 	@Test
@@ -139,15 +138,9 @@ public class TestAccount
 	{
 		Map<String, String> accountList = account.getTestAccountList();
 		Collection<String> accountNames = accountList.values();
-		System.out.println("TEST ACCOUNT COUNT: " + accountNames.size());
-		for (String accountName : accountNames)
-		{
-			System.out.println("ONE TEST ACCOUNT: " + accountName);
-		}
 		account.purgeTestAccount(0);
 		accountList = account.getTestAccountList();
 		accountNames = accountList.values();
-		System.out.println("TEST ACCOUNT COUNT NUMBER: " + accountNames.size());
 		assertEquals(0, accountNames.size());
 	}
 	
@@ -161,8 +154,6 @@ public class TestAccount
 		assertEquals(1, accountList.size());
 		Vector<String> accountNames = new Vector<String>(accountList.values());
 		Vector<String> accountTimes = new Vector<String>(accountList.keySet());
-		System.out.println(accountNames.get(0));
-		System.out.println(accountTimes.get(0));
 		assertEquals(1, accountNames.size());
 		assertEquals(user1.userName, accountNames.get(0));
 		assertEquals(1, accountTimes.size());
@@ -180,9 +171,6 @@ public class TestAccount
 		assertTrue(accountList.values().contains(user1.userName));
 		assertTrue(accountList.values().contains(user2.userName));
 		Vector<String> accountTimes2 = new Vector<String>(accountList.keySet());
-		System.out.println(accountTimes2.get(0));
-		System.out.println(accountTimes2.get(1));
-		System.out.println(time);
 		assertTrue(accountTimes2.get(0).equals(time));
 		String time2 = accountTimes2.get(1);
 		assertTrue(afterTime.compareTo(time2) < 0);
@@ -197,7 +185,6 @@ public class TestAccount
 		account.purgeTestAccount(1);
 		accountList = account.getTestAccountList();
 		Vector<String> accountNames2 = new Vector<String>(accountList.values());
-		System.out.println("TEST ACCOUNT COUNT: " + accountNames2.size());
 		assertEquals(1, accountNames2.size());
 		assertEquals(user2.userName, accountNames2.get(0));
 		

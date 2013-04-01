@@ -115,11 +115,5 @@ public class AutoTestContentExternalContact extends GwtTest {
 		assertEquals(contact1, cud.cellTable.getVisibleItem(0).ID);
 		assertEquals(contact2, cud.cellTable.getVisibleItem(1).ID);
 		assertEquals(contact3, cud.cellTable.getVisibleItem(2).ID);
-		
-		System.out.println(cud.cellTable.getElement().getInnerHTML());
-		
-		System.out.println(cud.cellTable.getColumnCount());
-		
-	
 	}	
 }

@@ -146,7 +146,6 @@ public class TestUserDocumentManager {
 	@Test
 	public void testSetDocumentContent() throws CassandraException
 	{
-		System.out.println("====================================== testSetDocumentContent");
 		manager.setUserDocumentContent(id, ud1_id, "f1", c1);
 		manager.setUserDocumentContent(id, ud2_id, "f2", c2);
 		manager.setUserDocumentContent(id2, ud21_id, "f21", c21);
@@ -155,7 +154,6 @@ public class TestUserDocumentManager {
 	@Test
 	public void testGetDocumentContent() throws CassandraException
 	{
-		System.out.println("====================================== testGetDocumentContent");
 		UserDocument copy_ud = manager.getUserDocument(id, ud1_id);
 		
 		UserDocumentId udid = manager.getUserDocumentId(id, copy_ud.revisions.get(copy_ud.revisions.size() - 1).ID);

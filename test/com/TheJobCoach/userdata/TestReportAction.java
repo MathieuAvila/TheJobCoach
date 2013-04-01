@@ -127,7 +127,6 @@ public class TestReportAction {
 		{
 			header++;
 			opps.add(opp);
-			System.out.println("Added opp: " + opp.ID);
 		}
 		
 		@Override
@@ -141,7 +140,6 @@ public class TestReportAction {
 		void logHeader(UserLogEntry log, boolean includeLogDetail, boolean inSpanDate) 
 		{
 			logs.add(log);
-			System.out.println("Added log: " + log.ID);
 		}
 	}
 	

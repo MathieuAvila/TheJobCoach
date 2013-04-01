@@ -157,17 +157,23 @@ public class AutoTestComponentChooseDocument extends GwtTest {
 
 		// Click on OK.
 		ccd.okCancel.getOk().click();
+		getBrowserSimulator().fireLoopEnd();
 		assertEquals(1, result.count);
-		assertEquals(ud2_docid.ID, result.lastValue.ID);
-
-		// Click on cancel
+		assertEquals(ud2_docid.ID, result.lastValue.ID);		
+	}
+	
+	@Test
+	public void testCancel() throws InterruptedException
+	{	// Click on cancel
 		ChooseResult result2 = new ChooseResult();
 		ccd = new ComponentChooseDocument(
 				p, userId, result2);
 		ccd.onModuleLoad();
+		getBrowserSimulator().fireLoopEnd();
 		Browser.click(ccd.cellTable, ccd.cellTable.getVisibleItem(1));
 		assertEquals(true, ccd.okCancel.getOk().isEnabled());
 		ccd.okCancel.getCancel().click();
+		getBrowserSimulator().fireLoopEnd();
 		assertEquals(0, result2.count);
 	}
 }

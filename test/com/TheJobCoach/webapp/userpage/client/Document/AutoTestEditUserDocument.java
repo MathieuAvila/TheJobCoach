@@ -42,7 +42,6 @@ public class AutoTestEditUserDocument extends GwtTest {
 			assertEquals(userId.userName, id.userName);
 			callback.onSuccess(String.valueOf(calls));
 			calls++;
-			System.out.println("Set user document .... " + calls);
 		}
 	}
 
@@ -83,8 +82,6 @@ public class AutoTestEditUserDocument extends GwtTest {
 		@Override
 		public void setResult(UserDocument result)
 		{
-			System.out.println("Finished with result ...");
-			
 			assertNotNull(result);
 			assertEquals(expect.description,      result.description);			
 			assertEquals(expect.fileName,         result.fileName);			
@@ -147,7 +144,6 @@ public class AutoTestEditUserDocument extends GwtTest {
 	public void testNewDoc() throws InterruptedException
 	{	
 		userService.calls = 0;
-		System.out.println("Check new doc");
 		EditUserDocumentResultTest result = new EditUserDocumentResultTest(ule);
 		eud = new EditUserDocument(
 				p, userId, null, result
@@ -163,10 +159,8 @@ public class AutoTestEditUserDocument extends GwtTest {
 		eud.upload.onBrowserEvent(event);	
 		eud.okCancel.getOk().click();
 		getBrowserSimulator().fireLoopEnd();
-		//System.out.println("Check new doc" + userService.calls + "  "+ userService);
 		assertEquals(1, userService.calls);
 		assertEquals(1, result.calls);
-		System.out.println(eud.form.getAction());
 	}
 
 }

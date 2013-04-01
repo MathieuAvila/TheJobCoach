@@ -22,7 +22,6 @@ public class TestSiteUUID {
 	public void testGetUUID()
 	{
 		String d = SiteUUID.dateFormatter(getDate(1970, 2, 5));
-		System.out.println(d);
 		assertEquals(true, d.contains("1970-03-05"));
 	}
 	
@@ -32,7 +31,6 @@ public class TestSiteUUID {
 	{
 		Date cur = new Date();
 		String d = SiteUUID.getDateUuid();
-		System.out.println(d);
 		assertEquals(true, d.contains(String.valueOf(cur.getYear() + 1900)));		
 	}
 	

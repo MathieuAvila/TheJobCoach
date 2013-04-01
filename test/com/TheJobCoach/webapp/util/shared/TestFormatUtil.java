@@ -25,7 +25,6 @@ public class TestFormatUtil {
 	public void testGetStringDate()
 	{
 		Date d = FormatUtil.getStringDate("2012_05_06_01_02_03");
-		System.out.println(d);
 		assertEquals(d, getDate(2012,05,06,01,02,03));
 	}
 	
@@ -33,7 +32,6 @@ public class TestFormatUtil {
 	public void testGetDateString()
 	{
 		String s = FormatUtil.getDateString(getDate(2012,05,06,01,02,03));
-		System.out.println(s);
 		assertEquals(s, "2012_05_06_01_02_03");
 	}
 	
@@ -41,7 +39,6 @@ public class TestFormatUtil {
 	public void testStartOfTheDay()
 	{
 		Date s = FormatUtil.startOfTheDay(getDate(2012,05,06,01,02,03));
-		System.out.println(s);
 		assertEquals(s, getDate(2012,05,06,00,00,00));
 	}
 	
@@ -49,7 +46,6 @@ public class TestFormatUtil {
 	public void testEndOfTheDay()
 	{
 		Date s = FormatUtil.endOfTheDay(getDate(2012,05,06,01,02,03));
-		System.out.println(s);
 		assertEquals(s, getDate(2012,05,06,23,59,59));
 	}
 	

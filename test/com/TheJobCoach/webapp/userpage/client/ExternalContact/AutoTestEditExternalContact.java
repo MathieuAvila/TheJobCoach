@@ -36,7 +36,6 @@ public class AutoTestEditExternalContact extends GwtTest {
 		@Override
 		public void setExternalContact(UserId id, ExternalContact contact,
 				AsyncCallback<String> callback) throws CassandraException {
-			System.out.println("Set contact entry....");
 			assertEquals(userId.userName, id.userName);
 			callback.onSuccess("");
 			calls++;
@@ -69,7 +68,6 @@ public class AutoTestEditExternalContact extends GwtTest {
 		@Override
 		public void setResult(ExternalContact result)
 		{
-			System.out.println("Finished with result ...");
 			assertNotNull(result);
 			assertEquals(expect.firstName, result.firstName);			
 			assertEquals(expect.email, result.email);			

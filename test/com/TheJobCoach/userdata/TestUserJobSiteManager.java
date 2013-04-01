@@ -40,13 +40,11 @@ public class TestUserJobSiteManager {
 		List<String> result = manager.getUserSiteList(id);
 		for (String site: result)
 		{
-			//System.out.println("Try delete previous site: " + site);
 			manager.deleteUserSite(id, site);
 		}
 		result = manager.getUserSiteList(id2);
 		for (String site: result)
 		{
-			//System.out.println("Try delete previous site2: " + site);
 			manager.deleteUserSite(id2, site);
 		}
 		manager.setUserSite(id, ujs1);
@@ -61,14 +59,12 @@ public class TestUserJobSiteManager {
 	@Test
 	public void testGetUserSiteList() throws CassandraException {
 		List<String> result = manager.getUserSiteList(id);
-		//System.out.println("***************** GET 1 " + result);
 		assertEquals(3, result.size());
 		assertTrue(result.contains(site1));
 		assertTrue(result.contains(site2));
 		assertTrue(result.contains(site3));
 
 		List<String> result2 = manager.getUserSiteList(id2);
-		//System.out.println("***************** GET 2 " + result2);
 		assertEquals(3, result2.size());
 		assertTrue(result2.contains(site12));
 		assertTrue(result2.contains(site22));
@@ -123,13 +119,11 @@ public class TestUserJobSiteManager {
 		manager.deleteUserSite(id2, site32);
 		
 		List<String> result = manager.getUserSiteList(id);
-		//System.out.println("***************** GET 1 " + result);
 		assertEquals(2, result.size());
 		assertTrue(result.contains(site1));
 		assertTrue(result.contains(site3));
 
 		List<String> result2 = manager.getUserSiteList(id2);
-		//System.out.println("***************** GET 2 " + result2);
 		assertEquals(2, result2.size());
 		assertTrue(result2.contains(site12));
 		assertTrue(result2.contains(site22));

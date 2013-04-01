@@ -44,13 +44,11 @@ public class TestUserExternalContactManager {
 		List<String> result = manager.getExternalContactListId(id);
 		for (String contact: result)
 		{
-			//System.out.println("Try delete previous contact: " + contact);
 			manager.deleteExternalContact(id, contact);
 		}
 		result = manager.getExternalContactListId(id2);
 		for (String contact: result)
 		{
-			//System.out.println("Try delete previous contact2: " + contact);
 			manager.deleteExternalContact(id2, contact);
 		}
 		manager.setExternalContact(id, ujs1);
@@ -65,14 +63,12 @@ public class TestUserExternalContactManager {
 	@Test
 	public void testgetExternalContactListId() throws CassandraException {
 		List<String> result = manager.getExternalContactListId(id);
-		//System.out.println("***************** GET 1 " + result);
 		assertEquals(3, result.size());
 		assertTrue(result.contains(contact1));
 		assertTrue(result.contains(contact2));
 		assertTrue(result.contains(contact3));
 
 		List<String> result2 = manager.getExternalContactListId(id2);
-		//System.out.println("***************** GET 2 " + result2);
 		assertEquals(3, result2.size());
 		assertTrue(result2.contains(contact12));
 		assertTrue(result2.contains(contact22));
@@ -94,7 +90,6 @@ public class TestUserExternalContactManager {
 	@Test
 	public void testgetExternalContactList() throws CassandraException {
 		Vector<ExternalContact> result = manager.getExternalContactList(id);
-		//System.out.println("***************** GET 1 " + result);
 		assertEquals(3, result.size());
 		assertEquals(ujs1.ID, result.get(0).ID);		
 		assertEquals(ujs2.ID, result.get(1).ID);		
@@ -152,13 +147,11 @@ public class TestUserExternalContactManager {
 		manager.deleteExternalContact(id2, contact32);
 		
 		List<String> result = manager.getExternalContactListId(id);
-		//System.out.println("***************** GET 1 " + result);
 		assertEquals(2, result.size());
 		assertTrue(result.contains(contact1));
 		assertTrue(result.contains(contact3));
 
 		List<String> result2 = manager.getExternalContactListId(id2);
-		//System.out.println("***************** GET 2 " + result2);
 		assertEquals(2, result2.size());
 		assertTrue(result2.contains(contact12));
 		assertTrue(result2.contains(contact22));

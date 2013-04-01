@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.TheJobCoach.CoachTestUtils;
+import com.TheJobCoach.webapp.GwtTestUtilsWrapper;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry;
@@ -24,6 +26,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
+import com.googlecode.gwt.test.internal.handlers.GwtTestGWTBridge;
 
 import static org.junit.Assert.*;
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
@@ -38,17 +41,14 @@ public class AutoTestEditLogEntry extends GwtTest {
 		@Override
 		public void setUserLogEntry(UserId id, UserLogEntry opp,
 				AsyncCallback<String> callback) throws CassandraException {
-			System.out.println("Set user log entry....");
 			assertEquals(userId.userName, id.userName);
 			callback.onSuccess("");
 			calls++;
 		}
 	}
 	
-	SpecialUserServiceAsync userService = new SpecialUserServiceAsync();
-	
-	HorizontalPanel p;
-    
+	static SpecialUserServiceAsync userService = null;
+	    
 	UserDocumentId docId1 = new UserDocumentId("ID1", "updateId1", "name1", "fileName1", new Date(), new Date());
 	UserDocumentId docId2 = new UserDocumentId("ID2", "updateId2", "name2", "fileName2", new Date(), new Date());
 	Vector<UserDocumentId> docIdList = new Vector<UserDocumentId>(Arrays.asList(docId1, docId2));
@@ -86,12 +86,10 @@ public class AutoTestEditLogEntry extends GwtTest {
 		public void setResult(UserLogEntry result)
 		{
 			int index;
-			System.out.println("Finished with result ...");
 			assertNotNull(result);
 			assertEquals(expect.title, result.title);
 			assertEquals(expect.description, result.description);
 			assertEquals(expect.done, result.done);
-			//System.out.println(" " + expect.eventDate + " " + result.eventDate);
 			assertEquals(expect.eventDate.toString(), result.eventDate.toString());
 			assertEquals(expect.ID, result.ID);
 			assertEquals(expect.opportunityId, result.opportunityId);
@@ -117,12 +115,11 @@ public class AutoTestEditLogEntry extends GwtTest {
 			calls++;
 		}
 	}
-	
-	private EditLogEntry cud;
 
 	@Before
 	public void beforeEditLogEntry()
 	{
+		if (userService == null) userService = new SpecialUserServiceAsync();
 		addGwtCreateHandler(new GwtCreateHandler () {
 
 			@Override
@@ -133,20 +130,27 @@ public class AutoTestEditLogEntry extends GwtTest {
 				}
 				return null;
 			}}
-		);	
-		p = new HorizontalPanel();
+		);
 	}
-
+	
+	@After
+	public void afterContentExternalContact() throws Throwable
+	{
+		GwtTestGWTBridge.get().afterTest();
+	}
+	
 	@Test
 	public void testValid() throws InterruptedException
 	{
+		HorizontalPanel p = new HorizontalPanel();
 		userService.calls = 0;
 		EditLogEntryResultTest result = new EditLogEntryResultTest(ule_modified);
-		cud = new EditLogEntry(
+		EditLogEntry cud = new EditLogEntry(
 				p, ule, "test",
 				userId, result
 				);
 		cud.onModuleLoad();	
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());	
 		
 		cud.txtbxTitle.setText(ule_modified.title);
 		cud.dateBoxEvent.setValue(ule_modified.eventDate);
@@ -156,23 +160,27 @@ public class AutoTestEditLogEntry extends GwtTest {
 		cud.comboBoxStatus.setSelectedIndex(0);
 		cud.contactList = contactList_modified;
 		cud.okCancel.getOk().click();
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());		
 		assertEquals(1, userService.calls);
 		assertEquals(1, result.calls);
 	}
-
+	
 	@Test
 	public void testCancel() throws InterruptedException
 	{
 		userService.calls = 0;
-		EditLogEntryResultTest result = new EditLogEntryResultTest(ule_modified);
-		cud = new EditLogEntry(
+		HorizontalPanel p = new HorizontalPanel();
+		EditLogEntryResultTest result2 = new EditLogEntryResultTest(ule_modified);
+		EditLogEntry cud = new EditLogEntry(
 				p, ule, "test",
-				userId, result
+				userId, result2
 				);
-		cud.onModuleLoad();	
+		cud.onModuleLoad();
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());	
 		cud.okCancel.getCancel().click();
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());	
 		assertEquals(0, userService.calls);
-		assertEquals(0, result.calls);
+		assertEquals(0, result2.calls);
 	}
 
 	

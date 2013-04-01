@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 
@@ -28,6 +30,8 @@ public class TestTodoEvent {
 	TodoEvent orgList2_3 = new TodoEvent("3", TodoEvent.NO_PLACE,TodoEvent.NO_PLACE,        100, 100);
 	Vector<TodoEvent> orgList_2 = new Vector<TodoEvent>(Arrays.asList(orgList2_0, orgList2_1, orgList2_2, orgList2_3));
 	
+	Logger logger = LoggerFactory.getLogger(TestTodoEvent.class);
+   		
 	//@Test
 	public void testOrderOneTodoEvent()
 	{
@@ -35,7 +39,6 @@ public class TestTodoEvent {
 		TodoEvent newOne_0 = new TodoEvent(0,0,      100, 100);
 		TodoEvent.orderOneTodoEvent(orgList_0, newOne_0, 300);
 		num = TodoEvent.MINIMUM_PLACE + ((TodoEvent.MINIMUM_PLACE + orgList1.x + orgList1.w + TodoEvent.MARGIN_X) / TodoEvent.SHIFT_QUANTUM + 1) * TodoEvent.SHIFT_QUANTUM;
-		System.out.println(newOne_0.x + " " + newOne_0.y + " " + num);
 		assertTrue(num == newOne_0.x);
 		assertEquals(TodoEvent.MINIMUM_PLACE,   newOne_0.y);
 		
@@ -44,14 +47,13 @@ public class TestTodoEvent {
 		TodoEvent.orderOneTodoEvent(orgList_1, newOne_1, 300);
 		int num_x = TodoEvent.MINIMUM_PLACE + ((TodoEvent.MINIMUM_PLACE + orgList1_1.x + orgList1_1.w + TodoEvent.MARGIN_X) / TodoEvent.SHIFT_QUANTUM ) * TodoEvent.SHIFT_QUANTUM;
 		int num_y = TodoEvent.MINIMUM_PLACE + ((TodoEvent.MINIMUM_PLACE + orgList1_0.y + orgList1_0.h + TodoEvent.MARGIN_X) / TodoEvent.SHIFT_QUANTUM ) * TodoEvent.SHIFT_QUANTUM;
-		System.out.println(newOne_1.x + " " + newOne_1.y + " " + num_x + " " + num_y);
 		assertTrue(num_y == newOne_1.y);
 		assertTrue(num_x == newOne_1.x);		
 	}
 	
 	private void printTodoEvent(TodoEvent event)
 	{
-		System.out.println(event.ID + " " + event.x + " " + event.y + " " + event.w + " " + event.h);
+		logger.info(event.ID + " " + event.x + " " + event.y + " " + event.w + " " + event.h);
 	}
 	
 	@Test

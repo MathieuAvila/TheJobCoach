@@ -86,7 +86,6 @@ public class TestCassandraAccessor {
 		CassandraAccessor.deleteKey("TestColumnFamily2", "fail");
 		CassandraAccessor.deleteKey("TestColumnFamily2", "myobject");
 		
-		System.out.println(CassandraAccessor.getColumn("TestColumnFamily2", "myobject2", "2k1"));		
 		assertNull(CassandraAccessor.getColumn("TestColumnFamily2", "myobject", "k1"));
 		assertNotNull(CassandraAccessor.getColumn("TestColumnFamily2", "myobject2", "2k1"));		
 	}
@@ -96,7 +95,6 @@ public class TestCassandraAccessor {
 	{
 		Map<String, String> map = null;
 			map = CassandraAccessor.getRow("TestColumnFamily", "myobject");
-		System.out.println(map.size());
 		assertEquals(map.size(), 3);
 		assertEquals(map.get("k1"), "v11");
 		assertEquals(map.get("k2"), "v22");
