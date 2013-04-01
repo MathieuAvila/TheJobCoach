@@ -163,8 +163,8 @@ public class EditLogEntry implements EntryPoint {
 		grid.setWidget(3, 0, lblEndDate);
 		grid.setWidget(3, 1, dateBoxEvent);
 		
-		grid.setWidget(3, 0, new Label(langLogEntry._TextDone()));
-		grid.setWidget(3, 1, doneBox);
+		grid.setWidget(4, 0, new Label(langLogEntry._TextDone()));
+		grid.setWidget(4, 1, doneBox);
 
 		grid.setWidget(5, 0, new Label(lang._TextPersonalNote()));
 		grid.setWidget(5, 1, richTextAreaNote);
