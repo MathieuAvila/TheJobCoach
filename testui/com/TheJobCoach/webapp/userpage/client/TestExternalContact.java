@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentChooseExternalContact;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalContactList;
@@ -11,6 +14,8 @@ import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalCon
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
@@ -23,6 +28,8 @@ import com.google.gwt.user.client.ui.RootPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class TestExternalContact implements EntryPoint {
+	
+	Logger logger = LoggerFactory.getLogger(TestExternalContact.class);
 	
 	@SuppressWarnings("deprecation")
 	public static Date getDate(int year, int month, int day)
@@ -39,25 +46,17 @@ public class TestExternalContact implements EntryPoint {
 	public void onModuleLoad()
 	{
 		{
-			final RootPanel rootContentExternalContact = RootPanel.get("contentexternalcontact");
-			if (rootContentExternalContact != null)
+			final RootPanel root = RootPanel.get("contentexternalcontact");
+			if (root != null)
 			{
-				GWT.runAsync(new RunAsyncCallback() 
-				{
+				EasyAsync.Check(root, new ToRun() {
 					@Override
-					public void onFailure(Throwable reason) 
-					{
-						MessageBox.messageBoxException(rootContentExternalContact, reason.toString());
-					}
-
-					@Override
-					public void onSuccess() 
-					{
-						System.out.println("Content External Contact");
-						rootContentExternalContact.setStyleName("mainpage-content");		
+					public void Open()
+					{		
+						root.setStyleName("mainpage-content");		
 						HorizontalPanel hp = new HorizontalPanel();
 						hp.setStyleName("mainpage-content");
-						rootContentExternalContact.add(hp);
+						root.add(hp);
 						hp.setSize("100%", "100%");
 						ContentExternalContact cud = new ContentExternalContact(hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
 						cud.onModuleLoad();
@@ -81,7 +80,6 @@ public class TestExternalContact implements EntryPoint {
 					@Override
 					public void onSuccess() 
 					{
-						System.out.println("Component External Contact List");
 						rootComponentExternalContactList.setStyleName("mainpage-content");		
 						HorizontalPanel hp = new HorizontalPanel();
 						hp.setStyleName("mainpage-content");
@@ -121,7 +119,6 @@ public class TestExternalContact implements EntryPoint {
 					@Override
 					public void onSuccess() 
 					{
-						System.out.println("Component Choose External Contact");
 						rootComponentChooseExternalContact.setStyleName("mainpage-content");		
 						HorizontalPanel hp = new HorizontalPanel();
 						hp.setStyleName("mainpage-content");
@@ -135,7 +132,7 @@ public class TestExternalContact implements EntryPoint {
 									@Override
 									public void setResult(ExternalContact result)
 									{
-										System.out.println("ID=" + result.ID);
+										logger.info("ID=" + result.ID);
 									}
 								});
 						cud.onModuleLoad();

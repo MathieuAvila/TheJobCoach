@@ -17,7 +17,6 @@ public class TestContentNews implements EntryPoint {
 		RootPanel root = RootPanel.get("contentnews");
 		if (root != null)
 		{
-			System.out.println("Main Page");
 			root.setStyleName("mainpage-content");		
 			HorizontalPanel hp = new HorizontalPanel();
 			hp.setStyleName("mainpage-content");

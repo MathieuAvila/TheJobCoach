@@ -17,7 +17,6 @@ public class TestCreateAccount implements EntryPoint {
 		RootPanel root = RootPanel.get("createaccount");
 		if (root != null)
 		{
-			System.out.println("Create Account");
 			root.setStyleName("mainpage-content");		
 			HorizontalPanel hp = new HorizontalPanel();
 			hp.setStyleName("mainpage-content");

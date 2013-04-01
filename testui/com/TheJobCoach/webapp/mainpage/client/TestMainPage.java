@@ -17,7 +17,6 @@ public class TestMainPage implements EntryPoint {
 		RootPanel root = RootPanel.get("mainpage");
 		if (root != null)
 		{
-			System.out.println("Main Page");
 			root.setStyleName("mainpage-content");		
 			HorizontalPanel hp = new HorizontalPanel();
 			hp.setStyleName("mainpage-content");

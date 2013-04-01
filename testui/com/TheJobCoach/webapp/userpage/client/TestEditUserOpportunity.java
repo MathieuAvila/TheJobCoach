@@ -5,9 +5,9 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.userpage.client.Opportunity.EditOpportunity;
 import com.TheJobCoach.webapp.userpage.client.Opportunity.EditOpportunity.EditOpportunityResult;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -24,17 +24,10 @@ public class TestEditUserOpportunity implements EntryPoint {
 		final RootPanel root = RootPanel.get("edituseropportunity");
 		if (root != null)
 		{
-
-			GWT.runAsync(new RunAsyncCallback() {
-
+			EasyAsync.Check(root, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) {
-					System.out.println("Error on userpage");
-				}
-
-				@Override
-				public void onSuccess() {
-					System.out.println("Edit User Opportunity");
+				public void Open()
+				{					
 					root.setStyleName("mainpage-content");		
 					HorizontalPanel hp = new HorizontalPanel();
 					hp.setStyleName("mainpage-content");

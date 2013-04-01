@@ -17,7 +17,6 @@ public class TestLostCredentials implements EntryPoint {
 		RootPanel root = RootPanel.get("lostcredentials");
 		if (root != null)
 		{
-			System.out.println("Lost Credentials");
 			root.setStyleName("mainpage-content");		
 			HorizontalPanel hp = new HorizontalPanel();
 			hp.setStyleName("mainpage-content");

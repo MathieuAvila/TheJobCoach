@@ -1,7 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -21,18 +23,10 @@ public class TestContentNews implements EntryPoint {
 		final RootPanel root = RootPanel.get("contentnews");
 		if (root != null)
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(root, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
+				public void Open()
 				{
-					MessageBox.messageBoxException(root, reason.toString());
-				}
-
-				@Override
-				public void onSuccess() 
-				{
-					System.out.println("Content News");
 					root.setStyleName("mainpage-content");		
 					HorizontalPanel hp = new HorizontalPanel();
 					hp.setStyleName("mainpage-content");

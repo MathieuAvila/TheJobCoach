@@ -1,9 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -20,16 +20,10 @@ public class TestUserPage implements EntryPoint {
 		final RootPanel root = RootPanel.get("userpage");
 		if (root != null)
 		{
-		GWT.runAsync(new RunAsyncCallback() {
-
-			@Override
-			public void onFailure(Throwable reason) {
-				System.out.println("Error on userpage");
-			}
-
-			@Override
-			public void onSuccess() {
-				// TODO Auto-generated method stub
+			EasyAsync.Check(root, new ToRun() {
+				@Override
+				public void Open()
+				{
 				root.setStyleName("mainpage-content");		
 				HorizontalPanel hp = new HorizontalPanel();
 				hp.setStyleName("mainpage-content");

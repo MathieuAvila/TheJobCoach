@@ -2,10 +2,9 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Todo.ContentTodo;
-import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -22,18 +21,10 @@ public class TestContentTodoEvent implements EntryPoint {
 		final RootPanel root = RootPanel.get("contenttodoevent");
 		if (root != null)
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(root, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
-				{
-					MessageBox.messageBoxException(root, reason.toString());
-				}
-
-				@Override
-				public void onSuccess() 
-				{
-					System.out.println("Content Todo Event");
+				public void Open()
+				{	
 					root.setStyleName("mainpage-content");		
 					HorizontalPanel hp = new HorizontalPanel();
 					hp.setStyleName("mainpage-content");

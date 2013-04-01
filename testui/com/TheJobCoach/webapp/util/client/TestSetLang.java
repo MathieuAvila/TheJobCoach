@@ -20,7 +20,6 @@ public class TestSetLang implements EntryPoint {
 	
 		LocaleInfo.getLocaleCookieName();
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
-		System.out.println("Set Lang.... Locale is:" + locale);
 		if ((locale == null) || (locale.equals("default")))
 		{
 			String cookie = LocaleInfo.getLocaleCookieName();
@@ -29,7 +28,6 @@ public class TestSetLang implements EntryPoint {
 			{
 				loadCount++;
 				com.google.gwt.user.client.Cookies.setCookie(cookie, "fr");
-				System.out.println("Applied locale fr");
 			}
 		}
 	}

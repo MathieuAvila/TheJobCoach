@@ -6,8 +6,10 @@ import java.util.Date;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Document.ComponentChooseDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -27,18 +29,10 @@ public class TestComponentChooseDocument implements EntryPoint {
 		final RootPanel root = RootPanel.get("componentchoosedocument");
 		if (root != null)
 		{
-			GWT.runAsync(new RunAsyncCallback() 
-			{
+			EasyAsync.Check(root, new ToRun() {
 				@Override
-				public void onFailure(Throwable reason) 
+				public void Open()
 				{
-					MessageBox.messageBoxException(root, reason.toString());
-				}
-
-				@Override
-				public void onSuccess() 
-				{
-					System.out.println("Content Component Choose Document");
 					root.setStyleName("mainpage-content");		
 					HorizontalPanel hp = new HorizontalPanel();
 					hp.setStyleName("mainpage-content");
@@ -52,7 +46,7 @@ public class TestComponentChooseDocument implements EntryPoint {
 					{
 						@Override
 						public void setResult(UserDocumentId result) {
-							System.out.println("Selected + " + result.updateId);
+							
 						}						
 					});
 					cud.onModuleLoad();					
