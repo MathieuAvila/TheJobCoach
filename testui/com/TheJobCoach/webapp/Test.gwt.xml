@@ -23,7 +23,7 @@
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserOpportunity" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserLog" />
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditLogEntry'/>
-	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestUiContentUserDocument" />
+	<entry-point class="com.TheJobCoach.webapp.userpage.client.Document.UiTestDocument" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserSite" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserReport" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestUserPage" />
@@ -32,8 +32,6 @@
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentMyAccount'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentNews'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentTodoEvent'/>
-	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestUiComponentDocumentList'/>
-	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestComponentChooseDocument'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestExternalContact'/>
 	<entry-point class='com.TheJobCoach.webapp.adminpage.client.TestContentUsers'/>
 	
