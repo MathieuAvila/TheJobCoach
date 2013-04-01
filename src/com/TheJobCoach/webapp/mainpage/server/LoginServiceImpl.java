@@ -1,5 +1,8 @@
 package com.TheJobCoach.webapp.mainpage.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.TheJobCoach.webapp.mainpage.client.LoginService;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
@@ -20,18 +23,20 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	
 	static com.TheJobCoach.userdata.Account account = new com.TheJobCoach.userdata.Account();
 	
+	private static Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+	
 	public MainPageReturnCode.CreateAccountStatus createAccount(
 			UserId id,
 			UserInformation info,
 			String locale)
 			throws IllegalArgumentException, CassandraException {
-		System.out.println("Create account request for: '" + id.userName + "' with password: '" + info.password+ "' with EMail:'" + info.email + "' with locale '" + locale +"'");		
+		logger.info("Create account request for: '" + id.userName + "' with password: '" + info.password+ "' with EMail:'" + info.email + "' with locale '" + locale +"'");		
 		return account.createAccount(id, info, locale);
 	}
 
 	@Override
 	public MainPageReturnLogin connect(String userName, String userPassword) {
-		System.out.println("Connection from: '" + userName + "' with password: '" + userPassword+ "'");
+		logger.info("Connection from: '" + userName + "' with password: '" + userPassword+ "'");
 		return account.loginAccount(userName, userPassword);
 	}
 

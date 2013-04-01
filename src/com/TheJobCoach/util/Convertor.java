@@ -59,7 +59,6 @@ public class Convertor {
 			return 0;
 		}
 		if (string == null) return 0;
-		System.out.println("String: " + string + " converted to: " + Float.valueOf(string));
 		return Float.valueOf(string);
 	}
 	

@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
@@ -20,6 +23,8 @@ import com.TheJobCoach.webapp.util.shared.CassandraException;
 public class DownloadFileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8067428735370164388L;
+	
+	Logger logger = LoggerFactory.getLogger(DownloadFileServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,	IOException 
 	{
@@ -27,15 +32,14 @@ public class DownloadFileServlet extends HttpServlet {
 		String docId = request.getParameter("docid");
 		String userId = request.getParameter("userid");
 		String token = request.getParameter("token");
-		System.out.println("Requesting doc: " + docId + " for user: " + userId + " with token: " + token);
+		logger.info("Requesting doc: " + docId + " for user: " + userId + " with token: " + token);
 		UserDocument userDoc;
 		ServletOutputStream out = response.getOutputStream();
 		UserId user =new UserId(userId, token, UserType.USER_TYPE_SEEKER);
 		try {
 			userDoc = cm.getUserDocument(user, docId);
 		} catch (CassandraException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.error("getUserDocument " + e1.getMessage());
 			out.flush();
 			out.close();
 			return;
@@ -59,12 +63,11 @@ public class DownloadFileServlet extends HttpServlet {
 		try 
 		{
 			doc = cm.getUserDocumentContent(user, docId);
-			System.out.println("Document has length :" + doc.length);
+			logger.info("Document has length :" + doc.length);
 		} 
 		catch (CassandraException e) 
 		{
-			System.out.println("Unable to build report");
-			e.printStackTrace();
+			logger.info("Unable to build report " + e.getMessage());
 			out.flush();
 			out.close();
 			return;

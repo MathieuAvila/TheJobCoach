@@ -94,7 +94,6 @@ public class EditOpportunity implements EntryPoint, IChanged {
 	{
 		double salary = 0;
 		if (txtbxSalary.getValue() != null) salary = Double.parseDouble(txtbxSalary.getValue().replace(",", "."));
-		System.out.println("Get value: " + txtbxSalary.getValue() + " means: " + salary);
 		if (id == null) id = SiteUUID.getDateUuid();
 		return new UserOpportunity(id, 
 				new Date(), 

@@ -125,7 +125,6 @@ public class ContentUserSite implements EntryPoint {
 			}
 			@Override
 			public void onSuccess(List<String> result) {
-				System.out.println(result);
 				jobSiteList.clear();
 				for (String idRes: result)
 				{

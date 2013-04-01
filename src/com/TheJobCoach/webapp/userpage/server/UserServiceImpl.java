@@ -57,7 +57,6 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public Integer setUserSite(UserId id, UserJobSite site)	throws CassandraException
 	{
-		System.out.println("SET: " + site.ID + "  " + site.name);
 		jobSiteManager.setUserSite(id, site);
 		return 0;
 	}

@@ -190,12 +190,10 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 	@Override
 	public void notifyValue(boolean set, String key, String value) 
 	{
-		System.out.println("found key: " + key + " has value " + value);
 		for (String testKey: fields.keySet())
 		{
 			if (testKey.equals(key))
 			{
-				//System.out.println("found key: " + key + " is set");
 				fields.get(testKey).setDefault(value);
 				fields.get(testKey).setValue(value);
 			}
@@ -213,7 +211,6 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 			{
 				field.setDefault(field.getValue());
 				map.put(testKey, field.getValue());
-				//System.out.println("KEY IS:" + testKey + " VALUE: " + field.getValue());
 			}
 		}
 		values.setValues(map, null);

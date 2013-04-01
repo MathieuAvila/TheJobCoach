@@ -13,6 +13,11 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.Vector;
 
+import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.MailerFactory;
@@ -21,15 +26,13 @@ import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
-import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
+import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.util.shared.SystemException;
-
-import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
 
 public class Account implements AccountInterface {
@@ -48,7 +51,9 @@ public class Account implements AccountInterface {
 	UserOpportunityManager oppManager = new UserOpportunityManager();
 	UserValues valuesManager = new UserValues();
 	UserJobSiteManager siteManager = new UserJobSiteManager();
-
+	
+	Logger logger = LoggerFactory.getLogger(Account.class);
+	
 	public Account()
 	{
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_ACCOUNT, cfDef);
@@ -168,11 +173,9 @@ public class Account implements AccountInterface {
 
 	public MainPageReturnLogin loginAccount(String userName, String password)
 	{
-		System.out.println("Try to login as: " + userName + " with password: " + password);
 		String token = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "token");
 		if (token == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
-		System.out.println("Token is: " + token);
 		String validatedStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "validated");
 		if (validatedStr == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
@@ -181,11 +184,9 @@ public class Account implements AccountInterface {
 		String passwordStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "password");
 		if (passwordStr == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
-		System.out.println(passwordStr  + " COMP "+ password);
 		if (!passwordStr.equals(password)) 
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
 		String typeStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "type");
-		System.out.println("TYPE "+ typeStr);
 		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, new UserId(userName, token, stringToUserType(typeStr)));
 	}
 
@@ -203,14 +204,11 @@ public class Account implements AccountInterface {
 				last = lastRow.get(0);
 			for (String userName: resultRows)
 			{
-				System.out.println("FOUND USER NAME: " + userName);
 				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);			
 				if (accountTable != null && accountTable.containsKey("token"))
 				{
-					System.out.println("USER: " + userName + "\nACCOUNT_TABLE: " + accountTable);
 					UserId newUserId = new UserId(userName, accountTable.get("token"), stringToUserType(accountTable.get("type")));
 					result.add(newUserId);
-					System.out.println("USER: " + newUserId.userName + " TOKEN: " + newUserId.token + " TYPE:" + userTypeToString(newUserId.type));				
 				}
 			}
 		}
@@ -253,12 +251,11 @@ public class Account implements AccountInterface {
 		{
 			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_NOT_VALIDATED, id.userName);
 			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_EMAIL, user.mail);
-			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
-			System.out.println("DELETED ACCOUNT: " + id.userName);
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);			
 		}
 		else
 		{
-			System.out.println("COULD NOT DELETE ACCOUNT: " + id.userName + " NO SUCH ACCOUNT FOUND");
+			logger.info("COULD NOT DELETE ACCOUNT: " + id.userName + " NO SUCH ACCOUNT FOUND");
 		}
 	}
 
@@ -275,7 +272,6 @@ public class Account implements AccountInterface {
 				last = lastRow.get(0);
 			for (String k: resultRows)
 			{
-				System.out.println("CHECK USER NAME: " + k);
 				Map<String, String> userNameDB = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, k);
 				if (userNameDB.containsKey("validated") || userNameDB.containsKey("username") || userNameDB.containsKey("date"))
 				{
@@ -284,8 +280,6 @@ public class Account implements AccountInterface {
 						// Delete this account.
 						deleteAccount(k);
 						CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, k);
-
-						System.out.println("DELETED TOKEN: " + k);
 					}
 				}
 			}
@@ -296,8 +290,6 @@ public class Account implements AccountInterface {
 	public void sendComment(UserId id, String comment) throws CassandraException
 	{
 		UserReport report = getUserReport(id);
-		System.out.println("Comment from: " + report.mail);
-		System.out.println("Message: '" + comment + "'");
 		MailerFactory.getMailer().sendEmail("mathieu.avila@laposte.net", 
 				"Comment on TheJobCoach from '" + report.mail + "' user '" + report.userName + "'", 
 				report.mail + "\n" + comment, 
@@ -341,11 +333,9 @@ public class Account implements AccountInterface {
 		Set<String> keys =  testAccountList.keySet();
 		for (String key: keys)
 		{
-			System.out.println("Compare test account: " + currentTime + " with: " + key + " " + currentTime.compareTo(key));
 			if (currentTime.compareTo(key) > 0) // purge
 			{
 				String userName = testAccountList.get(key);				
-				System.out.println("Too old, delete: " + userName);
 				deleteUserAccount(new UserId(userName, "", UserId.UserType.USER_TYPE_SEEKER));
 				CassandraAccessor.deleteColumn(COLUMN_FAMILY_TEST_LIST, CONSTANT_TEST_LIST_ROW, key);
 			}

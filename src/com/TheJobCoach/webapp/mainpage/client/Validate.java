@@ -9,7 +9,6 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.UrlBuilder;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -27,7 +26,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class Validate implements EntryPoint {
 
 	Panel rootPanel;
-
+	final static Lang lang = GWT.create(Lang.class);
+	
 	private final LoginServiceAsync loginService = GWT
 			.create(LoginService.class);
 
@@ -40,12 +40,7 @@ public class Validate implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad()
-	{	
-		final Lang lang = GWT.create(Lang.class);
-		System.out.println("Footer Panel Locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
+	{		
 		rootPanel.clear();
 		rootPanel.setStyleName("footer-content");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -139,11 +134,10 @@ public class Validate implements EntryPoint {
 		class ConnectHandlerLoginPage implements ClickHandler {
 
 			public void onClick(ClickEvent event) {
-				UrlBuilder urlB = com.google.gwt.user.client.Window.Location.createUrlBuilder();
+				UrlBuilder urlB = Window.Location.createUrlBuilder();
 				urlB.removeParameter("action");
 				String url = urlB.buildString();
-				System.out.println(url);
-				com.google.gwt.user.client.Window.Location.assign(url);		
+				Window.Location.assign(url);		
 				Window.Location.replace(url);
 			}
 		};

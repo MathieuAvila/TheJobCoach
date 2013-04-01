@@ -1,6 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 
+import com.TheJobCoach.webapp.footer.client.Footer;
+import com.TheJobCoach.webapp.mainpage.client.MainPage;
+import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
@@ -9,42 +12,39 @@ import com.TheJobCoach.webapp.userpage.client.MyReports.ContentMyReports;
 import com.TheJobCoach.webapp.userpage.client.Opportunity.ContentUserOpportunity;
 import com.TheJobCoach.webapp.userpage.client.Todo.ContentTodo;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
-import com.TheJobCoach.webapp.footer.client.Footer;
-import com.TheJobCoach.webapp.mainpage.client.MainPage;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
-import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Position;
-
-import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.StackPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.StackPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class UserPage implements EntryPoint {
+
+	final static Lang lang = GWT.create(Lang.class);
 
 	final VerticalPanel simplePanelContent = new VerticalPanel();
 	Label selectedMenu = null;
@@ -244,9 +244,6 @@ public class UserPage implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{		
-		Lang lang = GWT.create(Lang.class);
-		System.out.println("Locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("content");

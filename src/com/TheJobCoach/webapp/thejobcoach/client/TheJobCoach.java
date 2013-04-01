@@ -34,7 +34,6 @@ public class TheJobCoach implements EntryPoint {
 			{
 				loadCount++;
 				com.google.gwt.user.client.Cookies.setCookie(cookie, "fr");
-				System.out.println("Applied locale fr");
 				Window.Location.reload();
 			}
 		}
@@ -43,18 +42,11 @@ public class TheJobCoach implements EntryPoint {
 		String action = com.google.gwt.user.client.Window.Location.getParameter("action");
 		if (action != null)			
 		{	
-			System.out.println("Action is: " + action);
 			if (action.equals("validate"))
-			{					
-				String userName = com.google.gwt.user.client.Window.Location.getParameter("username");
-				String token = com.google.gwt.user.client.Window.Location.getParameter("token");				
-				System.out.println("Trying to validate user: " + userName + " with token " + token);
-				
+			{
 				Validate validate = new Validate();
 				validate.setRootPanel(RootPanel.get("content"));
 				validate.onModuleLoad();
-				//RootPanel.get("nameFieldContainer").add(main);
-				System.out.println("Validate an account...");
 				return;
 			}
 		}

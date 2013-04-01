@@ -35,8 +35,6 @@ public class AdminPage implements EntryPoint {
 	
 	public void changeMenu(String menu)
 	{
-		System.out.println(menu);
-		
 		if (menu.equals("users"))
 		{
 			ContentUsers contentUsers = new ContentUsers(simplePanelCenter, userId);

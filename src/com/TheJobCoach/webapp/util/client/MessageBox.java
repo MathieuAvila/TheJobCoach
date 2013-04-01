@@ -89,11 +89,8 @@ public class MessageBox implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{
-		System.out.println("Error named: '" + title + "', type: " + type + " message is: " + message);
-		
 		if (currentErrorCatcher != null)
 		{
-			System.out.println("SEND OUT ERROR MESSAGE BOX to error catcher - type: " + type + " '" + title + "' type: " + type + " message is: " + message);
 			currentErrorCatcher.errorEvent(this, type);
 		}
 		

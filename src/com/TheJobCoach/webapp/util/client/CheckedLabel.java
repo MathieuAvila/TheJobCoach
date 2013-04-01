@@ -12,7 +12,6 @@ public class CheckedLabel extends Label implements IChanged {
 		String style="label-status-" 
 				+ (isError ? "error" : "ok")
 				+ (isChanged ? "-c" : "-nc");
-		//System.out.println("STYLE:" + style);
 		setStyleName(style);			
 	}
 	

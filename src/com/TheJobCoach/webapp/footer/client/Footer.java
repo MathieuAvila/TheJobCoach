@@ -6,7 +6,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -19,7 +18,8 @@ import com.google.gwt.user.client.ui.Panel;
 public class Footer implements EntryPoint {
 
 	Panel rootPanel;
-
+	final static Lang lang = GWT.create(Lang.class);		
+	
 	public void setRootPanel(Panel panel)
 	{
 		rootPanel = panel;
@@ -45,17 +45,7 @@ public class Footer implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad()
-	{		
-
-		//UserPage uP = new UserPage();
-		//uP.onModuleLoad();
-		//return;
-
-		final Lang lang = GWT.create(Lang.class);
-		System.out.println("Footer Panel Locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
+	{
 		rootPanel.clear();
 		rootPanel.setStyleName("footer-content");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);

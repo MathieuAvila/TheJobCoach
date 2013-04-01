@@ -118,7 +118,6 @@ public class TodoEvent implements Serializable {
 		
 	private static boolean checkCol(int p1, int w1, int p2, int w2, int margin)
 	{
-		System.out.println("checkCol " + p1 + " " + w1 + " " + p2 + " " + w2); 
 		if ((p1 - margin <= p2) && (p1+w1 > p2 - margin)) return true;
 		if ((p2 - margin <= p1) && (p2+w2 > p1 - margin)) return true;
 		return false;
@@ -132,26 +131,18 @@ public class TodoEvent implements Serializable {
 		newOne.x = MINIMUM_PLACE;
 		newOne.y = MINIMUM_PLACE;
 		while (true)
-		{
-			System.out.println("CHECK " + newOne.x+ " " + newOne.y + " " + newOne.w+ " " +   newOne.h);
-			
+		{			
 			boolean ok = true;
 			// Is this a valid place to be ? Check against every existing note
-			int counter = 0;
 			for (TodoEvent index: actual)
 			{
-				System.out.println("COUNTER ===================== " + counter);
-				System.out.println(index.x+ " " +   index.y+ " " +   index.w+ " " +    index.h);
-				System.out.println(checkCol(index.x, index.w, newOne.x, newOne.w, MARGIN_X) + " " + checkCol(index.y, index.h, newOne.y, newOne.h, MARGIN_Y));
 				if (checkCol(index.x, index.w, newOne.x, newOne.w, MARGIN_X) && 
 					checkCol(index.y, index.h, newOne.y, newOne.h, MARGIN_Y))
 				{
 					ok = false;
 					break;
 				}
-				counter++;
 			}
-			System.out.println(" OK : " + ok);
 			
 			if (ok)
 			{

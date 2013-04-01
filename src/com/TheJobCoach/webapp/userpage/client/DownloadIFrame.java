@@ -24,11 +24,9 @@ HasLoadHandlers {
 			addLoadHandler(this);
 			rp.add(this);
 			setUrl(url);
-			System.out.println("LOAD DOC IN FRAME....");			
 		}
 		else
 		{
-			System.out.println("LOAD DOC....");
 			openURLInNewWindow(url);
 		}
 	}

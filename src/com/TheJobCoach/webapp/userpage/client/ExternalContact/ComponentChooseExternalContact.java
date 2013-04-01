@@ -31,7 +31,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 public class ComponentChooseExternalContact implements EntryPoint, IChooseDialogModel<ExternalContact>
 {
 
-	private final static UserServiceAsync userService = GWT.create(UserService.class);
+	private final UserServiceAsync userService = GWT.create(UserService.class);
 	private final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
 	final ExtendedCellTable<ExternalContact> cellTable = new ExtendedCellTable<ExternalContact>();
 	DialogBlockOkCancel okCancel;
@@ -145,7 +145,6 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseDialog
 		
 		dataProvider.addDataDisplay(cellTable);
 		dataProvider.updateRowCount(externalContactList.size(), true);
-		getAllContent();
 		
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<ExternalContact> selectionModel = new SingleSelectionModel<ExternalContact>();
@@ -176,6 +175,8 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseDialog
 		
 		dBox.setWidget(hp);
 		dBox.center();
+		
+		getAllContent();
 	}
 
 	@Override

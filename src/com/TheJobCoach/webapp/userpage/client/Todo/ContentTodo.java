@@ -250,7 +250,6 @@ public class ContentTodo implements EntryPoint {
 			{
 				if (colorChange)
 				{
-					System.out.println("Color Change is true");
 					colorChange = false;
 					event.preventDefault();
 					return;
@@ -290,14 +289,6 @@ public class ContentTodo implements EntryPoint {
 				final String TodoEventContent = myTodoEvent.text;
 				content.setText((TodoEventContent == null) ? "" : TodoEventContent);
 
-				System.out.println(
-						" X:" + myTodoEvent.x +
-						" Y:" + myTodoEvent.y +
-						" W:" + myTodoEvent.w +
-						" H:" + myTodoEvent.h +
-						" Color:" + myTodoEvent.color
-						);
-				
 				getElement().getStyle().setBackgroundColor(myTodoEvent.getHtmlColor());
 				bcolor.getStyle().setBackgroundColor(myTodoEvent.getHtmlColor(myTodoEvent.getNextColor()));
 				
@@ -391,7 +382,6 @@ public class ContentTodo implements EntryPoint {
 			}
 			@Override
 			public void onSuccess(Vector<TodoEvent> result) {
-				System.out.println(result);
 				userTodoEventList.clear();
 				userTodoEventList.addAll(result);				
 				for (TodoEvent todo: userTodoEventList)

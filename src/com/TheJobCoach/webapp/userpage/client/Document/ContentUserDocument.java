@@ -124,7 +124,6 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 								}
 								@Override
 								public void onSuccess(String result) {
-									System.out.println(result);						
 									getAllContent();
 								}
 							};

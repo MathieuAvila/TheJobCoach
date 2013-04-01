@@ -45,10 +45,8 @@ public class CheckedExtendedDropListField implements IExtendedField {
 	{
 		for (int i=0; i != tb.getItemCount(); i++)
 		{
-			//System.out.println("VALUE "+ value + "+"+tb.getValue(i));
 			if (tb.getValue(i).equals(value))
 			{
-				//System.out.println("FOUND");
 				tb.setSelectedIndex(i);
 			}
 		}
@@ -133,7 +131,6 @@ public class CheckedExtendedDropListField implements IExtendedField {
 	@Override
 	public String getValue()
 	{	
-		//System.out.println("INDEX " + tb.getSelectedIndex() + " " + tb.getItemCount());
 		if ((tb.getSelectedIndex() >= 0) &&(tb.getSelectedIndex() < tb.getItemCount()))
 			return tb.getValue(tb.getSelectedIndex());
 		return "";

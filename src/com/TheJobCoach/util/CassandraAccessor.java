@@ -1,13 +1,14 @@
 package com.TheJobCoach.util;
 
 
+import static me.prettyprint.hector.api.factory.HFactory.createMultigetSliceQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 import me.prettyprint.cassandra.serializers.BytesArraySerializer;
 import me.prettyprint.cassandra.serializers.StringSerializer;
@@ -16,7 +17,8 @@ import me.prettyprint.cassandra.service.ThriftKsDef;
 import me.prettyprint.cassandra.service.template.ColumnFamilyTemplate;
 import me.prettyprint.cassandra.service.template.ColumnFamilyUpdater;
 import me.prettyprint.cassandra.service.template.ThriftColumnFamilyTemplate;
-import me.prettyprint.hector.api.*;
+import me.prettyprint.hector.api.Cluster;
+import me.prettyprint.hector.api.Keyspace;
 import me.prettyprint.hector.api.beans.ColumnSlice;
 import me.prettyprint.hector.api.beans.HColumn;
 import me.prettyprint.hector.api.beans.OrderedRows;
@@ -33,7 +35,11 @@ import me.prettyprint.hector.api.query.MultigetSliceQuery;
 import me.prettyprint.hector.api.query.QueryResult;
 import me.prettyprint.hector.api.query.RangeSlicesQuery;
 import me.prettyprint.hector.api.query.SliceQuery;
-import static me.prettyprint.hector.api.factory.HFactory.createMultigetSliceQuery;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class CassandraAccessor {
 
@@ -49,7 +55,9 @@ public class CassandraAccessor {
 	private static final BytesArraySerializer bse = new BytesArraySerializer();
 
 	private static String location = "localhost:9160";	
-
+	
+	private static Logger logger = LoggerFactory.getLogger(CassandraAccessor.class);
+	
 	static public void setLocation(String _location)
 	{
 		location = _location;
@@ -67,7 +75,6 @@ public class CassandraAccessor {
 	{
 		if (myCluster == null)
 		{
-			//System.out.println("Get cluster from: " + location);
 			myCluster = HFactory.getOrCreateCluster(CLUSTERNAME, location);
 		}
 		return myCluster;
@@ -106,7 +113,6 @@ public class CassandraAccessor {
 		ColumnFamilyUpdater<String, String> updater = cfTemplate.createUpdater(key);
 		for(Map.Entry<String, String> e : mapUpdate.entrySet())
 		{
-			//System.out.println("Try update for table: " +  cfTemplate.getColumnFamily() + " from key:" + key  + " column: " + e.getKey() + " value: " + e.getValue());
 			updater.setString(e.getKey(), e.getValue());
 		}
 		//updater.setLong("time", System.currentTimeMillis());		
@@ -118,8 +124,7 @@ public class CassandraAccessor {
 		catch (HectorException e) 
 		{
 			// do something ...
-			System.out.println("Updater error");
-			e.printStackTrace();
+			logger.error("Updater error: " + e.getMessage());
 			throw new CassandraException();
 		}
 		return true;
@@ -142,11 +147,10 @@ public class CassandraAccessor {
 			r = cQ.setKey(key).setName(columnName).setColumnFamily(CF).execute();
 		}
 		catch (Exception e){
-			System.out.println(e);
+			logger.error("getColumn error: " + e.getMessage());
 			return null;
 		}
 		if (r == null) return null;
-		//System.out.println("CF=" + CF + " KEY=" + key +" COL=" + columnName + " RESULT=" + r.get());
 		HColumn<String, String> c = r.get();
 		if (c == null) return null;
 		return  c.getValue();
@@ -160,8 +164,7 @@ public class CassandraAccessor {
 			r = cQ.setKey(key).setColumnFamily(CF).setRange("", "", false, 100).execute();
 		}
 		catch (Exception e){
-			System.out.println("getRow CF:" + CF + " key: " + key);
-			//e.printStackTrace();
+			logger.error("getRow error: " + e.getMessage() + "getRow CF:" + CF + " key: " + key);
 			throw new CassandraException();
 		}
 		if (r == null) throw new CassandraException();
@@ -283,16 +286,13 @@ public class CassandraAccessor {
 				);
 		ColumnFamilyUpdater<String, String> updater = cfTemplate.createUpdater(key);		
 		updater.setByteArray(column, data);
-		System.out.println("Update data from CF: " + CF + " key: " + key + " column: " +column + " size: " + data.length);
 		try 
 		{
 			cfTemplate.update(updater);
 		} 
 		catch (HectorException e) 
 		{
-			// do something ...
-			System.out.println("Updater error");
-			e.printStackTrace();
+			logger.error("Updater error" + e.getMessage());
 			throw new CassandraException();
 		}
 	}
@@ -305,11 +305,10 @@ public class CassandraAccessor {
 			r = cQ.setKey(key).setName(columnName).setColumnFamily(CF).execute();
 		}
 		catch (Exception e){
-			System.out.println(e);
+			logger.error("getColumnByte error" + e.getMessage());
 			return null;
 		}
 		if (r == null) return null;
-		//System.out.println("CF=" + CF + " KEY=" + key +" COL=" + columnName + " RESULT=" + r.get());
 		HColumn<String, byte[]> c = r.get();
 		if (c == null) return null;
 		return c.getValue();

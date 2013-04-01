@@ -55,13 +55,9 @@ public class News {
 	}
 
 	public String createNews(NewsInformation info) throws CassandraException
-	{
-		System.out.println(info);
-		System.out.println("date "+ info.created);
-		
+	{				
 		@SuppressWarnings("deprecation")
 		String colDate = info.created.getYear() + "-" + info.created.getMonth();
-		System.out.println("COLDATE CREATE: " + colDate);
 		boolean result = CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_NEWS_DATE, colDate, 
 				(new ShortMap())
 				.add(info.ID, info.ID)
@@ -101,10 +97,7 @@ public class News {
 		{
 			startMonth = nextMonth; 
 			startYear = nextYear;			
-			System.out.println("YEAR " + startYear + " MONTH " + startMonth + " EYEAR " + endYear + " EMONTH " + endMonth);
-			String colDate = startYear + "-" + startMonth;
-			System.out.println("COLDATE: " + colDate);
-			
+			String colDate = startYear + "-" + startMonth;			
 			Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATE, colDate);
 			if (result != null)
 			{				
@@ -114,10 +107,8 @@ public class News {
 					Map<String, String> resultInfo = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_NEWS_DATA, key);
 					if (resultInfo == null) continue;
 					Date d = Convertor.toDate(resultInfo.get("date"));
-					//System.out.println("FOUND ... " + d + " compare : " + start + " _____ " + end);
 					if (d.after(start) && d.before(end))
 					{
-						//System.out.println("Insert !");
 						returnResult.insertElementAt(new NewsInformation(
 								key,
 								Convertor.toDate(resultInfo.get("date")),
@@ -149,10 +140,8 @@ public class News {
 			Calendar end = (Calendar) first.clone();
 			end.add(Calendar.MONTH, +1);
 			Vector<NewsInformation> resultLocal = getNews(first.getTime(), end.getTime());
-			//System.out.println("Found ... "+ resultLocal.size());
 			for (NewsInformation ni: resultLocal)
 			{
-				//System.out.println("Found ... "+ ni.ID + " .... " + foundList.contains(ni.ID));				
 				if (!foundList.contains(ni.ID))
 				{
 					foundList.add(ni.ID);

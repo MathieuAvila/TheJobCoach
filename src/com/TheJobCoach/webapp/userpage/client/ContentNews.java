@@ -11,7 +11,6 @@ import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
@@ -48,7 +47,6 @@ public class ContentNews implements EntryPoint {
 			@Override
 			public void onSuccess(Vector<NewsInformation> result)
 			{
-				System.out.println(result);
 				for (NewsInformation news: result)
 				{
 					ContentHelper.insertSubTitlePanel(simplePanelCenter, DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(news.created) + " - " + news.title);
@@ -59,7 +57,6 @@ public class ContentNews implements EntryPoint {
 			}
 		};
 		try {
-			System.out.println("Request News....");
 			userService.getNews(user, callback);
 		} catch (CassandraException e) {
 			MessageBox.messageBoxException(rootPanel, e);
@@ -72,8 +69,6 @@ public class ContentNews implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{		
-		System.out.println("Load News, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
 		rootPanel.setSize("100%", "100%");
 		rootPanel.clear();
 

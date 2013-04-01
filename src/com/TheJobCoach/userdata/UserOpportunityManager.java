@@ -56,7 +56,6 @@ public class UserOpportunityManager {
 		{
 			return null;  // this means it was deleted.
 		}
-		//System.out.println("found opp " + ID + " with firstseen " + resultReq.get("firstseen"));
 		return new UserOpportunity(
 				ID,
 				Convertor.toDate(resultReq.get("firstseen")),
@@ -150,7 +149,6 @@ public class UserOpportunityManager {
 
 	public void deleteUserOpportunityFromList(UserId id, String ID, String listName) throws CassandraException
 	{
-		System.out.println("DELETE UserOpportunity " + ID + " from list " + listName);
 		String key = id.userName + "#" + listName;		
 		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_LIST, key, ID);	
 	}

@@ -84,7 +84,6 @@ public class ContentExternalContact implements EntryPoint {
 			}
 			@Override
 			public void onSuccess(Vector<ExternalContact> result) {
-				System.out.println(result);
 				ExternalContactList.clear();
 				ExternalContactList.addAll(result);
 				dataProvider.updateRowCount(ExternalContactList.size(), true);
@@ -149,7 +148,6 @@ public class ContentExternalContact implements EntryPoint {
 								}
 								public void onSuccess(String result)
 								{
-									System.out.println("Created contact: " + result);
 									getAllContent();
 								}
 							});

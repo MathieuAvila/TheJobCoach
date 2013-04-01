@@ -63,12 +63,8 @@ public class MainPage implements EntryPoint {
 
 		public void onClick(ClickEvent event)
 		{				
-			System.out.println("Setting is: " + LocaleInfo.getCurrentLocale().getLocaleName());
-
-			System.out.println("Click on " + langName);
 			String cookie = LocaleInfo.getLocaleCookieName();
 			com.google.gwt.user.client.Cookies.setCookie(cookie, langName);
-			System.out.println("Applied locale "+langName);
 			Window.Location.reload();
 		}
 	}
@@ -87,9 +83,6 @@ public class MainPage implements EntryPoint {
 				public void onSuccess(final MainPageReturnLogin result)
 				{
 					connectButton.setEnabled(true);
-					System.out.println("Login returned result is:" + result.getLoginStatus());
-					if (result.id != null)
-						System.out.println("Login returned: " + result.id.token + " result is:" + result.getLoginStatus());
 					GWT.runAsync(new RunAsyncCallback() 
 					{
 						@Override

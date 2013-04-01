@@ -85,7 +85,6 @@ public class PanelCoach implements EntryPoint, IChanged, ReturnValue, IApply {
 	@Override
 	public void notifyValue(boolean set, String key, String value) 
 	{
-		System.out.println("Coach " + key + " " + value);
 		if (key.equals(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR))
 		{
 			coachPanel.clear();

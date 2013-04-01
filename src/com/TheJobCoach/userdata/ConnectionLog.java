@@ -39,7 +39,6 @@ public class ConnectionLog implements IUserDataManager {
 		if (user != null)
 		{
 			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONNECTIONLOG, user.userName);
-			//System.out.println("DELETED CONNECTION LOG: " + userName);
 		}
 	}
 

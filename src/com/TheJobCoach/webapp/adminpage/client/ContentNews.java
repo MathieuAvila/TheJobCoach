@@ -88,7 +88,6 @@ public class ContentNews implements EntryPoint {
 			}
 			@Override
 			public void onSuccess(Vector<NewsInformation> result) {
-				System.out.println(result);
 				newsList = result;
 				cellTable.setVisibleRange(0, newsList.size());
 				dataProvider.updateRowData(0, newsList);
@@ -163,7 +162,6 @@ public class ContentNews implements EntryPoint {
 		{
 			NewsInformation news = getNewsInformation();
 			news.ID = SiteUUID.getDateUuid();
-			System.out.println("My ID" + news.ID);
 			adminService.createNewsInformation(user, news, new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
 					// Show the RPC error message to the user
@@ -172,7 +170,6 @@ public class ContentNews implements EntryPoint {
 				}
 				public void onSuccess(String result)
 				{
-					System.out.println("Created site: " + result);
 					getAllContent();
 				}
 			});

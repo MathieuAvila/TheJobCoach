@@ -159,7 +159,6 @@ public class ComponentChooseDocument implements EntryPoint, IChooseDialogModel<U
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event)
 			{
-				System.out.println("has selected one element");
 				okCancel.getOk().setEnabled(true);
 			}
 		});

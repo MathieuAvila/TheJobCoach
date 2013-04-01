@@ -110,7 +110,6 @@ public class UserValues {
 		List<String> subSet = new ArrayList<String>();
 		for (String key: keysNameList)
 		{
-			System.out.println("KEY "+ key + " " + rootKey);
 			if (key.matches(rootKey + ".*"))
 			{
 				subSet.add(key);
@@ -126,7 +125,6 @@ public class UserValues {
 		}
 		if (start.equals("")) throw new SystemException();
 		end = end + "Z";
-		System.out.println("Start key: " + start + " End key: " + end);
 		Map<String, String> result = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME_LIST, id.userName, start, end, 1000);
 		for (String key: subSet)
 		{

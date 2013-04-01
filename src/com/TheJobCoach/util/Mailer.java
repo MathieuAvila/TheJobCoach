@@ -42,7 +42,6 @@ public class Mailer implements MailerInterface {
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception à la con");
 			e.printStackTrace();
 			return false;			
 		}
@@ -66,13 +65,11 @@ public class Mailer implements MailerInterface {
 		} 
 		catch (MessagingException e)
 		{
-			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception à la con");
 			e.printStackTrace();
 			return false;			
 		}

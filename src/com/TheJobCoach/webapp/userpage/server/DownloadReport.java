@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.TheJobCoach.userdata.ReportActionHtml;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
@@ -21,6 +24,7 @@ import com.TheJobCoach.webapp.util.shared.FormatUtil;
 public class DownloadReport extends HttpServlet {
 
 	private static final long serialVersionUID = -8067428735370164389L;
+	private static Logger logger = LoggerFactory.getLogger(DownloadReport.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,	IOException 
 	{
@@ -34,8 +38,6 @@ public class DownloadReport extends HttpServlet {
 		Date startDate = FormatUtil.getStringDate(start);
 		String end = request.getParameter("end");
 		Date endDate = FormatUtil.getStringDate(end);
-		System.out.println("Start is: " + start + " converted to:" + startDate);
-		System.out.println("End is: " + end + " converted to:" + endDate);
 		String detailOpp = request.getParameter("detailopp");
 		boolean includeOppDetail = FormatUtil.trueString.equals(detailOpp);
 		String detailLog = request.getParameter("detaillog");
@@ -43,7 +45,7 @@ public class DownloadReport extends HttpServlet {
 		String logPeriod = request.getParameter("logperiod");
 		boolean onlyLogPeriod = FormatUtil.trueString.equals(logPeriod);
 		
-		System.out.println(
+		logger.info(
 				"Requesting report: " + type 
 				+ " user:" + userId 
 				+ " format:" + format 
@@ -71,12 +73,11 @@ public class DownloadReport extends HttpServlet {
 				ReportActionHtml report = new ReportActionHtml(user, lang);
 				doc = report.getReport(startDate, endDate, includeOppDetail, includeLogDetail, onlyLogPeriod);
 			}
-			System.out.println("Document has length :" + doc.length);
+			logger.info("Document has length :" + doc.length);
 		} 
 		catch (CassandraException e) 
 		{
-			System.out.println("Document type:");
-			e.printStackTrace();
+			logger.error("getReport: " + e.getMessage());
 			out.flush();
 			out.close();
 			return;

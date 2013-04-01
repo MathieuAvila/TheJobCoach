@@ -187,7 +187,6 @@ public class ContentUserOpportunity implements EntryPoint {
 								}
 								public void onSuccess(String result)
 								{
-									System.out.println("Created opp: " + result);
 									getAllContent();
 								}
 							});
@@ -195,7 +194,7 @@ public class ContentUserOpportunity implements EntryPoint {
 					}
 					catch (CassandraException e)
 					{
-						System.out.println(e);
+						MessageBox.messageBoxException(rootPanel, e);
 					}
 				}
 			});
@@ -220,7 +219,6 @@ public class ContentUserOpportunity implements EntryPoint {
 							}
 							public void onSuccess(String result)
 							{
-								System.out.println("Updated opp: " + result);
 								getAllContent();
 							}
 						});
@@ -228,7 +226,7 @@ public class ContentUserOpportunity implements EntryPoint {
 				}
 				catch (CassandraException e)
 				{
-					System.out.println(e);
+					MessageBox.messageBoxException(rootPanel, e);
 				}
 			}
 		});

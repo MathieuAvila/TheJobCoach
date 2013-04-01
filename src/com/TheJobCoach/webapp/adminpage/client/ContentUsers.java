@@ -72,7 +72,6 @@ public class ContentUsers implements EntryPoint {
 			}
 			@Override
 			public void onSuccess(List<UserReport> result) {
-				System.out.println(result);
 				userList = result;
 				cellTable.setVisibleRange(0, userList.size());
 				dataProvider.updateRowData(0, userList);

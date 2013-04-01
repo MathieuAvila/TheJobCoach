@@ -20,21 +20,20 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class EditUserDocument implements EntryPoint {
@@ -148,7 +147,6 @@ public class EditUserDocument implements EntryPoint {
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event)
 			{
-				System.out.println("Upload completed for URL: " + copyURL );
 				mb.close();
 				dBox.hide();
 				resultInterface.setResult(ud);				
@@ -162,10 +160,7 @@ public class EditUserDocument implements EntryPoint {
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad()
-	{					
-		System.out.println("Load Edit User Document, locale is: " + LocaleInfo.getCurrentLocale().getLocaleName());				
-
-		//dBox.setSize("500", "300");
+	{	
 		dBox.setText(currentUserDocument == null ? langDocument._TextCreateANewUserDocument() : langDocument._TextUpdateANewUserDocument());
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);

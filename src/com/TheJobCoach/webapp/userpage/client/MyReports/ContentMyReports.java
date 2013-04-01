@@ -77,7 +77,6 @@ public class ContentMyReports implements EntryPoint {
 
 	public String getStartDate()
 	{
-		System.out.println("Période " + tfPeriod.getValue());
 		if (tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_LAST_WEEK))
 		{
 			Date d = new Date();
@@ -112,7 +111,6 @@ public class ContentMyReports implements EntryPoint {
 	
 	public String getEndDate()
 	{
-		System.out.println("Période fin " + tfPeriod.getValue());
 		if (tfPeriod.getValue().equals(ConstantsMyReports.PERIOD_SET))
 		{
 			return FormatUtil.getDateString(FormatUtil.endOfTheDay(tfEndDate.getItem().getValue()));	
@@ -128,9 +126,6 @@ public class ContentMyReports implements EntryPoint {
 		tfEndDate.getItem().setEnabled(enable);
 		tfStartDate.setValue(getStartDate());
 		tfEndDate.setValue(getEndDate());
-		
-		System.out.println("Set start to : " + getStartDate());
-		System.out.println("Set end to : " + getEndDate());
 	}
 	
 	/**
@@ -202,7 +197,6 @@ public class ContentMyReports implements EntryPoint {
 						+ "&lang=" + URL.encodeQueryString(cookieLang)
 						+ "&userid=" + URL.encodeQueryString(user.userName)
 						+ "&token=" + URL.encodeQueryString(user.token);
-				System.out.println(copyURL);
 				DownloadIFrame iframe = new DownloadIFrame(copyURL);
 				simplePanelCenter.add(iframe);
 			}

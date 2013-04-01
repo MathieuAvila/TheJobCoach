@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
@@ -19,10 +21,11 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 public class UploadFileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -2947803123194402987L;
+	private static Logger logger = LoggerFactory.getLogger(UploadFileServlet.class);
 
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		System.out.println("Upload FILE : " + request.toString());
+		logger.info("Upload FILE : " + request.toString());
 	
 		//if (!ServletFileUpload.isMultipartContent(request)) 
 		//	return; 
@@ -34,10 +37,10 @@ public class UploadFileServlet extends HttpServlet {
 		UserId userId = new UserId(user, token, UserId.UserType.USER_TYPE_SEEKER);
 		if (docId == null)
 		{
-			System.out.println("No DOC ID provided");
+			logger.error("No DOC ID provided");
 			return;
 		}
-		System.out.println("Upload for DOC ID:" + docId + " for user: " + user + " with token: " + token);
+		logger.info("Upload for DOC ID:" + docId + " for user: " + user + " with token: " + token);
 		
 		FileItemFactory factory = new DiskFileItemFactory(); 
 		ServletFileUpload upload = new ServletFileUpload(factory); 
@@ -47,19 +50,19 @@ public class UploadFileServlet extends HttpServlet {
 			items = upload.parseRequest(request); 
 		}
 		catch (FileUploadException e) {
-			e.printStackTrace();
+			logger.error("parseRequest : " + e.getMessage());
 			return;
 		}
-		System.out.println("Upload FILE items: " + items.size());
+		logger.info("Upload FILE items: " + items.size());
 		
 		for (Iterator<?> i = items.iterator(); i.hasNext();) {
 			
 			
 			FileItem item = (FileItem) i.next();
-			System.out.println("New item");
-			System.out.println("Upload FILE item: " + item.getContentType());
-			System.out.println("Upload FILE item: " + item.getName());
-			System.out.println("Upload FILE item: " + item.getSize());
+			logger.info("New item");
+			logger.info("Upload FILE item: " + item.getContentType());
+			logger.info("Upload FILE item: " + item.getName());
+			logger.info("Upload FILE item: " + item.getSize());
 			
 			if (item.isFormField()) 
 				continue;
@@ -71,18 +74,15 @@ public class UploadFileServlet extends HttpServlet {
 			}
 			if (slash != -1) { 
 				fileName = fileName.substring(slash + 1);
-			} 
-
+			}
 			try {
-				//	File uploadedFile = new File(DB.PATH_UPLOAD+ fileName);
-				//	item.write(uploadedFile);
-				System.out.println("Upload FILE : "+ fileName + " size " + item.getSize());
+				logger.info("Upload FILE : "+ fileName + " size " + item.getSize());
 				cm.setUserDocumentContent(userId, docId, fileName, item.get());
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				logger.error("setUserDocumentContent " + e.getMessage());
 			}
-		} // end for
+		}
 
-	} // end service()
+	}
 }
