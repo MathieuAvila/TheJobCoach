@@ -8,11 +8,8 @@ import com.TheJobCoach.webapp.userpage.client.Document.ComponentChooseDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
-import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
