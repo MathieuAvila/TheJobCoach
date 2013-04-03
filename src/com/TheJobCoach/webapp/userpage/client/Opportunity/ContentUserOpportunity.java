@@ -49,7 +49,11 @@ public class ContentUserOpportunity implements EntryPoint {
 	final ExtendedCellTable<UserOpportunity> cellTable = new ExtendedCellTable<UserOpportunity>();
 	UserOpportunity currentOpportunity = null;
 	final HTML panelDescriptionContent = new HTML("");
-
+	final Label labelTextSource = new Label();
+	final Label labelCreationDate = new Label();
+	final Label labelStartDate = new Label();
+	final Label labelEndDate = new Label();
+	
 	final Lang lang = GWT.create(Lang.class);
 	final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
 
@@ -64,6 +68,10 @@ public class ContentUserOpportunity implements EntryPoint {
 			public void onSuccess(UserOpportunity result) {
 				currentOpportunity = result;
 				panelDescriptionContent.setHTML(currentOpportunity.description);
+				labelTextSource.setText(currentOpportunity.source);
+				labelCreationDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(currentOpportunity.lastUpdate));
+				labelStartDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(currentOpportunity.startDate));
+				labelEndDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(currentOpportunity.endDate));
 				cellTable.redraw();				
 			}
 		};
@@ -285,7 +293,7 @@ public class ContentUserOpportunity implements EntryPoint {
 			}
 		};
 
-		// Create description column.
+		// Create company column.
 		TextColumn<UserOpportunity> companyColumn = new TextColumn<UserOpportunity>() {
 			@Override
 			public String getValue(UserOpportunity userOpportunity) 
@@ -405,26 +413,38 @@ public class ContentUserOpportunity implements EntryPoint {
 		simplePanelCenter.add(simplePanel);
 		simplePanel.setHeight("10px");
 
-		Grid grid_1 = new Grid(2, 2);
+		Grid grid_1 = new Grid(4, 2);
 		simplePanelCenter.add(grid_1);
-		grid_1.setWidth("100%");
+		//grid_1.setWidth("100%");
 
 		Label lblSource = new Label(lang._TextSource());
 		lblSource.setStyleName("summary-title");
 		grid_1.setWidget(0, 0, lblSource);
 
-		Label label_1 = new Label((String) null);
-		label_1.setStyleName("summary-text");
-		grid_1.setWidget(0, 1, label_1);
-		label_1.setWidth("100%");
+		labelTextSource.setStyleName("summary-text");
+		grid_1.setWidget(0, 1, labelTextSource);
+		labelTextSource.setWidth("100%");
 
 		Label labelCreated = new Label(langLogEntry._TextCreated());
 		labelCreated.setStyleName("summary-title");
 		grid_1.setWidget(1, 0, labelCreated);
 
-		Label labelCreatedContent = new Label((String) null);
-		labelCreatedContent.setStyleName("summary-text");
-		grid_1.setWidget(1, 1, labelCreatedContent);
+		labelCreationDate.setStyleName("summary-text");
+		grid_1.setWidget(1, 1, labelCreationDate);
+
+		Label lblStartDate = new Label(lang._TextStartDate());
+		lblStartDate.setStyleName("summary-title");
+		grid_1.setWidget(2, 0, lblStartDate);
+
+		labelStartDate.setStyleName("summary-text");
+		grid_1.setWidget(2, 1, labelStartDate);
+
+		Label lblEndDate = new Label(lang._TextEndDate());
+		lblEndDate.setStyleName("summary-title");
+		grid_1.setWidget(3, 0, lblEndDate);
+
+		labelEndDate.setStyleName("summary-text");
+		grid_1.setWidget(3, 1, labelEndDate);
 
 		Label labelDescription = new Label(lang._TextDescription());
 		labelDescription.setStyleName("summary-title");
