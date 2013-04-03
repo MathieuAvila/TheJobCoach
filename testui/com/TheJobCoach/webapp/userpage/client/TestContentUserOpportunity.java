@@ -30,9 +30,7 @@ public class TestContentUserOpportunity implements EntryPoint {
 					hp.setStyleName("mainpage-content");
 					root.add(hp);
 					hp.setSize("100%", "100%");
-					ContentUserOpportunity cuo = new ContentUserOpportunity();
-					cuo.setRootPanel(hp);
-					cuo.setUserParameters(new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
+					ContentUserOpportunity cuo = new ContentUserOpportunity(hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
 
 					cuo.onModuleLoad();
 				}});

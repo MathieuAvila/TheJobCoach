@@ -84,19 +84,15 @@ public class ContentUserOpportunity implements EntryPoint {
 		}		
 	}
 
-	public void setUserParameters(UserId _user)
+	public ContentUserOpportunity(Panel panel, UserId _user)
 	{
+		rootPanel = panel;
 		user = _user;
 	}
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
-
-	public void setRootPanel(Panel panel)
-	{
-		rootPanel = panel;
-	}
 
 	// The list of data to display.
 	private Vector<UserOpportunity> userOpportunityList = new Vector<UserOpportunity>();
@@ -362,7 +358,7 @@ public class ContentUserOpportunity implements EntryPoint {
 		cellTable.addColumn(salaryColumn, lang._TextSalary());
 		cellTable.addColumn(contractTypeColumn, lang._TextContractType());
 		cellTable.addColumn(firstSeenColumn, lang._TextFirstSeen());
-		cellTable.getColumnSortList().push(titleColumn);	
+		//cellTable.getColumnSortList().push(titleColumn);	
 		cellTable.setStyleName("filecelltable");
 
 
@@ -415,7 +411,6 @@ public class ContentUserOpportunity implements EntryPoint {
 
 		Grid grid_1 = new Grid(4, 2);
 		simplePanelCenter.add(grid_1);
-		//grid_1.setWidth("100%");
 
 		Label lblSource = new Label(lang._TextSource());
 		lblSource.setStyleName("summary-title");

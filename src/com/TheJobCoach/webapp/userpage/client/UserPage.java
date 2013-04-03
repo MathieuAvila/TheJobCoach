@@ -110,9 +110,7 @@ public class UserPage implements EntryPoint {
 				@Override
 				public void Open()
 				{
-					ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity();
-					contentUserOpportunity.setRootPanel(simplePanelContent);
-					contentUserOpportunity.setUserParameters(userId);
+					ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity(simplePanelContent, userId);
 					contentUserOpportunity.onModuleLoad();
 				}			
 			});
@@ -123,9 +121,7 @@ public class UserPage implements EntryPoint {
 				@Override
 				public void Open()
 				{
-					ContentReport contentReport = new ContentReport();				
-					contentReport.setRootPanel(simplePanelContent);
-					contentReport.setUserParameters(userId);
+					ContentReport contentReport = new ContentReport(simplePanelContent, userId);
 					contentReport.onModuleLoad();
 				}			
 			});

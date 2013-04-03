@@ -25,18 +25,14 @@ public class ContentReport implements EntryPoint {
 	private TextArea textArea = new TextArea();
 	private Lang lang = GWT.create(Lang.class);
 
-	public void setUserParameters(UserId _user)
-	{
-		user = _user;
-	}
-
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
 
-	public void setRootPanel(Panel panel)
+	public ContentReport(Panel panel, UserId _user)
 	{
 		rootPanel = panel;
+		user = _user;
 	}
 
 	private void sendComment()

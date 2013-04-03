@@ -29,9 +29,7 @@ public class TestContentReport implements EntryPoint {
 					hp.setStyleName("mainpage-content");
 					root.add(hp);
 					hp.setSize("100%", "100%");
-					ContentReport cud = new ContentReport();
-					cud.setRootPanel(hp);
-					cud.setUserParameters(new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
+					ContentReport cud = new ContentReport(hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
 					cud.onModuleLoad();
 				}
 			});

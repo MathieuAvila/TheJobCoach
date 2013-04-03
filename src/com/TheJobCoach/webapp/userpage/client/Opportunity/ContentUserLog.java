@@ -315,9 +315,7 @@ public class ContentUserLog implements EntryPoint {
 		buttonBack.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity();
-				contentUserOpportunity.setRootPanel(rootPanel);
-				contentUserOpportunity.setUserParameters(user);
+				ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity(rootPanel, user);
 				contentUserOpportunity.onModuleLoad();		
 			}
 			
