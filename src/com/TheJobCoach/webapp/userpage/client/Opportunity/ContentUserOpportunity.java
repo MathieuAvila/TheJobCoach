@@ -8,12 +8,13 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
-import com.TheJobCoach.webapp.userpage.client.Opportunity.EditOpportunity.EditOpportunityResult;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -56,7 +57,12 @@ public class ContentUserOpportunity implements EntryPoint {
 	
 	final Lang lang = GWT.create(Lang.class);
 	final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
-
+	
+	ButtonImageText buttonNewOpportunity;
+	
+	private IEditDialogModel<UserOpportunity> editModel;
+	private IContentUserLog logContent;
+	
 	private void setUserOpportunity(UserOpportunity opp)
 	{
 		AsyncCallback<UserOpportunity> callback = new AsyncCallback<UserOpportunity>() {
@@ -88,8 +94,18 @@ public class ContentUserOpportunity implements EntryPoint {
 	{
 		rootPanel = panel;
 		user = _user;
+		this.editModel = new EditOpportunity();
+		this.logContent = new ContentUserLog(); 
 	}
-
+	
+	public ContentUserOpportunity(Panel panel, UserId _user, IEditDialogModel<UserOpportunity> editModel, IContentUserLog logContent)
+	{
+		rootPanel = panel;
+		user = _user;
+		this.editModel = editModel; 
+		this.logContent = logContent;
+	}
+	 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
@@ -143,8 +159,8 @@ public class ContentUserOpportunity implements EntryPoint {
 	private void delete(final UserOpportunity opp)
 	{
 		MessageBox mb = new MessageBox(
-				rootPanel, true, true, MessageBox.TYPE.QUESTION, "Delete opportunity ?", 
-				"Are you sure you wish to delete opportunity " + opp.title, new MessageBox.ICallback() {
+				rootPanel, true, true, MessageBox.TYPE.QUESTION, langLogEntry._Text_DeleteOpportunityTitle(), 
+				langLogEntry._Text_DeleteOpportunity() + opp.title, new MessageBox.ICallback() {
 					@Override
 					public void complete(boolean ok) {
 						if (ok == true)
@@ -152,9 +168,7 @@ public class ContentUserOpportunity implements EntryPoint {
 							try {
 								userService.deleteUserOpportunity(user, opp.ID, new AsyncCallback<String>() {
 									public void onFailure(Throwable caught) {
-										// Show the RPC error message to the user
 										MessageBox.messageBoxException(rootPanel, caught);
-										//connectButton.setEnabled(true);
 									}
 									public void onSuccess(String result)
 									{
@@ -174,9 +188,7 @@ public class ContentUserOpportunity implements EntryPoint {
 	{
 		public void onClick(ClickEvent event)
 		{
-			EditOpportunity eus = new EditOpportunity(rootPanel, user, null, new EditOpportunityResult() {
-
-				@Override
+			IEditDialogModel<UserOpportunity> eus = editModel.clone(rootPanel, user, null, new IChooseResult<UserOpportunity>() {
 				public void setResult(UserOpportunity result) {
 					try 
 					{
@@ -185,9 +197,7 @@ public class ContentUserOpportunity implements EntryPoint {
 							result.ID = new Date().toString();
 							userService.setUserOpportunity(user, "managed", result, new AsyncCallback<String>() {
 								public void onFailure(Throwable caught) {
-									// Show the RPC error message to the user
 									MessageBox.messageBoxException(rootPanel, caught);
-									//connectButton.setEnabled(true);
 								}
 								public void onSuccess(String result)
 								{
@@ -208,7 +218,7 @@ public class ContentUserOpportunity implements EntryPoint {
 	
 	private void updateUserOpportunity(UserOpportunity opp)
 	{
-		EditOpportunity eus = new EditOpportunity(rootPanel, user, opp, new EditOpportunityResult() {
+		IEditDialogModel<UserOpportunity> eus = editModel.clone(rootPanel, user, opp, new IChooseResult<UserOpportunity>() {
 			@Override
 			public void setResult(UserOpportunity result) {
 				try 
@@ -239,8 +249,8 @@ public class ContentUserOpportunity implements EntryPoint {
 
 	void editLog(UserOpportunity opp)
 	{
-		ContentUserLog cul = new ContentUserLog(rootPanel, user, opp);		
-		cul.onModuleLoad();		
+		IContentUserLog cul = logContent.clone(rootPanel, user, opp);		
+		cul.onModuleLoad();
 	}
 
 	/**
@@ -398,7 +408,7 @@ public class ContentUserOpportunity implements EntryPoint {
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
 
-		ButtonImageText buttonNewOpportunity = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewOpportunity());
+		buttonNewOpportunity = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewOpportunity());
 		horizontalPanel.add(buttonNewOpportunity);
 
 		HTML htmlDescriptionhtml = new HTML("", true);

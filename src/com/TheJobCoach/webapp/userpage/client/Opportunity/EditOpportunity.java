@@ -10,6 +10,8 @@ import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.IChanged;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -31,12 +33,7 @@ import com.google.gwt.user.datepicker.client.DateBox;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class EditOpportunity implements EntryPoint, IChanged {
-
-	public interface EditOpportunityResult
-	{
-		public void setResult(UserOpportunity result);
-	}
+public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<UserOpportunity> {
 	
 	static final Lang lang = GWT.create(Lang.class);
     
@@ -62,16 +59,20 @@ public class EditOpportunity implements EntryPoint, IChanged {
 	DateBox dateBoxStart;
 	DateBox dateBoxEndDate;
 
-	public EditOpportunity(Panel panel, UserId _user, UserOpportunity _currentOpportunity, EditOpportunityResult _result)
+	public EditOpportunity(Panel panel, UserId _user, UserOpportunity _currentOpportunity, IChooseResult<UserOpportunity> result)
 	{	
 		user = _user;
 		rootPanel = panel;
 		currentOpportunity = _currentOpportunity;
-		result = _result;		
+		this.result = result;		
+	}
+
+	public EditOpportunity()
+	{		
 	}
 
 	Panel rootPanel;
-	EditOpportunityResult result;
+	IChooseResult<UserOpportunity> result;
 	UserOpportunity currentOpportunity;
 	
 	private void setOpportunity(UserOpportunity opp)
@@ -90,7 +91,7 @@ public class EditOpportunity implements EntryPoint, IChanged {
 		
 	}
 	
-	public UserOpportunity getOpportunity()
+	private UserOpportunity getOpportunity()
 	{
 		double salary = 0;
 		if (txtbxSalary.getValue() != null) salary = Double.parseDouble(txtbxSalary.getValue().replace(",", "."));
@@ -232,5 +233,13 @@ public class EditOpportunity implements EntryPoint, IChanged {
 		setOk = setOk && txtbxTitle.isValid();
 		setOk = setOk && txtbxSalary.isValid();
 		okCancel.getOk().setEnabled(setOk);	
+	}
+
+	@Override
+	public IEditDialogModel<UserOpportunity> clone(Panel rootPanel,
+			UserId userId, UserOpportunity edition,
+			IChooseResult<UserOpportunity> result)
+	{		
+		return new EditOpportunity(rootPanel, userId, edition, result);
 	}
 }

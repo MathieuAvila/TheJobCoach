@@ -1261,3 +1261,11 @@ td.datePickerMonth {
   background: #e7e7e7 url(images/thumb_horz.png) center center no-repeat;
   cursor: row-resize;
 }
+
+
+.SelectorList-CaptionPanel {   
+  -moz-border-radius:5px;  
+  border-radius: 5px;  
+  -webkit-border-radius: 5px;
+}
+

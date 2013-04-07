@@ -35,5 +35,11 @@ public interface LangLogEntry extends Constants {
 
 	@Key("questiondeleteeditlog")
 	String _Text_DeleteEditLog();
+	
+	@Key("questiondeleteopportunity")
+	String _Text_DeleteOpportunity();
+
+	@Key("questiondeleteopportunitytitle")
+	String _Text_DeleteOpportunityTitle();
 
 }

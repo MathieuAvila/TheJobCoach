@@ -7,12 +7,16 @@ public class ErrorCatcherMessageBox implements MessageBox.ErrorCatcher
 {
 	public MessageBox currentBox;
 	public TYPE type;
-
+	public String title;
+	public String message;
+	
 	@Override
-	public void errorEvent(MessageBox error, TYPE type)
+	public void errorEvent(MessageBox error, TYPE type, String title, String message)
 	{
 		currentBox = error;
 		this.type = type;
+		this.title = title;
+		this.message = message;
 	}
 	
 	public boolean hasError()
@@ -22,7 +26,7 @@ public class ErrorCatcherMessageBox implements MessageBox.ErrorCatcher
 	
 	public void clearError()
 	{
-		currentBox.close();
+		if (currentBox != null) currentBox.close();
 		currentBox = null;
 	}
 	

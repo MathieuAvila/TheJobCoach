@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class ContentUserLog implements EntryPoint {
+public class ContentUserLog implements EntryPoint, IContentUserLog {
 
 	UserId user;
 
@@ -59,6 +59,10 @@ public class ContentUserLog implements EntryPoint {
 		rootPanel = panel;
 		editedOpportunity = opp;
 		user = _user;
+	}
+
+	public ContentUserLog()
+	{
 	}
 
 	private final static UserServiceAsync userService = GWT.create(UserService.class);
@@ -346,5 +350,12 @@ public class ContentUserLog implements EntryPoint {
 		buttonNewLogEntry.addClickHandler(newHandler);
 
 		getAllContent();		
+	}
+
+
+	@Override
+	public IContentUserLog clone(Panel panel, UserId _user, UserOpportunity opp)
+	{
+		return new ContentUserLog(panel, _user, opp);
 	}
 }

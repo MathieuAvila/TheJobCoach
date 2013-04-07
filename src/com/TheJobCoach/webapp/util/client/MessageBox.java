@@ -68,7 +68,7 @@ public class MessageBox implements EntryPoint {
 	 * It shouldn't be used in production code. */
 	public interface ErrorCatcher
 	{
-		public void errorEvent(MessageBox error, TYPE type); 
+		public void errorEvent(MessageBox error, TYPE type, String title, String message);
 	}	
 	static private ErrorCatcher currentErrorCatcher = null;
 	static public void registerErrorCatcher(ErrorCatcher catcher)	
@@ -91,7 +91,7 @@ public class MessageBox implements EntryPoint {
 	{
 		if (currentErrorCatcher != null)
 		{
-			currentErrorCatcher.errorEvent(this, type);
+			currentErrorCatcher.errorEvent(this, type, title, message);
 		}
 		
 		dBox.setText(title);
