@@ -294,7 +294,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 						brk = "<br/>";
 					}
 					return result;
-				}}, "");
+				}}, langLogEntry._Text_Contacts());
 				
 		dataProvider.addDataDisplay(cellTable);
 
