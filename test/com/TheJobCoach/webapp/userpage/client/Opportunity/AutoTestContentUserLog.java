@@ -330,6 +330,5 @@ public class AutoTestContentUserLog extends GwtTest {
 		assertEquals(1, userLog.loaded);
 		
 		// TODO check what is loaded/freed
-
 	}	
 }
