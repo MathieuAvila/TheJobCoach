@@ -134,12 +134,6 @@ public class AutoTestEditLogEntry extends GwtTest {
 		);
 	}
 	
-	@After
-	public void afterContentExternalContact() throws Throwable
-	{
-		GwtTestGWTBridge.get().afterTest();
-	}
-	
 	@Test
 	public void testValid() throws InterruptedException
 	{

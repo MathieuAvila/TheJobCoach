@@ -190,7 +190,6 @@ public class AutoTestContentUserLog extends GwtTest {
 		@Override
 		public void onModuleLoad()
 		{
-			System.out.println("TestEditDialog::onModuleLoad");
 			loaded++;
 		}
 
@@ -232,7 +231,6 @@ public class AutoTestContentUserLog extends GwtTest {
 		@Override
 		public void onModuleLoad()
 		{
-			System.out.println("TestContentUserOpportunity::onModuleLoad");
 			loaded++;
 		}
 	}
