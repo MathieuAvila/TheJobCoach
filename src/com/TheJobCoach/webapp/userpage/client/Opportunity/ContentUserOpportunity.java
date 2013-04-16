@@ -43,7 +43,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class ContentUserOpportunity implements EntryPoint {
+public class ContentUserOpportunity implements EntryPoint, IContentUserOpportunity {
 
 	UserId user;
 
@@ -106,6 +106,10 @@ public class ContentUserOpportunity implements EntryPoint {
 		this.logContent = logContent;
 	}
 	 
+	public ContentUserOpportunity()
+	{
+	}
+
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
@@ -462,5 +466,11 @@ public class ContentUserOpportunity implements EntryPoint {
 		buttonNewOpportunity.addClickHandler(newHandler);
 
 		getAllContent();		
+	}
+
+	@Override
+	public IContentUserOpportunity clone(Panel panel, UserId _user)
+	{
+		return new ContentUserOpportunity(panel, _user);
 	}
 }

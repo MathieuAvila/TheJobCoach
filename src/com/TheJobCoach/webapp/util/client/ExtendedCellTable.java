@@ -4,6 +4,7 @@ import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -115,6 +116,25 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 				fieldUpdater);
 		addColumn(column, cName);
 		//this.(column, "20px");
+	}
+	
+	public void addColumnHtml(FieldUpdater<DocType, String> fieldUpdater, final GetValue<String, DocType> getter, String cName)
+	{
+		ClickableTextCell anchorcolumn = new ClickableTextCell()
+		{
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void render(Context context, com.google.gwt.safehtml.shared.SafeHtml value, com.google.gwt.safehtml.shared.SafeHtmlBuilder sb) {
+				if (value != null) {
+					sb.appendHtmlConstant(getter.getValue((DocType)context.getKey()));
+				}
+			}
+		};
+		Column<DocType, String> column = specialAddColumn(
+				anchorcolumn,
+				getter,
+				fieldUpdater);
+		addColumn(column, cName);
 	}
 
 	public ExtendedCellTable()

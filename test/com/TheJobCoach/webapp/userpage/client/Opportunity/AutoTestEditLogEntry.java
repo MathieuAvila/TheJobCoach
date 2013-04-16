@@ -19,6 +19,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.TestFormatUtil;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -72,7 +73,7 @@ public class AutoTestEditLogEntry extends GwtTest {
 			contactList_modified, new Vector<UserDocumentId>(),
 			"note2", false);
 		
-	class EditLogEntryResultTest implements EditLogEntry.EditLogEntryResult
+	class EditLogEntryResultTest implements IChooseResult<UserLogEntry>
 	{
 		UserLogEntry expect;
 		EditLogEntryResultTest(UserLogEntry expect)
@@ -131,12 +132,6 @@ public class AutoTestEditLogEntry extends GwtTest {
 				return null;
 			}}
 		);
-	}
-	
-	@After
-	public void afterContentExternalContact() throws Throwable
-	{
-		GwtTestGWTBridge.get().afterTest();
 	}
 	
 	@Test

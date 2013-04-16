@@ -13,6 +13,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
@@ -35,17 +36,12 @@ import com.google.gwt.user.datepicker.client.DateBox;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class EditLogEntry implements EntryPoint {
+public class EditLogEntry implements EntryPoint, IEditLogEntry {
 	
 	private final static UserServiceAsync userService = GWT.create(UserService.class);
 
 	private static final Lang lang = GWT.create(Lang.class);
 	private static final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
-	
-	public interface EditLogEntryResult
-	{
-		public void setResult(UserLogEntry result);
-	}
 
 	UserId user;
 
@@ -62,19 +58,23 @@ public class EditLogEntry implements EntryPoint {
 	String id;
 
 	Panel rootPanel;
-	EditLogEntryResult result;
+	IChooseResult<UserLogEntry> result;
 	UserLogEntry currentLogEntry;
 	String oppId;
 	Vector<UserDocumentId> userDocumentList;
 	Vector<ExternalContact> contactList = new Vector<ExternalContact>();
 	
-	public EditLogEntry(Panel panel, UserLogEntry _currentLogEntry, String _oppId, UserId _user, com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry.EditLogEntryResult editLogEntryResult)
+	public EditLogEntry(Panel panel, UserLogEntry _currentLogEntry, String _oppId, UserId _user, IChooseResult<UserLogEntry> editLogEntryResult)
 	{
 		user = _user;
 		rootPanel = panel;
 		currentLogEntry = _currentLogEntry;
 		result = editLogEntryResult;
 		oppId = _oppId;
+	}
+
+	public EditLogEntry()
+	{
 	}
 
 	public UserLogEntry getLogEntry()
@@ -208,5 +208,13 @@ public class EditLogEntry implements EntryPoint {
 		}		
 		
 		dBox.center();
+	}
+
+	@Override
+	public IEditLogEntry clone(Panel panel, UserLogEntry _currentLogEntry,
+			String _oppId, UserId _user,
+			IChooseResult<UserLogEntry> editLogEntryResult)
+	{
+		return new EditLogEntry(panel, _currentLogEntry, _oppId, _user, editLogEntryResult);
 	}
 }

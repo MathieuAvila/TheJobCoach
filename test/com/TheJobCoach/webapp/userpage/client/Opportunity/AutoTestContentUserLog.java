@@ -190,7 +190,6 @@ public class AutoTestContentUserLog extends GwtTest {
 		@Override
 		public void onModuleLoad()
 		{
-			System.out.println("TestEditDialog::onModuleLoad");
 			loaded++;
 		}
 
@@ -232,7 +231,6 @@ public class AutoTestContentUserLog extends GwtTest {
 		@Override
 		public void onModuleLoad()
 		{
-			System.out.println("TestContentUserOpportunity::onModuleLoad");
 			loaded++;
 		}
 	}
@@ -328,8 +326,7 @@ public class AutoTestContentUserLog extends GwtTest {
 		assertEquals(1, userLogStack.size());
 		TestContentUserOpportunity userLog = userLogStack.get(0);
 		assertEquals(1, userLog.loaded);
-		
-		// TODO check what is loaded/freed
 
+		// TODO check what is loaded/freed
 	}	
 }

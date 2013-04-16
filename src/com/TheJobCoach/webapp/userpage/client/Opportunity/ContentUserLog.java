@@ -8,11 +8,15 @@ import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -22,22 +26,19 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.HasData;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -51,28 +52,39 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 	final Lang lang = GWT.create(Lang.class);
 	final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
 	
-	UserOpportunity editedOpportunity;
-	UserLogEntry currentLogEntry;
+	private UserOpportunity editedOpportunity;
+	
+	private IEditLogEntry editModel;
+	private IContentUserOpportunity opportunityContent;
 
+	ButtonImageText buttonBack;
+	Button buttonNewLogEntry;
+	
 	public ContentUserLog(Panel panel, UserId _user, UserOpportunity opp)
 	{
 		rootPanel = panel;
 		editedOpportunity = opp;
 		user = _user;
+		editModel = new EditLogEntry();
+		opportunityContent = new ContentUserOpportunity();
+	}
+	
+	public ContentUserLog(Panel panel, UserId _user, UserOpportunity opp, IEditLogEntry editModel, IContentUserOpportunity opportunityContent)
+	{
+		rootPanel = panel;
+		editedOpportunity = opp;
+		user = _user;
+		this.editModel = editModel;
+		this.opportunityContent = opportunityContent;
 	}
 
 	public ContentUserLog()
 	{
 	}
 
-	private final static UserServiceAsync userService = GWT.create(UserService.class);
+	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
-
-	private void setUserLogEntry(UserLogEntry selected)
-	{
-		currentLogEntry = selected;
-	}
 
 	// The list of data to display.
 	private Vector<UserLogEntry> UserLogEntryList = new Vector<UserLogEntry>();
@@ -100,7 +112,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 		AsyncCallback<Vector<UserLogEntry>> callback = new AsyncCallback<Vector<UserLogEntry>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				MessageBox.messageBoxException(rootPanel, caught);
 			}
 			@Override
 			public void onSuccess(Vector<UserLogEntry> result) {
@@ -116,7 +128,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 		}
 		catch (CassandraException e) 
 		{
-			e.printStackTrace();
+			MessageBox.messageBoxException(rootPanel, e);
 		}
 	}
 
@@ -143,7 +155,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 							} 
 							catch (CassandraException e) 
 							{
-								Window.alert(e.toString());
+								MessageBox.messageBoxException(rootPanel, e);
 							}
 						}
 					}});
@@ -155,7 +167,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 	{
 		public void onClick(ClickEvent event)
 		{
-			EditLogEntry eus = new EditLogEntry(rootPanel, null, editedOpportunity.ID, user, new EditLogEntry.EditLogEntryResult() 
+			IEditLogEntry eus = editModel.clone(rootPanel, null, editedOpportunity.ID, user, new IChooseResult<UserLogEntry>() 
 			{
 				@Override
 				public void setResult(UserLogEntry result) {
@@ -172,7 +184,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 
 	void updateLogEntry(UserLogEntry currentLogEntry)
 	{
-		EditLogEntry eus = new EditLogEntry(rootPanel, currentLogEntry, editedOpportunity.ID, user, new EditLogEntry.EditLogEntryResult() {
+		IEditLogEntry eus = editModel.clone(rootPanel, currentLogEntry, editedOpportunity.ID, user, new IChooseResult<UserLogEntry>() {
 			@Override
 			public void setResult(UserLogEntry result) {
 				if (result != null)
@@ -226,15 +238,6 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 			}
 		};
 
-		// Create attached files column.
-		TextColumn<UserLogEntry> filesColumn = new TextColumn<UserLogEntry>() {
-			@Override
-			public String getValue(UserLogEntry userLog) 
-			{
-				return (userLog.attachedDocumentId.size()!=0) ? Integer.toString(userLog.attachedDocumentId.size()): "";
-			}
-		};
-
 		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserLogEntry, String>() {
 			@Override
 			public void update(int index, UserLogEntry object, String value) {
@@ -254,23 +257,45 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 		cellTable.addColumn(titleColumn, lang._TextName());
 		cellTable.addColumn(statusColumn, lang._TextStatus());
 		cellTable.addColumn(createdColumn, langLogEntry._TextCreated());
-		cellTable.addColumn(filesColumn, langLogEntry._TextFiles());
+				
+		cellTable.addColumnHtml(new FieldUpdater<UserLogEntry, String>() {
+			@Override
+			public void update(int index, UserLogEntry object, String value) {				
+			}}, 
+			new GetValue<String, UserLogEntry>(){
 
-		// Add a selection model to handle user selection.
-		final SingleSelectionModel<UserLogEntry> selectionModel = new SingleSelectionModel<UserLogEntry>();
-		cellTable.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler()
-		{
-			public void onSelectionChange(SelectionChangeEvent event) 
-			{
-				UserLogEntry selected = selectionModel.getSelectedObject();
-				if (selected != null) 
+				@Override
+				public String getValue(UserLogEntry log)
 				{
-					setUserLogEntry(selected);					
-				}
-			}
-		});
+					String result = "";
+					String brk = "";
+					for (UserDocumentId doc : log.attachedDocumentId)
+					{
+						result = result + brk + doc.fileName;
+						brk = "<br/>";
+					}
+					return result;
+				}}, langLogEntry._TextFiles());
+		
+		cellTable.addColumnHtml(new FieldUpdater<UserLogEntry, String>() {
+			@Override
+			public void update(int index, UserLogEntry object, String value) {				
+			}}, 
+			new GetValue<String, UserLogEntry>(){
 
+				@Override
+				public String getValue(UserLogEntry log)
+				{
+					String result = "";
+					String brk = "";
+					for (ExternalContact contact : log.linkedExternalContact)
+					{
+						result = result + brk + contact.firstName + " " + contact.lastName;
+						brk = "<br/>";
+					}
+					return result;
+				}}, langLogEntry._Text_Contacts());
+				
 		dataProvider.addDataDisplay(cellTable);
 
 		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
@@ -315,11 +340,11 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 		simplePanelCenter.add(simplePanel);
 		simplePanel.setHeight("20px");
 		
-		ButtonImageText buttonBack = new ButtonImageText(ButtonImageText.Type.BACK, langLogEntry._Text_BackToOpportunityList());
+		buttonBack = new ButtonImageText(ButtonImageText.Type.BACK, langLogEntry._Text_BackToOpportunityList());
 		buttonBack.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				ContentUserOpportunity contentUserOpportunity = new ContentUserOpportunity(rootPanel, user);
+				IContentUserOpportunity contentUserOpportunity = opportunityContent.clone(rootPanel, user);
 				contentUserOpportunity.onModuleLoad();		
 			}
 			
@@ -338,7 +363,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
 
-		Button buttonNewLogEntry = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewLogEntry());	
+		buttonNewLogEntry = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewLogEntry());	
 		horizontalPanel.add(buttonNewLogEntry);
 
 		HTML htmlDescriptionhtml = new HTML("", true);
