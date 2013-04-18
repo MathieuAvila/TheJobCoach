@@ -137,7 +137,9 @@ public class EditUserDocument implements EntryPoint {
 		// Now Upload file if necessary.
 		if ("".equals(upload.getFilename()) || (!fakeFileName.equals("")))
 		{
-			dBox.hide();	
+			dBox.hide();
+			resultInterface.setResult(ud);			
+			return;
 		}		
 		final String copyURL = GWT.getModuleBaseURL() + "UploadServlet?docid=" + URL.encodeQueryString(ud.ID) + "&userid=" + URL.encodeQueryString(user.userName)+ "&token=" + URL.encodeQueryString(user.token);
 		form.setAction(copyURL);
