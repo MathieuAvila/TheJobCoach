@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +26,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
-import com.googlecode.gwt.test.internal.handlers.GwtTestGWTBridge;
 
 import static org.junit.Assert.*;
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
