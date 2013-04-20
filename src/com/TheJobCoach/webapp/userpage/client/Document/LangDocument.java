@@ -8,6 +8,9 @@ public interface LangDocument extends Constants {
 
 	@Key("type")
 	String _TextType();
+
+	@Key("title")
+	String _TextTitle();
 	
 	@Key("documenttitle")
 	String _TextDocumentTitle();

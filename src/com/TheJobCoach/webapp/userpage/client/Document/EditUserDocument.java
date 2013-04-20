@@ -9,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
+import com.TheJobCoach.webapp.util.client.GridHelper;
 import com.TheJobCoach.webapp.util.client.IEditResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -167,16 +168,10 @@ public class EditUserDocument implements EntryPoint {
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		Grid grid = new Grid(5, 2);
-		grid.setBorderWidth(0);
-		grid.setSize("100%", "100%");
+		GridHelper grid = new GridHelper(rootPanel);
 
-		Label lblTitle = new Label("Title");
-		grid.setWidget(0, 0, lblTitle);		
-		grid.setWidget(0, 1, txtbxTitle);
-		grid.getCellFormatter().setWidth(0, 1, "90%");
-		txtbxTitle.setWidth("90%");
-
+		grid.addLine(0, new Label(langDocument._TextTitle()), txtbxTitle);
+		
 		for (DocumentStatus e: UserDocument.DocumentStatus.values() )
 		{
 			comboBoxStatus.addItem(langDocument.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(e)), UserDocument.documentStatusToString(e));
@@ -185,23 +180,9 @@ public class EditUserDocument implements EntryPoint {
 		{
 			comboBoxType.addItem(langDocument.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(e)), UserDocument.documentTypeToString(e));
 		}
-		
-		grid.setWidget(1, 0, lblType);
-		grid.setWidget(1, 1, comboBoxType);
-		
-		grid.setWidget(2, 0, lblStatus);
-		grid.setWidget(2, 1, comboBoxStatus);
-		
-		grid.setWidget(3, 0, lblDescription);		
-		grid.setWidget(3, 1, richTextAreaDescription);
-		grid.getCellFormatter().setWidth(2, 1, "100%");
-		richTextAreaDescription.setWidth("100%");
-
-		grid.setWidget(4, 0, lblSelectFile);	
-		grid.getCellFormatter().setWidth(3, 0, "30%");
-		grid.getCellFormatter().setWidth(3, 1, "100%");
-
-		grid.getCellFormatter().setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_RIGHT);
+		grid.addLine(1, lblType, comboBoxType);		
+		grid.addLine(2, lblStatus, comboBoxStatus);
+		grid.addLine(3, lblDescription, richTextAreaDescription);
 
 		HorizontalPanel holder = new HorizontalPanel();
 		holder.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
@@ -223,7 +204,7 @@ public class EditUserDocument implements EntryPoint {
 				}
 			}			
 		});
-		grid.setWidget(4, 1, form);
+		grid.addLine(4, lblSelectFile, form);
 		
 		if (currentUserDocument != null)
 		{
