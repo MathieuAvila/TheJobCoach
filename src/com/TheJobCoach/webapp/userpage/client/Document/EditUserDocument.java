@@ -125,17 +125,18 @@ public class EditUserDocument implements EntryPoint {
 				MessageBox.messageBoxException(rootPanel, caught);
 			}
 			@Override
-			public void onSuccess(String result) {
+			public void onSuccess(String result) 
+			{
+				if ("".equals(upload.getFilename()) && (fakeFileName.equals("")))
+				{
+					resultInterface.setResult(ud);
+					dBox.hide();
+				}
 			}
 		};
 		
 		try {			
 			userService.setUserDocument(user, ud, callback);
-			if ("".equals(upload.getFilename()) && (fakeFileName.equals("")))
-			{
-				resultInterface.setResult(ud);
-				dBox.hide();
-			}
 		} 
 		catch (CassandraException e) 
 		{

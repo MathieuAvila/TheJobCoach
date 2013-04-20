@@ -178,7 +178,6 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 			@Override
 			public String getValue(UserDocument document) 
 			{
-				//return UserDocument.documentStatusToString(document.status);
 				return langDocument.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(document.status));
 			}
 		};

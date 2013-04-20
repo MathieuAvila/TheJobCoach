@@ -75,6 +75,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public Vector<UserDocument> getUserDocumentList(UserId id)
 			throws CassandraException {
+		logger.info("Get document list");
 		return userDocumentManager.getUserDocumentList(id);
 	}
 
@@ -88,7 +89,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public String setUserDocument(UserId id, UserDocument document)	throws CassandraException
 	{
-		//logger.info("Set document: " + document.ID + " " + document.name);
+		logger.info("Set document: " + document.ID + " " + document.name);
 		userDocumentManager.setUserDocument(id, document);
 		return document.ID;
 	}
