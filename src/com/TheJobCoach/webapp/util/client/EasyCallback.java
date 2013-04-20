@@ -1,22 +1,19 @@
 package com.TheJobCoach.webapp.util.client;
 
-import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 
 public class EasyCallback<I> implements AsyncCallback<I>
 {
 	Panel rootPanel;
-	SuccessRun success;
+	SuccessRun<I> success;
 	
-	public interface SuccessRun
+	public interface SuccessRun<I>
 	{
-		public void onSuccess();
+		public void onSuccess(I result);
 	}
 
-	public EasyCallback(Panel rootPanel, SuccessRun success)
+	public EasyCallback(Panel rootPanel, SuccessRun<I> success)
 	{
 		this.rootPanel = rootPanel;
 		this.success = success;
@@ -31,6 +28,6 @@ public class EasyCallback<I> implements AsyncCallback<I>
 	@Override
 	public void onSuccess(I result)
 	{
-		success.onSuccess();
+		success.onSuccess(result);
 	}
 }

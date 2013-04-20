@@ -154,10 +154,10 @@ public class ContentUserSite implements EntryPoint {
 					EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
 						public void Run() throws CassandraException
 						{
-							userService.deleteUserSite(user, currentSite.ID, new EasyCallback<Integer>(rootPanel, new EasyCallback.SuccessRun()
+							userService.deleteUserSite(user, currentSite.ID, new EasyCallback<Integer>(rootPanel, new EasyCallback.SuccessRun<Integer>()
 							{	
 								@Override
-								public void onSuccess()
+								public void onSuccess(Integer r)
 								{
 									getAllContent();
 								}

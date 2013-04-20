@@ -9,6 +9,8 @@ import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.EasyCallback;
 import com.TheJobCoach.webapp.util.client.GridHelper;
 import com.TheJobCoach.webapp.util.client.IEditResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
@@ -21,14 +23,11 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -119,30 +118,21 @@ public class EditUserDocument implements EntryPoint {
 			}
 		}
 		final UserDocument ud = getDocument();
-		AsyncCallback<String> callback = new AsyncCallback<String>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(rootPanel, caught);
-			}
-			@Override
-			public void onSuccess(String result) 
-			{
-				if ("".equals(upload.getFilename()) && (fakeFileName.equals("")))
-				{
-					resultInterface.setResult(ud);
-					dBox.hide();
-				}
-			}
-		};
 		
-		try {			
-			userService.setUserDocument(user, ud, callback);
-		} 
-		catch (CassandraException e) 
-		{
-			MessageBox.messageBoxException(rootPanel, e);
-		}
-
+		EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
+			public void Run() throws CassandraException
+			{
+				userService.setUserDocument(user, ud, new EasyCallback<String>(rootPanel, new EasyCallback.SuccessRun<String>() {
+					@Override
+					public void onSuccess(String result)
+					{
+						if ("".equals(upload.getFilename()) && (fakeFileName.equals(""))) {
+							resultInterface.setResult(ud);
+							dBox.hide();
+						}
+					}}));
+			}});
+		
 		// Now Upload file if necessary.
 		if ("".equals(upload.getFilename()) && (fakeFileName.equals("")))
 		{

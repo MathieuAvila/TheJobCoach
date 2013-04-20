@@ -119,10 +119,10 @@ public class EditUserSite implements EntryPoint, IChanged {
 					public void Run() throws CassandraException
 					{
 						final UserJobSite resultSite = getUserJobSite();
-						userService.setUserSite(user, resultSite, new EasyCallback<Integer>(rootPanel, new EasyCallback.SuccessRun()
+						userService.setUserSite(user, resultSite, new EasyCallback<Integer>(rootPanel, new EasyCallback.SuccessRun<Integer>()
 						{	
 							@Override
-							public void onSuccess()
+							public void onSuccess(Integer r)
 							{
 								result.setResult(resultSite);
 							}

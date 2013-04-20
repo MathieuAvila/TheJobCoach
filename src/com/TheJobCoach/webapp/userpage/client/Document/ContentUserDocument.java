@@ -13,9 +13,11 @@ import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.EasyCallback;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
-import com.TheJobCoach.webapp.util.client.IEditResult;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
+import com.TheJobCoach.webapp.util.client.IEditResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -28,7 +30,6 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -77,28 +78,20 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 	};
 
 	void getAllContent()
-	{		
-		AsyncCallback<Vector<UserDocument>> callback = new AsyncCallback<Vector<UserDocument>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(rootPanel, caught);
-			}
-			@Override
-			public void onSuccess(Vector<UserDocument> result) {
-				userDocumentList.clear();
-				userDocumentList.addAll(result);				
-				dataProvider.updateRowCount(userDocumentList.size(), true);
-				dataProvider.updateRowData(0, userDocumentList.subList(0, userDocumentList.size()));
-				cellTable.redraw();				
-			}
-		};
-		try {
-			userService.getUserDocumentList(user, callback);
-		} catch (CassandraException e) {
-			MessageBox.messageBoxException(rootPanel, e);
-		}		
-		dataProvider.updateRowCount(userDocumentList.size(), true);
-		cellTable.redraw();
+	{
+		EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
+			public void Run() throws CassandraException
+			{
+				userService.getUserDocumentList(user, new EasyCallback<Vector<UserDocument>>(rootPanel, new EasyCallback.SuccessRun<Vector<UserDocument>>() {	
+					@Override
+					public void onSuccess(Vector<UserDocument> r)	{
+						userDocumentList.clear();
+						userDocumentList.addAll(r);				
+						dataProvider.updateRowCount(userDocumentList.size(), true);
+						dataProvider.updateRowData(0, userDocumentList.subList(0, userDocumentList.size()));
+						cellTable.redraw();
+					}}));
+			}});
 	}
 
 	void updateDoc(final UserDocument object)
@@ -116,24 +109,16 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 					@Override
 					public void complete(boolean ok) {
 						if (ok == true)
-						{
-							AsyncCallback<String> callback = new AsyncCallback<String>() {
-								@Override
-								public void onFailure(Throwable caught) {
-									MessageBox.messageBoxException(rootPanel, caught);
-								}
-								@Override
-								public void onSuccess(String result) {
-									getAllContent();
-								}
-							};
-							try {
-								userService.deleteUserDocument(user, object.ID, callback);
-							} catch (CassandraException e) {
-								MessageBox.messageBoxException(rootPanel, e);
-							}		
-							dataProvider.updateRowCount(userDocumentList.size(), true);
-							cellTable.redraw();							
+						{	
+							EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
+								public void Run() throws CassandraException
+								{
+									userService.deleteUserDocument(user, object.ID, new EasyCallback<String>(rootPanel, new EasyCallback.SuccessRun<String>() {	
+										@Override
+										public void onSuccess(String r)	{
+											getAllContent();
+										}}));
+								}});
 						}
 					}
 				});

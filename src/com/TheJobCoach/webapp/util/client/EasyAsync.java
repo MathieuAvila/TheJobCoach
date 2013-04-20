@@ -3,7 +3,6 @@ package com.TheJobCoach.webapp.util.client;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 
 public class EasyAsync
