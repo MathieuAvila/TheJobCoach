@@ -2,7 +2,8 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
-import com.TheJobCoach.webapp.userpage.client.EditUserSite.EditUserSiteResult;
+import com.TheJobCoach.webapp.userpage.client.UserSite.EditUserSite;
+import com.TheJobCoach.webapp.userpage.client.UserSite.EditUserSite.EditUserSiteResult;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;

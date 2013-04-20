@@ -11,6 +11,7 @@ import com.TheJobCoach.webapp.userpage.client.MyGoals.ContentMyGoals;
 import com.TheJobCoach.webapp.userpage.client.MyReports.ContentMyReports;
 import com.TheJobCoach.webapp.userpage.client.Opportunity.ContentUserOpportunity;
 import com.TheJobCoach.webapp.userpage.client.Todo.ContentTodo;
+import com.TheJobCoach.webapp.userpage.client.UserSite.ContentUserSite;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
