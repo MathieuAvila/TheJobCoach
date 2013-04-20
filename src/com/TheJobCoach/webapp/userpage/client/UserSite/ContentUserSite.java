@@ -13,6 +13,8 @@ import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.EasyCallback;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
@@ -41,7 +43,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 public class ContentUserSite implements EntryPoint {
 
 	final Lang lang = GWT.create(Lang.class);
-	
+
 	UserId user;
 
 	final ExtendedCellTable<UserJobSite> cellTable = new ExtendedCellTable<UserJobSite>();
@@ -56,7 +58,7 @@ public class ContentUserSite implements EntryPoint {
 	{
 		currentSite = site;
 	}
-	
+
 	public void setUserParameters(UserId _user)
 	{
 		user = _user;
@@ -150,30 +152,26 @@ public class ContentUserSite implements EntryPoint {
 	{
 		MessageBox mb = new MessageBox(rootPanel, true, true, MessageBox.TYPE.QUESTION, 
 				lang._TextConfirmDeleteSiteTitle(), lang._TextConfirmDeleteSite(), new MessageBox.ICallback() {
-					
-					public void complete(boolean ok) {
-						if(ok)
+
+			public void complete(boolean ok) {
+				if(ok)
+				{
+					EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
+						public void Run() throws CassandraException
 						{
-							try {
-								userService.deleteUserSite(user, currentSite.ID, new AsyncCallback<Integer>() {
-									public void onFailure(Throwable caught) {
-										// Show the RPC error message to the user
-										MessageBox.messageBoxException(rootPanel, caught.toString());										
-									}
-									public void onSuccess(Integer result)
-									{
-										getAllContent();
-									}
-								});
-							} 
-							catch (CassandraException e) 
-							{
-								MessageBox.messageBoxException(rootPanel, e.toString());
-							}
-						}
-					}
-				});
-	mb.onModuleLoad();
+							userService.deleteUserSite(user, currentSite.ID, new EasyCallback<Integer>(rootPanel, new EasyCallback.SuccessRun()
+							{	
+								@Override
+								public void onSuccess()
+								{
+									getAllContent();
+								}
+							}));
+						}});
+				}
+			}
+		});
+		mb.onModuleLoad();
 	}
 
 	public void newSite()
@@ -246,7 +244,7 @@ public class ContentUserSite implements EntryPoint {
 		rootPanel.add(simplePanelCenter);
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang.lblJobSites_text(), ClientImageBundle.INSTANCE.userJobSiteContent());
-		
+
 		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserJobSite, String>() {
 			@Override
 			public void update(int index, UserJobSite object, String value) {
@@ -260,7 +258,7 @@ public class ContentUserSite implements EntryPoint {
 				updateSite(object);
 			}}	
 				);
-		
+
 		// Create name column.
 		TextColumn<UserJobSite> nameColumn = new TextColumn<UserJobSite>() 	{
 			@Override
@@ -285,7 +283,7 @@ public class ContentUserSite implements EntryPoint {
 				return contact.URL;
 			}
 		});
-		
+
 		// Create login column.
 		TextColumn<UserJobSite> loginColumn = new TextColumn<UserJobSite>() {
 			@Override
@@ -348,9 +346,9 @@ public class ContentUserSite implements EntryPoint {
 		cellTable.setRowData(0, jobSiteList);
 		cellTable.setRowCount(jobSiteList.size(), true);
 		cellTable.addColumnSortHandler(columnSortHandler);
-		
+
 		simplePanelCenter.add(cellTable);
-		
+
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
