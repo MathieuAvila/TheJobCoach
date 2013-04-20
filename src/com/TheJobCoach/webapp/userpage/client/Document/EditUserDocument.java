@@ -131,10 +131,10 @@ public class EditUserDocument implements EntryPoint {
 		
 		try {			
 			userService.setUserDocument(user, ud, callback);
-			if ("".equals(upload.getFilename()) || (!fakeFileName.equals("")))
+			if ("".equals(upload.getFilename()) && (fakeFileName.equals("")))
 			{
-				dBox.hide();
 				resultInterface.setResult(ud);
+				dBox.hide();
 			}
 		} 
 		catch (CassandraException e) 
@@ -143,7 +143,7 @@ public class EditUserDocument implements EntryPoint {
 		}
 
 		// Now Upload file if necessary.
-		if ("".equals(upload.getFilename()) || (!fakeFileName.equals("")))
+		if ("".equals(upload.getFilename()) && (fakeFileName.equals("")))
 		{
 			return;
 		}
@@ -156,8 +156,8 @@ public class EditUserDocument implements EntryPoint {
 			public void onSubmitComplete(SubmitCompleteEvent event)
 			{
 				mb.close();
-				dBox.hide();
 				resultInterface.setResult(ud);				
+				dBox.hide();
 			}
 		});
 		form.submit();

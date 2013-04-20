@@ -3,6 +3,9 @@ package com.TheJobCoach.webapp.userpage.server;
 import java.util.List;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.TheJobCoach.admindata.News;
 import com.TheJobCoach.userdata.Account;
 import com.TheJobCoach.userdata.AccountInterface;
@@ -40,6 +43,8 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	static private UserExternalContactManager userExternalContactManager = new UserExternalContactManager();
 	static private TodoList todoList = new TodoList();
 
+	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	
 	@Override
 	public List<String> getUserSiteList(UserId id) throws CassandraException 
 	{
@@ -81,8 +86,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 
 	@Override
-	public String setUserDocument(UserId id, UserDocument document)
-			throws CassandraException {
+	public String setUserDocument(UserId id, UserDocument document)	throws CassandraException
+	{
+		//logger.info("Set document: " + document.ID + " " + document.name);
 		userDocumentManager.setUserDocument(id, document);
 		return document.ID;
 	}
