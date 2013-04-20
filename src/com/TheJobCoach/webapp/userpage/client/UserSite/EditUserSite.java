@@ -12,6 +12,7 @@ import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyCallback;
+import com.TheJobCoach.webapp.util.client.GridHelper;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -20,7 +21,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RichTextArea;
@@ -94,42 +94,19 @@ public class EditUserSite implements EntryPoint, IChanged {
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		Grid grid = new Grid(6, 2);
-		grid.setBorderWidth(0);
-		
+		GridHelper grid = new GridHelper(rootPanel);
+
 		VerticalPanel vp = new VerticalPanel();
 		dBox.setWidget(vp);		
 
 		vp.add(grid);
 		
-		grid.setWidget(0, 0, lblName);
-		grid.setWidget(0, 1, textBoxName);
-		textBoxName.setWidth("100%");
-
-		Label lblDescription = new Label(lang._TextDescription());
-		grid.setWidget(1, 0, lblDescription);
-
-		grid.setWidget(1, 1, textAreaDescription);
-		textAreaDescription.setSize("100%", "50px");
-
-		grid.setWidget(2, 0, lblUrl);
-
-		grid.setWidget(2, 1, textBoxUrl);
-
-		Label lblLogin = new Label(lang._TextLogin());
-		grid.setWidget(3, 0, lblLogin);
-
-		grid.setWidget(3, 1, textBoxLogin);
-
-		Label lblPassword = new Label(lang._TextPassword());
-		grid.setWidget(4, 0, lblPassword);
-
-		grid.setWidget(4, 1, textBoxPassword);
-
-		Label lblLastvisit = new Label(lang._TextLastVisit());
-		grid.setWidget(5, 0, lblLastvisit);
-
-		grid.setWidget(5, 1, datePickerLastVisit);
+		grid.addLine(lblName, textBoxName);
+		grid.addLine(new Label(lang._TextDescription()), textAreaDescription);
+		grid.addLine(lblUrl, textBoxUrl);
+		grid.addLine(new Label(lang._TextLogin()), textBoxLogin);
+		grid.addLine(new Label(lang._TextPassword()), textBoxPassword);
+		grid.addLine(new Label(lang._TextLastVisit()), datePickerLastVisit);
 
 		setUserJobSite(currentUserSite);
 

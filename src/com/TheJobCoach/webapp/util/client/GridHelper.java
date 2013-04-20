@@ -20,14 +20,14 @@ public class GridHelper extends Grid
 
 	public GridHelper(Panel root, int h)
 	{
-		super(2, h);
-		init(root, 2, h);
+		super(0, h);
+		init(root, 0, h);
 	}
 	
 	public GridHelper(Panel root)
 	{
-		super(2, 0);
-		init(root, 2, 0);
+		super(0, 0);
+		init(root, 0, 0);
 	}
 	
 	public void addLine(int line, Widget title, Widget content)
@@ -36,8 +36,15 @@ public class GridHelper extends Grid
 		if (super.numColumns < 2) super.resizeColumns(2);
 		super.setWidget(line, 0, title);		
 		if (content != null) super.setWidget(line, 1, content);
-		super.getCellFormatter().setWidth(line, 1, "90%");
-		title.setWidth("90%");
+		super.getCellFormatter().setWidth(line, 0, "30%");
+		title.setWidth("100%");
+		super.getCellFormatter().setWidth(line, 1, "70%");
+		content.setWidth("100%");
+	}
+	
+	public void addLine(Widget title, Widget content)
+	{
+		addLine(super.numRows, title, content);
 	}
 	
 	public void addLineTitle(int line, Widget title)
