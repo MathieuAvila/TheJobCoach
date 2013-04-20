@@ -186,9 +186,7 @@ public class ContentUserSite implements EntryPoint {
 					if (result != null)
 						userService.setUserSite(user, result, new AsyncCallback<Integer>() {
 							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								Window.alert(caught.toString());
-								//connectButton.setEnabled(true);
+								MessageBox.messageBoxException(rootPanel, caught.toString());
 							}
 							public void onSuccess(Integer result)
 							{
@@ -217,9 +215,7 @@ public class ContentUserSite implements EntryPoint {
 					if (result != null)
 						userService.setUserSite(user, result, new AsyncCallback<Integer>() {
 							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								Window.alert(caught.toString());
-								//connectButton.setEnabled(true);
+								MessageBox.messageBoxException(rootPanel, caught.toString());
 							}
 							public void onSuccess(Integer result)
 							{
