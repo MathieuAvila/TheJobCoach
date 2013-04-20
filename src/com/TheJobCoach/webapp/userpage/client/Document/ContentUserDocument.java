@@ -85,6 +85,7 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 			}
 			@Override
 			public void onSuccess(Vector<UserDocument> result) {
+				System.out.println("ICI");
 				userDocumentList.clear();
 				userDocumentList.addAll(result);				
 				dataProvider.updateRowCount(userDocumentList.size(), true);

@@ -131,17 +131,22 @@ public class EditUserDocument implements EntryPoint {
 		
 		try {			
 			userService.setUserDocument(user, ud, callback);
-		} catch (CassandraException e) {
+			if ("".equals(upload.getFilename()) || (!fakeFileName.equals("")))
+			{
+				dBox.hide();
+				resultInterface.setResult(ud);
+			}
+		} 
+		catch (CassandraException e) 
+		{
 			MessageBox.messageBoxException(rootPanel, e);
 		}
 
 		// Now Upload file if necessary.
 		if ("".equals(upload.getFilename()) || (!fakeFileName.equals("")))
 		{
-			dBox.hide();
-			resultInterface.setResult(ud);			
 			return;
-		}		
+		}
 		final String copyURL = GWT.getModuleBaseURL() + "UploadServlet?docid=" + URL.encodeQueryString(ud.ID) + "&userid=" + URL.encodeQueryString(user.userName)+ "&token=" + URL.encodeQueryString(user.token);
 		form.setAction(copyURL);
 		final MessageBox mb = MessageBox.messageBox(rootPanel, MessageBox.TYPE.WAIT, langDocument._TextUploadInProgress());
