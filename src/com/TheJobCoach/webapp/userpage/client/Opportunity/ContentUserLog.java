@@ -14,6 +14,8 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.EasyCallback;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
@@ -28,7 +30,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -108,28 +109,23 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 	};
 
 	void getAllContent()
-	{		
-		AsyncCallback<Vector<UserLogEntry>> callback = new AsyncCallback<Vector<UserLogEntry>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(rootPanel, caught);
-			}
-			@Override
-			public void onSuccess(Vector<UserLogEntry> result) {
-				UserLogEntryList.clear();
-				UserLogEntryList.addAll(result);
-				dataProvider.updateRowCount(UserLogEntryList.size(), true);
-				dataProvider.updateRowData(0, UserLogEntryList.subList(0, UserLogEntryList.size()));
-				cellTable.redraw();				
-			}
-		};
-		try {
-			userService.getUserLogEntryList(user, editedOpportunity.ID, callback);
-		}
-		catch (CassandraException e) 
-		{
-			MessageBox.messageBoxException(rootPanel, e);
-		}
+	{
+		EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
+			public void Run() throws CassandraException
+			{
+				userService.getUserLogEntryList(user, editedOpportunity.ID, new EasyCallback<Vector<UserLogEntry>>(rootPanel, new EasyCallback.SuccessRun<Vector<UserLogEntry>>()
+				{	
+					@Override
+					public void onSuccess(Vector<UserLogEntry> r)
+					{
+						UserLogEntryList.clear();
+						UserLogEntryList.addAll(r);
+						dataProvider.updateRowCount(UserLogEntryList.size(), true);
+						dataProvider.updateRowData(0, UserLogEntryList.subList(0, UserLogEntryList.size()));
+						cellTable.redraw();
+					}
+				}));
+			}});
 	}
 
 
@@ -142,21 +138,17 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 					public void complete(boolean ok) {
 						if (ok == true)
 						{
-							try {
-								userService.deleteUserLogEntry(user, currentLogEntry.ID, new AsyncCallback<String>() {
-									public void onFailure(Throwable caught) {
-										MessageBox.messageBoxException(rootPanel, caught.toString());
-									}
-									public void onSuccess(String result)
-									{
-										getAllContent();
-									}
-								});
-							} 
-							catch (CassandraException e) 
-							{
-								MessageBox.messageBoxException(rootPanel, e);
-							}
+							EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
+								public void Run() throws CassandraException
+								{
+									userService.deleteUserLogEntry(user, currentLogEntry.ID, new EasyCallback<String>(rootPanel, new EasyCallback.SuccessRun<String>()	{	
+										@Override
+										public void onSuccess(String r)
+										{
+											getAllContent();
+										}
+									}));
+								}});							
 						}
 					}});
 		mb.onModuleLoad();
