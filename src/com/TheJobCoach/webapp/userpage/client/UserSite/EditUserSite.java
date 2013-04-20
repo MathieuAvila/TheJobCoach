@@ -4,21 +4,27 @@ import java.util.Date;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.UserService;
+import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.EasyCallback;
 import com.TheJobCoach.webapp.util.client.IChanged;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 /**
@@ -27,11 +33,7 @@ import com.google.gwt.user.datepicker.client.DateBox;
 public class EditUserSite implements EntryPoint, IChanged {
 
 	static Lang lang = GWT.create(Lang.class);
-
-	public interface EditUserSiteResult
-	{
-		public void setResult(UserJobSite result);
-	}
+	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	UserId user;
 
@@ -45,12 +47,12 @@ public class EditUserSite implements EntryPoint, IChanged {
 	DateBox datePickerLastVisit = new DateBox();
 	
 	Panel rootPanel;
-	EditUserSiteResult result;
+	IChooseResult<UserJobSite> result;
 	UserJobSite currentUserSite;
 	
 	DialogBlockOkCancel okCancel;
 	
-	public EditUserSite(Panel panel, UserJobSite _currentUserSite, UserId _user, EditUserSiteResult _result)
+	public EditUserSite(Panel panel, UserJobSite _currentUserSite, UserId _user, IChooseResult<UserJobSite> _result)
 	{
 		rootPanel = panel;
 		currentUserSite = _currentUserSite;
@@ -136,8 +138,20 @@ public class EditUserSite implements EntryPoint, IChanged {
 			public void onClick(ClickEvent event)
 			{
 				okCancel.setEnabled(false);
-				dBox.hide();
-				result.setResult(getUserJobSite());	
+				EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
+					public void Run() throws CassandraException
+					{
+						final UserJobSite resultSite = getUserJobSite();
+						userService.setUserSite(user, resultSite, new EasyCallback<Integer>(rootPanel, new EasyCallback.SuccessRun()
+						{	
+							@Override
+							public void onSuccess()
+							{
+								result.setResult(resultSite);
+							}
+						}));
+					}});
+				dBox.hide();			
 			}
 		});		
 

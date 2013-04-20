@@ -8,7 +8,6 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
-import com.TheJobCoach.webapp.userpage.client.UserSite.EditUserSite.EditUserSiteResult;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
@@ -16,6 +15,7 @@ import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyCallback;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -57,11 +57,6 @@ public class ContentUserSite implements EntryPoint {
 	private void setUserJobSite(UserJobSite site)
 	{
 		currentSite = site;
-	}
-
-	public void setUserParameters(UserId _user)
-	{
-		user = _user;
 	}
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
@@ -176,26 +171,10 @@ public class ContentUserSite implements EntryPoint {
 
 	public void newSite()
 	{
-		EditUserSite eus = new EditUserSite(rootPanel, null, user, new EditUserSiteResult() {
+		EditUserSite eus = new EditUserSite(rootPanel, null, user, new IChooseResult<UserJobSite>() {
 			@Override
-			public void setResult(UserJobSite result) {
-				try 
-				{
-					if (result != null)
-						userService.setUserSite(user, result, new AsyncCallback<Integer>() {
-							public void onFailure(Throwable caught) {
-								MessageBox.messageBoxException(rootPanel, caught.toString());
-							}
-							public void onSuccess(Integer result)
-							{
-								getAllContent();
-							}
-						});
-				}
-				catch (CassandraException e)
-				{
-					MessageBox.messageBoxException(rootPanel, e.toString());
-				}
+			public void setResult(UserJobSite result) {				
+				getAllContent();				
 			}
 		});
 		eus.onModuleLoad();
@@ -203,28 +182,10 @@ public class ContentUserSite implements EntryPoint {
 
 	void updateSite(UserJobSite currentSite)
 	{
-
-		EditUserSite eus = new EditUserSite(rootPanel, currentSite, user, new EditUserSiteResult() {
-
+		EditUserSite eus = new EditUserSite(rootPanel, currentSite, user, new IChooseResult<UserJobSite>() {
 			@Override
-			public void setResult(UserJobSite result) {
-				try 
-				{
-					if (result != null)
-						userService.setUserSite(user, result, new AsyncCallback<Integer>() {
-							public void onFailure(Throwable caught) {
-								MessageBox.messageBoxException(rootPanel, caught.toString());
-							}
-							public void onSuccess(Integer result)
-							{
-								getAllContent();
-							}
-						});
-				}
-				catch (CassandraException e)
-				{
-					MessageBox.messageBoxException(rootPanel, e.toString());
-				}
+			public void setResult(UserJobSite result) {				
+				getAllContent();				
 			}
 		});
 		eus.onModuleLoad();
