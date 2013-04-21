@@ -1,6 +1,8 @@
 package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
@@ -128,7 +130,52 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 			}});
 	}
 
-
+	Map<UserLogEntry.LogEntryType, UserOpportunity.ApplicationStatus> change = new HashMap<UserLogEntry.LogEntryType, UserOpportunity.ApplicationStatus>()
+			{
+       				private static final long serialVersionUID = 5182652491874042551L;
+		{
+			/*EVENT,
+			RECALL,
+			INTERVIEW,
+			PROPOSAL,
+			CLOSED*/
+            put(UserLogEntry.LogEntryType.APPLICATION, UserOpportunity.ApplicationStatus.APPLIED);
+        }
+    };
+	
+	
+	protected void checkOpportunityChange(UserLogEntry log)
+	{
+		UserLogEntry lastLog = null;
+		for (UserLogEntry currentLog : UserLogEntryList)
+		{
+			if (lastLog == null || currentLog.eventDate.after(lastLog.eventDate))
+			{
+				lastLog = currentLog;
+			}
+		}
+		// Check if we have changed the latest one.
+		boolean isLast = false;
+		if (lastLog != null)
+		{
+			// Is it the last one that was changed ?
+			if (log.ID.equals(lastLog.ID)) // Yes
+			{
+				isLast= true;
+			}
+		}
+		else 
+		{
+			isLast= true; // It's the only one.
+		}
+		
+		// Has this an impact on status ?
+		if (isLast)
+		{
+			
+		}
+	}
+			
 	void deleteLogEntry(final UserLogEntry currentLogEntry)
 	{
 		MessageBox mb = new MessageBox(
@@ -165,6 +212,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 				public void setResult(UserLogEntry result) {
 					if (result != null)
 					{
+						checkOpportunityChange(result);
 						getAllContent();
 					}
 				}
