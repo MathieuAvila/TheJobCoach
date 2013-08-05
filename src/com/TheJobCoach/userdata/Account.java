@@ -142,8 +142,8 @@ public class Account implements AccountInterface {
 	{
 		CreateAccountStatus result = createAccountWithTokenNoMail(id, info, langStr);
 		if (result != CreateAccountStatus.CREATE_STATUS_OK) return result;
-		String body = Lang._TextBody(info.firstName, com.TheJobCoach.util.SiteDef.getAddress(), id.userName, id.token, langStr);
-		MailerFactory.getMailer().sendEmail(info.email, Lang._TextSubject(langStr), body, "noreply@www.thejobcoach.fr");
+		String body = Lang._TextActivateAccountBody(info.firstName, com.TheJobCoach.util.SiteDef.getAddress(), id.userName, id.token, langStr);
+		MailerFactory.getMailer().sendEmail(info.email, Lang._TextActivateAccountSubject(langStr), body, "noreply@www.thejobcoach.fr");
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 
