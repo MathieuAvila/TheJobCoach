@@ -11,8 +11,11 @@ import org.junit.Test;
 
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MockMailer;
+import com.TheJobCoach.util.MailerInterface.Attachment;
+import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
+import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
@@ -50,9 +53,13 @@ public class TestAccount
 				new UserInformation("nom", email, "password","prenom"), "en");
 		assertEquals( CreateAccountStatus.CREATE_STATUS_OK, status);
 		String mail = mockMail.lastBody;
-		assertEquals(true, mail.contains("token="));
+		assertEquals(true, mail.contains("token=mytoken"));
+		assertEquals(true, mail.contains("nom"));
+		assertEquals(true, mail.contains("prenom"));
 		String sb1 = mail.substring(mail.indexOf("token=") + new String("token=").length());
-		token = sb1.substring(0, sb1.indexOf("\n\nWe"));
+		System.out.println("OUTPUT BODY :"+mail);
+		System.out.println("OUTPUT BODY SB :"+sb1);
+		token = sb1.substring(0, sb1.indexOf("'>"));
 		assertEquals("mytoken", token);
 	}
 
@@ -190,5 +197,32 @@ public class TestAccount
 		
 	}
 	
-	
+	@Test
+	public void testLostCredentials() throws CassandraException 
+	{	
+		MailerFactory.setMailer(mockMail);
+
+		Boolean testRes = account.lostCredentials("nimportnawak", "FR");
+		assertEquals(false, testRes.booleanValue());
+		
+		{			
+			account.createAccountWithToken(
+					new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER),
+					new UserInformation("nom", email + "seeker", "passwordXXX", "prenom"), "en");
+			account.validateAccount(idSeeker, tokenSeeker);
+		}
+
+		testRes = account.lostCredentials(email + "seeker", "FR");
+		assertEquals(true, testRes.booleanValue());
+		
+		String mail = mockMail.lastBody;
+		System.out.println("CRED MAIL: " + mail);
+		assertEquals(true, mail.contains(idSeeker));
+		assertEquals(true, mail.contains("passwordXXX"));
+		//assertEquals(true, mail.contains("prenom"));
+
+		Map<String, Attachment> lastParts = mockMail.lastParts;
+		assertEquals(mockMail.lastParts, 1);
+	}
+
 }
