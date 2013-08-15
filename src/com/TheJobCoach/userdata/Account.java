@@ -4,6 +4,7 @@ package com.TheJobCoach.userdata;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.MailerFactory;
+import com.TheJobCoach.util.MailerInterface;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
@@ -143,7 +145,9 @@ public class Account implements AccountInterface {
 		CreateAccountStatus result = createAccountWithTokenNoMail(id, info, langStr);
 		if (result != CreateAccountStatus.CREATE_STATUS_OK) return result;
 		String body = Lang._TextActivateAccountBody(info.firstName, com.TheJobCoach.util.SiteDef.getAddress(), id.userName, id.token, langStr);
-		MailerFactory.getMailer().sendEmail(info.email, Lang._TextActivateAccountSubject(langStr), body, "noreply@www.thejobcoach.fr");
+		Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
+		parts.put("imglogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
+		MailerFactory.getMailer().sendEmail(info.email, Lang._TextActivateAccountSubject(langStr), body, "noreply@www.thejobcoach.fr", parts);
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 
@@ -303,7 +307,10 @@ public class Account implements AccountInterface {
 		UserReport info = getUserReport(new UserId(userName, "", UserType.USER_TYPE_SEEKER));
 		if (info == null) return new Boolean(false);
 		String body = Lang._TextLostCredentials(info.userName, info.password, lang);
-		MailerFactory.getMailer().sendEmail(info.mail, Lang._TextLostCredentialsSubject(lang), body, "noreply@www.thejobcoach.fr");
+		Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
+		parts.put("imglogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
+		
+		MailerFactory.getMailer().sendEmail(info.mail, Lang._TextLostCredentialsSubject(lang), body, "noreply@www.thejobcoach.fr", parts);
 		return new Boolean(true);
 	}
 

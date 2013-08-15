@@ -54,12 +54,12 @@ public class Lang
 
 	static String _TextActivateAccountSubject(String lang)
 	{
-		return getLangProp(lang).getProperty("credentialssubject");
+		return getLangProp(lang).getProperty("activateaccountsubject");
 	}
 	
 	static String _TextLostCredentialsSubject(String lang)
 	{
-		return getLangProp(lang).getProperty("activateaccountsubject");
+		return getLangProp(lang).getProperty("credentialssubject");
 	}
 	
 	static String _TextLostCredentials(String user, String password, String lang)

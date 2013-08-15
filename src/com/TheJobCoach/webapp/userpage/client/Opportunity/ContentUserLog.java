@@ -130,7 +130,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 			}});
 	}
 
-	Map<UserLogEntry.LogEntryType, UserOpportunity.ApplicationStatus> change = new HashMap<UserLogEntry.LogEntryType, UserOpportunity.ApplicationStatus>()
+	Map<UserLogEntry.LogEntryType, UserOpportunity.ApplicationStatus> changeOpportunityStatus = new HashMap<UserLogEntry.LogEntryType, UserOpportunity.ApplicationStatus>()
 			{
        				private static final long serialVersionUID = 5182652491874042551L;
 		{
@@ -146,22 +146,48 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 	
 	protected void checkOpportunityChange(UserLogEntry log)
 	{
+		// Only if relevant
+		if (!changeOpportunityStatus.containsKey(log.type))
+		{
+			return;
+		}
 		UserLogEntry lastLog = null;
+		UserLogEntry lastLogNotSame = null;
 		for (UserLogEntry currentLog : UserLogEntryList)
 		{
-			if (lastLog == null || currentLog.eventDate.after(lastLog.eventDate))
+			// Only if relevant
+			if (changeOpportunityStatus.containsKey(currentLog.type))
 			{
-				lastLog = currentLog;
+				if (lastLog == null || currentLog.eventDate.after(lastLog.eventDate))
+				{
+					lastLog = currentLog;
+				}
+				if ((lastLogNotSame == null) || ((currentLog.eventDate.after(lastLog.eventDate))) && (!currentLog.ID.equals(log.ID)))
+				{
+					lastLogNotSame = currentLog;
+				}
 			}
 		}
 		// Check if we have changed the latest one.
 		boolean isLast = false;
 		if (lastLog != null)
 		{
-			// Is it the last one that was changed ?
+			// Is it the last one that was changed, and is it still the lastOne ?
 			if (log.ID.equals(lastLog.ID)) // Yes
 			{
-				isLast= true;
+				// If there's no last, the edited one is the only one.
+				if (lastLogNotSame == null)
+				{
+					isLast= true;					
+				}
+				// otherwise check that the edited is the same OR after the last
+				else
+				{
+					if (log.ID.equals(lastLogNotSame.ID) || (log.eventDate.after(lastLogNotSame.eventDate)))
+					{
+						isLast= true;		
+					}
+				}
 			}
 		}
 		else 
@@ -169,10 +195,14 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 			isLast= true; // It's the only one.
 		}
 		
-		// Has this an impact on status ?
+        // We can propose to change this.
 		if (isLast)
 		{
-			
+			// Only if it's different than current status
+			if (!changeOpportunityStatus.get(log.type).equals(editedOpportunity.status))
+			{
+				
+			}
 		}
 	}
 			

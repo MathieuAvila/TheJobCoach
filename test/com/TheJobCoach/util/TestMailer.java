@@ -28,7 +28,7 @@ public class TestMailer
 		
 		//parts = null;
 		
-		String msg = "FIRST <img src=\"cid:firstimg\"><BR/>SECOND <img src=\"cid:secondimg\"><BR/>";
+		String msg = "FIRST <img src=\"cid:firstimg\"><BR/>SECOND <img src=\"cid:secondimg\"><BR/> UTF-8: ç à é # =  ";
 		assertEquals(true, mailer.sendEmail("mathieu.avila@gmail.com", "test_subject", msg, "test@test.com", parts));
 	}
 	
