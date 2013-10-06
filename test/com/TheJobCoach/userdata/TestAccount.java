@@ -222,7 +222,7 @@ public class TestAccount
 		//assertEquals(true, mail.contains("prenom"));
 
 		Map<String, Attachment> lastParts = mockMail.lastParts;
-		assertEquals(1, mockMail.lastParts);
+		assertEquals(1, mockMail.lastParts.size());
 	}
 
 }
