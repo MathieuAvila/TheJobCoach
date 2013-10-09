@@ -22,6 +22,6 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("drapeau_anglais.gif")
 	ImageResource flag_EN();
 
-	@Source("jobcoach.gif")
+	@Source("thejobcoach-icon-128.png")
 	ImageResource coach_logo();
 }
