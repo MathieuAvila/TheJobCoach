@@ -2,8 +2,12 @@ package com.TheJobCoach.userdata;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Properties;
+
+import com.TheJobCoach.util.StringResourceCache;
 
 public class Lang
 {
@@ -14,8 +18,12 @@ public class Lang
 		langProp.put("fr", new Properties());
 		langProp.put("en", new Properties());
 		try {
-			langProp.get("fr").load((new VoidObject()).getClass().getResourceAsStream("Lang_fr.properties"));
-			langProp.get("en").load((new VoidObject()).getClass().getResourceAsStream("Lang_en.properties"));
+			InputStream stream = (new VoidObject()).getClass().getResourceAsStream("Lang_fr.properties");
+			InputStreamReader isr = new InputStreamReader(stream, "UTF-8");
+			langProp.get("fr").load(isr);
+			stream = (new VoidObject()).getClass().getResourceAsStream("Lang_en.properties");
+			isr = new InputStreamReader(stream, "UTF-8");
+			langProp.get("en").load(isr);
 		} 
 		catch (FileNotFoundException e) 
 		{			
@@ -42,13 +50,16 @@ public class Lang
 		return langProp.get(getLang(lang));
 	}
 	
-	static String _TextActivateAccountBody(String firstName, String site, String userName, String key, String lang)
+	static String _TextActivateAccountBody(String firstName, String name, String email, String site, String userName, String key, String lang)
 	{
-		String body=getLangProp(lang).getProperty("activateaccountbody");
-		body = body.replace("{0}", firstName);
-		body = body.replace("{1}", site);
-		body = body.replace("{2}", userName);
-		body = body.replace("{3}", key);
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_account_new.html");
+		String URL= site + "/TheJobCoach.html?action=validate&username=" +userName + "&token=" + key;
+		body = body.replace("_URL_", URL);
+		body = body.replace("_FIRSTNAME_", firstName);
+		body = body.replace("_NAME_", name);
+		body = body.replace("_HELLO_", getLangProp(lang).getProperty("hello"));
+		body = body.replace("_ACCOUNT_REQUEST_", getLangProp(lang).getProperty("newaccountrequest"));
+		body = body.replace("_IGNORE_", getLangProp(lang).getProperty("newaccountrequestignore"));
 		return body;
 	}
 
@@ -62,11 +73,18 @@ public class Lang
 		return getLangProp(lang).getProperty("credentialssubject");
 	}
 	
-	static String _TextLostCredentials(String user, String password, String lang)
+	static String _TextLostCredentials(String firstName, String name, String userName, String password, String lang)
 	{
-		String body=getLangProp(lang).getProperty("credentialsbody");
-		body = body.replace("{0}", user);
-		body = body.replace("{1}", password);
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_account_credentials.html");
+		body = body.replaceAll("_FIRSTNAME_", firstName);
+		body = body.replaceAll("_NAME_", name);
+		body = body.replaceAll("_HELLO_", getLangProp(lang).getProperty("hello"));
+		body = body.replaceAll("_THANKS_AND_CREDS_", getLangProp(lang).getProperty("credentialsrequest"));
+		body = body.replaceAll("_USER_SUBJECT_", getLangProp(lang).getProperty("credentialsuser"));
+		body = body.replaceAll("_USER_", userName);
+		body = body.replaceAll("_PASSWORD_SUBJECT_", getLangProp(lang).getProperty("credentialspassword"));
+		body = body.replaceAll("_PASSWORD_", password);
+		body = body.replaceAll("_CAN_CONNECT_", getLangProp(lang).getProperty("credentialsconnect"));
 		return body;
 	}
 	

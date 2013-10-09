@@ -50,16 +50,19 @@ public class TestAccount
 		MailerFactory.setMailer(mockMail);
 		CreateAccountStatus status = account.createAccountWithToken(
 				new UserId(id, "mytoken", UserId.UserType.USER_TYPE_SEEKER),
-				new UserInformation("nom", email, "password","prenom"), "en");
+				new UserInformation("nom", email, "password","prenom"), "FR");
 		assertEquals( CreateAccountStatus.CREATE_STATUS_OK, status);
 		String mail = mockMail.lastBody;
 		assertEquals(true, mail.contains("token=mytoken"));
 		assertEquals(true, mail.contains("nom"));
 		assertEquals(true, mail.contains("prenom"));
+		assertEquals(true, mail.contains("charset=utf-8")); // encoding
+		assertEquals(true, mail.contains("demandé")); // encoding
+		assertEquals(1, mockMail.lastParts.size()); // image header
 		String sb1 = mail.substring(mail.indexOf("token=") + new String("token=").length());
 		System.out.println("OUTPUT BODY :"+mail);
 		System.out.println("OUTPUT BODY SB :"+sb1);
-		token = sb1.substring(0, sb1.indexOf("'>"));
+		token = sb1.substring(0, sb1.indexOf("</a>"));
 		assertEquals("mytoken", token);
 	}
 
@@ -220,7 +223,10 @@ public class TestAccount
 		assertEquals(true, mail.contains(idSeeker));
 		assertEquals(true, mail.contains("passwordXXX"));
 		//assertEquals(true, mail.contains("prenom"));
-
+		assertEquals(true, mail.contains("charset=utf-8")); // encoding
+		assertEquals(true, mail.contains("demandé")); // encoding
+		assertEquals(1, mockMail.lastParts.size()); // image header
+		
 		Map<String, Attachment> lastParts = mockMail.lastParts;
 		assertEquals(1, mockMail.lastParts.size());
 	}

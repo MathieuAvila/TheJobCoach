@@ -106,6 +106,15 @@ public class Account implements AccountInterface {
 				.add("type", userTypeToString(id.type))
 				.get());
 	}
+	
+	public boolean getUserInformation(UserId id, UserInformation info) throws CassandraException
+	{
+		info.name = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "name");
+		info.email = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "email");
+		info.password = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "password");
+		info.firstName = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "firstname");
+		return true;
+	}
 
 	public String getUsernameFromEmail(String mail)
 	{
@@ -144,9 +153,9 @@ public class Account implements AccountInterface {
 	{
 		CreateAccountStatus result = createAccountWithTokenNoMail(id, info, langStr);
 		if (result != CreateAccountStatus.CREATE_STATUS_OK) return result;
-		String body = Lang._TextActivateAccountBody(info.firstName, com.TheJobCoach.util.SiteDef.getAddress(), id.userName, id.token, langStr);
+		String body = Lang._TextActivateAccountBody(info.firstName, info.name, info.email, com.TheJobCoach.util.SiteDef.getAddress(), id.userName, id.token, langStr);
 		Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
-		parts.put("imglogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
+		parts.put("thejobcoachlogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
 		MailerFactory.getMailer().sendEmail(info.email, Lang._TextActivateAccountSubject(langStr), body, "noreply@www.thejobcoach.fr", parts);
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
@@ -306,9 +315,11 @@ public class Account implements AccountInterface {
 		if (userName == null) return new Boolean(false);
 		UserReport info = getUserReport(new UserId(userName, "", UserType.USER_TYPE_SEEKER));
 		if (info == null) return new Boolean(false);
-		String body = Lang._TextLostCredentials(info.userName, info.password, lang);
+		UserInformation fullinfo = new UserInformation();
+		getUserInformation(new UserId(info.userName, info.token, info.type), fullinfo);
+		String body = Lang._TextLostCredentials(fullinfo.firstName, fullinfo.name, info.userName, info.password, lang);
 		Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
-		parts.put("imglogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
+		parts.put("thejobcoachlogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
 		
 		MailerFactory.getMailer().sendEmail(info.mail, Lang._TextLostCredentialsSubject(lang), body, "noreply@www.thejobcoach.fr", parts);
 		return new Boolean(true);
