@@ -57,7 +57,7 @@ public class Validate implements EntryPoint {
 		verticalPanel.setCellHeight(verticalPanel_3, "50");
 		verticalPanel_3.setHeight("50");
 
-		Image image = new Image("jobcoach.gif");
+		Image image = new Image(ClientImageBundle.INSTANCE.coach_logo());
 		verticalPanel.add(image);
 		verticalPanel.setCellHorizontalAlignment(image, HasHorizontalAlignment.ALIGN_CENTER);
 
