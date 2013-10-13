@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.TheJobCoach.userdata.ReportActionHtml;
+import com.TheJobCoach.userdata.report.ReportActionHtml;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;

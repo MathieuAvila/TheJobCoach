@@ -1,4 +1,4 @@
-package com.TheJobCoach.userdata;
+package com.TheJobCoach.userdata.report;
 
 import static org.junit.Assert.*;
 
@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import org.junit.Test;
 
+import com.TheJobCoach.userdata.report.ReportActionHtml;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;

@@ -1,9 +1,11 @@
-package com.TheJobCoach.userdata;
+package com.TheJobCoach.userdata.report;
 
 import static org.junit.Assert.*;
 
 import java.util.Date;
 import org.junit.Test;
+
+import com.TheJobCoach.userdata.report.ReportHtml;
 
 public class TestReportHtml {
 

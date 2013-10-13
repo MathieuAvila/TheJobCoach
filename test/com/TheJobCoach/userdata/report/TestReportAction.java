@@ -1,4 +1,4 @@
-package com.TheJobCoach.userdata;
+package com.TheJobCoach.userdata.report;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,6 +10,9 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.TheJobCoach.userdata.UserLogManager;
+import com.TheJobCoach.userdata.UserOpportunityManager;
+import com.TheJobCoach.userdata.report.ReportAction;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;

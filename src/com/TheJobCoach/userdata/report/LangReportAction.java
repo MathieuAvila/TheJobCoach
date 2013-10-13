@@ -1,4 +1,4 @@
-package com.TheJobCoach.userdata;
+package com.TheJobCoach.userdata.report;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.util.Properties;
 
 public class LangReportAction
 {	
+
 	String lang;
 	Properties currentProperties;
 	Properties currentWebappProperties;

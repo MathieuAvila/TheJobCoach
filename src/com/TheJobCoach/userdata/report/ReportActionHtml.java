@@ -1,4 +1,4 @@
-package com.TheJobCoach.userdata;
+package com.TheJobCoach.userdata.report;
 
 import java.util.Date;
 

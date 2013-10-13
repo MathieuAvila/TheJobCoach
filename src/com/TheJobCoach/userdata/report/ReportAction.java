@@ -1,8 +1,10 @@
-package com.TheJobCoach.userdata;
+package com.TheJobCoach.userdata.report;
 
 import java.util.Date;
 import java.util.Vector;
 
+import com.TheJobCoach.userdata.UserLogManager;
+import com.TheJobCoach.userdata.UserOpportunityManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
