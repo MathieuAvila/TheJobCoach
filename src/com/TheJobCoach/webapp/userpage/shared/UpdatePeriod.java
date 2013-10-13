@@ -60,5 +60,19 @@ public class UpdatePeriod implements Serializable  {
 		this.needRecall = needRecall;
 	}
 
+	
+	@SuppressWarnings("deprecation")
+	public Date getNextCall()
+	{
+		Date result = (Date) this.last.clone();
+		switch(periodType)
+		{
+		case DAY:  result.setDate(last.getDate() + length); break;
+		case WEEK: result.setDate(last.getDate() + length * 7); break;
+		case MONTH:result.setMonth(last.getMonth() + length); break;
+		}
+		return result;
+	}
+	
 }
 

@@ -13,4 +13,17 @@ public class CoachTestUtils
 		result.setYear(year - 1900);
 		return result;
 	}
+
+	@SuppressWarnings("deprecation")
+	public static boolean isDateEqualForDay(Date d1, Date d2)
+	{
+		System.out.println(
+				d1.getDate() + " " + d2.getDate() 
+				+ " - "	+ d1.getMonth() + " " + d2.getMonth()
+				+ " - " + d1.getYear() + " " + d2.getYear());
+		return (d1.getDate() == d2.getDate())
+				&& (d1.getMonth() == d2.getMonth()) 
+				&& (d1.getYear() == d2.getYear());
+	}
+	
 }
