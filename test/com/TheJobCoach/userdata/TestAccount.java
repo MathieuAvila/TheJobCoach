@@ -12,10 +12,8 @@ import org.junit.Test;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MockMailer;
 import com.TheJobCoach.util.MailerInterface.Attachment;
-import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
@@ -228,7 +226,7 @@ public class TestAccount
 		assertEquals(1, mockMail.lastParts.size()); // image header
 		
 		Map<String, Attachment> lastParts = mockMail.lastParts;
-		assertEquals(1, mockMail.lastParts.size());
+		assertEquals(1, lastParts.size());
 	}
 
 }

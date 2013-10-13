@@ -72,43 +72,6 @@ public class Mailer implements MailerInterface {
 	    }
 	}
 
-
-	private class InputStreamMimeBodyPart extends MimeBodyPart {
-
-		private InputStream inputStream;
-
-		public InputStreamMimeBodyPart(InputStream source) {
-			this.inputStream = source;
-			if(!inputStream.markSupported()) {
-				throw new IllegalArgumentException("only streams with mark supported are ok");
-			}
-			inputStream.mark(Integer.MAX_VALUE); // remeber the whole stream.
-			
-			{
-				this.headers.addHeader("Content-Type", "image/png");
-				//updateHeaders();
-			}			
-		}
-
-		@Override
-		protected InputStream getContentStream() throws MessagingException {
-			return inputStream;
-			
-			//throw new IllegalStateException("getContentStream is not implemented on purpose.");
-		}
-
-		@Override
-		public void writeTo(OutputStream os) throws IOException, MessagingException {
-			System.out.println("writing to somewhere.");
-			byte[] buf = new byte[32];
-			int length;
-			inputStream.reset();
-			while((length = inputStream.read(buf)) > -1 ) {
-				os.write(buf, 0, length);
-			}
-		}
-	}
-
 	public boolean sendEmail(String _dstMail, String _subject, String _body, String _src, Map<String, Attachment> parts)
 	{
 		Properties props = new Properties();
@@ -174,22 +137,6 @@ public class Mailer implements MailerInterface {
 			// Add all additional parts
 			if (parts != null)
 				for (Map.Entry<String, Attachment> entry : parts.entrySet()) {
-/*
-					// Read image from file system. 
-					InputStream is = new VoidObject().getClass().getResourceAsStream(entry.getValue());
-					InputStreamMimeBodyPart messageBodyPart2 = new InputStreamMimeBodyPart(is);
-					//messageBodyPart2.setFileName(entry.getKey());
-					
-					//DataHandler dataHandler = new DataHandler(new InputStreamDataSource(is));
-					//messageBodyPart2.setDataHandler(dataHandler);  
-
-					// Set the content-ID of the image attachment.  
-					// Enclose the image CID with the lesser and greater signs.  
-					messageBodyPart2.setHeader("Content-ID", "<" + entry.getKey() + ">");  
-					messageBodyPart2.setHeader("Content-Type", "image/png");
-					// Add image attachment to multipart.  
-					multipart.addBodyPart(messageBodyPart2); 
-					*/
 					 // Part two is attachment
 			         messageBodyPart = new MimeBodyPart();
 			         String filename = entry.getValue().resource;
