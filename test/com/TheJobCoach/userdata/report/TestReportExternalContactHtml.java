@@ -72,6 +72,22 @@ public class TestReportExternalContactHtml {
 	}
 
 	@Test
+	public void testLogHeaderNoDetail() 
+	{
+		ReportExternalContactHtmlLocal report = new ReportExternalContactHtmlLocal(id, "FR", false);
+
+		report.includeTitle();
+		String rep = report.getReportString();
+		System.out.println("TOTO" + rep);
+		assertTrue(rep.contains("Rapport de contacts externes"));
+		String[] sub = rep.split("<TABLE>");
+		assertEquals(2, sub.length);
+		String table = sub[1];
+		//System.out.println("TOTO" + table);
+		assertTrue(!table.matches(".*Notes strictement personnelles.*"));
+	}
+
+	@Test
 	public void testContactHeader() 
 	{
 		ReportExternalContactHtmlLocal report = new ReportExternalContactHtmlLocal(id, "FR", true);

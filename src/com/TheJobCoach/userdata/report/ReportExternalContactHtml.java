@@ -31,7 +31,7 @@ public class ReportExternalContactHtml extends ReportExternalContact {
 						+ "<TH>" + lang.getPhone() + "</TH>"
 						+ "<TH>" + lang.getEmail() + "</TH>"
 						+ "<TH>" + lang.getRecall() + "</TH>"
-						+ "<TH>" + lang.getNote() + "</TH>"
+						+ (includeContactDetail ? ("<TH>" + lang.getNote() + "</TH>"):"")
 						+ "</TR>";
 	}
 	
