@@ -123,7 +123,7 @@ public class TestReportAction {
 		}
 		
 		public Vector<UserOpportunity> opps = new Vector<UserOpportunity>();
-		public Vector<UserLogEntry> logs = new Vector<UserLogEntry>();;
+		public Vector<UserLogEntry> logs = new Vector<UserLogEntry>();
 		
 		@Override
 		void opportunityHeader(UserOpportunity opp, boolean includeOpportunityDetail, boolean includeLogDetail)

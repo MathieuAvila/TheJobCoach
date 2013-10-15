@@ -11,19 +11,24 @@ public class LangReportAction
 
 	String lang;
 	Properties currentProperties;
-	Properties currentWebappProperties;
+	Properties currentWebappOppProperties;
+	Properties currentWebappContactProperties;
 	Properties currentWebappCommonProperties;
 
 	static HashMap<String, Properties> langProp = new HashMap<String, Properties>();
-	static HashMap<String, Properties> langPropWebapp = new HashMap<String, Properties>();
+	static HashMap<String, Properties> langPropWebappOpp = new HashMap<String, Properties>();
+	static HashMap<String, Properties> langPropWebappContact = new HashMap<String, Properties>();
 	static HashMap<String, Properties> langPropCommonWebapp = new HashMap<String, Properties>();
 	
 	static {
 		langProp.put("fr", new Properties());
 		langProp.put("en", new Properties());
 
-		langPropWebapp.put("fr", new Properties());
-		langPropWebapp.put("en", new Properties());
+		langPropWebappOpp.put("fr", new Properties());
+		langPropWebappOpp.put("en", new Properties());
+
+		langPropWebappContact.put("fr", new Properties());
+		langPropWebappContact.put("en", new Properties());
 
 		langPropCommonWebapp.put("fr", new Properties());
 		langPropCommonWebapp.put("en", new Properties());
@@ -35,9 +40,14 @@ public class LangReportAction
 			langProp.get("en").load(isr);
 
 			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/Opportunity/LangLogEntry_fr.properties"), "UTF-8");
-			langPropWebapp.get("fr").load(isr);
+			langPropWebappOpp.get("fr").load(isr);
 			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/Opportunity/LangLogEntry_en.properties"), "UTF-8");
-			langPropWebapp.get("en").load(isr);
+			langPropWebappOpp.get("en").load(isr);
+
+			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/ExternalContact/LangExternalContact_fr.properties"), "UTF-8");
+			langPropWebappContact.get("fr").load(isr);
+			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/ExternalContact/LangExternalContact_en.properties"), "UTF-8");
+			langPropWebappContact.get("en").load(isr);
 
 			isr = new InputStreamReader((new VoidObject()).getClass().getResourceAsStream("/com/TheJobCoach/webapp/userpage/client/Lang_fr.properties"), "UTF-8");
 			langPropCommonWebapp.get("fr").load(isr);
@@ -73,13 +83,19 @@ public class LangReportAction
 	{
 		this.lang = lang;
 		currentProperties = getLangProp(lang);
-		currentWebappProperties = langPropWebapp.get(getLang(lang));
+		currentWebappOppProperties = langPropWebappOpp.get(getLang(lang));
 		currentWebappCommonProperties = langPropCommonWebapp.get(getLang(lang));
+		currentWebappContactProperties = langPropWebappContact.get(getLang(lang));
 	}	
 
 	String getTimeReport()
 	{
 		return currentProperties.getProperty("timereport");
+	}
+
+	String getExternalContactReport()
+	{
+		return currentProperties.getProperty("contactreport");
 	}
 
 	String getDate()
@@ -99,7 +115,7 @@ public class LangReportAction
 	
 	String getActionName(String action)
 	{
-		return currentWebappProperties.getProperty("logEntryStatus_" + action);
+		return currentWebappOppProperties.getProperty("logEntryStatus_" + action);
 	}
 
 	public String getDescription()
@@ -109,7 +125,7 @@ public class LangReportAction
 
 	public String getDone()
 	{
-		return currentWebappProperties.getProperty("done");
+		return currentWebappOppProperties.getProperty("done");
 	}
 
 	public String getOpportunityStatusName(String applicationStatus)
@@ -119,6 +135,42 @@ public class LangReportAction
 
 	public String getFilename()
 	{
-		return currentWebappProperties.getProperty("attachedfiles");
+		return currentWebappOppProperties.getProperty("attachedfiles");
 	}
+	
+	public String getFirstName()
+	{
+		return currentWebappContactProperties.getProperty("firstname");
+	}
+	
+	public String getLastName()
+	{
+		return currentWebappContactProperties.getProperty("lastname");
+	}
+
+	public String getPhone()
+	{
+		return currentWebappContactProperties.getProperty("phone");
+	}
+
+	public String getOrganization()
+	{
+		return currentWebappContactProperties.getProperty("organization");
+	}
+
+	public String getEmail()
+	{
+		return currentWebappContactProperties.getProperty("email");
+	}
+
+	public String getRecall()
+	{
+		return currentProperties.getProperty("lastrecall");
+	}
+
+	public String getNote()
+	{
+		return currentWebappCommonProperties.getProperty("note");
+	}
+
 }
