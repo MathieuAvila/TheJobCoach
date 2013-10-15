@@ -57,7 +57,6 @@ public class ReportExternalContactHtml extends ReportExternalContact {
 				+ "<TD>" + ReportHtml.writeToString(contact.organization) + "</TD>"
 				+ "<TD>" + ReportHtml.writeToString(contact.phone) + "</TD>"
 				+ "<TD>" + ReportHtml.writeToString(contact.email) + "</TD>"
-				+ "<TD>" + ReportHtml.writeToString(contact.personalNote) + "</TD>"
 				+ "<TD>" + ReportHtml.getDate(super.lang, contact.update.last) + " / " + ReportHtml.getDate(super.lang, contact.update.getNextCall()) + "</TD>"
 				+ logDetail
 				+ "</TD></TR>\n";

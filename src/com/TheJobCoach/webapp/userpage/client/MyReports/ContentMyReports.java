@@ -59,7 +59,16 @@ public class ContentMyReports implements EntryPoint {
 	final CheckedDate tfEndDate = new CheckedDate();
 	Label clEndDate = new Label(langMyReports.endDate());
 	
-	ButtonImageText buttonActivityReport = new ButtonImageText(ButtonImageText.Type.NEW, "Obtenir mon rapport d'activité");
+	ButtonImageText buttonActivityReport = new ButtonImageText(ButtonImageText.Type.NEW, langMyReports.getActivityReport());
+
+	final CheckedExtendedDropListField tfFormatContact = new CheckedExtendedDropListField(
+			ConstantsMyReports.FORMAT_LIST, langMyReports.formatMap(), "format_");
+	Label clFormatContact = new Label(langMyReports.format());
+
+	final CheckedCheckBox tfDetailContact = new CheckedCheckBox(FormatUtil.trueString);
+	Label clDetailContact = new Label(langMyReports.includeContactDetail());
+
+	ButtonImageText buttonContactReport = new ButtonImageText(ButtonImageText.Type.NEW, langMyReports.getContactReport());
 
 	public ContentMyReports(Panel rootPanel, UserId user) {
 		this.user = user;
@@ -143,7 +152,7 @@ public class ContentMyReports implements EntryPoint {
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, "Mes rapports", ClientImageBundle.INSTANCE.userMyReportsContent());
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, "Rapport d'activité");
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, langMyReports.activityReport());
 
 		Grid grid0 = new Grid(7, 2);
 		simplePanelCenter.add(grid0);
@@ -204,5 +213,33 @@ public class ContentMyReports implements EntryPoint {
 		simplePanelCenter.add(buttonActivityReport);
 		tfPeriod.setValue(ConstantsMyReports.PERIOD_LAST_WEEK);
 		updateDateSelector();
+		
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, langMyReports.contactReport());
+		Grid grid1 = new Grid(2, 2);
+		simplePanelCenter.add(grid1);
+		grid1.setWidget(0,0, clFormatContact);
+		grid1.setWidget(0,1, tfFormatContact.getItem());
+
+		grid1.setWidget(1,0, clDetailContact);
+		grid1.setWidget(1,1, tfDetailContact.getItem());
+
+		buttonContactReport.addClickHandler(new ClickHandler()
+		{			
+			public void onClick(ClickEvent event)
+			{
+				String cookie = LocaleInfo.getLocaleCookieName();
+				String cookieLang = com.google.gwt.user.client.Cookies.getCookie(cookie);
+				String copyURL = GWT.getModuleBaseURL() + "DownloadReport?reporttype="+URL.encodeQueryString("reportactivity")
+						+ "&format=" + URL.encodeQueryString(tfFormatContact.getValue())
+						+ "&detail=" + URL.encodeQueryString(tfDetailContact.getValue())
+						+ "&lang=" + URL.encodeQueryString(cookieLang)
+						+ "&userid=" + URL.encodeQueryString(user.userName)
+						+ "&token=" + URL.encodeQueryString(user.token);
+				DownloadIFrame iframe = new DownloadIFrame(copyURL);
+				simplePanelCenter.add(iframe);
+			}
+		});
+		simplePanelCenter.add(buttonContactReport);
+
 	}
 }

@@ -32,6 +32,19 @@ public interface LangMyReports extends Constants {
 	
 	@Key("endDate")
 	String endDate();
+
+	@Key("activityreport")
+	String activityReport();	
+
+	@Key("contactreport")
+	String contactReport();	
+
+	@Key("getactivityreport")
+	String getActivityReport();	
+
+	@Key("getcontactreport")
+	String getContactReport();
 	
-	
+	@Key("includeContactDetail")
+	String includeContactDetail();
 }

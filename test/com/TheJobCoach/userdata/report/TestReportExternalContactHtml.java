@@ -62,7 +62,7 @@ public class TestReportExternalContactHtml {
 
 		report.includeTitle();
 		String rep = report.getReportString();
-		//System.out.println("TOTO" + rep);
+		System.out.println("TOTO" + rep);
 		assertTrue(rep.contains("Rapport de contacts externes"));
 		String[] sub = rep.split("<TABLE>");
 		assertEquals(2, sub.length);
@@ -80,16 +80,16 @@ public class TestReportExternalContactHtml {
 		String rep = report.getReportString();
 		String[] sub = rep.split("<TD>");
 		//System.out.println("TOTO" + rep);
-		System.out.println("TOTO" + sub[0]);
-		//System.out.println("TOTO" + sub[6]);
+		//System.out.println("TOTO" + sub[0]);
+		System.out.println("TOTO" + sub[7]);
 		assertTrue(sub[0].matches(".*orange.*"));
 		assertTrue(sub[1].matches(".*" +  uec1.lastName + ".*"));
 		assertTrue(sub[2].matches(".*" +  uec1.firstName + ".*"));
 		assertTrue(sub[3].matches(".*" +  uec1.organization + ".*"));
 		assertTrue(sub[4].matches(".*" +  uec1.phone + ".*"));
 		assertTrue(sub[5].matches(".*" +  uec1.email + ".*"));
-		assertTrue(sub[6].matches(".*" +  uec1.personalNote + ".*"));
-		assertTrue(sub[7].matches(".*2000.*2000.*"));
+		assertTrue(sub[6].matches(".*2000.*2000.*"));
+		assertTrue(sub[7].contains(uec1.personalNote));
 			
 		report.flush();
 		report.contactHeader(uec2);
@@ -109,5 +109,28 @@ public class TestReportExternalContactHtml {
 		sub = rep.split("<TD>");
 		assertTrue(sub[0].matches(".*brown.*"));
 
+	}
+	
+	@Test
+	public void testContactHeaderNoDetail() 
+	{
+		ReportExternalContactHtmlLocal report = new ReportExternalContactHtmlLocal(id, "FR", false);
+
+		report.contactHeader(uec1);
+		String rep = report.getReportString();
+		String[] sub = rep.split("<TD>");
+		System.out.println("TOTO" + rep);
+		//System.out.println("TOTO" + sub[0]);
+		//System.out.println("TOTO" + sub[7]);
+		assertEquals(7, sub.length);
+		assertTrue(sub[0].matches(".*orange.*"));
+		assertTrue(sub[1].matches(".*" +  uec1.lastName + ".*"));
+		assertTrue(sub[2].matches(".*" +  uec1.firstName + ".*"));
+		assertTrue(sub[3].matches(".*" +  uec1.organization + ".*"));
+		assertTrue(sub[4].matches(".*" +  uec1.phone + ".*"));
+		assertTrue(sub[5].matches(".*" +  uec1.email + ".*"));
+		assertTrue(sub[6].contains("2000"));
+		//assertTrue(sub[7].contains(uec1.personalNote));
+			
 	}
 }

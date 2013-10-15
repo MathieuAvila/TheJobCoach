@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.report.ReportActionHtml;
+import com.TheJobCoach.userdata.report.ReportExternalContactHtml;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -44,6 +45,8 @@ public class DownloadReport extends HttpServlet {
 		boolean includeLogDetail = FormatUtil.trueString.equals(detailLog);
 		String logPeriod = request.getParameter("logperiod");
 		boolean onlyLogPeriod = FormatUtil.trueString.equals(logPeriod);
+		String contactDetailStr = request.getParameter("detail");
+		boolean contactDetail = FormatUtil.trueString.equals(contactDetailStr);
 		
 		logger.info(
 				"Requesting report: " + type 
@@ -73,6 +76,16 @@ public class DownloadReport extends HttpServlet {
 				ReportActionHtml report = new ReportActionHtml(user, lang);
 				doc = report.getReport(startDate, endDate, includeOppDetail, includeLogDetail, onlyLogPeriod);
 			}
+			if (type.equals("reportactivity"))				
+			{
+				ReportExternalContactHtml report = new ReportExternalContactHtml(user, lang, contactDetail);
+				doc = report.getReport();
+			}
+			else
+			{
+				logger.info("Invalid document request :" + type);
+				return;
+			}			
 			logger.info("Document has length :" + doc.length);
 		} 
 		catch (CassandraException e) 
