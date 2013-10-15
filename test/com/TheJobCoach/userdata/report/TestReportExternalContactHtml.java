@@ -111,19 +111,19 @@ public class TestReportExternalContactHtml {
 		report.contactHeader(uec2);
 		rep = report.getReportString();
 		sub = rep.split("<TD>");
-		assertTrue(sub[0].matches(".*brown.*"));
+		assertTrue(sub[0].matches(".*" + ReportExternalContactHtml.VALIDRECALL + ".*"));
 		
 		report.flush();
 		report.contactHeader(uec3);
 		rep = report.getReportString();
 		sub = rep.split("<TD>");
-		assertTrue(sub[0].matches(".*brown.*"));
+		assertTrue(sub[0].matches(".*" + ReportExternalContactHtml.VALIDRECALL + ".*"));
 		
 		report.flush();
 		report.contactHeader(uec4);
 		rep = report.getReportString();
 		sub = rep.split("<TD>");
-		assertTrue(sub[0].matches(".*brown.*"));
+		assertTrue(sub[0].matches(".*" + ReportExternalContactHtml.VALIDRECALL + ".*"));
 
 	}
 	
@@ -139,7 +139,7 @@ public class TestReportExternalContactHtml {
 		//System.out.println("TOTO" + sub[0]);
 		//System.out.println("TOTO" + sub[7]);
 		assertEquals(7, sub.length);
-		assertTrue(sub[0].matches(".*orange.*"));
+		assertTrue(sub[0].matches(".*" + ReportExternalContactHtml.INVALIDRECALL + ".*"));
 		assertTrue(sub[1].matches(".*" +  uec1.lastName + ".*"));
 		assertTrue(sub[2].matches(".*" +  uec1.firstName + ".*"));
 		assertTrue(sub[3].matches(".*" +  uec1.organization + ".*"));

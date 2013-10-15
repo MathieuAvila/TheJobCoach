@@ -12,7 +12,10 @@ import com.TheJobCoach.webapp.util.shared.FormatUtil;
 public class ReportExternalContactHtml extends ReportExternalContact {
 
 	LangReportAction lang;
-		
+	
+	public final static String VALIDRECALL = "azure";
+	public final static String INVALIDRECALL = "orange";
+	
 	public ReportExternalContactHtml(UserId user, String lang, boolean includeContactDetail)
 	{
 		super(user, lang, includeContactDetail);
@@ -45,7 +48,7 @@ public class ReportExternalContactHtml extends ReportExternalContact {
 	void contactHeader(ExternalContact contact) 
 	{
 		String logDetail = "";
-		String BGCOLOR = contact.update.needRecall ? (new Date().before(contact.update.getNextCall()) ? "brown" : "orange") : "brown";
+		String BGCOLOR = contact.update.needRecall ? (new Date().before(contact.update.getNextCall()) ? VALIDRECALL : INVALIDRECALL) : VALIDRECALL;
 		
 		if (includeContactDetail)
 		{
