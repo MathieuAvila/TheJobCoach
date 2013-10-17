@@ -1,6 +1,9 @@
 eclipse.preferences.version=1
-encoding//src/com/TheJobCoach/userdata/LangReportAction_en.properties=UTF-8
-encoding//src/com/TheJobCoach/userdata/LangReportAction_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/userdata/Lang.java=UTF-8
+encoding//src/com/TheJobCoach/userdata/Lang_en.properties=UTF-8
+encoding//src/com/TheJobCoach/userdata/Lang_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/userdata/report/LangReportAction_en.properties=UTF-8
+encoding//src/com/TheJobCoach/userdata/report/LangReportAction_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/mainpage/client/Lang.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/mainpage/client/Lang_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Account/LangAccount.properties=UTF-8
@@ -19,3 +22,5 @@ encoding//src/com/TheJobCoach/webapp/userpage/client/MyReports/LangMyReports_en.
 encoding//src/com/TheJobCoach/webapp/userpage/client/MyReports/LangMyReports_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Opportunity/LangLogEntry.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Opportunity/LangLogEntry_fr.properties=UTF-8
+encoding//test/com/TheJobCoach/util/TestMailer.java=UTF-8
+encoding//test/com/TheJobCoach/util/TestStringResourceCache.java=UTF-8
