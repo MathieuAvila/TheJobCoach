@@ -5,8 +5,47 @@
 	<extend-property name="locale" values="fr"/>
 	<extend-property name="locale" values="en"/>
 	
-	<source path="client"/>
+	<!-- use feature detection to see if input type=datetime is available -->
+  <define-property name="supportsDateTimeInput" values="y,n"/>
+  <property-provider name="supportsDateTimeInput">
+    <![CDATA[
+             try {
+                var i = document.createElement("input");
+                i.setAttribute("type", "datetime");
+                return (i.type !== "text") ? "y" : "n";
+             }
+             catch (e) { return "n"; }
+    ]]>
+  </property-provider>
+
+  <!-- HTML4 TextBox-based implementation -->
+  <replace-with class="com.TheJobCoach.webapp.util.client.timepicker.UTCTimeBoxImplHtml4">
+    <when-type-is class="com.TheJobCoach.webapp.util.client.timepicker.UTCTimeBoxImpl" />
+  </replace-with>
+
+  <!-- HTML5 input type=date/time implementation -->
+  <replace-with class="com.TheJobCoach.webapp.util.client.timepicker.UTCTimeBoxImplHtml5">
+    <when-type-is class="com.TheJobCoach.webapp.util.client.timepicker.UTCTimeBoxImpl"/>
+    <all>
+      <!-- uses javascript test above -->
+      <when-property-is name="supportsDateTimeInput" value="y"/>
+
+      <!-- to limit permutations, only check safari and opera -->
+      <any>
+        <!-- iOS Safari since 5.0 -->
+        <when-property-is name="user.agent" value="safari"/>
+
+        <!-- opera supports datetime since Jun 2006, but it's lame -->
+        <!-- <when-property-is name="user.agent" value="opera"/> -->
+      </any>
+    </all>
+  </replace-with>
+
+
+  	<source path="client"/>
 	<source path="shared"/>
+	<source path="client/timepicker"/>
+
 	
 	<set-configuration-property name="locale.cookie" value="gwtlang"/>
 </module>

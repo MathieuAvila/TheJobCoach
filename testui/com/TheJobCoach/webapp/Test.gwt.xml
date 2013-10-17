@@ -15,6 +15,7 @@
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestSetLang'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxUI'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxError'/>
+	<entry-point class='com.TheJobCoach.webapp.util.client.timepicker.TestTimePicker'/>
 	<entry-point class='com.TheJobCoach.webapp.mainpage.client.TestCreateAccount'/>
 	<entry-point class='com.TheJobCoach.webapp.mainpage.client.TestLostCredentials'/>
 	<entry-point class='com.TheJobCoach.webapp.mainpage.client.TestMainPage'/>
@@ -35,7 +36,11 @@
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestExternalContact'/>
 	<entry-point class='com.TheJobCoach.webapp.adminpage.client.TestContentUsers'/>
 	
+
+	<source path="client/timepicker"/>
+	
 	<source path="util/client"/>	
+	<source path="util/client/timepicker"/>	
 	<source path="userpage/client"/>	
 	
 	<set-configuration-property name="locale.cookie" value="gwtlang"/>
