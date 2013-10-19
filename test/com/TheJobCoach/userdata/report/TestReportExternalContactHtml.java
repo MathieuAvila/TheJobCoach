@@ -2,26 +2,13 @@ package com.TheJobCoach.userdata.report;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Vector;
-
 import org.junit.Test;
 
 import com.TheJobCoach.CoachTestUtils;
-import com.TheJobCoach.userdata.UserExternalContactManager;
-import com.TheJobCoach.userdata.report.ReportActionHtml;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
-import com.TheJobCoach.webapp.userpage.shared.UserDocument;
-import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
-import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
-import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
-import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
-import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentType;
-import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 
 public class TestReportExternalContactHtml {
 

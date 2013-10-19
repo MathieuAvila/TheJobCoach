@@ -4,10 +4,6 @@ import java.util.Date;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
-import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
-import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
-import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
-import com.TheJobCoach.webapp.util.shared.FormatUtil;
 
 public class ReportExternalContactHtml extends ReportExternalContact {
 
