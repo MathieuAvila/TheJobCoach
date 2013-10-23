@@ -128,4 +128,16 @@ public class AutoTestContentMyReports extends GwtTest {
 		
 		//cud.buttonActivityReport.click();
 	}
+	@Test
+	public void testGetReportContact() throws InterruptedException
+	{
+		userService.calls = 0;
+		cud = new ContentMyReports(
+				p, userId);
+		cud.onModuleLoad();
+		
+		//PERIOD_ALL
+		
+		System.out.println(cud.getActivityURL());
+	}
 }

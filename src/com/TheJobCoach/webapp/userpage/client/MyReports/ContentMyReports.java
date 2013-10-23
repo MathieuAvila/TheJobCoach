@@ -137,6 +137,19 @@ public class ContentMyReports implements EntryPoint {
 		tfEndDate.setValue(getEndDate());
 	}
 	
+	public String getActivityURL()
+	{
+		String cookie = LocaleInfo.getLocaleCookieName();
+		String cookieLang = com.google.gwt.user.client.Cookies.getCookie(cookie);
+		if (cookieLang == null) cookieLang="FR";
+		String copyURL = GWT.getModuleBaseURL() + "DownloadReport?reporttype="+URL.encodeQueryString("reportactivity")
+				+ "&format=" + URL.encodeQueryString(tfFormatContact.getValue())
+				+ "&detail=" + URL.encodeQueryString(tfDetailContact.getValue())
+				+ "&lang=" + URL.encodeQueryString(cookieLang)
+				+ "&userid=" + URL.encodeQueryString(user.userName)
+				+ "&token=" + URL.encodeQueryString(user.token);
+		return copyURL;
+	}
 	/**
 	 * This is the entry point method.
 	 * @wbp.parser.entryPoint
@@ -226,16 +239,8 @@ public class ContentMyReports implements EntryPoint {
 		buttonContactReport.addClickHandler(new ClickHandler()
 		{			
 			public void onClick(ClickEvent event)
-			{
-				String cookie = LocaleInfo.getLocaleCookieName();
-				String cookieLang = com.google.gwt.user.client.Cookies.getCookie(cookie);
-				String copyURL = GWT.getModuleBaseURL() + "DownloadReport?reporttype="+URL.encodeQueryString("reportactivity")
-						+ "&format=" + URL.encodeQueryString(tfFormatContact.getValue())
-						+ "&detail=" + URL.encodeQueryString(tfDetailContact.getValue())
-						+ "&lang=" + URL.encodeQueryString(cookieLang)
-						+ "&userid=" + URL.encodeQueryString(user.userName)
-						+ "&token=" + URL.encodeQueryString(user.token);
-				DownloadIFrame iframe = new DownloadIFrame(copyURL);
+			{				
+				DownloadIFrame iframe = new DownloadIFrame(getActivityURL());
 				simplePanelCenter.add(iframe);
 			}
 		});
