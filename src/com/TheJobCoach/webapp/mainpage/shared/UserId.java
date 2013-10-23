@@ -33,4 +33,11 @@ public class UserId implements Serializable {
 		if (userName.equals("")) return false;
 		return userName.matches(getRegexp());
 	}
+	
+	public boolean equals(UserId id)
+	{
+		return token.equals(id.token)
+				&& userName.equals(id.userName)
+				&& type.equals(type);
+	}
 };
