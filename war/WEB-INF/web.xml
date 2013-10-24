@@ -6,10 +6,6 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.TheJobCoach.webapp.thejobcoach.server.GreetingServiceImpl</servlet-class>
-  </servlet>
   
   <servlet>
     <servlet-name>loginServlet</servlet-name>
@@ -30,11 +26,6 @@
     <servlet-name>adminServlet</servlet-name>
     <servlet-class>com.TheJobCoach.webapp.adminpage.server.AdminServiceImpl</servlet-class>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/thejobcoach/greet</url-pattern>
-  </servlet-mapping>
   
   <servlet-mapping>
     <servlet-name>loginServlet</servlet-name>
