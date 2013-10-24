@@ -10,11 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 public class ServletUtils {
 
 	/**
-	 * Sends headers to allow a file to be download to the workstation
-vs.
+	 * Sends headers to allow a file to be download to the workstation vs.
 	 * opened in the browser.
-	 * @param fileName the name of the file. This will be encoded as
-UTF-8.
+	 * @param fileName the name of the file. This will be encoded as UTF-8.
 	 * @param contentLen the length of the file, zero (0) if unknown.
 	 * @param request the {@code HttpServletRequest}.
 	 * @param response the {@code HttpSerletResponse}.
