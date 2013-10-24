@@ -9,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
+import com.TheJobCoach.webapp.util.client.CheckedTime;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
@@ -52,10 +53,10 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 			UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD_LIST, langGoals.periodMap(), "periodMap_");
 	CheckedLabel clGoalPeriod = new CheckedLabel("Période d'évaluation", false, tfGoalPeriod);
 
-	CheckedTextField tfConnectBefore = new CheckedTextField("[0-9]*");
+	CheckedTime tfConnectBefore = new CheckedTime(CheckedTime.DAY_MIDDAY);
 	CheckedLabel clConnectBefore = new CheckedLabel("Je dois me connecter avant cette heure ", false, tfConnectBefore);
 
-	CheckedTextField tfConnectAfter = new CheckedTextField( "[0-9]*");
+	CheckedTime tfConnectAfter = new CheckedTime( CheckedTime.DAY_END);
 	CheckedLabel clConnectAfter = new CheckedLabel("Je dois être déconnecté après cette heure", false, tfConnectAfter);
 
 	CheckedTextField tfConnectRatio = new CheckedTextField("[0-9]*");
@@ -112,10 +113,10 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 		simplePanelCenter.add(grid0);
 
 		grid0.setWidget(0,0, clConnectBefore);
-		grid0.setWidget(0,1, tfConnectBefore);
+		grid0.setWidget(0,1, tfConnectBefore.getItem());
 
 		grid0.setWidget(1,0, clConnectAfter);
-		grid0.setWidget(1,1, tfConnectAfter);
+		grid0.setWidget(1,1, tfConnectAfter.getItem());
 
 		grid0.setWidget(2,0, clConnectRatio);
 		grid0.setWidget(2,1, tfConnectRatio);

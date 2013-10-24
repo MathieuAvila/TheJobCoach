@@ -28,11 +28,6 @@
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/thejobcoach/greet</url-pattern>
-  </servlet-mapping>
-  
-  <servlet-mapping>
     <servlet-name>loginServlet</servlet-name>
     <url-pattern>/thejobcoach/login</url-pattern>
   </servlet-mapping>

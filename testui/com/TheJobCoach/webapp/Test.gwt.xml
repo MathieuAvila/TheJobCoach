@@ -16,6 +16,7 @@
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxUI'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxError'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.timepicker.TestTimePicker'/>
+	<entry-point class='com.TheJobCoach.webapp.util.client.TestCheckedComponents'/>
 	<entry-point class='com.TheJobCoach.webapp.mainpage.client.TestCreateAccount'/>
 	<entry-point class='com.TheJobCoach.webapp.mainpage.client.TestLostCredentials'/>
 	<entry-point class='com.TheJobCoach.webapp.mainpage.client.TestMainPage'/>
