@@ -133,6 +133,7 @@ public class AutoTestComponentChooseDocument extends GwtTest {
 				p, userId, result);
 		
 		ccd.onModuleLoad();
+		getBrowserSimulator().fireLoopEnd();
 		assertEquals(1, userService.callsGet);
 		assertEquals(4, ccd.cellTable.getRowCount());
 		
