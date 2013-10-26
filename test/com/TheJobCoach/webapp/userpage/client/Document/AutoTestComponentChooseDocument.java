@@ -9,6 +9,7 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.TheJobCoach.webapp.GwtTestUtilsWrapper;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
@@ -89,13 +90,14 @@ public class AutoTestComponentChooseDocument extends GwtTest {
 		}
 	}
 
-	SpecialUserServiceAsync userService = new SpecialUserServiceAsync();
+	static SpecialUserServiceAsync userService = null;
 	
 	HorizontalPanel p;
 	
 	@Before
 	public void beforeContentExternalContact()
 	{
+		if (userService == null) userService = new SpecialUserServiceAsync();
 		addGwtCreateHandler(new GwtCreateHandler () {
 
 			@Override
@@ -134,6 +136,7 @@ public class AutoTestComponentChooseDocument extends GwtTest {
 		
 		ccd.onModuleLoad();
 		getBrowserSimulator().fireLoopEnd();
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());	
 		assertEquals(1, userService.callsGet);
 		assertEquals(4, ccd.cellTable.getRowCount());
 		
@@ -170,7 +173,6 @@ public class AutoTestComponentChooseDocument extends GwtTest {
 		ccd = new ComponentChooseDocument(
 				p, userId, result2);
 		ccd.onModuleLoad();
-		getBrowserSimulator().fireLoopEnd();
 		Browser.click(ccd.cellTable, ccd.cellTable.getVisibleItem(1));
 		assertEquals(true, ccd.okCancel.getOk().isEnabled());
 		ccd.okCancel.getCancel().click();
