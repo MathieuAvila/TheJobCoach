@@ -1,7 +1,10 @@
 package com.TheJobCoach.webapp.util.client;
 
 import java.util.Map;
+
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.UpdateRequest;
 import com.TheJobCoach.webapp.util.shared.UpdateResponse;
 import com.google.gwt.user.client.rpc.AsyncCallback;

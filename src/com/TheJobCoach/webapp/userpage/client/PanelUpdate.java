@@ -3,7 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.Date;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.UtilService;
 import com.TheJobCoach.webapp.util.client.UtilServiceAsync;
 import com.TheJobCoach.webapp.util.shared.UpdateRequest;
@@ -11,7 +11,6 @@ import com.TheJobCoach.webapp.util.shared.UpdateResponse;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -44,22 +43,15 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint {
 	    			  ((m != 0)  ? (String.valueOf(m) + "mn ") : new String()) + 
 	    			  String.valueOf(s) + "s");
 	    	  UpdateRequest request = new UpdateRequest(today, connectSec, firstTime);
-	    	  utilService.sendUpdateList(userId, request, new AsyncCallback<UpdateResponse>()  
+	    	  utilService.sendUpdateList(userId, request, new ServerCallHelper<UpdateResponse>(rootPanel)  
 	    	  {
-				@Override
-				public void onFailure(Throwable caught) 
-				{
-					MessageBox.messageBoxException(rootPanel, caught.getMessage());					
-				}
-
 				@Override
 				public void onSuccess(UpdateResponse result)
 				{
 					if (firstTime) previousTime = result.totalDayTime;
 			    	firstTime = false;
 					// Store response. Send appropriate callbacks.
-				}
-	    		  
+				}	    		  
 	    	  });
 	      };
 	};

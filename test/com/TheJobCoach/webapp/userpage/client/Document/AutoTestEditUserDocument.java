@@ -1,7 +1,10 @@
 package com.TheJobCoach.webapp.userpage.client.Document;
 
-import java.util.Arrays;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
@@ -17,7 +20,6 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentRevision;
 import com.TheJobCoach.webapp.util.client.IEditResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -26,7 +28,6 @@ import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.utils.events.EventBuilder;
 
-import static org.junit.Assert.*;
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestEditUserDocument extends GwtTest {
 
@@ -38,7 +39,7 @@ public class AutoTestEditUserDocument extends GwtTest {
 
 		@Override
 		public void setUserDocument(UserId id, UserDocument contact,
-				AsyncCallback<String> callback) throws CassandraException {
+				AsyncCallback<String> callback) {
 			assertEquals(userId.userName, id.userName);
 			callback.onSuccess(String.valueOf(calls));
 			calls++;

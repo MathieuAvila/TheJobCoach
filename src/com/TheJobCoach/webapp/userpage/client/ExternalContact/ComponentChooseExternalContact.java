@@ -12,14 +12,12 @@ import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IChooseDialogModel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
-import com.TheJobCoach.webapp.util.client.MessageBox;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -73,11 +71,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseDialog
 
 	void getAllContent()
 	{		
-		AsyncCallback<Vector<ExternalContact>> callback = new AsyncCallback<Vector<ExternalContact>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(rootPanel, caught);
-			}
+		ServerCallHelper<Vector<ExternalContact>> callback = new ServerCallHelper<Vector<ExternalContact>>(rootPanel) {
 			@Override
 			public void onSuccess(Vector<ExternalContact> result) {
 				externalContactList.clear();
@@ -87,13 +81,7 @@ public class ComponentChooseExternalContact implements EntryPoint, IChooseDialog
 				cellTable.redraw();				
 			}
 		};
-		try {
-			userService.getExternalContactList(userId, callback);	
-		}
-		catch (CassandraException e)
-		{
-			MessageBox.messageBoxException(rootPanel, e);
-		}
+		userService.getExternalContactList(userId, callback);	
 		dataProvider.updateRowCount(externalContactList.size(), true);
 		cellTable.redraw();
 	}

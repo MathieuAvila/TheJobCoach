@@ -17,7 +17,7 @@ import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -27,7 +27,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -54,22 +53,18 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 	final Label labelCreationDate = new Label();
 	final Label labelStartDate = new Label();
 	final Label labelEndDate = new Label();
-	
+
 	final Lang lang = GWT.create(Lang.class);
 	final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
-	
+
 	ButtonImageText buttonNewOpportunity;
-	
+
 	private IEditDialogModel<UserOpportunity> editModel;
 	private IContentUserLog logContent;
-	
+
 	private void setUserOpportunity(UserOpportunity opp)
 	{
-		AsyncCallback<UserOpportunity> callback = new AsyncCallback<UserOpportunity>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(rootPanel, caught);
-			}
+		ServerCallHelper<UserOpportunity>callback = new ServerCallHelper<UserOpportunity>(rootPanel) {
 			@Override
 			public void onSuccess(UserOpportunity result) {
 				currentOpportunity = result;
@@ -81,13 +76,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 				cellTable.redraw();				
 			}
 		};
-		try {
-			userService.getUserOpportunity(user, opp.ID, callback);
-		}
-		catch (CassandraException e) 
-		{
-			e.printStackTrace();
-		}		
+		userService.getUserOpportunity(user, opp.ID, callback);	
 	}
 
 	public ContentUserOpportunity(Panel panel, UserId _user)
@@ -97,7 +86,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		this.editModel = new EditOpportunity();
 		this.logContent = new ContentUserLog(); 
 	}
-	
+
 	public ContentUserOpportunity(Panel panel, UserId _user, IEditDialogModel<UserOpportunity> editModel, IContentUserLog logContent)
 	{
 		rootPanel = panel;
@@ -105,7 +94,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		this.editModel = editModel; 
 		this.logContent = logContent;
 	}
-	 
+
 	public ContentUserOpportunity()
 	{
 	}
@@ -137,11 +126,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 
 	void getAllContent()
 	{		
-		AsyncCallback<Vector<UserOpportunity>> callback = new AsyncCallback<Vector<UserOpportunity>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(rootPanel, caught);
-			}
+		ServerCallHelper<Vector<UserOpportunity>>callback = new ServerCallHelper<Vector<UserOpportunity>>(rootPanel) {
 			@Override
 			public void onSuccess(Vector<UserOpportunity> result) {
 				userOpportunityList.clear();
@@ -151,13 +136,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 				cellTable.redraw();				
 			}
 		};
-		try {
-			userService.getUserOpportunityList(user, "managed", callback);
-		}
-		catch (CassandraException e) 
-		{
-			e.printStackTrace();
-		}
+		userService.getUserOpportunityList(user, "managed", callback);
 	}
 
 	private void delete(final UserOpportunity opp)
@@ -169,22 +148,14 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 					public void complete(boolean ok) {
 						if (ok == true)
 						{
-							try {
-								userService.deleteUserOpportunity(user, opp.ID, new AsyncCallback<String>() {
-									public void onFailure(Throwable caught) {
-										MessageBox.messageBoxException(rootPanel, caught);
-									}
-									public void onSuccess(String result)
-									{
-										getAllContent();
-									}
-								});
-							}
-							catch (CassandraException e) 
-							{
-								MessageBox.messageBoxException(rootPanel, e);
-							}
-						}}});
+							userService.deleteUserOpportunity(user, opp.ID, new ServerCallHelper<String>(rootPanel) {
+								public void onSuccess(String result)
+								{
+									getAllContent();
+								}
+							});
+						}
+					}});
 		mb.onModuleLoad();
 	}
 
@@ -194,47 +165,10 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		{
 			IEditDialogModel<UserOpportunity> eus = editModel.clone(rootPanel, user, null, new IChooseResult<UserOpportunity>() {
 				public void setResult(UserOpportunity result) {
-					try 
-					{
-						if (result != null)
-						{
-							result.ID = new Date().toString();
-							userService.setUserOpportunity(user, "managed", result, new AsyncCallback<String>() {
-								public void onFailure(Throwable caught) {
-									MessageBox.messageBoxException(rootPanel, caught);
-								}
-								public void onSuccess(String result)
-								{
-									getAllContent();
-								}
-							});
-						}
-					}
-					catch (CassandraException e)
-					{
-						MessageBox.messageBoxException(rootPanel, e);
-					}
-				}
-			});
-			eus.onModuleLoad();
-		}
-	}
-	
-	private void updateUserOpportunity(UserOpportunity opp)
-	{
-		IEditDialogModel<UserOpportunity> eus = editModel.clone(rootPanel, user, opp, new IChooseResult<UserOpportunity>() {
-			@Override
-			public void setResult(UserOpportunity result) {
-				try 
-				{
 					if (result != null)
 					{
-						userService.setUserOpportunity(user, "managed", result, new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								MessageBox.messageBoxException(rootPanel, caught);
-								//connectButton.setEnabled(true);
-							}
+						result.ID = new Date().toString();
+						userService.setUserOpportunity(user, "managed", result, new ServerCallHelper<String>(rootPanel) {
 							public void onSuccess(String result)
 							{
 								getAllContent();
@@ -242,9 +176,24 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 						});
 					}
 				}
-				catch (CassandraException e)
+			});
+			eus.onModuleLoad();
+		}
+	}
+
+	private void updateUserOpportunity(UserOpportunity opp)
+	{
+		IEditDialogModel<UserOpportunity> eus = editModel.clone(rootPanel, user, opp, new IChooseResult<UserOpportunity>() {
+			@Override
+			public void setResult(UserOpportunity result) {
+				if (result != null)
 				{
-					MessageBox.messageBoxException(rootPanel, e);
+					userService.setUserOpportunity(user, "managed", result, new ServerCallHelper<String>(rootPanel) {
+						public void onSuccess(String result)
+						{
+							getAllContent();
+						}
+					});
 				}
 			}
 		});
@@ -287,7 +236,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			public void update(int index, UserOpportunity object, String value) {
 				updateUserOpportunity(object);
 			}});
-		
+
 		cellTable.addColumnUrl(new ExtendedCellTable.GetValue<String, UserOpportunity>() {
 			public String getValue(UserOpportunity contact) {
 				return contact.url;

@@ -7,16 +7,16 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
 import com.TheJobCoach.webapp.util.client.DialogToolBox;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -74,25 +74,14 @@ public class MainPage implements EntryPoint {
 		public void onClick(ClickEvent event) {							
 			// Then, we send the input to the server.
 			connectButton.setEnabled(false);
-			loginService.connect(nameField.getText(), passwordField.getText(), new AsyncCallback<MainPageReturnLogin>() {
-				public void onFailure(Throwable caught) {
-					// Show the RPC error message to the user						
-					connectButton.setEnabled(true);
-				}
-
+			loginService.connect(nameField.getText(), passwordField.getText(), new ServerCallHelper<MainPageReturnLogin>(rootPanel) {
 				public void onSuccess(final MainPageReturnLogin result)
 				{
 					connectButton.setEnabled(true);
-					GWT.runAsync(new RunAsyncCallback() 
+					EasyAsync.Check(rootPanel,  new EasyAsync.ToRun()
 					{
 						@Override
-						public void onFailure(Throwable reason) 
-						{
-							MessageBox.messageBoxException(rootPanel, reason.toString());
-						}
-
-						@Override
-						public void onSuccess() 
+						public void Open()
 						{
 							switch (result.getLoginStatus())
 							{ 
@@ -151,27 +140,14 @@ public class MainPage implements EntryPoint {
 
 	private void createTestAccount()
 	{
-		try
-		{
-			loginService.createTestUser(LocaleInfo.getCurrentLocale().getLocaleName(), UserType.USER_TYPE_SEEKER, new AsyncCallback<UserId>() {
-				public void onFailure(Throwable caught) 
-				{
-					MessageBox.messageBoxException(rootPanel, caught.toString());		
-				}
-
+			loginService.createTestUser(LocaleInfo.getCurrentLocale().getLocaleName(), UserType.USER_TYPE_SEEKER, new ServerCallHelper<UserId>(rootPanel) {
 				@Override
 				public void onSuccess(final UserId result) 
 				{
-					GWT.runAsync(new RunAsyncCallback() 
+					EasyAsync.Check(rootPanel, new EasyAsync.ToRun()
 					{
 						@Override
-						public void onFailure(Throwable reason) 
-						{
-							MessageBox.messageBoxException(rootPanel, reason.toString());
-						}
-
-						@Override
-						public void onSuccess() 
+						public void Open()
 						{
 							UserPage uP = new UserPage();
 
@@ -181,11 +157,6 @@ public class MainPage implements EntryPoint {
 					});
 				}
 			});
-		} 
-		catch (Exception e)
-		{
-			MessageBox.messageBoxException(rootPanel, e);
-		}
 	}
 
 	// Create a handler for the create test account button

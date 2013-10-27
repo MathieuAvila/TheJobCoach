@@ -7,6 +7,7 @@ import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
@@ -15,8 +16,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -65,11 +64,7 @@ public class ContentUsers implements EntryPoint {
 	
 	void getAllContent()
 	{		
-		AsyncCallback<List<UserReport>> callback = new AsyncCallback<List<UserReport>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-			}
+		ServerCallHelper<List<UserReport>> callback = new ServerCallHelper<List<UserReport>>(rootPanel) {
 			@Override
 			public void onSuccess(List<UserReport> result) {
 				userList = result;
@@ -242,11 +237,7 @@ public class ContentUsers implements EntryPoint {
 					public void complete(boolean ok) {
 						if (ok == true)
 						{
-							AsyncCallback<String> callback = new AsyncCallback<String>() {
-								@Override
-								public void onFailure(Throwable caught) {
-									Window.alert(caught.getMessage());
-								}
+							ServerCallHelper<String> callback = new ServerCallHelper<String>(rootPanel) {
 								@Override
 								public void onSuccess(String result) {
 									getAllContent();

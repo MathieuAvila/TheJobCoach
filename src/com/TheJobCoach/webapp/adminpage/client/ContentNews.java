@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
@@ -15,8 +16,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -81,11 +80,7 @@ public class ContentNews implements EntryPoint {
 	@SuppressWarnings("deprecation")
 	void getAllContent()
 	{		
-		AsyncCallback<Vector<NewsInformation>> callback = new AsyncCallback<Vector<NewsInformation>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-			}
+		ServerCallHelper<Vector<NewsInformation>> callback = new ServerCallHelper<Vector<NewsInformation>>(rootPanel) {
 			@Override
 			public void onSuccess(Vector<NewsInformation> result) {
 				newsList = result;
@@ -124,12 +119,7 @@ public class ContentNews implements EntryPoint {
 	{
 		public void onClick(ClickEvent event)
 		{
-			adminService.deleteNewsInformation(user, getNewsInformation(), new AsyncCallback<String>() {
-				public void onFailure(Throwable caught) {
-					// Show the RPC error message to the user
-					Window.alert(caught.toString());
-					//connectButton.setEnabled(true);
-				}
+			adminService.deleteNewsInformation(user, getNewsInformation(), new ServerCallHelper<String>(rootPanel) {
 				public void onSuccess(String result)
 				{
 					getAllContent();
@@ -142,12 +132,7 @@ public class ContentNews implements EntryPoint {
 	{
 		public void onClick(ClickEvent event)
 		{		
-			adminService.createNewsInformation(user, getNewsInformation(), new AsyncCallback<String>() {
-				public void onFailure(Throwable caught) {
-					// Show the RPC error message to the user
-					Window.alert(caught.toString());
-					//connectButton.setEnabled(true);
-				}
+			adminService.createNewsInformation(user, getNewsInformation(), new ServerCallHelper<String>(rootPanel) {
 				public void onSuccess(String result)
 				{
 					getAllContent();
@@ -162,12 +147,7 @@ public class ContentNews implements EntryPoint {
 		{
 			NewsInformation news = getNewsInformation();
 			news.ID = SiteUUID.getDateUuid();
-			adminService.createNewsInformation(user, news, new AsyncCallback<String>() {
-				public void onFailure(Throwable caught) {
-					// Show the RPC error message to the user
-					Window.alert(caught.toString());
-					//connectButton.setEnabled(true);
-				}
+			adminService.createNewsInformation(user, news, new ServerCallHelper<String>(rootPanel) {
 				public void onSuccess(String result)
 				{
 					getAllContent();

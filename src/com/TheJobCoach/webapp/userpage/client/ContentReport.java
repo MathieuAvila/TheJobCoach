@@ -4,12 +4,11 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
-import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -37,12 +36,7 @@ public class ContentReport implements EntryPoint {
 
 	private void sendComment()
 	{
-		AsyncCallback<String> callback = new AsyncCallback<String>() {
-			@Override
-			public void onFailure(Throwable caught)
-			{
-				MessageBox.messageBoxException(rootPanel, caught.getMessage());
-			}
+		ServerCallHelper<String> callback = new ServerCallHelper<String>(rootPanel) {			
 			@Override
 			public void onSuccess(String result)
 			{

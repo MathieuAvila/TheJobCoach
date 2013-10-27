@@ -13,14 +13,13 @@ import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IChooseDialogModel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -76,11 +75,7 @@ public class ComponentChooseDocument implements EntryPoint, IChooseDialogModel<U
 
 	void getAllContent()
 	{		
-		AsyncCallback<Vector<UserDocumentId>> callback = new AsyncCallback<Vector<UserDocumentId>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-			}
+		ServerCallHelper<Vector<UserDocumentId>> callback = new ServerCallHelper<Vector<UserDocumentId>>(rootPanel) {
 			@Override
 			public void onSuccess(Vector<UserDocumentId> result) {
 				docList.clear();

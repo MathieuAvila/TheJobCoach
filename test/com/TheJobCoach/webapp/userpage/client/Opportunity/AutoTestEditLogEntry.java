@@ -1,5 +1,8 @@
 package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
@@ -11,15 +14,13 @@ import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.GwtTestUtilsWrapper;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
-import com.TheJobCoach.webapp.userpage.client.Opportunity.EditLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
+import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
-import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.TestFormatUtil;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -27,7 +28,6 @@ import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 
-import static org.junit.Assert.*;
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestEditLogEntry extends GwtTest {
 	
@@ -39,7 +39,7 @@ public class AutoTestEditLogEntry extends GwtTest {
 		
 		@Override
 		public void setUserLogEntry(UserId id, UserLogEntry opp,
-				AsyncCallback<String> callback) throws CassandraException {
+				AsyncCallback<String> callback){
 			assertEquals(userId.userName, id.userName);
 			callback.onSuccess("");
 			calls++;

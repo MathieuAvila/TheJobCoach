@@ -1,13 +1,14 @@
 package com.TheJobCoach.webapp.util.client;
 
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 
 public class EasyAsync
 {
-	
 	public interface ToRun
 	{
 		public void Open();
@@ -15,7 +16,7 @@ public class EasyAsync
 	
 	public interface ServerCallRun
 	{
-		public void Run() throws CassandraException;
+		public void Run() throws CassandraException, CoachSecurityException;
 	}
 	
 	public static void Check(final Panel root, final ToRun run)
@@ -45,5 +46,11 @@ public class EasyAsync
 		{
 			MessageBox.messageBoxException(rootPanel, e.toString());
 		}
+		catch (CoachSecurityException e)
+		{
+			Window.Location.replace("/index.html");
+			Window.Location.reload();
+		}
 	}
+
 }

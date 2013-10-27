@@ -19,7 +19,6 @@ import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.MessageBox;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -90,28 +89,28 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 		@Override
 		public void getUserOpportunityList(UserId id, String list,
 				AsyncCallback<Vector<UserOpportunity>> callback)
-				throws CassandraException {
+				{
 			callsGet++;
 			callback.onSuccess(contactList);
 		}
 		@Override
 		public void getUserOpportunity(UserId id, String oppId,
 				AsyncCallback<UserOpportunity> callback)
-				throws CassandraException {
+				{
 			callsGetSingle++;
 			callback.onSuccess(opportunity2);	
 		}
 		@Override
 		public void setUserOpportunity(UserId id, String list,
 				UserOpportunity opp, AsyncCallback<String> callback)
-				throws CassandraException {
+				{
 			callsSet++;
 			callback.onSuccess("");
 		}
 		
 		@Override
 		public void deleteUserOpportunity(UserId id, String oppId,
-				AsyncCallback<String> callback) throws CassandraException {
+				AsyncCallback<String> callback)  {
 			callsDelete++;
 			lastId = oppId;
 			callback.onSuccess("");

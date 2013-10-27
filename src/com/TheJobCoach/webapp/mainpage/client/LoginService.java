@@ -25,4 +25,6 @@ public interface LoginService extends RemoteService {
 	Boolean lostCredentials(String email, String lang) throws CassandraException;
 	
 	UserId createTestUser(String lang, UserId.UserType type) throws CassandraException, SystemException ;	
+
+	String disconnect(String lang, UserId.UserType type) throws CassandraException, SystemException ;	
 }

@@ -8,6 +8,7 @@ import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,7 +18,6 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Panel;
@@ -63,12 +63,8 @@ public class CreateAccount implements EntryPoint, IChanged {
 					new UserId(textBoxUserName.getText(), "", UserId.UserType.USER_TYPE_SEEKER),
 					new UserInformation(textBoxCreateName.getText(), textBoxMail.getText(), newUserPassword.getText(), textBoxFirstName.getText()),
 					LocaleInfo.getCurrentLocale().getLocaleName(),
-					new AsyncCallback<MainPageReturnCode.CreateAccountStatus>() {
-						public void onFailure(Throwable caught) {
-							// Show the RPC error message to the user
-							MessageBox.messageBoxException(rootPanel, "An error occured while creating account: " + caught);
-						}
-
+					new ServerCallHelper<MainPageReturnCode.CreateAccountStatus>(rootPanel) {
+		
 						public void onSuccess(MainPageReturnCode.CreateAccountStatus result) 
 						{							
 							switch (result)

@@ -22,7 +22,6 @@ import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
@@ -66,7 +65,6 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 		@Override
 		public void getExternalContactList(UserId id,
 				AsyncCallback<Vector<ExternalContact>> callback)
-				throws CassandraException
 		{
 			callsGet++;
 			callback.onSuccess((Vector<ExternalContact>)contactList.clone());
@@ -74,7 +72,7 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 
 		@Override
 		public void setExternalContact(UserId id, ExternalContact contact,
-				AsyncCallback<String> callback) throws CassandraException
+				AsyncCallback<String> callback)
 		{
 			callsSet++;
 			callback.onSuccess("");
@@ -82,7 +80,7 @@ public class AutoTestComponentChooseExternalContact extends GwtTest {
 
 		@Override
 		public void deleteExternalContact(UserId id, String contact,
-				AsyncCallback<String> callback) throws CassandraException
+				AsyncCallback<String> callback)
 		{
 			callsDelete++;
 			callback.onSuccess("");			

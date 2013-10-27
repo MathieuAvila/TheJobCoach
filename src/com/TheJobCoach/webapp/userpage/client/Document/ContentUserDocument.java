@@ -14,12 +14,12 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
-import com.TheJobCoach.webapp.util.client.EasyCallback;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IEditResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
@@ -82,7 +82,7 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 		EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
 			public void Run() throws CassandraException
 			{
-				userService.getUserDocumentList(user, new EasyCallback<Vector<UserDocument>>(rootPanel, new EasyCallback.SuccessRun<Vector<UserDocument>>() {	
+				userService.getUserDocumentList(user, new ServerCallHelper<Vector<UserDocument>>(rootPanel) {	
 					@Override
 					public void onSuccess(Vector<UserDocument> r)	{
 						userDocumentList.clear();
@@ -90,7 +90,7 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 						dataProvider.updateRowCount(userDocumentList.size(), true);
 						dataProvider.updateRowData(0, userDocumentList.subList(0, userDocumentList.size()));
 						cellTable.redraw();
-					}}));
+					}});
 			}});
 	}
 
@@ -113,11 +113,11 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 							EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
 								public void Run() throws CassandraException
 								{
-									userService.deleteUserDocument(user, object.ID, new EasyCallback<String>(rootPanel, new EasyCallback.SuccessRun<String>() {	
+									userService.deleteUserDocument(user, object.ID, new ServerCallHelper<String>(rootPanel) {	
 										@Override
 										public void onSuccess(String r)	{
 											getAllContent();
-										}}));
+										}});
 								}});
 						}
 					}

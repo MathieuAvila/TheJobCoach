@@ -15,6 +15,7 @@ import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -37,8 +38,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Random;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -188,11 +187,7 @@ public class ContentTodo implements EntryPoint {
 				myTodoEvent.y = org_y;
 				myTodoEvent.w = org_w;
 				myTodoEvent.h = org_h;
-				userService.setTodoEvent(user, myTodoEvent, new AsyncCallback<Boolean>() {
-					public void onFailure(Throwable caught) 
-					{
-						
-					}
+				userService.setTodoEvent(user, myTodoEvent, new ServerCallHelper<Boolean>(rootPanel) {
 					public void onSuccess(Boolean result)
 					{	
 						// Really ? ... Don't care.
@@ -375,11 +370,7 @@ public class ContentTodo implements EntryPoint {
 
 	void getAllContent()
 	{		
-		AsyncCallback<Vector<TodoEvent>> callback = new AsyncCallback<Vector<TodoEvent>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-			}
+		ServerCallHelper<Vector<TodoEvent>> callback = new ServerCallHelper<Vector<TodoEvent>>(rootPanel) {
 			@Override
 			public void onSuccess(Vector<TodoEvent> result) {
 				userTodoEventList.clear();
@@ -401,11 +392,7 @@ public class ContentTodo implements EntryPoint {
 			public void complete(boolean ok) {				
 				if(ok)
 				{
-					userService.deleteTodoEvent(user, currentTodoEvent, new AsyncCallback<Boolean>() {
-						public void onFailure(Throwable caught) {
-							// Show the RPC error message to the user
-							MessageBox.messageBoxException(rootPanel, caught.toString());										
-						}
+					userService.deleteTodoEvent(user, currentTodoEvent, new ServerCallHelper<Boolean>(rootPanel) {
 						public void onSuccess(Boolean result)
 						{
 							userTodoEventList.remove(currentTodoEvent);
@@ -440,11 +427,7 @@ public class ContentTodo implements EntryPoint {
 		TodoEvent.orderOneTodoEvent(userTodoEventList, event, 1000);
 		surface.onTodoEventCreated(event);
 
-		userService.setTodoEvent(user, event, new AsyncCallback<Boolean>() {
-			public void onFailure(Throwable caught) 
-			{
-				MessageBox.messageBoxException(rootPanel, caught.getLocalizedMessage());
-			}
+		userService.setTodoEvent(user, event, new ServerCallHelper<Boolean>(rootPanel) {
 			public void onSuccess(Boolean result)
 			{
 				// Get away.

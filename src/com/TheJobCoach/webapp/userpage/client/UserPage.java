@@ -15,10 +15,10 @@ import com.TheJobCoach.webapp.userpage.client.UserSite.ContentUserSite;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
-import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -243,7 +243,7 @@ public class UserPage implements EntryPoint {
 	{		
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
-		RootPanel rootPanel = RootPanel.get("content");
+		final RootPanel rootPanel = RootPanel.get("content");
 		rootPanel.clear();
 
 		rootPanel.setStyleName("mainpage-content");
@@ -302,19 +302,24 @@ public class UserPage implements EntryPoint {
 		imageLogout.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				GWT.runAsync(new RunAsyncCallback() {
+				
+				EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun()
+				{					
 					@Override
-					public void onFailure(Throwable reason) 
-					{
-						MessageBox.messageBoxException(simplePanelContent, reason.toString());					
+					public void Run() throws CassandraException, CoachSecurityException
+					{					
+						EasyAsync.Check(rootPanel, new EasyAsync.ToRun()
+						{							
+							@Override
+							public void Open()
+							{
+								MainPage main = new MainPage();
+								main.onModuleLoad();
+							}
+						});
 					}
-					@Override
-					public void onSuccess() {
-						MainPage main = new MainPage();
-						main.onModuleLoad();
-					}
-				});
-			}		
+				 });
+				}
 		});
 		imageLogout.setStyleName("mainpage-label-clickable");
 

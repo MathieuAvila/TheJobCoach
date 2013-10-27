@@ -6,12 +6,10 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
-import com.TheJobCoach.webapp.util.client.MessageBox;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -38,12 +36,7 @@ public class ContentNews implements EntryPoint {
 
 	private void getNews()
 	{
-		AsyncCallback<Vector<NewsInformation>> callback = new AsyncCallback<Vector<NewsInformation>>()	{
-			@Override
-			public void onFailure(Throwable caught)
-			{
-				MessageBox.messageBoxException(rootPanel, caught.getMessage());
-			}
+		ServerCallHelper<Vector<NewsInformation> > callback =  new ServerCallHelper<Vector<NewsInformation>>(rootPanel){
 			@Override
 			public void onSuccess(Vector<NewsInformation> result)
 			{
@@ -55,12 +48,8 @@ public class ContentNews implements EntryPoint {
 					simplePanelCenter.add(text);
 				}				
 			}
-		};
-		try {
-			userService.getNews(user, callback);
-		} catch (CassandraException e) {
-			MessageBox.messageBoxException(rootPanel, e);
-		}
+		};		
+		userService.getNews(user, callback);		
 	}
 
 	/**

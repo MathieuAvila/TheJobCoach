@@ -14,14 +14,13 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
-import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
@@ -97,18 +96,12 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 	private void commit()
 	{
 		final UserLogEntry log = getLogEntry();
-		try {
-		userService.setUserLogEntry(user, log, new AsyncCallback<String>() {
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(rootPanel, caught.toString());
-			}
+		userService.setUserLogEntry(user, log, new ServerCallHelper<String>(rootPanel) {
 			public void onSuccess(String tmp)
 			{
 				result.setResult(log);			
 			}
 		});
-		}
-		catch (Exception e) { MessageBox.messageBoxException(rootPanel, e);}
 	};
 
 	/**

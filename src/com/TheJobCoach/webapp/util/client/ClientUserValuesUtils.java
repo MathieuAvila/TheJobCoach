@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 
 public class ClientUserValuesUtils {
@@ -58,11 +57,7 @@ public class ClientUserValuesUtils {
 	
 	public void preloadValueList(final String key, final ReturnValue result)
 	{
-		AsyncCallback<Map<String,String>> callback = new AsyncCallback<Map<String,String>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(panel, caught.toString());
-			}
+		ServerCallHelper<Map<String,String>> callback = new ServerCallHelper<Map<String,String>>(panel) {
 			@Override
 			public void onSuccess(Map<String,String> resultMap) {
 				insertKeys(resultMap, false);
@@ -78,11 +73,7 @@ public class ClientUserValuesUtils {
 
 	public void setValues(final HashMap<String, String> map, final ReturnValue result)
 	{
-		AsyncCallback<String> callback = new AsyncCallback<String>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(panel, caught.toString());
-			}
+		ServerCallHelper<String> callback = new ServerCallHelper<String>(panel) {
 			@Override
 			public void onSuccess(String resultMap) {
 				if (result != null)

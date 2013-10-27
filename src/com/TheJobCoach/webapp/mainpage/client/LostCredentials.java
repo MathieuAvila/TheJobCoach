@@ -6,13 +6,12 @@ import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.MessageBox;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Grid;
@@ -42,13 +41,9 @@ public class LostCredentials implements EntryPoint, IChanged {
 	class LostCredentialsHandler implements ClickHandler {
 		public void onClick(ClickEvent event) {
 			okCancel.setEnabled(false);
-			try {
+			
 				loginService.lostCredentials(textBoxMail.getValue(), LocaleInfo.getCurrentLocale().getLocaleName(), 
-						new AsyncCallback<Boolean>() {
-					public void onFailure(Throwable caught) {
-						MessageBox.messageBoxException(rootPanel, "An error occured while retrieving account information: " + caught);
-						okCancel.setEnabled(true);						
-					}
+						new ServerCallHelper<Boolean>(rootPanel) {
 
 					public void onSuccess(Boolean b) 
 					{	
@@ -64,11 +59,7 @@ public class LostCredentials implements EntryPoint, IChanged {
 						}						
 					}
 				});
-			} 
-			catch (CassandraException e) 
-			{
-				MessageBox.messageBoxException(rootPanel, e);				
-			}
+			
 		}
 	}
 

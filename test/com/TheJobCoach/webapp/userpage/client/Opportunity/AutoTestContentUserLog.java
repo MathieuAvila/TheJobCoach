@@ -28,7 +28,6 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
@@ -123,7 +122,6 @@ public class AutoTestContentUserLog extends GwtTest {
 		@Override
 		public void getUserLogEntryList(UserId id, String oppId,
 				AsyncCallback<Vector<UserLogEntry>> callback)
-				throws CassandraException
 		{
 			callsGet++;
 			callback.onSuccess(new Vector<UserLogEntry>(Arrays.asList(userLog1, userLog2, userLog3)));
@@ -131,7 +129,7 @@ public class AutoTestContentUserLog extends GwtTest {
 		
 		@Override
 		public void deleteUserLogEntry(UserId id, String logId,
-				AsyncCallback<String> callback) throws CassandraException {
+				AsyncCallback<String> callback) {
 			callsDelete++;
 			lastId = logId;
 			callback.onSuccess("");

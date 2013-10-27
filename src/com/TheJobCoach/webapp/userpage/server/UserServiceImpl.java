@@ -3,6 +3,9 @@ package com.TheJobCoach.webapp.userpage.server;
 import java.util.List;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +28,9 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -45,167 +50,199 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
 	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
-	@Override
-	public List<String> getUserSiteList(UserId id) throws CassandraException 
+	private void check(UserId id) throws CoachSecurityException
 	{
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		CoachSecurityCheck.checkUser(id, session);
+	}
+
+	@Override
+	public List<String> getUserSiteList(UserId id) throws CassandraException, CoachSecurityException 
+	{
+		check(id);
 		List<String> result = jobSiteManager.getUserSiteList(id);
 		return result;
 	}
 
 	@Override
-	public Integer deleteUserSite(UserId id, String siteId)	throws CassandraException 
+	public Integer deleteUserSite(UserId id, String siteId)	throws CassandraException , CoachSecurityException 
 	{
+		check(id);
 		jobSiteManager.deleteUserSite(id, siteId);
 		return 0;
 	}
 
 	@Override
-	public Integer setUserSite(UserId id, UserJobSite site)	throws CassandraException
+	public Integer setUserSite(UserId id, UserJobSite site)	throws CassandraException, CoachSecurityException 
 	{
+		check(id);
 		jobSiteManager.setUserSite(id, site);
 		return 0;
 	}
 
 	@Override
-	public UserJobSite getUserSite(UserId id, String siteId) throws CassandraException
+	public UserJobSite getUserSite(UserId id, String siteId) throws CassandraException, CoachSecurityException
 	{
+		check(id);
 		return jobSiteManager.getUserSite(id, siteId);
 	}
 
 	@Override
 	public Vector<UserDocument> getUserDocumentList(UserId id)
-			throws CassandraException {
+			throws CassandraException, CoachSecurityException {
+		check(id);
 		logger.info("Get document list");
 		return userDocumentManager.getUserDocumentList(id);
 	}
 
 	@Override
 	public String deleteUserDocument(UserId id, String documentId)
-			throws CassandraException {
+			throws CassandraException, CoachSecurityException {
+		check(id);
 		userDocumentManager.deleteUserDocument(id, documentId);
 		return documentId;
 	}
 
 	@Override
-	public String setUserDocument(UserId id, UserDocument document)	throws CassandraException
+	public String setUserDocument(UserId id, UserDocument document)	throws CassandraException, CoachSecurityException
 	{
+		check(id);
 		logger.info("Set document: " + document.ID + " " + document.name);
 		userDocumentManager.setUserDocument(id, document);
 		return document.ID;
 	}
 
 	@Override
-	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException
+	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException, CoachSecurityException
 	{
+		check(id);
 		Vector<NewsInformation> result = news.getLatestNews();
 		return result;
 	}
 
 	@Override
 	public Vector<UserOpportunity> getUserOpportunityList(UserId id,
-			String list) throws CassandraException {
+			String list) throws CassandraException, CoachSecurityException {
+		check(id);
 		return userOpportunityManager.getOpportunitiesList(id, list);
 	}
 
 	@Override
 	public UserOpportunity getUserOpportunity(UserId id, String oppId)
-			throws CassandraException {
+			throws CassandraException, CoachSecurityException {
+		check(id);
 		return userOpportunityManager.getOpportunityLong(id, oppId);
 	}
 
 	@Override
-	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException {
+	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException , CoachSecurityException
+	{
+		check(id);
 		userOpportunityManager.setUserOpportunity(id, opp, list);
 		return opp.ID;
 	}
 
 	@Override
-	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException {
+	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException, CoachSecurityException {
+		check(id);
 		userOpportunityManager.deleteUserOpportunity(id, oppId);
 		return oppId;
 	}
 
 	@Override
 	public Vector<UserLogEntry> getUserLogEntryList(UserId id, String oppId)
-			throws CassandraException {
+			throws CassandraException, CoachSecurityException {
+		check(id);
 		return userLogManager.getLogList(id, oppId);
 	}
 
 	@Override
 	public UserLogEntry getUserLogEntry(UserId id, String logId)
-			throws CassandraException {
+			throws CassandraException, CoachSecurityException {
+		check(id);
 		return userLogManager.getLogEntryLong(id, logId);
 	}
 
 	@Override
 	public String setUserLogEntry(UserId id, UserLogEntry log)
-			throws CassandraException {
+			throws CassandraException, CoachSecurityException {
+		check(id);
 		userLogManager.setUserLogEntry(id, log);
 		return log.ID;
 	}
 
 	@Override
 	public String deleteUserLogEntry(UserId id, String logId)
-			throws CassandraException {
+			throws CassandraException, CoachSecurityException {
+		check(id);
 		userLogManager.deleteUserLogEntry(id, logId);
 		return logId;
 	}
 
 	@Override
-	public String sendComment(UserId user, String value) throws CassandraException 
+	public String sendComment(UserId id, String value) throws CassandraException , CoachSecurityException
 	{
-		account.sendComment(user, value);
+		check(id);
+		account.sendComment(id, value);
 		return null;
 	}
 
 	@Override
-	public Vector<UserDocumentId> getUserDocumentIdList(UserId userId)
-			throws CassandraException {
-		return userDocumentManager.getUserDocumentIdList(userId);
+	public Vector<UserDocumentId> getUserDocumentIdList(UserId id)
+			throws CassandraException, CoachSecurityException {
+		check(id);
+		return userDocumentManager.getUserDocumentIdList(id);
 	}
 
 	@Override
 	public Vector<TodoEvent> getTodoEventList(UserId id, String lang)
-			throws CassandraException
+			throws CassandraException, CoachSecurityException
 	{
+		check(id);
 		return todoList.getTodoEventList(id, lang);
 	}
 
 	@Override
 	public Boolean setTodoEvent(UserId id, TodoEvent todo)
-			throws CassandraException
+			throws CassandraException, CoachSecurityException
 	{
+		check(id);
 		todoList.setTodoEvent(id, todo);
 		return new Boolean(true);
 	}
 
 	@Override
 	public Boolean deleteTodoEvent(UserId id, TodoEvent todo)
-			throws CassandraException
+			throws CassandraException, CoachSecurityException
 	{
+		check(id);
 		todoList.deleteTodoEvent(id, todo.ID);
 		return new Boolean(true);
 	}
 
 	@Override
 	public Vector<ExternalContact> getExternalContactList(UserId id)
-			throws CassandraException
+			throws CassandraException, CoachSecurityException
 	{
+		check(id);
 		return userExternalContactManager.getExternalContactList(id);
 	}
 
 	@Override
 	public String setExternalContact(UserId id, ExternalContact contact)
-			throws CassandraException
+			throws CassandraException, CoachSecurityException
 	{
+		check(id);
 		userExternalContactManager.setExternalContact(id, contact);
 		return "";
 	}
 
 	@Override
 	public String deleteExternalContact(UserId id, String contact)
-			throws CassandraException
+			throws CassandraException, CoachSecurityException
 	{
+		check(id);
 		userExternalContactManager.deleteExternalContact(id, contact);
 		return "";
 	}

@@ -13,11 +13,11 @@ import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
-import com.TheJobCoach.webapp.util.client.EasyCallback;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
@@ -25,8 +25,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
@@ -91,12 +89,7 @@ public class ContentUserSite implements EntryPoint {
 
 	void getOneSite(String siteId)
 	{
-		AsyncCallback<UserJobSite> callback = new AsyncCallback<UserJobSite>()	{
-			@Override
-			public void onFailure(Throwable caught)
-			{
-				Window.alert(caught.getMessage());
-			}
+		ServerCallHelper<UserJobSite> callback = new ServerCallHelper<UserJobSite>(rootPanel)	{
 			@Override
 			public void onSuccess(UserJobSite result)
 			{
@@ -109,20 +102,12 @@ public class ContentUserSite implements EntryPoint {
 				dataProvider.updateRowData(0, jobSiteList);
 			}
 		};
-		try {
-			userService.getUserSite(user, siteId, callback);
-		} catch (CassandraException e) {
-			MessageBox.messageBoxException(rootPanel, e.toString());
-		}
+		userService.getUserSite(user, siteId, callback);
 	}
 
 	void getAllContent()
 	{		
-		AsyncCallback<List<String>> callback = new AsyncCallback<List<String>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-			}
+		ServerCallHelper<List<String>> callback = new ServerCallHelper<List<String>>(rootPanel) {
 			@Override
 			public void onSuccess(List<String> result) {
 				jobSiteList.clear();
@@ -135,11 +120,8 @@ public class ContentUserSite implements EntryPoint {
 				cellTable.redraw();
 			}
 		};
-		try {
-			userService.getUserSiteList(user, callback);
-		} catch (CassandraException e) {
-			MessageBox.messageBoxException(rootPanel, e.toString());
-		}
+		userService.getUserSiteList(user, callback);
+		
 	}
 
 
@@ -154,14 +136,14 @@ public class ContentUserSite implements EntryPoint {
 					EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
 						public void Run() throws CassandraException
 						{
-							userService.deleteUserSite(user, currentSite.ID, new EasyCallback<Integer>(rootPanel, new EasyCallback.SuccessRun<Integer>()
+							userService.deleteUserSite(user, currentSite.ID, new ServerCallHelper<Integer>(rootPanel)
 							{	
 								@Override
 								public void onSuccess(Integer r)
 								{
 									getAllContent();
 								}
-							}));
+							});
 						}});
 				}
 			}

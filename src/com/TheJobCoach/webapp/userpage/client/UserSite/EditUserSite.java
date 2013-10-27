@@ -11,10 +11,10 @@ import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
-import com.TheJobCoach.webapp.util.client.EasyCallback;
 import com.TheJobCoach.webapp.util.client.GridHelper;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -119,14 +119,14 @@ public class EditUserSite implements EntryPoint, IChanged {
 					public void Run() throws CassandraException
 					{
 						final UserJobSite resultSite = getUserJobSite();
-						userService.setUserSite(user, resultSite, new EasyCallback<Integer>(rootPanel, new EasyCallback.SuccessRun<Integer>()
+						userService.setUserSite(user, resultSite, new ServerCallHelper<Integer>(rootPanel)
 						{	
 							@Override
 							public void onSuccess(Integer r)
 							{
 								result.setResult(resultSite);
 							}
-						}));
+						});
 					}});
 				dBox.hide();			
 			}

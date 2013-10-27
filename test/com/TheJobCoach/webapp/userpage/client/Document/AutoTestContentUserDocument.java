@@ -11,10 +11,8 @@ import org.junit.Test;
 
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
-import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentRevision;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
@@ -72,7 +70,7 @@ public class AutoTestContentUserDocument extends GwtTest {
 		@Override
 		public void getUserDocumentList(UserId id,
 				AsyncCallback<Vector<UserDocument>> callback)
-				throws CassandraException {
+				 {
 			callback.onSuccess(docIdList);
 			calls++;			
 		}

@@ -13,17 +13,16 @@ import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
@@ -76,12 +75,8 @@ public class ContentExternalContact implements EntryPoint {
 	};
 
 	void getAllContent()
-	{		
-		AsyncCallback<Vector<ExternalContact>> callback = new AsyncCallback<Vector<ExternalContact>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				MessageBox.messageBoxException(rootPanel, caught.getMessage());
-			}
+	{	
+		ServerCallHelper<Vector<ExternalContact>> callback = new ServerCallHelper<Vector<ExternalContact>>(rootPanel) {
 			@Override
 			public void onSuccess(Vector<ExternalContact> result) {
 				ExternalContactList.clear();
@@ -91,13 +86,7 @@ public class ContentExternalContact implements EntryPoint {
 				cellTable.redraw();				
 			}
 		};
-		try {
-			userService.getExternalContactList(user, callback);
-		}
-		catch (CassandraException e) 
-		{
-			MessageBox.messageBoxException(rootPanel, e);
-		}
+		userService.getExternalContactList(user, callback);
 	}
 
 	private void delete(final ExternalContact contact)
@@ -109,21 +98,12 @@ public class ContentExternalContact implements EntryPoint {
 					public void complete(boolean ok) {
 						if (ok == true)
 						{
-							try {
-								userService.deleteExternalContact(user, contact.ID, new AsyncCallback<String>() {
-									public void onFailure(Throwable caught) {
-										MessageBox.messageBoxException(rootPanel, caught);
-									}
-									public void onSuccess(String result)
-									{
-										getAllContent();
-									}
-								});
-							}
-							catch (CassandraException e) 
-							{
-								MessageBox.messageBoxException(rootPanel, e);
-							}
+							userService.deleteExternalContact(user, contact.ID, new ServerCallHelper<String>(rootPanel) {
+								public void onSuccess(String result)
+								{
+									getAllContent();
+								}
+							});
 						}}});
 		mb.onModuleLoad();
 	}
@@ -136,59 +116,37 @@ public class ContentExternalContact implements EntryPoint {
 
 				@Override
 				public void setResult(ExternalContact result) {
-					
-					try 
-					{
-						if (result != null)
-						{
-							result.ID = SiteUUID.getDateUuid();
-							userService.setExternalContact(user, result, new AsyncCallback<String>() {
-								public void onFailure(Throwable caught) {
-									MessageBox.messageBoxException(rootPanel, caught);									
-								}
-								public void onSuccess(String result)
-								{
-									getAllContent();
-								}
-							});
-						}
-					}
-					catch (CassandraException e)
-					{
-						MessageBox.messageBoxException(rootPanel, e);
-					}
-				}
-			});
-		eus.onModuleLoad();
-		}
-	}
-	
-	private void updateExternalContact(ExternalContact contact)
-	{		
-		EditExternalContact eus = new EditExternalContact(rootPanel, contact, user, new EditExternalContactResult() {
-			@Override
-			public void setResult(ExternalContact result) {
-				try 
-				{
+
 					if (result != null)
 					{
-						userService.setExternalContact(user, result, new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								MessageBox.messageBoxException(rootPanel, caught);
-								//connectButton.setEnabled(true);
-							}
+						result.ID = SiteUUID.getDateUuid();
+						userService.setExternalContact(user, result, new ServerCallHelper<String>(rootPanel) {								
 							public void onSuccess(String result)
 							{
 								getAllContent();
 							}
 						});
-					}
+					}			
 				}
-				catch (CassandraException e)
+			});
+			eus.onModuleLoad();
+		}
+	}
+
+	private void updateExternalContact(ExternalContact contact)
+	{		
+		EditExternalContact eus = new EditExternalContact(rootPanel, contact, user, new EditExternalContactResult() {
+			@Override
+			public void setResult(ExternalContact result) {
+				if (result != null)
 				{
-					MessageBox.messageBoxException(rootPanel, e);
-				}
+					userService.setExternalContact(user, result, new ServerCallHelper<String>(rootPanel) {
+						public void onSuccess(String result)
+						{
+							getAllContent();
+						}
+					});
+				}				
 			}
 		});
 		eus.onModuleLoad();
@@ -264,7 +222,7 @@ public class ContentExternalContact implements EntryPoint {
 		firstNameColumn.setSortable(true);
 		lastColumn.setSortable(true);
 		organizationColumn.setSortable(true);
-		
+
 		cellTable.addColumn(firstNameColumn, langExternalContact._TextFirstName());
 		cellTable.addColumn(lastColumn, langExternalContact._TextLastName());
 		cellTable.addColumn(organizationColumn, langExternalContact._Text_Organization());
