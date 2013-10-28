@@ -116,6 +116,8 @@ public class MessageBox implements EntryPoint {
 		case QUESTION: imageIcon = new Image(questionIcon); break;
 		case ERROR:    imageIcon = new Image(errorIcon); break;
 		case WAIT:     imageIcon = new Image(waitIcon); break;
+		default:
+			break;
 		}
 
 		if (imageIcon != null) 
