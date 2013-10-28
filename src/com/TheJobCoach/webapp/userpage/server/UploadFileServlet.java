@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 
 public class UploadFileServlet extends HttpServlet {
 
@@ -42,6 +44,15 @@ public class UploadFileServlet extends HttpServlet {
 		}
 		logger.info("Upload for DOC ID:" + docId + " for user: " + user + " with token: " + token);
 		
+		try
+		{
+			ServletSecurityCheck.check(request, new UserId(user, token, UserId.UserType.USER_TYPE_SEEKER));
+		}
+		catch (CoachSecurityException e2)
+		{
+			return;
+		}
+
 		FileItemFactory factory = new DiskFileItemFactory(); 
 		ServletFileUpload upload = new ServletFileUpload(factory); 
 

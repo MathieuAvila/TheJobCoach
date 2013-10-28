@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.TheJobCoach.webapp.adminpage.shared.UserReport;
@@ -17,12 +18,12 @@ import com.TheJobCoach.webapp.mainpage.shared.UserId;
 @RemoteServiceRelativePath("admin")
 public interface AdminService extends RemoteService {
 	
-	public List<UserReport> getUserReportList(UserId id) throws CassandraException;
+	public List<UserReport> getUserReportList(UserId id) throws CassandraException, CoachSecurityException;
 
-	public Vector<NewsInformation> getNewsInformationList(UserId id, Date start, Date end) throws CassandraException;
-	public String createNewsInformation(UserId id, NewsInformation news) throws CassandraException;
-	public String deleteNewsInformation(UserId id, NewsInformation newsId) throws CassandraException;
+	public Vector<NewsInformation> getNewsInformationList(UserId id, Date start, Date end) throws CassandraException, CoachSecurityException;
+	public String createNewsInformation(UserId id, NewsInformation news) throws CassandraException, CoachSecurityException;
+	public String deleteNewsInformation(UserId id, NewsInformation newsId) throws CassandraException, CoachSecurityException;
 	
-	public String deleteUser(UserId user, String userName) throws CassandraException;
+	public String deleteUser(UserId user, String userName) throws CassandraException, CoachSecurityException;
 	
 }

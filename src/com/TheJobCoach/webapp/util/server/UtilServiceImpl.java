@@ -25,23 +25,17 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 	UserValues userValues = new UserValues();
 	ConnectionLog logManager = new ConnectionLog();
 	
-	private void check(UserId id) throws CoachSecurityException
-	{
-		HttpServletRequest request = this.getThreadLocalRequest();
-		HttpSession session = request.getSession();
-		CoachSecurityCheck.checkUser(id, session);
-	}
 	@Override
 	public Map<String,String> getValues(UserId id, String rootValue) throws CassandraException, SystemException , CoachSecurityException
 	{
-		check(id);
+		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		return userValues.getValues(id, rootValue);		
 	}
 	
 	@Override
 	public String setValues(UserId id, Map<String,String> map) throws CassandraException, SystemException , CoachSecurityException
 	{
-		check(id);
+		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		userValues.setValues(id, map, true);	
 		return "";
 	}
@@ -50,7 +44,7 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 	public UpdateResponse sendUpdateList(UserId id, UpdateRequest request) 	throws CassandraException, SystemException, CoachSecurityException
 	{
 		// TODO: Case with multiple windows at the same time.
-		check(id);
+		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		logManager.addLogTimeDay(
 				id.userName, 
 				request.from, 
