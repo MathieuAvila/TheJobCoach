@@ -11,6 +11,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +20,21 @@ import com.TheJobCoach.userdata.report.ReportActionHtml;
 import com.TheJobCoach.userdata.report.ReportExternalContactHtml;
 import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
+import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 
 public class DownloadReport extends HttpServlet {
 
 	private static final long serialVersionUID = -8067428735370164389L;
 	private static Logger logger = LoggerFactory.getLogger(DownloadReport.class);
+
+	private void check(HttpServletRequest request, UserId id) throws CoachSecurityException
+	{
+		HttpSession session = request.getSession();
+		CoachSecurityCheck.checkUser(id, session);
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,	IOException 
 	{
@@ -47,7 +56,16 @@ public class DownloadReport extends HttpServlet {
 		boolean onlyLogPeriod = FormatUtil.trueString.equals(logPeriod);
 		String contactDetailStr = request.getParameter("detail");
 		boolean contactDetail = FormatUtil.trueString.equals(contactDetailStr);
-		
+
+		try
+		{
+			check(request, new UserId(userId, token, UserId.UserType.USER_TYPE_SEEKER));
+		}
+		catch (CoachSecurityException e2)
+		{
+			return;
+		}
+
 		logger.info(
 				"Requesting report: " + type 
 				+ " user:" + userId 
@@ -76,7 +94,7 @@ public class DownloadReport extends HttpServlet {
 				ReportActionHtml report = new ReportActionHtml(user, lang);
 				doc = report.getReport(startDate, endDate, includeOppDetail, includeLogDetail, onlyLogPeriod);
 			}
-			if (type.equals("reportactivity"))				
+			else if (type.equals("reportactivity"))				
 			{
 				ReportExternalContactHtml report = new ReportExternalContactHtml(user, lang, contactDetail);
 				doc = report.getReport();
