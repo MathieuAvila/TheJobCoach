@@ -12,6 +12,9 @@
 	<extend-property name="locale" values="fr"/>
 	<extend-property name="locale" values="en"/>
 	 
+	<!--  needs to first ! -->
+	<entry-point class='com.TheJobCoach.webapp.util.client.TestSecurity'/>
+	
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestSetLang'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxUI'/>
 	<entry-point class='com.TheJobCoach.webapp.util.client.TestMessageBoxError'/>
@@ -36,7 +39,7 @@
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestContentTodoEvent'/>
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestExternalContact'/>
 	<entry-point class='com.TheJobCoach.webapp.adminpage.client.TestContentUsers'/>
-	
+		
 
 	<source path="client/timepicker"/>
 	

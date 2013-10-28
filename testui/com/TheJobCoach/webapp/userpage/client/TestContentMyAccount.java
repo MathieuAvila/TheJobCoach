@@ -1,9 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
+import com.TheJobCoach.webapp.util.client.TestSecurity;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -30,7 +30,7 @@ public class TestContentMyAccount implements EntryPoint {
 					hp.setStyleName("mainpage-content");
 					root.add(hp);
 					hp.setSize("100%", "100%");
-					ContentAccount cud = new ContentAccount(hp, new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER));
+					ContentAccount cud = new ContentAccount(hp, TestSecurity.defaultUser);
 					cud.onModuleLoad();
 				}
 			});

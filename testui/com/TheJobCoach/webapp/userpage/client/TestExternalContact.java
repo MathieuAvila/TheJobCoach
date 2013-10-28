@@ -4,17 +4,18 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentChooseExternalContact;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalContactList;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.TestSecurity;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -53,7 +54,7 @@ public class TestExternalContact implements EntryPoint {
 						hp.setStyleName("mainpage-content");
 						root.add(hp);
 						hp.setSize("100%", "100%");
-						ContentExternalContact cud = new ContentExternalContact(hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
+						ContentExternalContact cud = new ContentExternalContact(hp,TestSecurity.defaultUser);
 						cud.onModuleLoad();
 					}
 				});
@@ -92,7 +93,7 @@ public class TestExternalContact implements EntryPoint {
 						ComponentExternalContactList cud = new ComponentExternalContactList(
 								external_contact_list, 
 								hp, 
-								new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
+								TestSecurity.defaultUser);
 						cud.onModuleLoad();
 					}
 				});

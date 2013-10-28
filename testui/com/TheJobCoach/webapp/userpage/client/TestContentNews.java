@@ -1,8 +1,8 @@
 package com.TheJobCoach.webapp.userpage.client;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
+import com.TheJobCoach.webapp.util.client.TestSecurity;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -29,7 +29,7 @@ public class TestContentNews implements EntryPoint {
 					hp.setStyleName("mainpage-content");
 					root.add(hp);
 					hp.setSize("100%", "100%");
-					ContentNews cud = new ContentNews(hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER));
+					ContentNews cud = new ContentNews(hp, TestSecurity.defaultUser);
 					cud.onModuleLoad();
 				}
 			});
