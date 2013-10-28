@@ -3,9 +3,9 @@ package com.TheJobCoach.webapp.userpage.client.MyGoals;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;

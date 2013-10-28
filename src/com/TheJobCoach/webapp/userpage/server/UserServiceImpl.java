@@ -3,9 +3,6 @@ package com.TheJobCoach.webapp.userpage.server;
 import java.util.List;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,17 +15,16 @@ import com.TheJobCoach.userdata.UserExternalContactManager;
 import com.TheJobCoach.userdata.UserJobSiteManager;
 import com.TheJobCoach.userdata.UserLogManager;
 import com.TheJobCoach.userdata.UserOpportunityManager;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
-import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
 import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;

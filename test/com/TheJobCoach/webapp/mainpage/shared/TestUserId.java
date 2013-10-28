@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.TheJobCoach.webapp.userpage.shared.UserId;
+
 public class TestUserId {
 	
 	@Test

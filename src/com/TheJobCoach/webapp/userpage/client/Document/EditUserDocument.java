@@ -2,11 +2,11 @@ package com.TheJobCoach.webapp.userpage.client.Document;
 
 import java.util.Date;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.EasyAsync;

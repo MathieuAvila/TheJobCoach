@@ -8,8 +8,8 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;

@@ -2,10 +2,10 @@ package com.TheJobCoach.webapp.userpage.client.UserSite;
 
 import java.util.Date;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;

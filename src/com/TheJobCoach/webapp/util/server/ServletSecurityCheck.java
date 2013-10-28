@@ -3,7 +3,7 @@ package com.TheJobCoach.webapp.util.server;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 
 /**

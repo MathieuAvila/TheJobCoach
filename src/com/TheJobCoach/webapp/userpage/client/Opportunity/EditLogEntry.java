@@ -2,7 +2,6 @@ package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
 import java.util.Vector;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
@@ -10,6 +9,7 @@ import com.TheJobCoach.webapp.userpage.client.Document.ComponentDocumentList;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalContactList;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;

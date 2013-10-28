@@ -1,10 +1,9 @@
 package com.TheJobCoach.webapp.adminpage.client;
 
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
-
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;

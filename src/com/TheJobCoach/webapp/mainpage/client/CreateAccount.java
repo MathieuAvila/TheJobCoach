@@ -1,8 +1,8 @@
 package com.TheJobCoach.webapp.mainpage.client;
 
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;

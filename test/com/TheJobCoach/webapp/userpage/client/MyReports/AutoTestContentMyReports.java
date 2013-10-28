@@ -3,12 +3,13 @@ package com.TheJobCoach.webapp.userpage.client.MyReports;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.MyReports.ContentMyReports;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.ConstantsMyReports;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.google.gwt.dom.client.Document;

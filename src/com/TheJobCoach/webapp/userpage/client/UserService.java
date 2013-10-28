@@ -8,6 +8,7 @@ import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
@@ -15,7 +16,6 @@ import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 
 /**
  * The client side stub for the RPC service.

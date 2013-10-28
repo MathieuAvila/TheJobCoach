@@ -2,9 +2,9 @@ package com.TheJobCoach.webapp.userpage.client.MyReports;
 
 import java.util.Date;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DownloadIFrame;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.CheckedCheckBox;
 import com.TheJobCoach.webapp.util.client.CheckedDate;

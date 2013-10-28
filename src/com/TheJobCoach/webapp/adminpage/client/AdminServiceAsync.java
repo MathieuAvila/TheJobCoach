@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.adminpage.shared.UserReport;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**

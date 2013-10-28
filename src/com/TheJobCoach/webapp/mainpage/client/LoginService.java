@@ -2,8 +2,8 @@ package com.TheJobCoach.webapp.mainpage.client;
 
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.google.gwt.user.client.rpc.RemoteService;

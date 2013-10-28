@@ -3,7 +3,7 @@ package com.TheJobCoach.userdata;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public class UserDataCentralManager

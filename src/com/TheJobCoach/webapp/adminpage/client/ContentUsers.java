@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.TheJobCoach.webapp.adminpage.shared.UserReport;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;

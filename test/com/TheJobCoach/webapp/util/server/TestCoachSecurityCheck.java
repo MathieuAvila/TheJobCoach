@@ -1,8 +1,7 @@
 package com.TheJobCoach.webapp.util.server;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
 import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
@@ -11,7 +10,7 @@ import javax.servlet.http.HttpSessionContext;
 
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 
 @SuppressWarnings("deprecation")
@@ -34,7 +33,7 @@ public class TestCoachSecurityCheck {
 		}
 
 		@Override
-		public Enumeration getAttributeNames() {
+		public Enumeration<?> getAttributeNames() {
 			return null;
 		}
 
@@ -63,7 +62,6 @@ public class TestCoachSecurityCheck {
 			return null;
 		}
 
-		@SuppressWarnings("deprecation")
 		@Override
 		public HttpSessionContext getSessionContext() {
 			return null;

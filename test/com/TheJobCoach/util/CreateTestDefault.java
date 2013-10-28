@@ -1,9 +1,9 @@
 package com.TheJobCoach.util;
 
 import com.TheJobCoach.userdata.Account;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class CreateTestDefault {
 					new UserId("admin","mytokenadmin", UserType.USER_TYPE_ADMIN),
 					new UserInformation("nom", "admintoto@toto.com", "password", "admintoto@toto.com"), "en");
 			account.validateAccount("admin", "mytokenadmin");
-			account.loginAccount("user", "password");
+			account.loginAccount("admin", "password");
 		}
 		{
 			account.deleteAccount("coach");
@@ -39,7 +39,7 @@ public class CreateTestDefault {
 					new UserId("coach","mytokencoach", UserType.USER_TYPE_COACH),
 					new UserInformation("nom", "coachtoto@toto.com", "password", "coachtoto@toto.com"), "en");
 			account.validateAccount("coach", "mytokencoach");
-			account.loginAccount("user", "password");			
+			account.loginAccount("coach", "password");			
 		}
 	}
 }

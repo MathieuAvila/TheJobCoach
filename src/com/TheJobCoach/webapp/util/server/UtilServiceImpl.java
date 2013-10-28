@@ -2,12 +2,9 @@ package com.TheJobCoach.webapp.util.server;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import com.TheJobCoach.userdata.ConnectionLog;
 import com.TheJobCoach.userdata.UserValues;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.UtilService;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;

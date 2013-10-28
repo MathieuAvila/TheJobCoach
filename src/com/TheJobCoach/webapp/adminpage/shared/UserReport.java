@@ -3,7 +3,7 @@ package com.TheJobCoach.webapp.adminpage.shared;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
+import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 
 public class UserReport implements Serializable {
 	

@@ -1,9 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client.ExternalContact;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.ComponentUpdatePeriod;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;

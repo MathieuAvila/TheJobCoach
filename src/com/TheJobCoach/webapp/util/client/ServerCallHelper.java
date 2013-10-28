@@ -23,8 +23,7 @@ public class ServerCallHelper<T> implements AsyncCallback<T>
 		}
 		if (caught instanceof CoachSecurityException)
 		{
-			Window.Location.replace("/index.html");
-			Window.Location.reload();
+			Window.Location.replace("/TheJobCoach.html");
 		}
 	}
 	@Override

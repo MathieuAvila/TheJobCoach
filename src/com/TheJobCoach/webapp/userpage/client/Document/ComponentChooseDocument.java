@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IChooseDialogModel;

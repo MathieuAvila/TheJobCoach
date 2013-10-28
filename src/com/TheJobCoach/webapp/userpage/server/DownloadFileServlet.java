@@ -10,13 +10,14 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.UserDocumentManager;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;

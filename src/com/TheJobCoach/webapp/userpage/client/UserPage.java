@@ -3,7 +3,6 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.client.MainPage;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
@@ -13,6 +12,7 @@ import com.TheJobCoach.webapp.userpage.client.Opportunity.ContentUserOpportunity
 import com.TheJobCoach.webapp.userpage.client.Todo.ContentTodo;
 import com.TheJobCoach.webapp.userpage.client.UserSite.ContentUserSite;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -50,7 +50,7 @@ public class UserPage implements EntryPoint {
 	final VerticalPanel simplePanelContent = new VerticalPanel();
 	Label selectedMenu = null;
 
-	UserId userId = new UserId("user", "user", UserId.UserType.USER_TYPE_SEEKER);
+	UserId userId = null;
 
 	public void setUser(UserId _userId)
 	{

@@ -3,7 +3,7 @@ package com.TheJobCoach.webapp.util.client;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UpdateRequest;
 import com.TheJobCoach.webapp.util.shared.UpdateResponse;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;

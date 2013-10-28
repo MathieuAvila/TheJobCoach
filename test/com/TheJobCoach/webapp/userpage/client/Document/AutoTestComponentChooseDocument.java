@@ -10,11 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.TheJobCoach.webapp.GwtTestUtilsWrapper;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentRevision;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;

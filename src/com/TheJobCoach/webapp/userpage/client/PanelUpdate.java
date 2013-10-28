@@ -2,7 +2,7 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.Date;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.UtilService;
 import com.TheJobCoach.webapp.util.client.UtilServiceAsync;

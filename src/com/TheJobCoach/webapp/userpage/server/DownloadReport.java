@@ -11,13 +11,14 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.report.ReportActionHtml;
 import com.TheJobCoach.userdata.report.ReportExternalContactHtml;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
-import com.TheJobCoach.webapp.mainpage.shared.UserId.UserType;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;

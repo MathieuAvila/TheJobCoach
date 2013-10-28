@@ -13,11 +13,11 @@ import org.junit.Test;
 
 import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.ErrorCatcherMessageBox;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentRevision;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.IEditResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.google.gwt.user.client.Event;

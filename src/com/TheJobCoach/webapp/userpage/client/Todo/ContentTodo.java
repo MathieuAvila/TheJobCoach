@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.MessageBox;

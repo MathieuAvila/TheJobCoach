@@ -1,7 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset.IApply;

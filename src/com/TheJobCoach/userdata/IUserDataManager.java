@@ -1,6 +1,6 @@
 package com.TheJobCoach.userdata;
 
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public interface IUserDataManager

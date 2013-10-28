@@ -4,14 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import com.TheJobCoach.webapp.adminpage.client.AdminService;
 import com.TheJobCoach.webapp.adminpage.shared.UserReport;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
-import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
@@ -26,13 +22,6 @@ public class AdminServiceImpl extends RemoteServiceServlet implements AdminServi
 	static com.TheJobCoach.userdata.Account account = new com.TheJobCoach.userdata.Account();
 	static com.TheJobCoach.admindata.News news = new com.TheJobCoach.admindata.News();
 	
-	private void check(UserId id) throws CoachSecurityException
-	{
-		HttpServletRequest request = this.getThreadLocalRequest();
-		HttpSession session = request.getSession();
-		CoachSecurityCheck.checkUser(id, session);
-	}
-
 	@Override
 	public List<UserReport> getUserReportList(UserId id)
 			throws CassandraException, CoachSecurityException {

@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.TheJobCoach.webapp.adminpage.shared.UserReport;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 
 /**
  * The client side stub for the RPC service.

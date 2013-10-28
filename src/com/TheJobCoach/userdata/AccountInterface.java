@@ -5,8 +5,8 @@ import java.util.Vector;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
-import com.TheJobCoach.webapp.mainpage.shared.UserId;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 
 public interface AccountInterface
