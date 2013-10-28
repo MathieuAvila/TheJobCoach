@@ -82,11 +82,11 @@ public class TimePicker extends Composite implements HasValue<Long>, HasValueCha
 
     public static final Long getValueForNextHour() {
         Date date = new Date();
-        long value = UTCDateBox.date2utc(date);
+        long value = TimeUtils.date2utc(date);
 
         // remove anything after an hour and add an hour
         long hour = 60 * 60 * 1000;
-        value = value % UTCDateBox.DAY_IN_MS;
+        value = value % TimeUtils.DAY_IN_MS;
         return value - (value % hour) + hour;
     }
 

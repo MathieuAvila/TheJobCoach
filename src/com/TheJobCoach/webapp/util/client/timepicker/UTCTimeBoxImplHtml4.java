@@ -87,7 +87,7 @@ public class UTCTimeBoxImplHtml4 extends UTCTimeBoxImplShared {
             this.offsetFromMidnight = offsetFromMidnight;
 
             // format the time in the local time zone
-            long time = UTCDateBox.timezoneOffsetMillis(new Date(0)) + offsetFromMidnight;
+            long time = TimeUtils.timezoneOffsetMillis(new Date(0)) + offsetFromMidnight;
             value = timeFormat.format(new Date(time));
 
             Anchor anchor = new Anchor(value);

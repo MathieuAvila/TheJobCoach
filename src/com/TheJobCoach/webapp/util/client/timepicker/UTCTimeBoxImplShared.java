@@ -70,7 +70,7 @@ public abstract class UTCTimeBoxImplShared extends Composite implements UTCTimeB
             // midnight GMT
             Date date = new Date(0);
             // offset by timezone and value
-            date.setTime(UTCDateBox.timezoneOffsetMillis(date) + value.longValue());
+            date.setTime(TimeUtils.timezoneOffsetMillis(date) + value.longValue());
             // format it
             return fmt.format(date);
         }
@@ -108,7 +108,7 @@ public abstract class UTCTimeBoxImplShared extends Composite implements UTCTimeB
     protected static final Long parseUsingFormat(String text, DateTimeFormat fmt) {
         Date date = new Date(0);
         int num = fmt.parse(text, 0, date);
-        return (num != 0) ? new Long(normalizeInLocalRange(date.getTime() - UTCDateBox.timezoneOffsetMillis(date))) : null;
+        return (num != 0) ? new Long(normalizeInLocalRange(date.getTime() - TimeUtils.timezoneOffsetMillis(date))) : null;
     }
    
     protected static final Long parseUsingFallbacks(String text, DateTimeFormat primaryTimeFormat) {
@@ -120,7 +120,7 @@ public abstract class UTCTimeBoxImplShared extends Composite implements UTCTimeB
     }
 
     protected static long normalizeInLocalRange(long time) {
-        return (time + UTCDateBox.DAY_IN_MS) % UTCDateBox.DAY_IN_MS;
+        return (time + TimeUtils.DAY_IN_MS) % TimeUtils.DAY_IN_MS;
     }
 
    
