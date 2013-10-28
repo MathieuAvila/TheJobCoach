@@ -15,10 +15,7 @@ public class CoachSecurityCheck
 	public static void checkUser(UserId id, HttpSession session) throws CoachSecurityException
 	{
 		UserId loggedin = (UserId)session.getAttribute(SESSION_VARIABLE);
-		System.out.println(" 1 " + id.userName);
 		if (loggedin == null) throw new CoachSecurityException();
-		System.out.println(" 2 " + loggedin.userName);
-		System.out.println(" 3 " + !loggedin.equals(id));
 		if (!loggedin.equals(id)) throw new CoachSecurityException();
 	}
 
