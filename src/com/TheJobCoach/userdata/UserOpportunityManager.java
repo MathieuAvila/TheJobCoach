@@ -22,7 +22,8 @@ public class UserOpportunityManager {
 	
 	final public static String MANAGED_LIST = "managed";
 	
-	
+	final static UserLogManager log = new UserLogManager();
+
 	public UserOpportunityManager()
 	{
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
@@ -114,7 +115,7 @@ public class UserOpportunityManager {
 				(new ShortMap())
 				.add(result.ID, result.ID)
 				.get());
-		boolean resultReq = CassandraAccessor.updateColumn(
+		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_DATA, 
 				result.ID, 
 				(new ShortMap())
@@ -134,18 +135,10 @@ public class UserOpportunityManager {
 				.add("note", result.note)
 				.add("status", UserOpportunity.applicationStatusToString(result.status))
 				.get());	
-		if (resultReq == false)
-		{
-			throw new CassandraException(); 
-		}
-		resultReq = CassandraAccessor.updateColumn(
+		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_LIST, 
 				id.userName,
 				(new ShortMap()).add(result.ID, result.ID).get());
-		if (resultReq == false)
-		{
-			throw new CassandraException(); 
-		}
 	}
 
 	public void deleteUserOpportunityFromList(UserId id, String ID, String listName) throws CassandraException
@@ -156,7 +149,6 @@ public class UserOpportunityManager {
 
 	public void deleteUserOpportunity(UserId id, String ID) throws CassandraException 
 	{
-		UserLogManager log = new UserLogManager();
 		log.deleteOpportunityLogList(id, ID);
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, ID);
 	}
@@ -177,5 +169,7 @@ public class UserOpportunityManager {
 	public void deleteUser(UserId id) throws CassandraException
 	{
 		deleteUserList(id, MANAGED_LIST);
+		log.deleteUser(id);
 	}
+	
 }
