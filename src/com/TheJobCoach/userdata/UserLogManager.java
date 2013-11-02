@@ -1,30 +1,36 @@
 package com.TheJobCoach.userdata;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Vector;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
 import com.TheJobCoach.util.CassandraAccessor;
+import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
 
 public class UserLogManager {
 
 	final static String COLUMN_FAMILY_NAME_LIST = "loglist";
 	final static String COLUMN_FAMILY_NAME_DATA = "logdata";
-
+	final static String COLUMN_FAMILY_NAME_LOG_CHANGE = "logchange";
+	
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
+	static ColumnFamilyDefinition cfDefLogChange = null;
 
 	public UserLogManager()
 	{
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
 		cfDefData = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_DATA, cfDefData);
+		cfDefLogChange = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LOG_CHANGE, cfDefLogChange);
 	}
 
 	public Vector<UserLogEntry> getLogList(UserId id, String oppId) throws CassandraException 
@@ -91,6 +97,10 @@ public class UserLogManager {
 
 	public void setUserLogEntry(UserId id, UserLogEntry result) throws CassandraException 
 	{
+		UserLogEntry previousLog = getLogEntryLong(id, result.ID);
+		if (previousLog != null)
+			removeUserOppStatusChange(id, previousLog.eventDate, result.ID);
+		
 		String key = id.userName + "#" + result.opportunityId;
 		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_LIST, 
@@ -122,22 +132,15 @@ public class UserLogManager {
 			}
 		update.addVector("vcontact", contactVector);
 		
-		boolean resultReq = CassandraAccessor.updateColumn(
+		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_DATA, 
 				result.ID, 
-				update.get());	
-		if (resultReq == false)
-		{
-			throw new CassandraException(); 
-		}
-		resultReq = CassandraAccessor.updateColumn(
+				update.get());
+		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_LIST, 
 				id.userName,
 				(new ShortMap()).add(result.ID, result.ID).get());
-		if (resultReq == false)
-		{
-			throw new CassandraException(); 
-		}
+		addUserOppStatusChange(id, result.eventDate, result.ID);
 	}
 
 	public void deleteUserLogEntryFromList(UserId id, String ID, String oppId) throws CassandraException
@@ -148,6 +151,8 @@ public class UserLogManager {
 
 	public void deleteUserLogEntry(UserId id, String ID) throws CassandraException 
 	{
+		UserLogEntry previousLog = getLogEntryLong(id, ID);
+		removeUserOppStatusChange(id, previousLog.eventDate, ID);
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, ID);
 	}
 	
@@ -156,9 +161,50 @@ public class UserLogManager {
 		Vector<UserLogEntry> resultReq = getLogList(id, oppId);
 		for (UserLogEntry log: resultReq)
 		{			
-				deleteUserLogEntryFromList(id, log.ID, oppId);			
+			deleteUserLogEntryFromList(id, log.ID, oppId);
+			removeUserOppStatusChange(id, log.eventDate, log.ID);
 		}
 		String key = id.userName + "#" + oppId;		
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST, key);
+	}
+	
+	public void deleteUser(UserId id) throws CassandraException
+	{
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LOG_CHANGE, id.userName);
+	}
+
+	public void addUserOppStatusChange(UserId id, Date d, String logId) throws CassandraException
+	{
+		ShortMap update = new ShortMap().add(Convertor.getDateStringUnique(d), logId);
+		CassandraAccessor.updateColumn(
+				COLUMN_FAMILY_NAME_LOG_CHANGE, 
+				id.userName, 
+				update.get());	
+	}
+
+	public void removeUserOppStatusChange(UserId id, Date d, String logId) throws CassandraException
+	{
+		Date start = FormatUtil.startOfTheDay(d);
+		Date end = FormatUtil.endOfTheDay(d);
+		String strStart = FormatUtil.getDateString(start);
+		String strEnd = FormatUtil.getDateString(end);
+		Map<String, String> values = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME_LOG_CHANGE, id.userName, strStart, strEnd, 
+				1000); // TODO: can be more than that. Do we really care of this use case ?
+		for (String key: values.keySet())
+		{
+			if (values.get(key).equals(logId))
+			{
+				CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_LOG_CHANGE, id.userName, key);
+			};
+		}
+	}
+
+	public Vector<String> getPeriodUserOppStatusChange(UserId id, Date start, Date end) throws CassandraException
+	{
+		String strStart = FormatUtil.getDateString(start);
+		String strEnd = FormatUtil.getDateString(end);
+		Map<String, String> values = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME_LOG_CHANGE, id.userName, strStart, strEnd, 
+				1000); // TODO: can be more than that. Do we really care of this use case ?
+		return new Vector<String>(values.values());
 	}
 }

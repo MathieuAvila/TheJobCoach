@@ -30,16 +30,6 @@ public class TestUserLogManager {
 	
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	
-	@SuppressWarnings("deprecation")
-	static Date getDate(int year, int month, int day)
-	{
-		Date result = new Date();
-		result.setDate(day);
-		result.setMonth(month);
-		result.setYear(year - 1900);
-		return result;
-	}
-	
 	static String contact1 = "contact1";
 	static String contact2 = "contact2";
 	static String contact3 = "contact3";
@@ -50,17 +40,17 @@ public class TestUserLogManager {
 	static Vector<ExternalContact> externalContactList = new Vector<ExternalContact>(Arrays.asList(external_contact1, external_contact2, external_contact3));
 	static Vector<ExternalContact> externalContactList_Filtered = new Vector<ExternalContact>(Arrays.asList(external_contact1, external_contact3));
 
-	static UserOpportunity opportunity1 = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 2, 1),
+	static UserOpportunity opportunity1 = new UserOpportunity("opp1", CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 2, 1),
 			"title1", "description1", "companyId1",
 			"contractType1",  1,  
-			getDate(2000, 1, 1), getDate(2000, 1, 1),
+			CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "note1");
 
-	static UserOpportunity opportunity2 = new UserOpportunity("opp2", getDate(2000, 1, 2), getDate(2000, 2, 2),
+	static UserOpportunity opportunity2 = new UserOpportunity("opp2", CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  2,  
-			getDate(2000, 1, 2), getDate(2000, 1, 2),
+			CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.NEW, "note2");
 
@@ -75,19 +65,19 @@ public class TestUserLogManager {
 	static Vector<UserDocumentId> docIdListVoid = new Vector<UserDocumentId>();
 	
 	static UserLogEntry userLog1 = new UserLogEntry("opp1", "log1", "title1", "description1", 
-			getDate(2000, 2, 1),
+			CoachTestUtils.getDate(2000, 2, 1),
 			LogEntryType.INFO, externalContactList, docIdList, "note1", false);
 	
 	static UserLogEntry userLog1_less = new UserLogEntry("opp1", "log1", "title1", "description1", 
-			getDate(2000, 2, 1),
+			CoachTestUtils.getDate(2000, 2, 1),
 			LogEntryType.INFO, externalContactList_void, docIdList_less, "note1_less", false);
 	
 	static UserLogEntry userLog2 = new UserLogEntry("opp1", "log2", "title2", "description2", 
-			getDate(2000, 2, 1),
+			CoachTestUtils.getDate(2000, 2, 1),
 			LogEntryType.INFO, externalContactList_void, docIdListVoid, "note2", false);
 		
 	static UserLogEntry userLog3 = new UserLogEntry("opp2", "log3", "title3", "description3", 
-			getDate(2000, 2, 1),
+			CoachTestUtils.getDate(2000, 2, 1),
 			LogEntryType.INFO, externalContactList_void, docIdListVoid, "note3", true);
 	
 	private void checkContactList(Vector<ExternalContact> op1, Vector<ExternalContact> op2)
@@ -214,4 +204,89 @@ public class TestUserLogManager {
 		checkUserLogEntry(log1, userLog1, false);
 		checkContactList(log1.linkedExternalContact, externalContactList_Filtered);	
 	}
+	
+	@Test
+	public void testStatusChange() throws CassandraException 
+	{
+		UserLogEntry userLog_timeA = new UserLogEntry("opp_timeA", "log_opp1_timeA", "title", "description", 
+				CoachTestUtils.getDate(2100, 2, 10),
+				LogEntryType.INFO, externalContactList_void, docIdListVoid, "note2", false);
+		
+		UserLogEntry userLog_timeB = new UserLogEntry("opp_timeB", "log_opp1_timeB", "title", "description", 
+				CoachTestUtils.getDate(2100, 3, 10),
+				LogEntryType.INFO, externalContactList_void, docIdListVoid, "note2", false);
+		
+		UserLogEntry userLog_timeC = new UserLogEntry("opp_timeC", "log_opp1_timeC", "title", "description", 
+				CoachTestUtils.getDate(2100, 4, 10),
+				LogEntryType.INFO, externalContactList_void, docIdListVoid, "note2", false);
+
+		UserLogEntry userLog_timeC_replaced = new UserLogEntry("opp_timeC", "log_opp1_timeC", "title", "description", 
+				CoachTestUtils.getDate(2100, 4, 20),
+				LogEntryType.INFO, externalContactList_void, docIdListVoid, "note2", false);
+		
+		UserLogEntry userLog_timeD = new UserLogEntry("opp_timeD", "log_opp1_timeD", "title", "description", 
+				CoachTestUtils.getDate(2100, 5, 10),
+				LogEntryType.INFO, externalContactList_void, docIdListVoid, "note2", false);
+		
+		UserId id_tmp = new UserId("user_tmp", "token", UserId.UserType.USER_TYPE_SEEKER);
+		
+		manager.setUserLogEntry(id_tmp, userLog_timeA);
+		manager.setUserLogEntry(id_tmp, userLog_timeB);
+		manager.setUserLogEntry(id_tmp, userLog_timeC);
+		manager.setUserLogEntry(id_tmp, userLog_timeD);
+		
+		Date first_date = CoachTestUtils.getDate(2100, 1, 5);
+		Date start = CoachTestUtils.getDate(2100, 3, 5);
+		Date end = CoachTestUtils.getDate(2100, 4, 15);
+		Date end_replaced = CoachTestUtils.getDate(2100, 4, 25);
+		Date last_date = CoachTestUtils.getDate(2100, 7, 5);
+		
+		// Get all
+		Vector<String> result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		assertEquals(2, result.size());
+		assertEquals(userLog_timeB.ID, result.get(0));
+		assertEquals(userLog_timeC.ID, result.get(1));
+		
+		// Delete one log
+		manager.deleteUserLogEntry(id_tmp, userLog_timeB.ID);
+		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		assertEquals(1, result.size());
+		assertEquals(userLog_timeC.ID, result.get(0));
+		
+		// Set back deleted log
+		manager.setUserLogEntry(id_tmp, userLog_timeB);
+		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		assertEquals(2, result.size());
+		assertEquals(userLog_timeB.ID, result.get(0));
+		assertEquals(userLog_timeC.ID, result.get(1));
+		
+		// Delete the whole opportunity
+		manager.deleteOpportunityLogList(id_tmp, userLog_timeC.opportunityId);
+		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		assertEquals(1, result.size());
+		assertEquals(userLog_timeB.ID, result.get(0));
+		
+		// Set back deleted log, replace with another one, expect date change
+		manager.setUserLogEntry(id_tmp, userLog_timeC);
+		manager.setUserLogEntry(id_tmp, userLog_timeC_replaced);
+		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		// First call in previous period: only B
+		assertEquals(1, result.size());
+		assertEquals(userLog_timeB.ID, result.get(0));
+		// Second call in new period: B and new C
+		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end_replaced);
+		assertEquals(userLog_timeB.ID, result.get(0));
+		assertEquals(userLog_timeC_replaced.ID, result.get(1));
+		
+		// check all.
+		result = manager.getPeriodUserOppStatusChange(id_tmp, first_date, last_date);
+		assertEquals(4, result.size());
+		
+		// Delete the whole user
+		manager.deleteUser(id_tmp);
+		result = manager.getPeriodUserOppStatusChange(id_tmp, first_date, last_date);
+		assertEquals(0, result.size());
+	}
+	
+	
 }
