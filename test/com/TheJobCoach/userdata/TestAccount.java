@@ -65,9 +65,10 @@ public class TestAccount
 	}
 
 	@Test
-	public void test01ExistsAccount()
+	public void test01ExistsAccount() throws CassandraException
 	{	
 		assertEquals(false, account.existsAccount("fake one"));
+		test00CreateAccount();
 		assertEquals(true, account.existsAccount(id));
 	}
 
@@ -92,6 +93,7 @@ public class TestAccount
 	public void test04CreateAccountType() throws CassandraException
 	{
 		{
+			account.deleteAccount(idAdmin);
 			MailerFactory.setMailer(mockMail);			
 			CreateAccountStatus status = account.createAccountWithToken(
 					new UserId(idAdmin, tokenAdmin, UserId.UserType.USER_TYPE_ADMIN),
@@ -104,6 +106,7 @@ public class TestAccount
 			assertEquals(UserId.UserType.USER_TYPE_ADMIN, loginCred.id.type);
 		}
 		{
+			account.deleteAccount(idCoach);
 			MailerFactory.setMailer(mockMail);
 			CreateAccountStatus status = account.createAccountWithToken(
 					new UserId(idCoach, tokenCoach, UserId.UserType.USER_TYPE_COACH),
@@ -115,6 +118,7 @@ public class TestAccount
 			assertEquals(UserId.UserType.USER_TYPE_COACH, loginCred.id.type);
 		}
 		{
+			account.deleteAccount(idSeeker);
 			MailerFactory.setMailer(mockMail);
 			CreateAccountStatus status = account.createAccountWithToken(
 					new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER),
