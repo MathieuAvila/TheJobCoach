@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -55,18 +54,42 @@ public class ConnectionLog implements IUserDataManager {
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_CONNECTIONLOG, userName, map);
 	}
 
-	public int getLogDays(String userName, Date start, Date end) throws CassandraException
+	public class LogTimeResult
 	{
+		public int totalDay;
+		public int startOk;
+		public int endOk;
+	}
+	
+	public LogTimeResult getLogDays(String userName, Date start, Date end) throws CassandraException
+	{
+		LogTimeResult result = new LogTimeResult();
 		String dStart = FormatUtil.getDateString(FormatUtil.startOfTheDay(start));
 		String dEnd = FormatUtil.getDateString(FormatUtil.endOfTheDay(end));
 		Map<String, String> res = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME_CONNECTIONLOG, userName, dStart, dEnd, 10000);
 		Set<Date> aggr = new HashSet<Date>();
+		Set<Date> aggrStartOk = new HashSet<Date>();
+		Set<Date> aggrEndOk = new HashSet<Date>();
+		Date currentStart= FormatUtil.sameDayTimeAs(start);
+		Date currentEnd= FormatUtil.sameDayTimeAs(end);
+		
 		for (String d: res.keySet())
 		{
-			Date cDate = FormatUtil.startOfTheDay(FormatUtil.getStringDate(d));
+			Date realDate = FormatUtil.getStringDate(d);
+			Date cDate = FormatUtil.startOfTheDay(realDate);
 			aggr.add(cDate);
+			Date currentTime = FormatUtil.sameDayTimeAs(realDate);
+			if (currentTime.before(currentStart))
+				aggrStartOk.add(cDate);
+			if (currentTime.before(currentEnd))
+				aggrEndOk.add(cDate);
+			else
+				aggrEndOk.remove(cDate);
 		}
-		return aggr.size();
+		result.totalDay = aggr.size();
+		result.startOk = aggrStartOk.size();
+		result.endOk = aggrEndOk.size();
+		return result;
 	}
 	
 	public int getLogTimeDay(String userName, Date date) throws CassandraException
