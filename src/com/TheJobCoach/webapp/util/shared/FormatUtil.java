@@ -73,6 +73,16 @@ public class FormatUtil
 	}
 	
 	@SuppressWarnings("deprecation")
+	public static Date sameDayTimeAs(Date d)
+	{
+		Date r = new Date();
+		r.setHours(d.getHours());
+		r.setMinutes(d.getMinutes());
+		r.setSeconds(d.getSeconds());
+		return r;
+	}
+
+	@SuppressWarnings("deprecation")
 	public static Date endOfTheDay(Date d)
 	{
 		Date r = new Date(d.getTime());
