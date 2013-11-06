@@ -5,6 +5,16 @@ import java.util.Date;
 public class FormatUtil 
 {
 
+	public static String trueString = "1";
+	public static String falseString = "0";
+	
+	public enum PERIOD_TYPE 
+	{ 
+		PERIOD_TYPE_WEEK,
+		PERIOD_TYPE_2WEEKS,
+		PERIOD_TYPE_MONTH
+	};
+	
 	public static String fillWithZeroCount(int i, int nbDigit)
 	{
 		String v = String.valueOf(i);
@@ -65,10 +75,11 @@ public class FormatUtil
 	@SuppressWarnings("deprecation")
 	public static Date startOfTheDay(Date d)
 	{
-		Date r = new Date(d.getTime());
+		Date r = new Date(0);
+		r.setYear(d.getYear());
+		r.setMonth(d.getMonth());
+		r.setDate(d.getDate());
 		r.setHours(0);
-		r.setMinutes(0);
-		r.setSeconds(0);
 		return r;
 	}
 	
@@ -105,6 +116,55 @@ public class FormatUtil
 		return r;
 	}
 
-	public static String trueString = "1";
-	public static String falseString = "0";
+	final static long MS_PER_WEEK = 1000 * 60 * 60 * 24 * 7;
+
+	public void copyDate()
+	{
+		
+	}
+
+	@SuppressWarnings("deprecation")
+	public static void getPeriod(PERIOD_TYPE type, int count, Date current, Date periodStart, Date periodEnd)
+	{
+		switch (type)
+		{
+		case PERIOD_TYPE_MONTH:
+		{
+			periodStart.setTime(current.getTime());
+			periodStart.setDate(1);
+			periodStart.setTime(startOfTheDay(periodStart).getTime());
+			periodStart.setMonth(periodStart.getMonth() + count);
+			periodEnd.setTime(periodStart.getTime());
+			periodEnd.setMonth(periodEnd.getMonth() + 1);
+			periodEnd.setTime(periodEnd.getTime() - 1);
+		}
+		break;
+		case PERIOD_TYPE_2WEEKS:
+		case PERIOD_TYPE_WEEK:
+		{
+			int interval = (type == PERIOD_TYPE.PERIOD_TYPE_WEEK) ? 1 : 2;
+			Date fixedDate = getStringDate("2013_10_11_0_0_0");
+			System.out.println("fixed " + fixedDate);
+			long fixedRef = fixedDate.getTime();
+			long currentRef = current.getTime();
+
+			long diffWeek = (currentRef - fixedRef) / MS_PER_WEEK + (currentRef - fixedRef) < 0 ? -1*interval : 0;
+			
+			long boundary = diffWeek % interval;
+			
+			System.out.println("boundary " + boundary + " diffWeek " + diffWeek);
+			
+			
+			long startWeekMs = fixedRef + diffWeek * MS_PER_WEEK;
+			long startPeriodMs = startWeekMs + (count * interval - boundary ) * MS_PER_WEEK;
+			long endPeriodMs = startPeriodMs + interval * MS_PER_WEEK;
+			periodStart.setTime(startPeriodMs);
+			periodEnd.setTime(endPeriodMs -1);
+		}
+		break;
+		default:
+			break;
+		}
+		
+	}
 }

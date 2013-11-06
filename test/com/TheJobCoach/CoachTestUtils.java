@@ -9,7 +9,7 @@ public class CoachTestUtils
 	{
 		Date result = new Date();
 		result.setDate(day);
-		result.setMonth(month);
+		result.setMonth(month - 1);
 		result.setYear(year - 1900);
 		return result;
 	}
