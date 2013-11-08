@@ -1,11 +1,12 @@
 package com.TheJobCoach.webapp.userpage.client.MyGoals;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
+import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
@@ -17,10 +18,19 @@ import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset;
 import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset.IApply;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IExtendedField;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Grid;
 
@@ -77,13 +87,43 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 	CheckedTextField tfPhoneCall = new CheckedTextField("[0-9]*");
 	CheckedLabel clPhoneCall = new CheckedLabel(langGoals.imust_phonecalls(), false, tfPhoneCall);
 	
+	Label previousDate = new Label();
+	Label nextDate = new Label();
+	
+	int currentPeriod = 0;
+	
+	ButtonImageText nextButton = new ButtonImageText(ButtonImageText.Type.BACK, "Suivant");
+	ButtonImageText prevButton = new ButtonImageText(ButtonImageText.Type.BACK, "Précédent");
 	
 	void getValues()
 	{	
 		values.preloadValueList("PERFORMANCE", this);
 	}
-
+	
+	static void helperInsertElementInGrid(Grid bigGrid, int line, String text)
+	{
+	SimplePanel panelTitle = new SimplePanel();
+	bigGrid.setWidget(line, 0, panelTitle);
+	ContentHelper.insertSubTitlePanel(panelTitle, text);
+	}
+	
 	HashMap<String, IExtendedField> fields = new HashMap<String, IExtendedField>();
+	
+	public void addPeriod(int count)
+	{
+		// Now update
+		Date previousDateValue = new Date();
+		Date nextDateValue = new Date();
+		currentPeriod += count;
+		if (currentPeriod > 0) currentPeriod = 0;
+		FormatUtil.getPeriod(UserValuesConstantsMyGoals.mapStringPeriod.get(tfGoalPeriod.getValue()), currentPeriod, new Date(), previousDateValue, nextDateValue);
+		
+		previousDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(previousDateValue));
+		nextDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(nextDateValue));
+		
+		// No next on current period
+		nextButton.setEnabled(currentPeriod < 0);
+	}
 	
 	/**
 	 * This is the entry point method.
@@ -96,80 +136,100 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setSize("100%", "");
+		
+		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextMyGoals(), ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent());
 		rootPanel.add(simplePanelCenter);
 
-		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextMyGoals(), ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent());
+		Grid bigGrid = new Grid(15, 3);
+		bigGrid.setWidth("100%");
+		
+		simplePanelCenter.add(bigGrid);
 
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langGoals.evaluationPeriod());
-		Grid gridPeriod = new Grid(1, 2);
-		simplePanelCenter.add(gridPeriod);
-		gridPeriod.setWidget(0,0, clGoalPeriod);
-		gridPeriod.setWidget(0,1, tfGoalPeriod.getItem());
+		helperInsertElementInGrid(bigGrid, 0, langGoals.evaluationPeriod());
+		
+		bigGrid.setWidget(1, 0, clGoalPeriod);
+		bigGrid.setWidget(1, 1, tfGoalPeriod.getItem());
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD, tfGoalPeriod);
+		tfGoalPeriod.getItem().addChangeHandler(new ChangeHandler()
+		{
+			@Override
+			public void onChange(ChangeEvent event)
+			{
+				currentPeriod = 0;
+				addPeriod(0);
+			}
+		});
+		
+		Grid gridPeriodEvaluation = new Grid(1, 4);
+		//gridPeriodEvaluation.setWidth("100%");
 
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langGoals.connectionTimes());
+		bigGrid.setWidget(1, 2, gridPeriodEvaluation);
+		prevButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				addPeriod(-1);
+			}
+		});
+		gridPeriodEvaluation.setWidget(0, 0, prevButton);
+		gridPeriodEvaluation.setWidget(0, 1, previousDate);
+		gridPeriodEvaluation.setWidget(0, 2, nextDate);
+		previousDate.setWidth("10em");
+		nextDate.setWidth("10em");
+		nextButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				addPeriod(1);
+			}
+		});
+		gridPeriodEvaluation.setWidget(0, 3, nextButton);
+		
+		helperInsertElementInGrid(bigGrid, 2, langGoals.connectionTimes());
 
-		Grid grid0 = new Grid(3, 2);
-		simplePanelCenter.add(grid0);
+		bigGrid.setWidget(3,0, clConnectBefore);
+		bigGrid.setWidget(3,1, tfConnectBefore.getItem());
 
-		grid0.setWidget(0,0, clConnectBefore);
-		grid0.setWidget(0,1, tfConnectBefore.getItem());
+		bigGrid.setWidget(4,0, clConnectAfter);
+		bigGrid.setWidget(4,1, tfConnectAfter.getItem());
 
-		grid0.setWidget(1,0, clConnectAfter);
-		grid0.setWidget(1,1, tfConnectAfter.getItem());
-
-		grid0.setWidget(2,0, clConnectRatio);
-		grid0.setWidget(2,1, tfConnectRatio);
+		bigGrid.setWidget(5,0, clConnectRatio);
+		bigGrid.setWidget(5,1, tfConnectRatio);
 		
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, tfConnectBefore);
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, tfConnectAfter);
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, tfConnectRatio);
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langGoals.opportunityGoals());
+		helperInsertElementInGrid(bigGrid, 6, langGoals.opportunityGoals());
 
-		Grid grid1 = new Grid(1, 2);
-		simplePanelCenter.add(grid1);
-		
-		grid1.setWidget(0,0, clCreateOpportunity);
-		grid1.setWidget(0,1, tfCreateOpportunity);
+		bigGrid.setWidget(7,0, clCreateOpportunity);
+		bigGrid.setWidget(7,1, tfCreateOpportunity);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, tfCreateOpportunity);
 
-		Grid grid2 = new Grid(1, 2);
-		simplePanelCenter.add(grid2);
-		
-		grid2.setWidget(0,0, clCandidateOpportunity);
-		grid2.setWidget(0,1, tfCandidateOpportunity);
+		bigGrid.setWidget(8,0, clCandidateOpportunity);
+		bigGrid.setWidget(8,1, tfCandidateOpportunity);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY, tfCandidateOpportunity);
 
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langGoals.interviewGoals());
+		helperInsertElementInGrid(bigGrid, 9, langGoals.interviewGoals());
 
-		Grid grid3 = new Grid(1, 2);
-		simplePanelCenter.add(grid3);
-		
-		grid3.setWidget(0,0, clInterviewOpportunity);
-		grid3.setWidget(0,1, tfInterviewOpportunity);
+		bigGrid.setWidget(10,0, clInterviewOpportunity);
+		bigGrid.setWidget(10,1, tfInterviewOpportunity);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW, tfInterviewOpportunity);
 
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langGoals.phonecallGoals());
+		helperInsertElementInGrid(bigGrid, 11, langGoals.phonecallGoals());
 
-		Grid grid4 = new Grid(1, 2);
-		simplePanelCenter.add(grid4);
-		
-		grid4.setWidget(0,0, clPhoneCall);
-		grid4.setWidget(0,1, tfPhoneCall);
+		bigGrid.setWidget(12,0, clPhoneCall);
+		bigGrid.setWidget(12,1, tfPhoneCall);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL, tfPhoneCall);
 			
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langGoals.proposalGoals());
+		helperInsertElementInGrid(bigGrid, 13, langGoals.proposalGoals());
 
-		Grid grid5 = new Grid(1, 2);
-		simplePanelCenter.add(grid5);
-		
-		grid5.setWidget(0,0, clProposal);
-		grid5.setWidget(0,1, tfProposal);
+		bigGrid.setWidget(14,0, clProposal);
+		bigGrid.setWidget(14,1, tfProposal);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL, tfProposal);
 				
@@ -179,12 +239,14 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 		simplePanelCenter.add(applyReset);
 
-		getValues();		
+		getValues();
+		addPeriod(0);		
 	}
 
 	@Override
 	public void changed(boolean ok, boolean changed, boolean init) 
 	{
+		System.out.println("changed ... " + applyReset);
 		if (applyReset != null) applyReset.hasEvent();
 	}
 
@@ -199,6 +261,7 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 				fields.get(testKey).setValue(value);
 			}
 		}
+		addPeriod(0);
 	}
 
 	@Override
