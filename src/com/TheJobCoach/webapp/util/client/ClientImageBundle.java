@@ -47,6 +47,9 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("left_24.png")
 	ImageResource backIcon();
 
+	@Source("right_24.png")
+	ImageResource nextIcon();
+
 	@Source("email_32.png")
 	ImageResource emailIcon();
 }
