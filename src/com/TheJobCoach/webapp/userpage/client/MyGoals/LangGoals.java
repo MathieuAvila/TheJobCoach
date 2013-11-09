@@ -56,4 +56,13 @@ public interface LangGoals extends Constants {
 	
 	@Key("imust_phonecalls")
 	String imust_phonecalls();
+
+	@Key("nextPeriod")
+	String nextPeriod();
+	
+	@Key("previousPeriod")
+	String previousPeriod();
+
+	@Key("resultsOnPeriod")
+	String resultsOnPeriod();
 }

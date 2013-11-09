@@ -92,8 +92,8 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 	
 	int currentPeriod = 0;
 	
-	ButtonImageText nextButton = new ButtonImageText(ButtonImageText.Type.BACK, "Suivant");
-	ButtonImageText prevButton = new ButtonImageText(ButtonImageText.Type.BACK, "Précédent");
+	ButtonImageText nextButton = new ButtonImageText(ButtonImageText.Type.NEXT, langGoals.nextPeriod());
+	ButtonImageText prevButton = new ButtonImageText(ButtonImageText.Type.BACK, langGoals.previousPeriod());
 	
 	void getValues()
 	{	
@@ -102,9 +102,14 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 	
 	static void helperInsertElementInGrid(Grid bigGrid, int line, String text)
 	{
-	SimplePanel panelTitle = new SimplePanel();
-	bigGrid.setWidget(line, 0, panelTitle);
-	ContentHelper.insertSubTitlePanel(panelTitle, text);
+		helperInsertElementInGrid(bigGrid, line, 0, text);
+	}
+
+	static void helperInsertElementInGrid(Grid bigGrid, int line, int column, String text)
+	{
+		SimplePanel panelTitle = new SimplePanel();
+		bigGrid.setWidget(line, column, panelTitle);
+		ContentHelper.insertSubTitlePanel(panelTitle, text);
 	}
 	
 	HashMap<String, IExtendedField> fields = new HashMap<String, IExtendedField>();
@@ -159,6 +164,8 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 				addPeriod(0);
 			}
 		});
+
+		helperInsertElementInGrid(bigGrid, 0, 2, langGoals.resultsOnPeriod());
 		
 		Grid gridPeriodEvaluation = new Grid(1, 4);
 		//gridPeriodEvaluation.setWidth("100%");
