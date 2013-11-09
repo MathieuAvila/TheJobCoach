@@ -10,9 +10,9 @@ import java.util.Set;
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
 import com.TheJobCoach.util.CassandraAccessor;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
+import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 

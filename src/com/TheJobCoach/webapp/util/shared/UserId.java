@@ -1,4 +1,4 @@
-package com.TheJobCoach.webapp.userpage.shared;
+package com.TheJobCoach.webapp.util.shared;
 
 import java.io.Serializable;
 
@@ -7,14 +7,16 @@ public class UserId implements Serializable {
 	private static final long serialVersionUID = 5013720505251872867L;
 	public String userName;
 	public String token;
+
 	public enum UserType
-	{ 
+	{
 		USER_TYPE_SEEKER,
 		USER_TYPE_ADMIN,
 		USER_TYPE_COACH;
 	};
+	
 	public UserType type;
-	public UserId(String _userName, String _token, UserType _type)
+	public UserId(String _userName, String _token, UserId.UserType _type)
 	{
 		userName = _userName;
 		token = _token;

@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.TheJobCoach.webapp.userpage.client.DownloadIFrame;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.CheckedCheckBox;
 import com.TheJobCoach.webapp.util.client.CheckedDate;
@@ -12,6 +11,7 @@ import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.shared.ConstantsMyReports;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;

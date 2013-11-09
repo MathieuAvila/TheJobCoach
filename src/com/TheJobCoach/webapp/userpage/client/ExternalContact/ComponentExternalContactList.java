@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IChooseDialogModel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
+import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

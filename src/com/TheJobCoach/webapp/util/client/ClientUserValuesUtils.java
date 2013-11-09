@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import com.TheJobCoach.webapp.userpage.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
+import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Panel;
 
@@ -60,6 +63,9 @@ public class ClientUserValuesUtils {
 		ServerCallHelper<Map<String,String>> callback = new ServerCallHelper<Map<String,String>>(panel) {
 			@Override
 			public void onSuccess(Map<String,String> resultMap) {
+				
+				System.out.println("preloadValueList IN2");
+			
 				insertKeys(resultMap, false);
 				if (result != null)
 				{
@@ -68,7 +74,27 @@ public class ClientUserValuesUtils {
 				}
 			}
 		};
-		utilService.getValues(id, key, callback);		
+		System.out.println("preloadValueList IN");
+		try
+		{
+			utilService.getValues(id, key, callback);
+		}
+		catch (CassandraException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SystemException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (CoachSecurityException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("preloadValueList OUT");
 	}
 
 	public void setValues(final HashMap<String, String> map, final ReturnValue result)
@@ -84,7 +110,25 @@ public class ClientUserValuesUtils {
 			}
 		};
 		insertKeys(map, true);
-		utilService.setValues(id, map, callback);
+		try
+		{
+			utilService.setValues(id, map, callback);
+		}
+		catch (CassandraException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SystemException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (CoachSecurityException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
 
 	public void setValue(String key, String value)

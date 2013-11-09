@@ -8,9 +8,9 @@ import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class UserOpportunityManager {
 

@@ -5,8 +5,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 /**
  * The server side implementation of the RPC service.

@@ -17,12 +17,12 @@ import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.report.ReportActionHtml;
 import com.TheJobCoach.userdata.report.ReportExternalContactHtml;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 
 public class DownloadReport extends HttpServlet {
 
@@ -72,7 +72,7 @@ public class DownloadReport extends HttpServlet {
 				+ " logPeriod:" + logPeriod
 				);
 		ServletOutputStream out = response.getOutputStream();
-		UserId user =new UserId(userId, token, UserType.USER_TYPE_SEEKER);
+		UserId user =new UserId(userId, token, UserId.UserType.USER_TYPE_SEEKER);
 		
 		ServletUtils.sendHeaders("Report.html", 0, request, response);
 		response.setBufferSize( 8 * 1024 );

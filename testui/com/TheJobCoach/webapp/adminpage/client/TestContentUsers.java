@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.adminpage.client;
 
-import com.TheJobCoach.webapp.userpage.shared.UserId;
+import com.TheJobCoach.webapp.util.client.TestSecurity;
+import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -23,7 +24,7 @@ public class TestContentUsers implements EntryPoint {
 			hp.setStyleName("mainpage-content");
 			root.add(hp);
 			hp.setSize("100%", "100%");
-			ContentUsers ele = new ContentUsers(hp, new UserId("mathieu", "token", UserId.UserType.USER_TYPE_ADMIN));
+			ContentUsers ele = new ContentUsers(hp, TestSecurity.defaultUser);
 			ele.onModuleLoad();
 		}
 	}

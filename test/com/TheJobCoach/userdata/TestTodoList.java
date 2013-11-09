@@ -9,8 +9,9 @@ import java.util.Vector;
 import org.junit.Test;
 
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 import com.google.common.collect.ImmutableMap;
 
 public class TestTodoList implements TodoList.TodoListSubscriber{

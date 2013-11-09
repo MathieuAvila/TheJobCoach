@@ -2,7 +2,7 @@ package com.TheJobCoach.webapp.mainpage.shared;
 
 import java.io.Serializable;
 
-import com.TheJobCoach.webapp.userpage.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class MainPageReturnLogin implements Serializable
 {

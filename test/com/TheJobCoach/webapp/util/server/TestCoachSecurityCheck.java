@@ -10,8 +10,9 @@ import javax.servlet.http.HttpSessionContext;
 
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 
 @SuppressWarnings("deprecation")
 public class TestCoachSecurityCheck {

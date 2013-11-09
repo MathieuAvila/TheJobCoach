@@ -3,8 +3,9 @@ package com.TheJobCoach.webapp.util.client;
 import com.TheJobCoach.webapp.mainpage.client.LoginService;
 import com.TheJobCoach.webapp.mainpage.client.LoginServiceAsync;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;

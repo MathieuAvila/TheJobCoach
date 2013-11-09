@@ -4,8 +4,8 @@ import java.util.Vector;
 
 import com.TheJobCoach.userdata.UserExternalContactManager;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class ReportExternalContact 
 {

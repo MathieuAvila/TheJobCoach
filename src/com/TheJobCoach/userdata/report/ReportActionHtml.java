@@ -3,10 +3,10 @@ package com.TheJobCoach.userdata.report;
 import java.util.Date;
 
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class ReportActionHtml extends ReportAction {
 

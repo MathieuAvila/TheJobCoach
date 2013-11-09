@@ -7,9 +7,10 @@ import java.util.Vector;
 
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 
 public class TestUserOpportunitiesManager {
 	

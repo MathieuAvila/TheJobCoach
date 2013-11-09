@@ -7,10 +7,10 @@ import com.TheJobCoach.userdata.ConnectionLog;
 import com.TheJobCoach.userdata.UserLogManager;
 import com.TheJobCoach.userdata.UserOpportunityManager;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class GoalReport
 {

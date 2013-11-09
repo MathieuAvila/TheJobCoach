@@ -3,7 +3,7 @@ package com.TheJobCoach.userdata.report;
 import java.util.Date;
 
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class ReportExternalContactHtml extends ReportExternalContact {
 

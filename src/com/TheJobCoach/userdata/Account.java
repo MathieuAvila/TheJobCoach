@@ -30,11 +30,11 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccount
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.util.shared.SystemException;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 
 
 public class Account implements AccountInterface {
@@ -258,7 +258,7 @@ public class Account implements AccountInterface {
 
 	public void deleteAccount(String userName) throws CassandraException
 	{
-		UserId id = new UserId(userName, "", UserType.USER_TYPE_SEEKER);
+		UserId id = new UserId(userName, "", UserId.UserType.USER_TYPE_SEEKER);
 		UserReport user = getUserReport(id);
 		if (user != null)
 		{
@@ -313,7 +313,7 @@ public class Account implements AccountInterface {
 	{	
 		String userName = getUsernameFromEmail(email);
 		if (userName == null) return new Boolean(false);
-		UserReport info = getUserReport(new UserId(userName, "", UserType.USER_TYPE_SEEKER));
+		UserReport info = getUserReport(new UserId(userName, "", UserId.UserType.USER_TYPE_SEEKER));
 		if (info == null) return new Boolean(false);
 		UserInformation fullinfo = new UserInformation();
 		getUserInformation(new UserId(info.userName, info.token, info.type), fullinfo);
@@ -362,7 +362,7 @@ public class Account implements AccountInterface {
 	
 	public UserId createTestAccount(String langStr, UserId.UserType userType) throws CassandraException, SystemException
 	{
-		if (userType == UserType.USER_TYPE_ADMIN) throw new SystemException();
+		if (userType == UserId.UserType.USER_TYPE_ADMIN) throw new SystemException();
 		boolean exist = true;
 		String userName = null;
 		int counter = 0;

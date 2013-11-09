@@ -4,12 +4,12 @@ import com.TheJobCoach.webapp.adminpage.client.AdminPage;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.userpage.client.UserPage;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.client.DialogToolBox;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Position;
@@ -140,7 +140,7 @@ public class MainPage implements EntryPoint {
 
 	private void createTestAccount()
 	{
-			loginService.createTestUser(LocaleInfo.getCurrentLocale().getLocaleName(), UserType.USER_TYPE_SEEKER, new ServerCallHelper<UserId>(rootPanel) {
+			loginService.createTestUser(LocaleInfo.getCurrentLocale().getLocaleName(), UserId.UserType.USER_TYPE_SEEKER, new ServerCallHelper<UserId>(rootPanel) {
 				@Override
 				public void onSuccess(final UserId result) 
 				{

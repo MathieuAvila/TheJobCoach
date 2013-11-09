@@ -10,10 +10,10 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
 
@@ -61,7 +61,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public UserId createTestUser(String lang, UserType type) throws CassandraException, SystemException 
+	public UserId createTestUser(String lang, UserId.UserType type) throws CassandraException, SystemException 
 	{
 		// purge old accounts.
 		account.purgeTestAccount(60 * 60 * 24); // 1 day
@@ -70,7 +70,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public String disconnect(String lang, UserType type)
+	public String disconnect(String lang, UserId.UserType type)
 			throws CassandraException, SystemException
 	{
 		HttpServletRequest request = this.getThreadLocalRequest();

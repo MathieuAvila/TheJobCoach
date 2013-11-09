@@ -16,11 +16,11 @@ import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 
 public class DownloadFileServlet extends HttpServlet {
 
@@ -45,7 +45,7 @@ public class DownloadFileServlet extends HttpServlet {
 		logger.info("Requesting doc: " + docId + " for user: " + userId + " with token: " + token);
 		UserDocument userDoc;
 		ServletOutputStream out = response.getOutputStream();
-		UserId user =new UserId(userId, token, UserType.USER_TYPE_SEEKER);
+		UserId user =new UserId(userId, token, UserId.UserType.USER_TYPE_SEEKER);
 		try {
 			userDoc = cm.getUserDocument(user, docId);
 		} catch (CassandraException e1) {

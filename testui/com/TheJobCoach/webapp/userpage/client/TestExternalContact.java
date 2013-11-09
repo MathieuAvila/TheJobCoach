@@ -9,13 +9,13 @@ import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalC
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.TestSecurity;
+import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -123,7 +123,7 @@ public class TestExternalContact implements EntryPoint {
 
 						ComponentChooseExternalContact cud = new ComponentChooseExternalContact(
 								hp, 
-								new UserId("mathieu", "token", UserId.UserType.USER_TYPE_SEEKER), new IChooseResult<ExternalContact>()
+								TestSecurity.defaultUser, new IChooseResult<ExternalContact>()
 								{									
 									@Override
 									public void setResult(ExternalContact result)

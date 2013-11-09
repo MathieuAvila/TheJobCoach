@@ -1,7 +1,11 @@
 package com.TheJobCoach.webapp.util.shared;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
 
 public class UserValuesConstantsMyGoals 
 {	
@@ -13,6 +17,13 @@ public class UserValuesConstantsMyGoals
 			PERFORMANCE_EVALUATION_PERIOD__WEEK, 
 			PERFORMANCE_EVALUATION_PERIOD__2WEEK, 
 			PERFORMANCE_EVALUATION_PERIOD__MONTH);
+	public final static Map<String, FormatUtil.PERIOD_TYPE> mapStringPeriod = new HashMap<String, FormatUtil.PERIOD_TYPE>();
+	
+	static {
+		mapStringPeriod.put(PERFORMANCE_EVALUATION_PERIOD__WEEK, FormatUtil.PERIOD_TYPE.PERIOD_TYPE_WEEK);
+		mapStringPeriod.put(PERFORMANCE_EVALUATION_PERIOD__2WEEK, FormatUtil.PERIOD_TYPE.PERIOD_TYPE_2WEEKS);
+		mapStringPeriod.put(PERFORMANCE_EVALUATION_PERIOD__MONTH, FormatUtil.PERIOD_TYPE.PERIOD_TYPE_MONTH);
+    }
 
 	public final static String PERFORMANCE_CREATEOPPORTUNITY        = "PERFORMANCE_CREATEOPPORTUNITY";
 	public final static String PERFORMANCE_CANDIDATEOPPORTUNITY     = "PERFORMANCE_CANDIDATEOPPORTUNITY";	

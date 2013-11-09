@@ -3,8 +3,8 @@ package com.TheJobCoach.webapp.util.server;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 /**
  * The server side implementation of the RPC service.

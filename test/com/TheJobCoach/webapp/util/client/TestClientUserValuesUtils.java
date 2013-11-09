@@ -8,9 +8,9 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.userpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
@@ -45,7 +45,7 @@ public class TestClientUserValuesUtils extends GwtTest
 			}}
 		);
 		VerticalPanel vp = new VerticalPanel();
-		values = new ClientUserValuesUtils(vp, new UserId("user", "", UserType.USER_TYPE_SEEKER));
+		values = new ClientUserValuesUtils(vp, new UserId("user", "", UserId.UserType.USER_TYPE_SEEKER));
 	};
 	
 	@Test

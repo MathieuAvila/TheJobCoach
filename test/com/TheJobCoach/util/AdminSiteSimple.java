@@ -2,9 +2,9 @@ package com.TheJobCoach.util;
 
 import com.TheJobCoach.userdata.Account;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
-import com.TheJobCoach.webapp.userpage.shared.UserId.UserType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.UserId;
+
 
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class AdminSiteSimple {
 		{
 			account.deleteAccount("admin");
 			account.createAccountWithToken(
-					new UserId("admin","mytokenadmin", UserType.USER_TYPE_ADMIN),
+					new UserId("admin","mytokenadmin", UserId.UserType.USER_TYPE_ADMIN),
 					new UserInformation("nom", "toto@totoadmin.com", "lvveumda", "prenom"), "en");
 			account.validateAccount("admin", "mytokenadmin");
 			account.loginAccount("admin", "lvveumda");
@@ -27,7 +27,7 @@ public class AdminSiteSimple {
 
 		{
 			account.createAccountWithToken(
-					new UserId("avila","mytokenuser", UserType.USER_TYPE_SEEKER),
+					new UserId("avila","mytokenuser", UserId.UserType.USER_TYPE_SEEKER),
 					new UserInformation("nom", "toto@totoseeker.com", "lvveumda", "prenom"), "en");
 			account.validateAccount("avila", "mytokenuser");
 			account.loginAccount("avila", "lvveumda");

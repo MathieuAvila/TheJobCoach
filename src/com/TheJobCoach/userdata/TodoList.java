@@ -10,10 +10,10 @@ import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent.EventColor;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent.Priority;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class TodoList 
 {	

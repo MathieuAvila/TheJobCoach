@@ -3,7 +3,6 @@ package com.TheJobCoach.webapp.userpage.client.Opportunity;
 import java.util.Date;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
@@ -13,6 +12,7 @@ import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
+import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

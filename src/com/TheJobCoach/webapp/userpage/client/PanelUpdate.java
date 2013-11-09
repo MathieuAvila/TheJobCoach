@@ -2,12 +2,15 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.Date;
 
-import com.TheJobCoach.webapp.userpage.shared.UserId;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.UtilService;
 import com.TheJobCoach.webapp.util.client.UtilServiceAsync;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UpdateRequest;
 import com.TheJobCoach.webapp.util.shared.UpdateResponse;
+import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
@@ -43,16 +46,34 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint {
 	    			  ((m != 0)  ? (String.valueOf(m) + "mn ") : new String()) + 
 	    			  String.valueOf(s) + "s");
 	    	  UpdateRequest request = new UpdateRequest(today, connectSec, firstTime);
-	    	  utilService.sendUpdateList(userId, request, new ServerCallHelper<UpdateResponse>(rootPanel)  
-	    	  {
-				@Override
-				public void onSuccess(UpdateResponse result)
-				{
-					if (firstTime) previousTime = result.totalDayTime;
-			    	firstTime = false;
-					// Store response. Send appropriate callbacks.
-				}	    		  
-	    	  });
+	    	  try
+			{
+				utilService.sendUpdateList(userId, request, new ServerCallHelper<UpdateResponse>(rootPanel)  
+				  {
+					@Override
+					public void onSuccess(UpdateResponse result)
+					{
+						if (firstTime) previousTime = result.totalDayTime;
+				    	firstTime = false;
+						// Store response. Send appropriate callbacks.
+					}	    		  
+				  });
+			}
+			catch (CassandraException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (SystemException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (CoachSecurityException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	      };
 	};
 	

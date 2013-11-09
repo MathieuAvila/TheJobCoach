@@ -17,6 +17,11 @@ public class ServerCallHelper<T> implements AsyncCallback<T>
 	@Override
 	public void onFailure(Throwable caught)
 	{
+		System.out.println("Mega error .. ");
+		for (StackTraceElement element: caught.getStackTrace())
+		{
+			System.out.println("Stack error .. " + element.toString());
+		}
 		if (caught instanceof CassandraException)
 		{
 			MessageBox.messageBoxException(rootPanel, caught.toString());
