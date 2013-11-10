@@ -98,5 +98,6 @@ public class CheckedTime implements IExtendedField {
 	public void setDefault(String value)
 	{
 		defaultValue = value;
+		checkUserValue(true);
 	}
 }
