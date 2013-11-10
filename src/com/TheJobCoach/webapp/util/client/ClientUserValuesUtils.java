@@ -63,9 +63,6 @@ public class ClientUserValuesUtils {
 		ServerCallHelper<Map<String,String>> callback = new ServerCallHelper<Map<String,String>>(panel) {
 			@Override
 			public void onSuccess(Map<String,String> resultMap) {
-				
-				System.out.println("preloadValueList IN2");
-			
 				insertKeys(resultMap, false);
 				if (result != null)
 				{
@@ -74,7 +71,6 @@ public class ClientUserValuesUtils {
 				}
 			}
 		};
-		System.out.println("preloadValueList IN");
 		try
 		{
 			utilService.getValues(id, key, callback);
@@ -94,7 +90,6 @@ public class ClientUserValuesUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("preloadValueList OUT");
 	}
 
 	public void setValues(final HashMap<String, String> map, final ReturnValue result)
