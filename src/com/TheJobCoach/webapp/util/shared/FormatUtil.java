@@ -144,16 +144,12 @@ public class FormatUtil
 		{
 			int interval = (type == PERIOD_TYPE.PERIOD_TYPE_WEEK) ? 1 : 2;
 			Date fixedDate = getStringDate("2013_10_11_0_0_0");
-			System.out.println("fixed " + fixedDate);
 			long fixedRef = fixedDate.getTime();
 			long currentRef = current.getTime();
 
 			long diffWeek = (currentRef - fixedRef) / MS_PER_WEEK + (currentRef - fixedRef) < 0 ? -1*interval : 0;
 			
 			long boundary = diffWeek % interval;
-			
-			System.out.println("boundary " + boundary + " diffWeek " + diffWeek);
-			
 			
 			long startWeekMs = fixedRef + diffWeek * MS_PER_WEEK;
 			long startPeriodMs = startWeekMs + (count * interval - boundary ) * MS_PER_WEEK;
