@@ -52,4 +52,13 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("email_32.png")
 	ImageResource emailIcon();
+
+	@Source("failure_24.png")
+	ImageResource failure_24();
+
+	@Source("success_24.png")
+	ImageResource success_24();
+
+	@Source("unknown_24.png")
+	ImageResource unknown_24();
 }
