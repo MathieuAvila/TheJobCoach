@@ -17,6 +17,7 @@ encoding//src/com/TheJobCoach/webapp/userpage/client/ExternalContact/LangExterna
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang_en.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Lang_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/MyGoals/LangGoals_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/MyReports/LangMyReports.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/MyReports/LangMyReports_en.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/MyReports/LangMyReports_fr.properties=UTF-8
