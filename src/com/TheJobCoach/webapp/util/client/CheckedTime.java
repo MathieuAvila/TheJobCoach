@@ -27,7 +27,6 @@ public class CheckedTime implements IExtendedField {
 	public boolean getIsDefault()
 	{
 		if (defaultValue == null) return true;
-		System.out.println(getValue() + " " + defaultValue+ " " + defaultValue.equals(getValue()));
 		return defaultValue.equals(getValue());
 	}
 	
