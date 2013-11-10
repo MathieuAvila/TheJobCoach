@@ -17,18 +17,20 @@ public class ServerCallHelper<T> implements AsyncCallback<T>
 	@Override
 	public void onFailure(Throwable caught)
 	{
-		System.out.println("Mega error .. ");
-		for (StackTraceElement element: caught.getStackTrace())
-		{
-			System.out.println("Stack error .. " + element.toString());
-		}
+		/* In case we need degugging those stacks on the client side 
+		   System.out.println("ServerCallHelper stack trace .. ");
+           for (StackTraceElement element: caught.getStackTrace())
+               {
+                       System.out.println(".. " + element.toString());
+               }
+		 */
 		if (caught instanceof CassandraException)
 		{
 			MessageBox.messageBoxException(rootPanel, caught.toString());
 		}
 		if (caught instanceof CoachSecurityException)
 		{
-			Window.Location.replace("/TheJobCoach.html");
+			Window.Location.replace("TheJobCoach.html");
 		}
 	}
 	@Override
