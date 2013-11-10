@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
-
 public class UserValuesConstantsMyGoals 
 {	
 	public final static String PERFORMANCE_EVALUATION_PERIOD        = "PERFORMANCE_EVALUATION_PERIOD";
