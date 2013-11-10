@@ -20,6 +20,11 @@ public class GoalReportInformation implements Serializable
 	public Date start;
 	public Date end;
 	
+	public GoalReportInformation()
+	{
+		
+	}
+	
 	public GoalReportInformation(Date start, Date end)
 	{
 		this.start = start;

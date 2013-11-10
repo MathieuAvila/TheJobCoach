@@ -1,9 +1,11 @@
 package com.TheJobCoach.webapp.userpage.client;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
@@ -169,6 +171,13 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 	@Override
 	public void deleteExternalContact(UserId id, String contact,
 			AsyncCallback<String> callback)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void getUserGoalReport(UserId id, Date start, Date end,
+			AsyncCallback<GoalReportInformation> callback)
 	{
 		// TODO Auto-generated method stub
 		

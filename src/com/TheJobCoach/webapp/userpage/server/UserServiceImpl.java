@@ -1,5 +1,6 @@
 package com.TheJobCoach.webapp.userpage.server;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -15,8 +16,10 @@ import com.TheJobCoach.userdata.UserExternalContactManager;
 import com.TheJobCoach.userdata.UserJobSiteManager;
 import com.TheJobCoach.userdata.UserLogManager;
 import com.TheJobCoach.userdata.UserOpportunityManager;
+import com.TheJobCoach.userdata.report.GoalReport;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
@@ -44,7 +47,8 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	static private UserDocumentManager userDocumentManager = UserDocumentManager.getInstance();
 	static private UserExternalContactManager userExternalContactManager = new UserExternalContactManager();
 	static private TodoList todoList = new TodoList();
-
+	static private GoalReport goalReport = new GoalReport();
+	
 	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Override
@@ -236,4 +240,11 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		userExternalContactManager.deleteExternalContact(id, contact);
 		return "";
 	}
+	
+	public GoalReportInformation getUserGoalReport(UserId id, Date start, Date end) throws CassandraException, CoachSecurityException
+	{
+		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+		return goalReport.getReport(id, start, end);
+	}
+
 }

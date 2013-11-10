@@ -1,9 +1,11 @@
 package com.TheJobCoach.webapp.userpage.client;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
@@ -50,4 +52,6 @@ public interface UserServiceAsync {
 	public void getTodoEventList(UserId id, String lang, AsyncCallback<Vector<TodoEvent>> callback);
 	public void setTodoEvent(UserId id, TodoEvent todo, AsyncCallback<Boolean> callback);
 	public void deleteTodoEvent(UserId id, TodoEvent todo, AsyncCallback<Boolean> callback);
+	
+	public void getUserGoalReport(UserId id, Date start, Date end, AsyncCallback<GoalReportInformation> callback);
 }
