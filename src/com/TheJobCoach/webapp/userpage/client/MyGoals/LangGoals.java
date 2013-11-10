@@ -65,4 +65,16 @@ public interface LangGoals extends Constants {
 
 	@Key("resultsOnPeriod")
 	String resultsOnPeriod();
+	
+	@Key("success")
+	String success();
+	
+	@Key("failure")
+	String failure();
+	
+	@Key("unknown")
+	String unknown();
+	
+	
+	
 }
