@@ -1,5 +1,6 @@
 package com.TheJobCoach.webapp.util.client;
 
+import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,10 +10,15 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.slf4j.Logger;
 
 public class DefaultUtilServiceAsync implements UtilServiceAsync
 {
-	static Map<String, String> values = new HashMap<String, String>();
+	static public Map<String, String> values = new HashMap<String, String>();
+	
+	static Logger logger = LoggerFactory.getLogger(DefaultUtilServiceAsync.class);
+
+	static public int calls = 0;
 	
 	{
 		addValue(UserValuesConstantsAccount.ACCOUNT_TYPE, "Freemium");
@@ -30,9 +36,12 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR);
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO);
 		
+		addValue(UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD);
+
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY);
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY);
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW);
+		addValue(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL);
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL);
 
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_RECALL_GOAL_MIDDLE);
@@ -57,6 +66,9 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 		{
 			if (k.startsWith(rootValue)) hm.put(k, values.get(k));
 		}
+		logger.info("getValues root " + rootValue);
+		logger.info("getValues result " + hm);
+		calls++;
 		callback.onSuccess(hm);
 	}
 	
@@ -68,6 +80,7 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 		{
 			if (values.containsKey(k)) values.put(k, map.get(k));
 		}
+		calls++;
 		callback.onSuccess("");
 	}
 	

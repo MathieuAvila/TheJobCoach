@@ -3,15 +3,22 @@ package com.TheJobCoach.webapp.userpage.client.MyGoals;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.UserService;
+import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
+import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.CheckedTime;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset;
@@ -40,6 +47,9 @@ import com.google.gwt.user.client.ui.Grid;
 public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply {
 
 	UserId user;
+	
+	
+	private final static UserServiceAsync userService = GWT.create(UserService.class);
 
 	final Lang lang = GWT.create(Lang.class);
 
@@ -56,7 +66,6 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 	Panel rootPanel = null;
 
-
 	final static LangGoals langGoals = GWT.create(LangGoals.class);
 	
 	CheckedExtendedDropListField tfGoalPeriod = new CheckedExtendedDropListField(
@@ -65,35 +74,61 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 	CheckedTime tfConnectBefore = new CheckedTime(CheckedTime.DAY_MIDDAY);
 	CheckedLabel clConnectBefore = new CheckedLabel(langGoals.imust_beforehour(), false, tfConnectBefore);
-
+	ResultEvaluation reConnectBefore = new ResultEvaluation();
+	
 	CheckedTime tfConnectAfter = new CheckedTime( CheckedTime.DAY_END);
 	CheckedLabel clConnectAfter = new CheckedLabel(langGoals.imustnot_afterhour(), false, tfConnectAfter);
+	ResultEvaluation reConnectAfter = new ResultEvaluation();
 
 	CheckedTextField tfConnectRatio = new CheckedTextField("[0-9]*");
 	CheckedLabel clConnectRatio = new CheckedLabel(langGoals.imustnot_thisnumber(), false, tfConnectRatio);
+	ResultEvaluation reConnectRatio = new ResultEvaluation();
 
 	CheckedTextField tfCreateOpportunity = new CheckedTextField("[0-9]*");
 	CheckedLabel clCreateOpportunity = new CheckedLabel(langGoals.imust_createopp(), false, tfCreateOpportunity);
+	ResultEvaluation reCreateOpportunity = new ResultEvaluation();
 	
 	CheckedTextField tfCandidateOpportunity = new CheckedTextField("[0-9]*");
 	CheckedLabel clCandidateOpportunity = new CheckedLabel(langGoals.imust_candidate(), false, tfCandidateOpportunity);
+	ResultEvaluation reCandidateOpportunity = new ResultEvaluation();
 	
 	CheckedTextField tfInterviewOpportunity = new CheckedTextField("[0-9]*");
 	CheckedLabel clInterviewOpportunity = new CheckedLabel(langGoals.imust_interviews(), false, tfInterviewOpportunity);
+	ResultEvaluation reInterviewOpportunity = new ResultEvaluation();
 	
 	CheckedTextField tfProposal = new CheckedTextField("[0-9]*");
 	CheckedLabel clProposal = new CheckedLabel(langGoals.imust_proposals(), false, tfProposal);
+	ResultEvaluation reProposal = new ResultEvaluation();
 	
 	CheckedTextField tfPhoneCall = new CheckedTextField("[0-9]*");
 	CheckedLabel clPhoneCall = new CheckedLabel(langGoals.imust_phonecalls(), false, tfPhoneCall);
+	ResultEvaluation rePhoneCall = new ResultEvaluation();
+	
+	Map<String, Vector<ResultEvaluation>> mapEvalutionKey = new HashMap<String, Vector<ResultEvaluation>>();
 	
 	Label previousDate = new Label();
 	Label nextDate = new Label();
+	
+	// Stores request start day and end day.
+	long startTime;
+	long endTime;
 	
 	int currentPeriod = 0;
 	
 	ButtonImageText nextButton = new ButtonImageText(ButtonImageText.Type.NEXT, langGoals.nextPeriod());
 	ButtonImageText prevButton = new ButtonImageText(ButtonImageText.Type.BACK, langGoals.previousPeriod());
+	
+	void appendEvaluationKey(String key, ResultEvaluation re)
+	{
+		Vector<ResultEvaluation> v;
+		if (mapEvalutionKey.containsKey(key)) v = mapEvalutionKey.get(key);
+		else 
+		{
+			v = new Vector<ResultEvaluation>();
+			mapEvalutionKey.put(key, v);
+		}
+		v.add(re);
+	}
 	
 	void getValues()
 	{	
@@ -114,6 +149,10 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 	
 	HashMap<String, IExtendedField> fields = new HashMap<String, IExtendedField>();
 	
+	int lastCurrent = -1; // This forces 1st refresh
+	Date lastPrevious;
+	Date lastNext;
+	
 	public void addPeriod(int count)
 	{
 		// Now update
@@ -123,11 +162,47 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 		if (currentPeriod > 0) currentPeriod = 0;
 		FormatUtil.getPeriod(UserValuesConstantsMyGoals.mapStringPeriod.get(tfGoalPeriod.getValue()), currentPeriod, new Date(), previousDateValue, nextDateValue);
 		
+		// Set times in previousDate and nextDate with goal values.
+		previousDateValue = new Date(FormatUtil.startOfTheDay(previousDateValue).getTime() + startTime);
+		nextDateValue = new Date(FormatUtil.startOfTheDay(nextDateValue).getTime() + endTime);
+
 		previousDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(previousDateValue));
 		nextDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(nextDateValue));
 		
 		// No next on current period
 		nextButton.setEnabled(currentPeriod < 0);
+		
+		reConnectBefore.setCurrent(currentPeriod == 0);
+		reConnectAfter.setCurrent(currentPeriod == 0);
+		reConnectRatio.setCurrent(currentPeriod == 0);
+		reCreateOpportunity.setCurrent(currentPeriod == 0);
+		reCandidateOpportunity.setCurrent(currentPeriod == 0);
+		reInterviewOpportunity.setCurrent(currentPeriod == 0);
+		reProposal.setCurrent(currentPeriod == 0);
+		rePhoneCall.setCurrent(currentPeriod == 0);
+		
+		// now run request to get actual values
+		ServerCallHelper<GoalReportInformation> callback = new ServerCallHelper<GoalReportInformation>(rootPanel) {
+			@Override
+			public void onSuccess(GoalReportInformation result)
+			{
+				reConnectBefore.setValue(result.succeedStartDay);
+				reConnectAfter.setValue(result.succeedEndDay);
+				reConnectRatio.setValue(result.connectedDays);
+				reCreateOpportunity.setValue(result.newOpportunities);
+				reCandidateOpportunity.setValue(result.log.get(UserLogEntry.LogEntryType.APPLICATION));
+				reInterviewOpportunity.setValue(result.log.get(UserLogEntry.LogEntryType.INTERVIEW));
+				reProposal.setValue(result.log.get(UserLogEntry.LogEntryType.PROPOSAL));
+				rePhoneCall.setValue(result.log.get(UserLogEntry.LogEntryType.RECALL));
+			}
+		};
+		if ((lastCurrent != currentPeriod)||(!previousDateValue.equals(lastPrevious))|(!nextDateValue.equals(lastNext)))
+		{
+			lastCurrent = currentPeriod;
+			lastPrevious = previousDateValue;
+			lastNext = nextDateValue;
+			userService.getUserGoalReport(user, previousDateValue, nextDateValue, callback);
+		}
 	}
 	
 	/**
@@ -167,7 +242,7 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 
 		helperInsertElementInGrid(bigGrid, 0, 2, langGoals.resultsOnPeriod());
 		
-		Grid gridPeriodEvaluation = new Grid(1, 4);
+		Grid gridPeriodEvaluation = new Grid(1, 3);
 		//gridPeriodEvaluation.setWidth("100%");
 
 		bigGrid.setWidget(1, 2, gridPeriodEvaluation);
@@ -179,8 +254,13 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 			}
 		});
 		gridPeriodEvaluation.setWidget(0, 0, prevButton);
-		gridPeriodEvaluation.setWidget(0, 1, previousDate);
-		gridPeriodEvaluation.setWidget(0, 2, nextDate);
+		
+		VerticalPanel vpEval = new VerticalPanel();
+		gridPeriodEvaluation.setWidget(0, 1, vpEval);
+		
+		vpEval.add(previousDate);
+		vpEval.add(nextDate);
+
 		previousDate.setWidth("10em");
 		nextDate.setWidth("10em");
 		nextButton.addClickHandler(new ClickHandler() {
@@ -190,62 +270,80 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 				addPeriod(1);
 			}
 		});
-		gridPeriodEvaluation.setWidget(0, 3, nextButton);
+		gridPeriodEvaluation.setWidget(0, 2, nextButton);
 		
 		helperInsertElementInGrid(bigGrid, 2, langGoals.connectionTimes());
 
 		bigGrid.setWidget(3,0, clConnectBefore);
 		bigGrid.setWidget(3,1, tfConnectBefore.getItem());
+		bigGrid.setWidget(3,2, reConnectBefore);
 
 		bigGrid.setWidget(4,0, clConnectAfter);
 		bigGrid.setWidget(4,1, tfConnectAfter.getItem());
+		bigGrid.setWidget(4,2, reConnectAfter);
 
 		bigGrid.setWidget(5,0, clConnectRatio);
 		bigGrid.setWidget(5,1, tfConnectRatio);
+		bigGrid.setWidget(5,2, reConnectRatio);
 		
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, tfConnectBefore);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, tfConnectAfter);
-		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, tfConnectRatio);
+		appendEvaluationKey(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, reConnectBefore);
 		
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, tfConnectAfter);
+		appendEvaluationKey(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, reConnectAfter);
+		
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, tfConnectRatio);
+		appendEvaluationKey(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, reConnectRatio);
+	
 		helperInsertElementInGrid(bigGrid, 6, langGoals.opportunityGoals());
 
 		bigGrid.setWidget(7,0, clCreateOpportunity);
 		bigGrid.setWidget(7,1, tfCreateOpportunity);
+		bigGrid.setWidget(7,2, reCreateOpportunity);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, tfCreateOpportunity);
+		appendEvaluationKey(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, reCreateOpportunity);
 
 		bigGrid.setWidget(8,0, clCandidateOpportunity);
 		bigGrid.setWidget(8,1, tfCandidateOpportunity);
+		bigGrid.setWidget(8,2, reCandidateOpportunity);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY, tfCandidateOpportunity);
+		appendEvaluationKey(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY, reCandidateOpportunity);
 
 		helperInsertElementInGrid(bigGrid, 9, langGoals.interviewGoals());
 
 		bigGrid.setWidget(10,0, clInterviewOpportunity);
 		bigGrid.setWidget(10,1, tfInterviewOpportunity);
+		bigGrid.setWidget(10,2, reInterviewOpportunity);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW, tfInterviewOpportunity);
+		appendEvaluationKey(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW, reInterviewOpportunity);
 
 		helperInsertElementInGrid(bigGrid, 11, langGoals.phonecallGoals());
 
 		bigGrid.setWidget(12,0, clPhoneCall);
 		bigGrid.setWidget(12,1, tfPhoneCall);
+		bigGrid.setWidget(12,2, rePhoneCall);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL, tfPhoneCall);
+		appendEvaluationKey(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL, rePhoneCall);
 			
 		helperInsertElementInGrid(bigGrid, 13, langGoals.proposalGoals());
 
 		bigGrid.setWidget(14,0, clProposal);
 		bigGrid.setWidget(14,1, tfProposal);
+		bigGrid.setWidget(14,2, reProposal);
 
 		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL, tfProposal);
+		appendEvaluationKey(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL, reProposal);
 				
 		for (IExtendedField f: fields.values()) f.registerListener(this);
 		
 		applyReset = new DialogBlockApplyReset(new ArrayList<IExtendedField>(fields.values()), this);
 
 		simplePanelCenter.add(applyReset);
-
+				
 		getValues();
 		addPeriod(0);		
 	}
@@ -253,7 +351,6 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 	@Override
 	public void changed(boolean ok, boolean changed, boolean init) 
 	{
-		System.out.println("changed ... " + applyReset);
 		if (applyReset != null) applyReset.hasEvent();
 	}
 
@@ -266,6 +363,36 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 			{
 				fields.get(testKey).setDefault(value);
 				fields.get(testKey).setValue(value);
+			}
+			try {
+				Integer v = Integer.valueOf(value);
+				Vector<ResultEvaluation> rev = mapEvalutionKey.get(key);
+				if (rev != null)
+				{
+					for (ResultEvaluation re : rev)
+					{
+						re.setMinimum(v.intValue());
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				// Ok, this field may be anything.	
+			}
+		}
+		// Specifics for start/end day
+		if (key.equals(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR) 
+				|| key.equals(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR))
+		{
+			try {
+			Long time = Long.valueOf(value);
+			if (key.equals(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR))
+				startTime = time;
+			else 
+				endTime = time;
+			}
+			catch (Exception e) {
+				// valid: not set.
 			}
 		}
 		addPeriod(0);
@@ -285,6 +412,8 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 			}
 		}
 		values.setValues(map, null);
+		addPeriod(0);
+		getValues();
 		applyReset.hasEvent();
 	}
 }

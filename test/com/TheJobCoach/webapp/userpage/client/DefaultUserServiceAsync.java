@@ -18,6 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class DefaultUserServiceAsync implements UserServiceAsync
 {	
+	static public int calls = 0;
+	
 	@Override
 	public void getUserSiteList(UserId id,
 			AsyncCallback<List<String>> callback) {
@@ -180,6 +182,5 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 			AsyncCallback<GoalReportInformation> callback)
 	{
 		// TODO Auto-generated method stub
-		
 	}
 };
