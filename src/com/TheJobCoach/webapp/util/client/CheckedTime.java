@@ -44,7 +44,14 @@ public class CheckedTime implements IExtendedField {
 	
 	public void setValue(String value)
 	{
+		if (value == null) return;
+		try {
 		timePicker.setValue(Long.parseLong(value));		
+		}
+		catch (Exception e)
+		{
+			// format error. Ignore
+		}
 		checkUserValue(true);
 	}
 	
