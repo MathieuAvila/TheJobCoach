@@ -84,6 +84,7 @@ public class CheckedExtendedDropListField implements IExtendedField {
 		};
 		tb.addChangeHandler(changeH);
 		tb.addKeyUpHandler(changeKey);
+		tb.setSelectedIndex(0);
 		checkUserValue(true);		
 	}
 
