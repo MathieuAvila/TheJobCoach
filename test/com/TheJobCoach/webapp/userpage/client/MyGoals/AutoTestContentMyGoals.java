@@ -13,6 +13,8 @@ import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.util.client.DefaultUtilServiceAsync;
+import com.TheJobCoach.webapp.util.client.IExtendedField;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -45,6 +47,9 @@ public class AutoTestContentMyGoals extends GwtTest {
 		public Date start;
 		public Date end;
 		
+		public int succeedStartDay = 4;
+		public int succeedEndDay = 5;
+		
 		@Override
 		public void getUserGoalReport(UserId id, Date start, Date end,
 				AsyncCallback<GoalReportInformation> callback)
@@ -54,8 +59,8 @@ public class AutoTestContentMyGoals extends GwtTest {
 			calls++;
 			GoalReportInformation result = new GoalReportInformation();
 			result.connectedDays = 3;
-			result.succeedStartDay = 1;
-			result.succeedEndDay = 2;
+			result.succeedStartDay = this.succeedStartDay;
+			result.succeedEndDay = this.succeedEndDay;
 			result.newOpportunities = 10;
 			result.log.put(UserLogEntry.LogEntryType.APPLICATION, 4);
 			result.log.put(UserLogEntry.LogEntryType.INTERVIEW, 5);
@@ -64,6 +69,14 @@ public class AutoTestContentMyGoals extends GwtTest {
 			logger.info("getUserGoalReport start:" + start + " end:" + end);
 			callback.onSuccess(result);
 		}
+		
+		public void reset()
+		{
+			  succeedStartDay = 4;
+			  succeedEndDay = 5;
+			  calls = 0;
+		}
+		
 	}
 
 	class SpecialUtilServiceAsync extends DefaultUtilServiceAsync
@@ -145,13 +158,13 @@ public class AutoTestContentMyGoals extends GwtTest {
 	public void testNoValue()
 	{
 		SpecialUtilServiceAsync.calls = 0;		
-		SpecialUserServiceAsync.calls = 0;		
+		userService.reset();		
 
 		cud = new ContentMyGoals(
 				p, userId);
 		cud.onModuleLoad();		
 		assertEquals(1, SpecialUtilServiceAsync.calls);		
-		assertEquals(1, SpecialUserServiceAsync.calls);		
+		assertEquals(2, SpecialUserServiceAsync.calls);		
 		checkFields(cud, "",
 				"12:00", "",
 				"23:59", "",
@@ -164,12 +177,22 @@ public class AutoTestContentMyGoals extends GwtTest {
 				);
 	}
 	
+	void checkValueChange(IExtendedField w, ResultEvaluation re, int realValue)
+	{
+		w.setValue(String.valueOf(realValue - 1));
+		TestResultEvaluation.checkResultEvaluationContext(re, TestResultEvaluation.STATUS.SUCCESS, realValue);
+		w.setValue(String.valueOf(realValue + 1));
+		TestResultEvaluation.checkResultEvaluationContext(re, TestResultEvaluation.STATUS.FAILURE, realValue);
+		w.setValue("");
+		TestResultEvaluation.checkResultEvaluationContext(re, TestResultEvaluation.STATUS.NOTSET, realValue);
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testAllValue()
 	{
 		SpecialUtilServiceAsync.calls = 0;		
-		SpecialUserServiceAsync.calls = 0;		
+		userService.reset();		
 		
 		SpecialUtilServiceAsync.addValue(
 				UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD, 
@@ -189,13 +212,13 @@ public class AutoTestContentMyGoals extends GwtTest {
 				p, userId);
 		cud.onModuleLoad();		
 		assertEquals(1, SpecialUtilServiceAsync.calls);		
-		assertEquals(3, SpecialUserServiceAsync.calls);
+		assertEquals(5, SpecialUserServiceAsync.calls);
 		SpecialUtilServiceAsync.calls = 0;		
 		SpecialUserServiceAsync.calls = 0;	
 
 		checkFields(cud, "1",
-				"09:00", "1",
-				"18:00", "2",
+				"09:00", "4",
+				"18:00", "5",
 				"1", "3",
 				"2", "10",
 				"3", "4",
@@ -239,6 +262,47 @@ public class AutoTestContentMyGoals extends GwtTest {
 		assertTrue(cud.nextButton.isEnabled());
 		assertTrue(cud.prevButton.isEnabled());
 		
-	}
+		// test content change 
+		checkValueChange(cud.tfConnectRatio, cud.reConnectRatio, 3);
+		checkValueChange(cud.tfCreateOpportunity, cud.reCreateOpportunity, 10);
+		checkValueChange(cud.tfCandidateOpportunity, cud.reCandidateOpportunity, 4);
+		checkValueChange(cud.tfInterviewOpportunity, cud.reInterviewOpportunity, 5);
+		checkValueChange(cud.tfProposal, cud.reProposal, 6);
+		checkValueChange(cud.tfPhoneCall, cud.rePhoneCall, 7);
+		
+		// check actual success for start time and end time. 1/ not set
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectBefore, TestResultEvaluation.STATUS.NOTSET, 4);
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectAfter, TestResultEvaluation.STATUS.NOTSET, 5);
+		// 2/ set value to success
+		cud.tfConnectRatio.setValue("3");
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectBefore, TestResultEvaluation.STATUS.SUCCESS, 4);
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectAfter, TestResultEvaluation.STATUS.SUCCESS, 5);
+		// 3/ set connect ratio goal to upper value and check for failure.
+		cud.tfConnectRatio.setValue("50");
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectBefore, TestResultEvaluation.STATUS.FAILURE, 4);
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectAfter, TestResultEvaluation.STATUS.FAILURE, 5);
+		
+		// special case for start time change
+		DefaultUserServiceAsync.calls = 0;
+		userService.succeedStartDay = 100;
+		cud.tfConnectBefore.setValue(String.valueOf(7*60*60*1000)); // 7:00
+		assertTrue(SpecialUserServiceAsync.calls != 0);
+		diff = userService.start.getTime() - FormatUtil.startOfTheDay(userService.start).getTime();
+		assertEquals(7*60*60*1000, diff);
+		assertEquals(100, cud.reConnectBefore.value);
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectBefore, TestResultEvaluation.STATUS.SUCCESS, 100);
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectAfter, TestResultEvaluation.STATUS.FAILURE, 5);
+
+		// special case for end time change
+		DefaultUserServiceAsync.calls = 0;
+		userService.succeedEndDay = 200;
+		cud.tfConnectAfter.setValue(String.valueOf(9*60*60*1000)); // 9:00
+		assertTrue(SpecialUserServiceAsync.calls != 0);
+		diff = userService.end.getTime() - FormatUtil.startOfTheDay(userService.end).getTime();
+		assertEquals(9*60*60*1000, diff);
+		assertEquals(200, cud.reConnectAfter.value);
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectBefore, TestResultEvaluation.STATUS.SUCCESS, 100);
+		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectAfter, TestResultEvaluation.STATUS.SUCCESS, 200);
+}
 
 }

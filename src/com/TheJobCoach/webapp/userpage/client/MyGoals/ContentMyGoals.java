@@ -348,36 +348,58 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 		addPeriod(0);		
 	}
 
+	HashMap<String, String> receivedValues = new HashMap<String, String>();
+	
 	@Override
 	public void changed(boolean ok, boolean changed, boolean init) 
 	{
+		// Update evaluation values.
+		for (String key: fields.keySet())
+		{
+			IExtendedField f = fields.get(key);
+			String newV = f.getValue();
+			String v = receivedValues.get(key);
+			if (!newV.equals(v))
+			{
+				receivedValues.put(key, newV);
+				notifyValueFromServer(key, newV, false);
+			}
+		}
 		if (applyReset != null) applyReset.hasEvent();
 	}
-
-	@Override
-	public void notifyValue(boolean set, String key, String value) 
+	
+	
+	public void notifyValueFromServer(String key, String value, boolean server) 
 	{
 		for (String testKey: fields.keySet())
 		{
-			if (testKey.equals(key))
+			if (server) 
 			{
-				fields.get(testKey).setDefault(value);
-				fields.get(testKey).setValue(value);
-			}
-			try {
-				Integer v = Integer.valueOf(value);
-				Vector<ResultEvaluation> rev = mapEvalutionKey.get(key);
-				if (rev != null)
+				if (testKey.equals(key))
 				{
-					for (ResultEvaluation re : rev)
-					{
-						re.setMinimum(v.intValue());
-					}
+					fields.get(testKey).setDefault(value);
+					fields.get(testKey).setValue(value);
 				}
 			}
-			catch (Exception e)
+			Vector<ResultEvaluation> rev = mapEvalutionKey.get(key);
+			if (rev != null)
 			{
-				// Ok, this field may be anything.	
+				Integer v = null;
+				try {
+					if (!"".equals(value))
+					v = Integer.valueOf(value);
+				}
+				catch (Exception e)
+				{
+					// Ok, this field may be anything.
+				}
+				for (ResultEvaluation re : rev)
+				{
+					if (v != null)
+						re.setMinimum(v.intValue());
+					else
+						re.resetMinimum();
+				}
 			}
 		}
 		// Specifics for start/end day
@@ -396,6 +418,13 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 			}
 		}
 		addPeriod(0);
+	}
+
+	@Override
+	public void notifyValue(boolean set, String key, String value) 
+	{
+		receivedValues.put(key, value);
+		notifyValueFromServer(key, value, true);
 	}
 
 	@Override
