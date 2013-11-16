@@ -67,11 +67,19 @@ public class ResultEvaluation extends HorizontalPanel
 	
 	void update()
 	{
-		if (isSet.size() != 3) return;
+		if (isSet.size() != 3) 
+		{
+			DOM.setImgSrc(img.getElement(),"");
+			successOrFailure.setText("");
+			actualPerformance.setText("");
+		}
+		else
+		{
 		boolean success = value >= minimum;
 		setResource(images.get(new Boolean(current)).get(new Boolean(success)));
 		successOrFailure.setText(success ? langGoals.success() : (current ? langGoals.unknown() : langGoals.failure()));
 		actualPerformance.setText(String.valueOf(value));
+		}
 	}
 	
 	public void setValue(int value)
@@ -92,6 +100,13 @@ public class ResultEvaluation extends HorizontalPanel
 	{
 		this.current = current;
 		isSet.add("c");
+		update();
+	}
+
+
+	public void resetMinimum()
+	{
+		isSet.remove("m");
 		update();
 	}
 	

@@ -15,7 +15,7 @@ public class TestResultEvaluation extends GwtTest {
 
 	private ResultEvaluation re;
 
-	private void checkResult(int value, int minimum, boolean current, String img, String msg)
+	private ResultEvaluation checkResult(int value, int minimum, boolean current, String img, String msg)
 	{
 		re = new ResultEvaluation();
 		re.setValue(value);
@@ -27,14 +27,12 @@ public class TestResultEvaluation extends GwtTest {
 		assertTrue(txt.getText().contains(msg));
 		Label val = (Label)re.getWidget(0);
 		assertTrue(val.getText().equals(String.valueOf(value)));
+		return re;
 	}
 	
 	@Test
 	public void statusTest()
 	{
-		String cookie = LocaleInfo.getLocaleCookieName();
-		com.google.gwt.user.client.Cookies.setCookie(cookie, "en");
-		
 		checkResult(10, 9,  false, "success", "Succ");
 		checkResult(10, 10, false, "success", "Succ");
 		checkResult(10, 15, false, "failure", "chec");
@@ -42,6 +40,14 @@ public class TestResultEvaluation extends GwtTest {
 		checkResult(10, 9,  true, "success", "Succ");
 		checkResult(10, 10, true, "success", "Succ");
 		checkResult(10, 15, true, "unknown", "En cours");
+	}
+	
+	@Test
+	public void resetTest()
+	{
+		ResultEvaluation re = checkResult(10, 9,  false, "success", "Succ");
+		re.resetMinimum();
+		checkVoid(re);
 	}
 	
 	private void checkVoid(ResultEvaluation re)
