@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -15,6 +17,8 @@ import com.googlecode.gwt.test.GwtTest;
 public class TestResultEvaluation extends GwtTest {
 
 	private ResultEvaluation re;
+	
+	static Logger logger = LoggerFactory.getLogger(TestResultEvaluation.class);
 
 	public enum STATUS { SUCCESS, FAILURE, UNKNOWN, NOTSET} ;
 
@@ -48,6 +52,12 @@ public class TestResultEvaluation extends GwtTest {
 		String msg = txtStatus.get(status);
 		if (status != STATUS.NOTSET)
 		{
+			logger.info(image.getUrl() + " " + img);
+			logger.info(val.getText() + " " +String.valueOf(value));
+			logger.info(txt.getText() + " " +msg);
+			logger.info(re.minimum + " " + re.value);
+			logger.info(re.isSet.toString());
+			
 			assertTrue(image.getUrl().contains(img));
 			assertTrue(txt.getText().contains(msg));
 			assertTrue(val.getText().equals(String.valueOf(value)));
