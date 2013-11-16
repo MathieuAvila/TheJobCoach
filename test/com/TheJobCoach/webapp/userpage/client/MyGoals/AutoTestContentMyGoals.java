@@ -37,19 +37,19 @@ public class AutoTestContentMyGoals extends GwtTest {
 		result.setYear(year - 1900);
 		return result;
 	}
-	
+
 	private ContentMyGoals cud;
-	
+
 	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 
 	class SpecialUserServiceAsync extends DefaultUserServiceAsync
 	{
 		public Date start;
 		public Date end;
-		
+
 		public int succeedStartDay = 4;
 		public int succeedEndDay = 5;
-		
+
 		@Override
 		public void getUserGoalReport(UserId id, Date start, Date end,
 				AsyncCallback<GoalReportInformation> callback)
@@ -69,26 +69,26 @@ public class AutoTestContentMyGoals extends GwtTest {
 			logger.info("getUserGoalReport start:" + start + " end:" + end);
 			callback.onSuccess(result);
 		}
-		
+
 		public void reset()
 		{
-			  succeedStartDay = 4;
-			  succeedEndDay = 5;
-			  calls = 0;
+			succeedStartDay = 4;
+			succeedEndDay = 5;
+			calls = 0;
 		}
-		
+
 	}
 
 	class SpecialUtilServiceAsync extends DefaultUtilServiceAsync
 	{
-		
+
 	}
 
 	static SpecialUserServiceAsync userService;
 	static SpecialUtilServiceAsync utilService;
-	
+
 	HorizontalPanel p;
-	
+
 	@Before
 	public void beforeContentMyReports()
 	{
@@ -108,7 +108,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 				}
 				return null;
 			}}
-		);
+				);
 		p = new HorizontalPanel();		
 	}
 
@@ -117,7 +117,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 		logger.info("Check field " + name + " value:" + value + " expected:" + toCheck);
 		assertEquals(toCheck, value);
 	}
-	
+
 	void checkFields(ContentMyGoals cmg, 
 			String tfGoalPeriod,
 			String tfConnectBefore, String reConnectBefore,
@@ -153,7 +153,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 		printAndCheck("tfPhoneCall", tfPhoneCall, cmg.tfPhoneCall.getText());
 		printAndCheck("rePhoneCall", rePhoneCall, cmg.rePhoneCall.actualPerformance.getText());
 	}
-	
+
 	@Test
 	public void testNoValue()
 	{
@@ -176,7 +176,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 				"", ""
 				);
 	}
-	
+
 	void checkValueChange(IExtendedField w, ResultEvaluation re, int realValue)
 	{
 		w.setValue(String.valueOf(realValue - 1));
@@ -186,28 +186,28 @@ public class AutoTestContentMyGoals extends GwtTest {
 		w.setValue("");
 		TestResultEvaluation.checkResultEvaluationContext(re, TestResultEvaluation.STATUS.NOTSET, realValue);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testAllValue()
 	{
 		SpecialUtilServiceAsync.calls = 0;		
 		userService.reset();		
-		
+
 		SpecialUtilServiceAsync.addValue(
 				UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD, 
 				UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD__2WEEK);
 		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, new Long(9*60*60*1000).toString());
 		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, new Long(18*60*60*1000).toString());
 		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, "1");
-		
+
 		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, "2");
 		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY, "3");
 		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW, "4");
 		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL, "5");		
 		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL, "6");
 		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_RECALL_GOAL_MIDDLE, "7");
-			
+
 		cud = new ContentMyGoals(
 				p, userId);
 		cud.onModuleLoad();		
@@ -226,7 +226,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 				"5", "6",
 				"6", "7"
 				);
-		
+
 		Date prev = new Date(cud.previousDate.getText());
 		Date next = new Date(cud.nextDate.getText());
 		long diff = next.getTime() - prev.getTime();
@@ -242,15 +242,15 @@ public class AutoTestContentMyGoals extends GwtTest {
 		long timeEnd = userService.end.getTime() - next.getTime();
 		assertEquals(timeStart, 60*60*1000 * 9);
 		assertEquals(timeEnd, 60*60*1000 * 18);
-		
-		
+
+
 		cud.prevButton.click();
 		assertEquals(0, SpecialUtilServiceAsync.calls);		
 		assertEquals(1, SpecialUserServiceAsync.calls);		
-		
+
 		assertTrue(cud.nextButton.isEnabled());
 		assertTrue(cud.prevButton.isEnabled());
-		
+
 		Date prev2 = new Date(cud.previousDate.getText());
 		Date next2 = new Date(cud.nextDate.getText());
 		diff = next2.getTime() - prev2.getTime();
@@ -261,7 +261,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 		assertTrue(next2.before(prev));
 		assertTrue(cud.nextButton.isEnabled());
 		assertTrue(cud.prevButton.isEnabled());
-		
+
 		// test content change 
 		checkValueChange(cud.tfConnectRatio, cud.reConnectRatio, 3);
 		checkValueChange(cud.tfCreateOpportunity, cud.reCreateOpportunity, 10);
@@ -269,7 +269,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 		checkValueChange(cud.tfInterviewOpportunity, cud.reInterviewOpportunity, 5);
 		checkValueChange(cud.tfProposal, cud.reProposal, 6);
 		checkValueChange(cud.tfPhoneCall, cud.rePhoneCall, 7);
-		
+
 		// check actual success for start time and end time. 1/ not set
 		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectBefore, TestResultEvaluation.STATUS.NOTSET, 4);
 		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectAfter, TestResultEvaluation.STATUS.NOTSET, 5);
@@ -281,7 +281,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 		cud.tfConnectRatio.setValue("50");
 		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectBefore, TestResultEvaluation.STATUS.FAILURE, 4);
 		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectAfter, TestResultEvaluation.STATUS.FAILURE, 5);
-		
+
 		// special case for start time change
 		DefaultUserServiceAsync.calls = 0;
 		userService.succeedStartDay = 100;
@@ -303,6 +303,6 @@ public class AutoTestContentMyGoals extends GwtTest {
 		assertEquals(200, cud.reConnectAfter.value);
 		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectBefore, TestResultEvaluation.STATUS.SUCCESS, 100);
 		TestResultEvaluation.checkResultEvaluationContext(cud.reConnectAfter, TestResultEvaluation.STATUS.SUCCESS, 200);
-}
+	}
 
 }
