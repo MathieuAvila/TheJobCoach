@@ -1,6 +1,6 @@
 package com.TheJobCoach.util;
 
-import com.TheJobCoach.userdata.Account;
+import com.TheJobCoach.userdata.AccountManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class CreateTestDefault {
 
-	static Account account = new Account();
+	static AccountManager account = new AccountManager();
 
 	@Test
 	public void testCreateAccount() throws CassandraException

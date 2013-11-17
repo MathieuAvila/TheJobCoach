@@ -22,10 +22,10 @@ import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
 
-public class TestAccount
+public class TestAccountManager
 {
 
-	static Account account = new Account();
+	static AccountManager account = new AccountManager();
 
 	static String id =  "toto" + UUID.randomUUID().hashCode();
 	static String email =  id + "@toto.com";

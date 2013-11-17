@@ -1,6 +1,6 @@
 package com.TheJobCoach.util;
 
-import com.TheJobCoach.userdata.Account;
+import com.TheJobCoach.userdata.AccountManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -15,7 +15,7 @@ public class AdminSiteSimple {
 	{
 		//CassandraAccessor.setLocation("192.168.0.50:9160");
 
-		Account account = new Account();		
+		AccountManager account = new AccountManager();		
 		{
 			account.deleteAccount("admin");
 			account.createAccountWithToken(

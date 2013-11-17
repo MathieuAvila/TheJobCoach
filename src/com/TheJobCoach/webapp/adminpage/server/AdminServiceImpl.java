@@ -19,7 +19,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class AdminServiceImpl extends RemoteServiceServlet implements AdminService 
 {
-	static com.TheJobCoach.userdata.Account account = new com.TheJobCoach.userdata.Account();
+	static com.TheJobCoach.userdata.AccountManager account = new com.TheJobCoach.userdata.AccountManager();
 	static com.TheJobCoach.admindata.News news = new com.TheJobCoach.admindata.News();
 	
 	@Override

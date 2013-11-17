@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.admindata.News;
-import com.TheJobCoach.userdata.Account;
+import com.TheJobCoach.userdata.AccountManager;
 import com.TheJobCoach.userdata.AccountInterface;
 import com.TheJobCoach.userdata.TodoList;
 import com.TheJobCoach.userdata.UserDocumentManager;
@@ -39,7 +39,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class UserServiceImpl extends RemoteServiceServlet implements UserService
 {
-	static private AccountInterface account = new Account();
+	static private AccountInterface account = new AccountManager();
 	static private UserJobSiteManager jobSiteManager = new UserJobSiteManager();
 	static private News news = new News();
 	static private UserOpportunityManager userOpportunityManager = new UserOpportunityManager();

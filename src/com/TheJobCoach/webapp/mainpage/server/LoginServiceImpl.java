@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 public class LoginServiceImpl extends RemoteServiceServlet implements
 		LoginService {
 	
-	static com.TheJobCoach.userdata.Account account = new com.TheJobCoach.userdata.Account();
+	static com.TheJobCoach.userdata.AccountManager account = new com.TheJobCoach.userdata.AccountManager();
 	
 	private static Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 	

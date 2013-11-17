@@ -35,9 +35,7 @@ import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
-
-
-public class Account implements AccountInterface {
+public class AccountManager implements AccountInterface {
 
 	static ColumnFamilyDefinition cfDef = null;
 	static ColumnFamilyDefinition cfDefEmail = null;
@@ -54,9 +52,9 @@ public class Account implements AccountInterface {
 	UserValues valuesManager = new UserValues();
 	UserJobSiteManager siteManager = new UserJobSiteManager();
 	
-	Logger logger = LoggerFactory.getLogger(Account.class);
+	Logger logger = LoggerFactory.getLogger(AccountManager.class);
 	
-	public Account()
+	public AccountManager()
 	{
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_ACCOUNT, cfDef);
 		cfDefEmail = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_EMAIL, cfDefEmail);
