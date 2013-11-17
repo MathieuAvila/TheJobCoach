@@ -14,6 +14,29 @@ public class UserId implements Serializable {
 		USER_TYPE_ADMIN,
 		USER_TYPE_COACH;
 	};
+
+	public static String userTypeToString(UserId.UserType type)
+	{
+		switch (type)
+		{
+		case USER_TYPE_SEEKER: return "seeker";
+		case USER_TYPE_COACH:  return "coach";
+		case USER_TYPE_ADMIN:  return "admin";
+		}
+		return "";
+	}
+
+	public static UserType stringToUserType(String type)
+	{
+		if (type == null) return UserType.USER_TYPE_SEEKER;
+		if (type.equals("seeker"))
+			return UserType.USER_TYPE_SEEKER;
+		if (type.equals("coach"))
+			return UserType.USER_TYPE_COACH;
+		if (type.equals("admin"))
+			return UserType.USER_TYPE_ADMIN;
+		return UserId.UserType.USER_TYPE_SEEKER;
+	}
 	
 	public UserType type;
 	public UserId(String _userName, String _token, UserId.UserType _type)

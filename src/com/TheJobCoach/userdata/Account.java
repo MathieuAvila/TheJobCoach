@@ -70,29 +70,6 @@ public class Account implements AccountInterface {
 		return ((token != null)&&(!token.equals("")));
 	}
 
-	protected String userTypeToString(UserId.UserType type)
-	{
-		switch (type)
-		{
-		case USER_TYPE_SEEKER: return "seeker";
-		case USER_TYPE_COACH:  return "coach";
-		case USER_TYPE_ADMIN:  return "admin";
-		}
-		return "";
-	}
-
-	protected UserId.UserType stringToUserType(String type)
-	{
-		if (type == null) return UserId.UserType.USER_TYPE_SEEKER;
-		if (type.equals("seeker"))
-			return UserId.UserType.USER_TYPE_SEEKER;
-		if (type.equals("coach"))
-			return UserId.UserType.USER_TYPE_COACH;
-		if (type.equals("admin"))
-			return UserId.UserType.USER_TYPE_ADMIN;
-		return UserId.UserType.USER_TYPE_SEEKER;
-	}
-
 	public boolean updateUserInformation(UserId id, UserInformation info) throws CassandraException
 	{
 		return CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
@@ -103,7 +80,7 @@ public class Account implements AccountInterface {
 				.add("firstname", info.firstName)
 				.add("date", new Date())
 				.add("token", id.token)
-				.add("type", userTypeToString(id.type))
+				.add("type", UserId.userTypeToString(id.type))
 				.get());
 	}
 	
@@ -197,10 +174,9 @@ public class Account implements AccountInterface {
 		String passwordStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "password");
 		if (passwordStr == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
-		if (!passwordStr.equals(password)) 
-			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+		if (!passwordStr.equals(password)) 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
 		String typeStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "type");
-		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, new UserId(userName, token, stringToUserType(typeStr)));
+		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, new UserId(userName, token, UserId.stringToUserType(typeStr)));
 	}
 
 	public Vector<UserId> listUser() throws CassandraException
@@ -220,7 +196,7 @@ public class Account implements AccountInterface {
 				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);			
 				if (accountTable != null && accountTable.containsKey("token"))
 				{
-					UserId newUserId = new UserId(userName, accountTable.get("token"), stringToUserType(accountTable.get("type")));
+					UserId newUserId = new UserId(userName, accountTable.get("token"), UserId.stringToUserType(accountTable.get("type")));
 					result.add(newUserId);
 				}
 			}
@@ -238,7 +214,7 @@ public class Account implements AccountInterface {
 				result.get("password"),
 				result.get("email"),
 				id.token, 
-				stringToUserType(result.get("type")),
+				UserId.stringToUserType(result.get("type")),
 				Convertor.toDate(result.get("date")),
 				Convertor.toDate(result.get("date")), 
 				Convertor.toBoolean(result.get("validated"), true)
