@@ -17,7 +17,7 @@ public interface AccountInterface
 	
 	public ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException;
 	
-	public MainPageReturnLogin loginAccount(String userName, String password);
+	public MainPageReturnLogin loginAccount(String userName, String password) throws CassandraException;
 	
 	public Vector<UserId> listUser() throws CassandraException;
 

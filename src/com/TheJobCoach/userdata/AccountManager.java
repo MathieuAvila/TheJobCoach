@@ -42,6 +42,8 @@ public class AccountManager implements AccountInterface {
 	final static String COLUMN_FAMILY_NAME_NOT_VALIDATED = "accountvalidation";
 	final static String COLUMN_FAMILY_TEST_LIST = "accounttestlist";
 
+	final static int LAST_VERSION = 1;
+	
 	UserOpportunityManager oppManager = new UserOpportunityManager();
 	UserValues valuesManager = new UserValues();
 	UserJobSiteManager siteManager = new UserJobSiteManager();
@@ -62,26 +64,41 @@ public class AccountManager implements AccountInterface {
 		return ((token != null)&&(!token.equals("")));
 	}
 
-	public boolean updateUserInformation(UserId id, UserInformation info) throws CassandraException
+	public boolean updateUserInformation(UserId id, UserInformation info, int version) throws CassandraException
 	{
-		return CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
-				(new ShortMap())
-				.add("email", info.email)
-				.add("name", info.name)
-				.add("password", info.password)
-				.add("firstname", info.firstName)
-				.add("date", new Date())
-				.add("token", id.token)
-				.add("type", UserId.userTypeToString(id.type))
-				.get());
+		ShortMap sm = new ShortMap()
+		.add("email", info.email)
+		.add("name", info.name)
+		.add("firstname", info.firstName)
+		.add("date", new Date())
+		.add("token", id.token)
+		.add("type", UserId.userTypeToString(id.type));
+		if (version == 0) // original one
+		{
+			sm = sm.add("password", info.password);
+		}
+		if (version >= 1)
+		{
+			String s = UtilSecurity.getSalt();
+			String h = UtilSecurity.getHash(s + info.password);
+			sm = sm
+					.add("version", 1)
+					.add("hashedpassword", h)
+					.add("salt", s);
+			// upgrade to secured version
+			CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "password");
+		}
+		return CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, sm.get());
+		
 	}
 	
 	public boolean getUserInformation(UserId id, UserInformation info) throws CassandraException
 	{
-		info.name = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "name");
-		info.email = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "email");
-		info.password = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "password");
-		info.firstName = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "firstname");
+		Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);	
+		info.name = accountTable.get("name");
+		info.email = accountTable.get("email");
+		info.password = accountTable.get("password"); // may be null
+		info.firstName = accountTable.get("firstname");
 		return true;
 	}
 
@@ -91,7 +108,7 @@ public class AccountManager implements AccountInterface {
 		return result;
 	}
 
-	CreateAccountStatus createAccountWithTokenNoMail(UserId id, UserInformation info, String langStr) throws CassandraException
+	CreateAccountStatus createAccountWithTokenNoMail(UserId id, UserInformation info, String langStr, int version) throws CassandraException
 	{
 		if (existsAccount(id.userName))
 			return CreateAccountStatus.CREATE_STATUS_ALREADY_EXISTS;
@@ -113,14 +130,19 @@ public class AccountManager implements AccountInterface {
 				.add("validated", false)
 				.get());
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
-		result = updateUserInformation(id, info);
+		result = updateUserInformation(id, info, version);
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 	
-	public CreateAccountStatus createAccountWithToken(UserId id, UserInformation info, String langStr) throws CassandraException
+	CreateAccountStatus createAccountWithTokenNoMail(UserId id, UserInformation info, String langStr) throws CassandraException
 	{
-		CreateAccountStatus result = createAccountWithTokenNoMail(id, info, langStr);
+		return createAccountWithTokenNoMail(id, info, langStr, LAST_VERSION);
+	}
+	
+	public CreateAccountStatus createAccountWithToken(UserId id, UserInformation info, String langStr, int version) throws CassandraException
+	{
+		CreateAccountStatus result = createAccountWithTokenNoMail(id, info, langStr, version);
 		if (result != CreateAccountStatus.CREATE_STATUS_OK) return result;
 		String body = Lang._TextActivateAccountBody(info.firstName, info.name, info.email, com.TheJobCoach.util.SiteDef.getAddress(), id.userName, id.token, langStr);
 		Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
@@ -128,13 +150,23 @@ public class AccountManager implements AccountInterface {
 		MailerFactory.getMailer().sendEmail(info.email, Lang._TextActivateAccountSubject(langStr), body, "noreply@www.thejobcoach.fr", parts);
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
-
-	public CreateAccountStatus createAccount(UserId id, UserInformation info, String langStr) throws CassandraException
+	
+	public CreateAccountStatus createAccountWithToken(UserId id, UserInformation info, String langStr) throws CassandraException
+	{
+		return createAccountWithToken(id, info, langStr, LAST_VERSION);
+	}
+	
+	public CreateAccountStatus createAccount(UserId id, UserInformation info, String langStr, int version) throws CassandraException
 	{
 		UUID uuid = UUID.randomUUID();
 		String token = id.userName + "_" + uuid.toString();
 		id.token = token;
-		return createAccountWithToken(id, info, langStr);
+		return createAccountWithToken(id, info, langStr, version);
+	}
+
+	public CreateAccountStatus createAccount(UserId id, UserInformation info, String langStr) throws CassandraException
+	{
+		return createAccount( id,  info, langStr, LAST_VERSION);
 	}
 
 	public ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException
@@ -153,22 +185,52 @@ public class AccountManager implements AccountInterface {
 		return ValidateAccountStatus.VALIDATE_STATUS_OK;
 	}
 
-	public MainPageReturnLogin loginAccount(String userName, String password)
+	public MainPageReturnLogin loginAccount(String userName, String password) throws CassandraException
 	{
-		String token = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "token");
+		Map<String, String> accountTable;
+		try {
+			accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);	
+		} 
+		catch (Exception e)
+		{
+			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
+		}
+		if (accountTable == null)
+			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
+		String token = accountTable.get("token");
 		if (token == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
-		String validatedStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "validated");
+		String validatedStr = accountTable.get("validated");
 		if (validatedStr == null)
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
 		boolean validated = Convertor.toBoolean(validatedStr);
 		if (!validated) return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
-		String passwordStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "password");
-		if (passwordStr == null)
-			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
-		if (!passwordStr.equals(password)) 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+		
 		String typeStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "type");
-		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, new UserId(userName, token, UserId.stringToUserType(typeStr)));
+		UserId id = new UserId(userName, token, UserId.stringToUserType(typeStr));
+		
+		// Get version, and adapt according to value
+		String v = accountTable.get("version");
+		if (v == null)
+		{		
+			String passwordStr = accountTable.get("password");
+			if (passwordStr == null)
+				return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+			if (!passwordStr.equals(password)) 	
+				return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+			// force upgrade to hashed password (at least version 1)
+			UserInformation info = new UserInformation();
+			getUserInformation(id, info);
+			updateUserInformation(id, info, LAST_VERSION);
+		}
+		else // If there's a version, it MUST be "1"
+		{
+			String h = accountTable.get("hashedpassword");
+			String s = accountTable.get("salt");
+			if (!UtilSecurity.compareHashedSaltedPassword(password, s, h))
+				return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+		}
+		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, id);
 	}
 
 	public Vector<UserId> listUser() throws CassandraException
@@ -276,7 +338,7 @@ public class AccountManager implements AccountInterface {
 				report.mail + "\n" + comment, 
 				report.mail);
 	}
-
+	
 	public Boolean lostCredentials(String email, String lang) throws CassandraException 
 	{	
 		String userName = getUsernameFromEmail(email);
@@ -284,7 +346,15 @@ public class AccountManager implements AccountInterface {
 		UserReport info = getUserReport(new UserId(userName, "", UserId.UserType.USER_TYPE_SEEKER));
 		if (info == null) return new Boolean(false);
 		UserInformation fullinfo = new UserInformation();
-		getUserInformation(new UserId(info.userName, info.token, info.type), fullinfo);
+		UserId id = new UserId(info.userName, info.token, info.type);
+		getUserInformation(id, fullinfo);
+		
+		// generate new password
+		fullinfo.password = UtilSecurity.getPassword();
+		info.password = fullinfo.password;
+		// update to latest version
+		updateUserInformation(id, fullinfo, LAST_VERSION);
+		
 		String body = Lang._TextLostCredentials(fullinfo.firstName, fullinfo.name, info.userName, info.password, lang);
 		Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
 		parts.put("thejobcoachlogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
@@ -298,6 +368,5 @@ public class AccountManager implements AccountInterface {
 		deleteAccount(id.userName);
 		UserDataCentralManager.deleteUser(id);
 	}
-	
 
 }

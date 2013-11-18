@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +14,7 @@ public class UtilSecurity
 {
 	private static Logger logger = LoggerFactory.getLogger(UtilSecurity.class);
 	private final static int SALT_SIZE = 32;
+	private final static int PASSWORD_SIZE = 8;
 	static MessageDigest digest;
 	
 	final static Random r = new SecureRandom();
@@ -43,6 +45,11 @@ public class UtilSecurity
 			logger.error("Unhandled error with salt generation. Continuing with void salt... : " + e.getMessage());
 		}
 		return t;
+	}
+
+	public static String getPassword()
+	{
+		return RandomStringUtils.randomAlphabetic(PASSWORD_SIZE);
 	}
 	
 	static public String getHash(String key)

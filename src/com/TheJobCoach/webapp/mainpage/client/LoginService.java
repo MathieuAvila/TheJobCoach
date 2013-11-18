@@ -19,7 +19,7 @@ public interface LoginService extends RemoteService {
 	MainPageReturnCode.CreateAccountStatus createAccount(UserId id,
 			UserInformation info, String locale) throws IllegalArgumentException, CassandraException;
 		
-	MainPageReturnLogin connect(String userName, String userPassword);
+	MainPageReturnLogin connect(String userName, String userPassword) throws CassandraException;
 
 	MainPageReturnCode.ValidateAccountStatus validateAccount(String userName, String token) throws CassandraException;
 	

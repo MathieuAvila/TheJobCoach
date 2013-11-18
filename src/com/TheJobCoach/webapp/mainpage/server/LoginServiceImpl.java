@@ -42,7 +42,8 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public MainPageReturnLogin connect(String userName, String userPassword) {
+	public MainPageReturnLogin connect(String userName, String userPassword) throws CassandraException 
+	{
 		logger.info("Connection from: '" + userName + "' with password: '" + userPassword+ "'");
 		MainPageReturnLogin result = account.loginAccount(userName, userPassword);
 		HttpServletRequest request = this.getThreadLocalRequest();

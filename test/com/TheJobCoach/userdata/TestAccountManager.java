@@ -4,14 +4,17 @@ import static org.junit.Assert.*;
 
 import java.util.Map;
 import java.util.UUID;
+
 import org.junit.Test;
 
+import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MockMailer;
 import com.TheJobCoach.util.MailerInterface.Attachment;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -44,7 +47,8 @@ public class TestAccountManager
 		MailerFactory.setMailer(mockMail);
 		CreateAccountStatus status = account.createAccountWithToken(
 				new UserId(id, "mytoken", UserId.UserType.USER_TYPE_SEEKER),
-				new UserInformation("nom", email, "password","prenom"), "FR");
+				new UserInformation("nom", email, "password","prenom"), 
+				"FR");
 		assertEquals( CreateAccountStatus.CREATE_STATUS_OK, status);
 		String mail = mockMail.lastBody;
 		assertEquals(true, mail.contains("token=mytoken"));
@@ -141,6 +145,15 @@ public class TestAccountManager
 		account.deleteAccount(id);				
 	}
 
+	public String getPasswordFromMail(String mail)
+	{
+		String split[] = mail.split("Mot de passe : <strong>");
+		assertEquals(2, split.length);
+		String split2[] = split[1].split("</strong>");
+		assertTrue(split2.length >= 2);
+		return split2[0];
+	}
+	
 	@Test
 	public void testLostCredentials() throws CassandraException 
 	{	
@@ -161,15 +174,52 @@ public class TestAccountManager
 		
 		String mail = mockMail.lastBody;
 		System.out.println("CRED MAIL: " + mail);
-		assertEquals(true, mail.contains(idSeeker));
-		assertEquals(true, mail.contains("passwordXXX"));
+		assertTrue(mail.contains(idSeeker));
+		assertFalse(mail.contains("passwordXXX"));
 		//assertEquals(true, mail.contains("prenom"));
-		assertEquals(true, mail.contains("charset=utf-8")); // encoding
-		assertEquals(true, mail.contains("demandé")); // encoding
+		assertTrue(mail.contains("charset=utf-8")); // encoding
+		assertTrue(mail.contains("demandé")); // encoding
 		assertEquals(1, mockMail.lastParts.size()); // image header
 		
 		Map<String, Attachment> lastParts = mockMail.lastParts;
 		assertEquals(1, lastParts.size());
+		
+		// Now try to log in with new password
+		String newPassword = getPasswordFromMail(mail);
+		System.out.println("NEW PASSWORD: " + newPassword);
+		MainPageReturnLogin loginCred = account.loginAccount(idSeeker, newPassword);
+		assertEquals(loginCred.getLoginStatus(), LoginStatus.CONNECT_STATUS_OK);
+		loginCred = account.loginAccount(idSeeker, "toto11");
+		assertEquals(loginCred.getLoginStatus(), LoginStatus.CONNECT_STATUS_PASSWORD);
 	}
+	
+	@Test
+	public void testUpgradePassword() throws CassandraException 
+	{
+		account.deleteAccount(idSeeker);
+		MailerFactory.setMailer(mockMail);
+		CreateAccountStatus status = account.createAccountWithToken(
+				new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER),
+				new UserInformation("nom", email + "seeker", "password", "prenom"), "en", 0);
+		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
+		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
+		
+		// check password columnn
+		Map<String, String> accountTable = CassandraAccessor.getRow(AccountManager.COLUMN_FAMILY_NAME_ACCOUNT, idSeeker);	
+		assertEquals(accountTable.get("password"), "password"); 
 
+		// Login successfully should trigger an upgrade
+		MainPageReturnLogin loginCred = account.loginAccount(idSeeker, "password");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
+		
+		// Now check it's been upgraded
+		accountTable = CassandraAccessor.getRow(AccountManager.COLUMN_FAMILY_NAME_ACCOUNT, idSeeker);	
+		assertEquals(null, accountTable.get("password")); 
+        // Check we still can login after upgrade
+ 		loginCred = account.loginAccount(idSeeker, "password");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
+		
+	}
 }
