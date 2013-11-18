@@ -28,6 +28,8 @@ public class TestConnectionLog
 	@Test
 	public void testFull() throws CassandraException
 	{
+		cl.deleteUser(user);
+
 		cl.addLogTimeDay(userName, TestFormatUtil.getDate(2012, 5, 6, 1, 10, 20), 120);
 		cl.addLogTimeDay(userName, TestFormatUtil.getDate(2012, 5, 6, 1, 10, 20), 1200); // replace previous
 		assertEquals(1200, cl.getLogTimeDay(userName, TestFormatUtil.getDate(2012, 5, 6, 1, 10, 20)));
