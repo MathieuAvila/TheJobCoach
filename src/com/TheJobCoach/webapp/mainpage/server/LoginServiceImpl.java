@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.TheJobCoach.userdata.AccountManager;
+import com.TheJobCoach.userdata.EvaluationAccountManager;
 import com.TheJobCoach.webapp.mainpage.client.LoginService;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
@@ -13,7 +15,6 @@ import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
 
@@ -26,7 +27,8 @@ import javax.servlet.http.HttpSession;
 public class LoginServiceImpl extends RemoteServiceServlet implements
 		LoginService {
 	
-	static com.TheJobCoach.userdata.AccountManager account = new com.TheJobCoach.userdata.AccountManager();
+	static AccountManager account = new AccountManager();
+	static EvaluationAccountManager evaluationAccount = new EvaluationAccountManager();
 	
 	private static Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 	
@@ -64,9 +66,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	public UserId createTestUser(String lang, UserId.UserType type) throws CassandraException, SystemException 
 	{
 		// purge old accounts.
-		account.purgeTestAccount(60 * 60 * 24); // 1 day
+		evaluationAccount.purgeTestAccount(60 * 60 * 24); // 1 day
 		// create account
-		return account.createTestAccount(lang, type);
+		return evaluationAccount.createTestAccount(lang, type);
 	}
 
 	@Override
