@@ -37,14 +37,14 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 			UserInformation info,
 			String locale)
 			throws IllegalArgumentException, CassandraException {
-		logger.info("Create account request for: '" + id.userName + "' with password: '" + info.password+ "' with EMail:'" + info.email + "' with locale '" + locale +"'");		
+		logger.info("Create account request for: '" + id.userName + "' with EMail:'" + info.email + "' with locale '" + locale +"'");		
 		return account.createAccount(id, info, locale);
 	}
 
 	@Override
 	public MainPageReturnLogin connect(String userName, String userPassword) throws CassandraException 
 	{
-		logger.info("Connection from: '" + userName + "' with password: '" + userPassword+ "'");
+		logger.info("Connection from: '" + userName);
 		MainPageReturnLogin result = account.loginAccount(userName, userPassword);
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
