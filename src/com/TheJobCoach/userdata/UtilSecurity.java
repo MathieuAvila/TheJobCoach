@@ -20,6 +20,7 @@ public class UtilSecurity
 	final static Random r = new SecureRandom();
 	
 	static {
+		logger.info("Found commons-codec on path at: " + Base64.class.getProtectionDomain().getCodeSource().getLocation());
 		try
 		{
 			digest = MessageDigest.getInstance("SHA-256");
