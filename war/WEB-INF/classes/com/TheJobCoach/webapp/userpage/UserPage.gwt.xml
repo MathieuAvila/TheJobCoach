@@ -3,6 +3,7 @@
 <module>
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name='com.TheJobCoach.webapp.util.Util'/>	
+	<inherits name="com.google.gwt.user.RemoteServiceObfuscateTypeNames"/>
 	
 	<inherits name="com.google.gwt.i18n.I18N"/>
 	
