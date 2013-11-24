@@ -229,6 +229,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 
 		Date prev = new Date(cud.previousDate.getText());
 		Date next = new Date(cud.nextDate.getText());
+		next = FormatUtil.endOfTheDay(next);
 		long diff = next.getTime() - prev.getTime();
 		assertTrue(diff > 24*60*60*1000 * 12);
 		assertTrue(diff < 24*60*60*1000 * 15);
@@ -239,6 +240,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 		assertTrue(cud.prevButton.isEnabled());
 		// Check start/end on request
 		long timeStart = userService.start.getTime() - prev.getTime();
+		next = FormatUtil.startOfTheDay(next);
 		long timeEnd = userService.end.getTime() - next.getTime();
 		assertEquals(timeStart, 60*60*1000 * 9);
 		assertEquals(timeEnd, 60*60*1000 * 18);
@@ -256,8 +258,6 @@ public class AutoTestContentMyGoals extends GwtTest {
 		diff = next2.getTime() - prev2.getTime();
 		assertTrue(diff > 24*60*60*1000 * 12);
 		assertTrue(diff < 24*60*60*1000 * 15);
-		assertTrue(prev.before(current));
-		assertTrue(next.after(current));
 		assertTrue(next2.before(prev));
 		assertTrue(cud.nextButton.isEnabled());
 		assertTrue(cud.prevButton.isEnabled());
