@@ -6,6 +6,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class GridHelper extends Grid
 {
+	String defaultCol1Size = "30%";
+	String defaultCol2Size = "70%";
+	
 	void init(Panel root, int w, int h)
 	{
 		super.setBorderWidth(0);
@@ -29,6 +32,14 @@ public class GridHelper extends Grid
 		super(0, 0);
 		init(root, 0, 0);
 	}
+
+	public GridHelper(Panel root, String s1, String s2)
+	{
+		super(0, 0);
+		init(root, 0, 0);
+		defaultCol1Size = s1;
+		defaultCol2Size = s2;
+	}
 	
 	public void addLine(int line, Widget title, Widget content)
 	{
@@ -36,9 +47,9 @@ public class GridHelper extends Grid
 		if (super.numColumns < 2) super.resizeColumns(2);
 		super.setWidget(line, 0, title);		
 		if (content != null) super.setWidget(line, 1, content);
-		super.getCellFormatter().setWidth(line, 0, "30%");
+		super.getCellFormatter().setWidth(line, 0, defaultCol1Size);
 		title.setWidth("100%");
-		super.getCellFormatter().setWidth(line, 1, "70%");
+		super.getCellFormatter().setWidth(line, 1, defaultCol2Size);
 		content.setWidth("100%");
 	}
 	
