@@ -1,2 +1,0 @@
-# Module com.TheJobCoach.webapp.mainpage.MainPage
-# RPC service class, partial path of RPC policy file
