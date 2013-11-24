@@ -24,4 +24,6 @@ public interface AccountInterface
 	public void sendComment(UserId id, String comment) throws CassandraException;
 	
 	public void purgeAccount() throws CassandraException;
+
+	public void setPassword(UserId id, String newPassword) throws CassandraException;
 }

@@ -206,8 +206,10 @@ public class TestAccountManager
 		
 		// check password columnn
 		Map<String, String> accountTable = CassandraAccessor.getRow(AccountManager.COLUMN_FAMILY_NAME_ACCOUNT, idSeeker);	
+		System.out.println(accountTable);
 		assertEquals(accountTable.get("password"), "password"); 
 
+		
 		// Login successfully should trigger an upgrade
 		MainPageReturnLogin loginCred = account.loginAccount(idSeeker, "password");
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
@@ -221,5 +223,36 @@ public class TestAccountManager
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
 		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
 		
+	}
+	
+
+	@Test
+	public void testUpdatePassword() throws CassandraException 
+	{
+		account.deleteAccount(idSeeker);
+		MailerFactory.setMailer(mockMail);
+		UserId id = new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER);
+		CreateAccountStatus status = account.createAccountWithToken(
+				id,
+				new UserInformation("nom", email + "seeker", "password", "prenom"), "en");
+		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
+		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
+		
+		// Login successfully
+		MainPageReturnLogin loginCred = account.loginAccount(idSeeker, "password");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
+		
+		// Now change
+		account.setPassword(id, "NEWPASS");
+		
+		// Check new login with NEW password
+		loginCred = account.loginAccount(idSeeker, "NEWPASS");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
+		
+		// Check failure with previous pass
+		loginCred = account.loginAccount(idSeeker, "password");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_PASSWORD, loginCred.getLoginStatus());
 	}
 }

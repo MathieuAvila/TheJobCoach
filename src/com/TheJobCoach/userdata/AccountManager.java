@@ -64,6 +64,27 @@ public class AccountManager implements AccountInterface {
 		return ((token != null)&&(!token.equals("")));
 	}
 
+	public void updatePassword(UserId id, String password, int version) throws CassandraException
+	{
+		ShortMap sm = new ShortMap();
+		if (version == 0) // original one
+		{
+			sm = sm.add("password", password);
+		}
+		if (version >= 1)
+		{
+			String s = UtilSecurity.getSalt();
+			String h = UtilSecurity.getHash(s + password);
+			sm = sm
+					.add("version", 1)
+					.add("hashedpassword", h)
+					.add("salt", s);
+			// upgrade to secured version
+			CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "password");
+		}
+		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, sm.get());
+	}
+	
 	public boolean updateUserInformation(UserId id, UserInformation info, int version) throws CassandraException
 	{
 		ShortMap sm = new ShortMap()
@@ -73,23 +94,10 @@ public class AccountManager implements AccountInterface {
 		.add("date", new Date())
 		.add("token", id.token)
 		.add("type", UserId.userTypeToString(id.type));
-		if (version == 0) // original one
-		{
-			sm = sm.add("password", info.password);
-		}
-		if (version >= 1)
-		{
-			String s = UtilSecurity.getSalt();
-			String h = UtilSecurity.getHash(s + info.password);
-			sm = sm
-					.add("version", 1)
-					.add("hashedpassword", h)
-					.add("salt", s);
-			// upgrade to secured version
-			CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "password");
-		}
-		return CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, sm.get());
 		
+		 CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, sm.get());
+		 updatePassword(id, info.password, version);
+		 return true;
 	}
 	
 	public boolean getUserInformation(UserId id, UserInformation info) throws CassandraException
@@ -367,6 +375,12 @@ public class AccountManager implements AccountInterface {
 	{
 		deleteAccount(id.userName);
 		UserDataCentralManager.deleteUser(id);
+	}
+
+	@Override
+	public void setPassword(UserId id, String newPassword) throws CassandraException
+	{
+		updatePassword(id, newPassword, LAST_VERSION);
 	}
 
 }
