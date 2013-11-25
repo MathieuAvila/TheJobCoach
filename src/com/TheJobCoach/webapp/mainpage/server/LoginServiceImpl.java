@@ -69,7 +69,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		// purge old accounts.
 		evaluationAccount.purgeTestAccount(60 * 60 * 24); // 1 day
 		// create account
-		return evaluationAccount.createTestAccount(lang, type);
+		UserId testAccount = evaluationAccount.createTestAccount(lang, type);
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		CoachSecurityCheck.loginUser(testAccount, session);
+		return testAccount;
 	}
 
 	@Override
