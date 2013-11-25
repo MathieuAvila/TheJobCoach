@@ -59,4 +59,5 @@ public interface UserService extends RemoteService
 	
 	public GoalReportInformation getUserGoalReport(UserId id, Date start, Date end) throws CassandraException, CoachSecurityException;
 
+	public String setPassword(UserId id, String newPassword) throws CassandraException, CoachSecurityException;
 }

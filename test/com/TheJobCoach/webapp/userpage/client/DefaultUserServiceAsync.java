@@ -183,4 +183,11 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 	{
 		// TODO Auto-generated method stub
 	}
+	@Override
+	public void setPassword(UserId id, String newPassword,
+			AsyncCallback<String> callback)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 };

@@ -1,4 +1,4 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.Account;
 
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
@@ -32,6 +32,24 @@ public class TestContentMyAccount implements EntryPoint {
 					hp.setSize("100%", "100%");
 					ContentAccount cud = new ContentAccount(hp, TestSecurity.defaultUser);
 					cud.onModuleLoad();
+				}
+			});
+		}
+		
+		final RootPanel rootPw = RootPanel.get("changepassword");
+		if (rootPw != null)
+		{
+			EasyAsync.Check(rootPw, new ToRun() {
+				@Override
+				public void Open()
+				{
+					rootPw.setStyleName("mainpage-content");		
+					HorizontalPanel hp = new HorizontalPanel();
+					hp.setStyleName("mainpage-content");
+					rootPw.add(hp);
+					hp.setSize("100%", "100%");
+					EditPassword editPassword = new EditPassword(hp, TestSecurity.defaultUser);
+					editPassword.onModuleLoad();
 				}
 			});
 		}

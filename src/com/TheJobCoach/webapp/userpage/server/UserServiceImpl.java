@@ -247,4 +247,13 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		return goalReport.getReport(id, start, end);
 	}
 
+	@Override
+	public String setPassword(UserId id, String newPassword)
+			throws CassandraException, CoachSecurityException
+	{
+		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+		account.setPassword(id, newPassword);
+		return "";
+	}
+
 }
