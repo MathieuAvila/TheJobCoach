@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedTextField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
@@ -22,7 +23,10 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -38,7 +42,10 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangAccount langAccount = GWT.create(LangAccount.class);
 	final static com.TheJobCoach.webapp.util.client.Lang langUtil = GWT.create(com.TheJobCoach.webapp.util.client.Lang.class);
-
+	
+	Label lblPassword = new Label(lang._TextPassword());
+	ButtonImageText btnChangePassword = new ButtonImageText(ButtonImageText.Type.NEW, langAccount.Text_changespassword());
+	
 	ClientUserValuesUtils values = null;
 
 	DialogBlockApplyReset applyReset = null;
@@ -107,13 +114,24 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 		
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitleAccount());
 
-		Grid grid0 = new Grid(1, 2);
+		Grid grid0 = new Grid(2, 2);
 		simplePanelCenter.add(grid0);
 
 		grid0.setWidget(0,0, clModel);
 		grid0.setWidget(0,1, tfModel.getItem());
 
 		fields.put(UserValuesConstantsAccount.ACCOUNT_MODEL, tfModel);
+
+		grid0.setWidget(1,0, lblPassword);
+		grid0.setWidget(1,1, btnChangePassword);
+		btnChangePassword.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				EditPassword ep = new EditPassword(rootPanel, user);
+				ep.onModuleLoad();
+			}	
+		});
 		
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitlePersonalInformation());
 

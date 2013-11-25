@@ -56,6 +56,7 @@ public interface LangAccount extends Constants {
 	@Key("title_visibility")
 	String Text_TitleVisibility();
 
+	
 	@Key("changespassword")
 	String Text_changespassword();
 	
@@ -64,5 +65,5 @@ public interface LangAccount extends Constants {
 
 	@Key("retypepassword")
 	String _Text_retypepassword();
-	
+
 }
