@@ -79,5 +79,8 @@ public class TestFormatUtil {
 		checkExpectGetPeriod(PERIOD_TYPE.PERIOD_TYPE_MONTH, 0, current, CoachTestUtils.getDate(2013, 11, 1), CoachTestUtils.getDate(2013, 11, 30));
 		checkExpectGetPeriod(PERIOD_TYPE.PERIOD_TYPE_MONTH, -1, current, CoachTestUtils.getDate(2013, 10, 1), CoachTestUtils.getDate(2013, 10, 31));
 		checkExpectGetPeriod(PERIOD_TYPE.PERIOD_TYPE_MONTH, 1, current, CoachTestUtils.getDate(2013, 12, 1), CoachTestUtils.getDate(2013, 12, 31));
+	 
+		current = CoachTestUtils.getDate(2013, 11, 26);
+		checkExpectGetPeriod(PERIOD_TYPE.PERIOD_TYPE_WEEK, 0, current, CoachTestUtils.getDate(2013, 11, 25), CoachTestUtils.getDate(2013, 12, 1));
 	}
 }

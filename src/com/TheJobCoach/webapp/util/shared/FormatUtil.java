@@ -147,8 +147,8 @@ public class FormatUtil
 			long fixedRef = fixedDate.getTime();
 			long currentRef = current.getTime();
 
-			long diffWeek = (currentRef - fixedRef) / MS_PER_WEEK + (currentRef - fixedRef) < 0 ? -1*interval : 0;
-			
+			long diffWeek = (currentRef - fixedRef) / MS_PER_WEEK + ((currentRef - fixedRef) < 0 ? -1*interval : 0);
+
 			long boundary = diffWeek % interval;
 			
 			long startWeekMs = fixedRef + diffWeek * MS_PER_WEEK;
