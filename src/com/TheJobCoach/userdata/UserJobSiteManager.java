@@ -60,7 +60,7 @@ public class UserJobSiteManager {
 	{
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (new ShortMap()).add(result.ID, result.ID).get());
 		String reqId = id.userName + "_" + result.ID;
-		boolean resultReq = CassandraAccessor.updateColumn(
+		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_DATA, 
 				reqId, 
 				(new ShortMap())
@@ -70,11 +70,7 @@ public class UserJobSiteManager {
 				.add("login", result.login)
 				.add("password", result.password)
 				.add("lastvisit", result.lastVisit)
-				.get());	
-		if (resultReq == false)
-		{
-			throw new CassandraException(); 
-		}
+				.get());
 	}
 	
 	public void deleteUserSite(UserId id, String ID) throws CassandraException 

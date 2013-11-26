@@ -55,11 +55,8 @@ public class TestUserJobSiteManager {
 		manager.setUserSite(id2, ujs21);
 		manager.setUserSite(id2, ujs22);
 		manager.setUserSite(id2, ujs23);	
-	}
-	
-	@Test
-	public void testGetUserSiteList() throws CassandraException {
-		List<String> result = manager.getUserSiteList(id);
+
+		result = manager.getUserSiteList(id);
 		assertEquals(3, result.size());
 		assertTrue(result.contains(site1));
 		assertTrue(result.contains(site2));
@@ -128,6 +125,28 @@ public class TestUserJobSiteManager {
 		assertEquals(2, result2.size());
 		assertTrue(result2.contains(site12));
 		assertTrue(result2.contains(site22));
+	}
+
+	@Test
+	public void testDeleteUser() throws CassandraException 
+	{
+		ujs1.ID = site1;
+		ujs2.ID = site2;
+		ujs3.ID = site3;
+		manager.setUserSite(id, ujs1);
+		manager.setUserSite(id, ujs2);
+		manager.setUserSite(id, ujs3);
+		
+		manager.deleteUser(id);
+
+		List<String> result = manager.getUserSiteList(id);
+		assertEquals(0, result.size());
+		
+		int hasError = 0;
+		try{ manager.getUserSite(id, site1); } catch (CassandraException e) { hasError++; };
+		try{ manager.getUserSite(id, site2); } catch (CassandraException e) { hasError++; };
+		try{ manager.getUserSite(id, site3); } catch (CassandraException e) { hasError++; };
+		assertEquals(3, hasError);
 	}
 	
 }
