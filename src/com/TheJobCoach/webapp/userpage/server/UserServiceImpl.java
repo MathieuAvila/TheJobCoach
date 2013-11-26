@@ -207,11 +207,11 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 
 	@Override
-	public Boolean deleteTodoEvent(UserId id, TodoEvent todo)
+	public Boolean deleteTodoEvent(UserId id, String todoId, boolean done)
 			throws CassandraException, CoachSecurityException
 	{
 		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
-		todoList.deleteTodoEvent(id, todo.ID);
+		todoList.deleteTodoEvent(id, todoId, done);
 		return new Boolean(true);
 	}
 

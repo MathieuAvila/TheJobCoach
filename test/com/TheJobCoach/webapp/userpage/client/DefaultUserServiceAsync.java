@@ -149,7 +149,7 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 		
 	}
 	@Override
-	public void deleteTodoEvent(UserId id, TodoEvent todo,
+	public void deleteTodoEvent(UserId id, String todo, boolean done,
 			AsyncCallback<Boolean> callback)
 	{
 		// TODO Auto-generated method stub

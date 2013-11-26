@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
 import com.TheJobCoach.util.CassandraAccessor;
@@ -17,7 +20,8 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class TodoList 
 {	
-
+	private static Logger logger = LoggerFactory.getLogger(TodoList.class);
+	
 	private static HashMap<Priority, String> priority2String = new HashMap<Priority, String>();
 	private static HashMap<String, Priority> string2Priority = new HashMap<String, Priority>();
 
@@ -49,9 +53,9 @@ public class TodoList
 	public interface TodoListSubscriber
 	{
 		public String getSubscriberId();
-		public void event(TodoEvent event);
-		public boolean isEventValid(TodoEvent event);
-		public void eventDone(TodoEvent event);
+		public void event(UserId id, TodoEvent event);
+		public boolean isEventValid(UserId id, TodoEvent event);
+		public void eventDone(UserId id, TodoEvent event);
 	}
 	
 	static ColumnFamilyDefinition cfDef = null;
@@ -79,7 +83,10 @@ public class TodoList
 	public TodoEvent getTodoEvent(UserId id, String ID, String lang) throws CassandraException 
 	{
 		String reqId = id.userName + "_" + ID;
-		ShortMap resultReq = new ShortMap(CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId));
+		
+		Map<String, String> res = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
+		if (res == null) throw new CassandraException();
+		ShortMap resultReq = new ShortMap(res);
 		TodoEvent te = new TodoEvent(
 				ID, 
 				Convertor.toString(resultReq.getString("text")),
@@ -131,21 +138,47 @@ public class TodoList
 			try
 			{
 				TodoEvent todo = getTodoEvent(id, key, lang);
-				result.add(todo);
+				TodoListSubscriber subscriber = subscriberMap.get(todo.eventSubscriber);
+				boolean valid = true;
+				if (subscriber != null)
+				{
+					// Check still validity
+					valid = subscriber.isEventValid(id, todo);
+				}
+				if (valid) result.add(todo);
+				else rawDeleteTodo(id, key);
 			}
 			catch (CassandraException e) // Happens if key does not exist anymore in table. Purge bad entry. 
 			{
-				deleteTodoEvent(id, key);
+				logger.info("purge invalid todo key " + key + " for user:" + id.userName);
+				deleteTodoEvent(id, key, false);
 			}			
 		}
 		return result;
 	}
 	
-	public void deleteTodoEvent(UserId id, String todoKey) throws CassandraException
-	{		
+	private void rawDeleteTodo(UserId id, String todoKey) throws CassandraException
+	{
 		String reqId = id.userName + "_" + todoKey;
 		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_TODOLIST, id.userName, todoKey);
-		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_TODOLIST, reqId);
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_DATA, reqId);
 	}
 	
+	public void deleteTodoEvent(UserId id, String todoKey, boolean markDone) throws CassandraException
+	{	
+		try {
+		TodoEvent event = getTodoEvent(id, todoKey, "");
+		TodoListSubscriber subscriber = subscriberMap.get(event.eventSubscriber);
+		if (subscriber != null)
+		{
+			// call for deletion
+			subscriber.eventDone(id, event);
+		}
+		}
+		catch (CassandraException e) {
+			// possible if partially destroyed
+		}
+		rawDeleteTodo(id, todoKey);
+	}
+
 }

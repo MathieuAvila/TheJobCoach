@@ -55,7 +55,7 @@ public interface UserService extends RemoteService
 	
 	public Vector<TodoEvent> getTodoEventList(UserId id, String lang) throws CassandraException, CoachSecurityException;
 	public Boolean setTodoEvent(UserId id, TodoEvent todo) throws CassandraException, CoachSecurityException;
-	public Boolean deleteTodoEvent(UserId id, TodoEvent todo) throws CassandraException, CoachSecurityException;
+	public Boolean deleteTodoEvent(UserId id, String todoId, boolean done) throws CassandraException, CoachSecurityException;
 	
 	public GoalReportInformation getUserGoalReport(UserId id, Date start, Date end) throws CassandraException, CoachSecurityException;
 

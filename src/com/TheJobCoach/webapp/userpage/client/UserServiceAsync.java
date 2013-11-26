@@ -53,7 +53,7 @@ public interface UserServiceAsync {
 	
 	public void getTodoEventList(UserId id, String lang, AsyncCallback<Vector<TodoEvent>> callback);
 	public void setTodoEvent(UserId id, TodoEvent todo, AsyncCallback<Boolean> callback);
-	public void deleteTodoEvent(UserId id, TodoEvent todo, AsyncCallback<Boolean> callback);
+	public void deleteTodoEvent(UserId id, String todoId, boolean done, AsyncCallback<Boolean> callback);
 	
 	public void getUserGoalReport(UserId id, Date start, Date end, AsyncCallback<GoalReportInformation> callback);
 	

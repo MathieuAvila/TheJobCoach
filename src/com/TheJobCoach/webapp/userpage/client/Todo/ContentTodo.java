@@ -45,9 +45,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class ContentTodo implements EntryPoint {
 
 	final static Lang lang = GWT.create(Lang.class);
@@ -55,7 +52,7 @@ public class ContentTodo implements EntryPoint {
 
 	final static int MINIMUM_SIZE_W = 120;
 	final static int MINIMUM_SIZE_H = 120;
-	
+
 	UserId user;
 
 	public ContentTodo(Panel rootPanel, UserId user) {
@@ -66,7 +63,7 @@ public class ContentTodo implements EntryPoint {
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
-	
+
 	public void setRootPanel(Panel panel)
 	{
 		rootPanel = panel;
@@ -78,7 +75,7 @@ public class ContentTodo implements EntryPoint {
 	 *
 	 */
 	class SurfaceView extends FlowPanel {
-		
+
 		private class TodoEventView extends SimplePanel implements
 		MouseUpHandler, MouseDownHandler, MouseMoveHandler,
 		ValueChangeHandler<String>, KeyUpHandler
@@ -96,7 +93,7 @@ public class ContentTodo implements EntryPoint {
 			private int dragOffsetX, dragOffsetY;
 
 			private int org_x, org_y, org_w, org_h;
-			
+
 			private SurfaceView surface;
 			/**
 			 * @param TodoEvent
@@ -110,7 +107,7 @@ public class ContentTodo implements EntryPoint {
 
 				final Element elem = getElement();
 				elem.getStyle().setProperty("position", "absolute");
-				
+
 				HorizontalPanel hp = new HorizontalPanel();
 				SimplePanel titlePanel = new SimplePanel();
 				titlePanel.setWidth("100%");
@@ -128,16 +125,16 @@ public class ContentTodo implements EntryPoint {
 
 				setPixelPosition(myTodoEvent.x, myTodoEvent.y);
 				setPixelSize(myTodoEvent.w, myTodoEvent.h);
-				
+
 				this.setWidget(content);
 
 				addDomHandler(this, MouseDownEvent.getType());
 				addDomHandler(this, MouseMoveEvent.getType());
 				addDomHandler(this, MouseUpEvent.getType());
-				
+
 
 				checkForChange();
-				
+
 				SimplePanel colorPanel = new SimplePanel();
 				colorPanel.setWidth("2em");
 				hp.add(colorPanel);
@@ -146,7 +143,7 @@ public class ContentTodo implements EntryPoint {
 				bcolor.setClassName("TodoEvent-title");
 				bcolor.setInnerHTML("C");
 				colorPanel.getElement().appendChild(bcolor);
-				
+
 				SimplePanel donePanel = new SimplePanel();
 				donePanel.setWidth("2em");
 				hp.add(donePanel);
@@ -155,7 +152,7 @@ public class ContentTodo implements EntryPoint {
 				done.setClassName("TodoEvent-title");
 				done.setInnerHTML("X");
 				donePanel.getElement().appendChild(done);
-								
+
 				render();
 			}
 
@@ -164,20 +161,20 @@ public class ContentTodo implements EntryPoint {
 				final Style style = getElement().getStyle();
 				int new_org_x = Integer.parseInt(style.getLeft().substring(0, (style.getLeft().length() - 2)));
 				int new_org_y = Integer.parseInt(style.getTop().substring(0, (style.getTop().length() - 2)));
-				
+
 				int new_org_w = content.getOffsetWidth() - 2;
 				int new_org_h = content.getOffsetHeight() - 2;
-				
+
 				boolean result = (new_org_x != org_x) || (new_org_y != org_y) || (new_org_h != org_h) || (new_org_w != org_w);
-				
+
 				org_x = new_org_x;
 				org_y = new_org_y;
 				org_w = new_org_w;
 				org_h = new_org_h;
-				
+
 				if (org_w < MINIMUM_SIZE_W) org_w = MINIMUM_SIZE_W;
 				if (org_h < MINIMUM_SIZE_H) org_h = MINIMUM_SIZE_H;
-				
+
 				return result;
 			}
 
@@ -286,7 +283,7 @@ public class ContentTodo implements EntryPoint {
 
 				getElement().getStyle().setBackgroundColor(myTodoEvent.getHtmlColor());
 				bcolor.getStyle().setBackgroundColor(myTodoEvent.getHtmlColor(myTodoEvent.getNextColor()));
-				
+
 			}
 
 			private void select(int zIndex) {
@@ -299,7 +296,7 @@ public class ContentTodo implements EntryPoint {
 				myTodoEvent.text = event.getValue();
 				updateTodoEvent();
 			}
-			
+
 			@Override
 			public void onKeyUp(KeyUpEvent event)
 			{
@@ -314,9 +311,9 @@ public class ContentTodo implements EntryPoint {
 		private TodoEventView selectedTodoEventView;
 
 		private HashMap<String, TodoEventView> content = new HashMap<String, TodoEventView>();
-		
+
 		private final ContentTodo contentTodo;
-		
+
 		public SurfaceView(ContentTodo contentTodo) {
 			final Element elem = getElement();
 			elem.setId("surface");
@@ -338,9 +335,9 @@ public class ContentTodo implements EntryPoint {
 		}
 
 		public void onRemoveTodoEvent(TodoEvent id) {			
-				//this.remove(content.get(id.ID));
-				//content.remove(id.ID);
-				contentTodo.deleteTodoEvent(id);
+			//this.remove(content.get(id.ID));
+			//content.remove(id.ID);
+			contentTodo.deleteTodoEvent(id);
 		}
 
 		public void confirmRemoveTodoEvent(TodoEvent id)
@@ -348,7 +345,7 @@ public class ContentTodo implements EntryPoint {
 			this.remove(content.get(id.ID));
 			content.remove(id.ID);
 		}
-		
+
 		private void select(TodoEventView TodoEventView) 
 		{			
 			assert TodoEventView != null;
@@ -383,16 +380,17 @@ public class ContentTodo implements EntryPoint {
 		};
 		userService.getTodoEventList(user, "FR", callback);
 	}
-	
+
 	void deleteTodoEvent(final TodoEvent currentTodoEvent)
 	{
+		if (currentTodoEvent == null) return;
 		MessageBox mb = new MessageBox(rootPanel, true, true, MessageBox.TYPE.QUESTION, 
 				langTodo._TextConfirmDeleteTitle(), langTodo._TextConfirmDelete(), new MessageBox.ICallback() {
 
 			public void complete(boolean ok) {				
 				if(ok)
 				{
-					userService.deleteTodoEvent(user, currentTodoEvent, new ServerCallHelper<Boolean>(rootPanel) {
+					userService.deleteTodoEvent(user, currentTodoEvent.ID, false, new ServerCallHelper<Boolean>(rootPanel) {
 						public void onSuccess(Boolean result)
 						{
 							userTodoEventList.remove(currentTodoEvent);
@@ -451,7 +449,7 @@ public class ContentTodo implements EntryPoint {
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextTodo(), ClientImageBundle.INSTANCE.todoContent());
 
 		getAllContent();
-		
+
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
