@@ -1,25 +1,42 @@
 package com.TheJobCoach.userdata;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
+import com.TheJobCoach.userdata.TodoList.TodoListSubscriber;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
+import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
+import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
-public class UserJobSiteManager {
+public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager {
 
 	final static String COLUMN_FAMILY_NAME_LIST = "userjobsitelist";
 	final static String COLUMN_FAMILY_NAME_DATA = "userjobsitedata";
 	
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
+	static ITodoList todoList = new TodoList();
+	
+	static boolean inited = false;
+	{
+		if (!inited)
+		{
+			TodoList.registerTodoListSubscriber(this);
+			UserDataCentralManager.addManager(this);
+			inited = true;
+		}
+	}
 	
 	public UserJobSiteManager()
 	{
@@ -52,7 +69,7 @@ public class UserJobSiteManager {
 				Convertor.toString(resultReq.get("description")),
 				Convertor.toString(resultReq.get("login")),
 				Convertor.toString(resultReq.get("password")),
-				Convertor.toDate(resultReq.get("lastvisit"))
+				UpdatePeriodAccessor.fromCassandra(resultReq)
 				);
 	}
 
@@ -63,14 +80,34 @@ public class UserJobSiteManager {
 		CassandraAccessor.updateColumn(
 				COLUMN_FAMILY_NAME_DATA, 
 				reqId, 
-				(new ShortMap())
+				UpdatePeriodAccessor.toCassandra(new ShortMap()
 				.add("name", result.name)
 				.add("url", result.URL)
 				.add("description", result.description)
 				.add("login", result.login)
-				.add("password", result.password)
-				.add("lastvisit", result.lastVisit)
+				.add("password", result.password), result.update)
 				.get());
+		if (result.update.needRecall)
+		{
+			// Create a TodoEvent
+			Date nextDate = result.update.getNextCall();
+			HashMap<String, String> hash = new HashMap<String, String>();
+			hash.put(TodoCommon.ID, result.ID);
+			hash.put(TodoCommon.LAST, FormatUtil.getDateString(result.update.last));
+			hash.put(TodoCommon.NAME, result.name);
+			
+			TodoEvent te = new TodoEvent(
+					result.ID, 
+					"",
+					hash,  
+					TodoCommon.SITEMANAGER_SUBSCRIBER_ID, 
+					TodoEvent.Priority.NORMAL,  
+					nextDate, 
+					TodoEvent.EventColor.BLUE, 
+					-1,-1,
+					150,100);
+			todoList.setTodoEvent(id, te);
+		}
 	}
 	
 	public void deleteUserSite(UserId id, String ID) throws CassandraException 
@@ -88,6 +125,79 @@ public class UserJobSiteManager {
 			deleteUserSite(id, siteId);
 		}
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST, id.userName);	
+	}
+	
+	/*
+	 * Those are for TodoList interface
+	 */
+	
+	@Override
+	public String getSubscriberId()
+	{
+		return TodoCommon.SITEMANAGER_SUBSCRIBER_ID;
+	}
+
+	@Override
+	public void event(UserId id, TodoEvent event)
+	{
+		// TODO : WTF ?
+	}
+
+	@Override
+	public boolean isEventValid(UserId id, TodoEvent event)
+	{
+		// Does ID exist ? 
+		String siteId = event.systemText.get(TodoCommon.ID);
+		String lastDate = event.systemText.get(TodoCommon.LAST);
+		if (siteId == null) return false;
+		UserJobSite ujs;
+		try {
+			ujs = getUserSite(id, siteId);
+		}
+		catch (CassandraException e)
+		{
+			return false;
+		}
+		return FormatUtil.getDateString(ujs.update.last).equals(lastDate);
+	}
+
+	@Override
+	public void eventDone(UserId id, TodoEvent event)
+	{
+		String siteId = event.systemText.get("siteid");
+		if (siteId == null) return;
+		UserJobSite ujs;
+		try {
+			ujs = getUserSite(id, siteId);
+		}
+		catch (CassandraException e)
+		{
+			return;
+		}
+		// Update last update, set new.
+		ujs.update.last = new Date();
+		try {
+			setUserSite(id, ujs);
+		}
+		catch (CassandraException e) {};
+	}
+	
+	/*
+	 * Those are for CentralManager
+	 */
+
+	@Override
+	public void createUser(UserId user)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createTestUser(UserId user, String lang)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

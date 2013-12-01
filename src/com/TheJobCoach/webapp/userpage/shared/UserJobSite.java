@@ -3,6 +3,8 @@ package com.TheJobCoach.webapp.userpage.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
+
 public class UserJobSite implements Serializable {
 
 	
@@ -14,10 +16,10 @@ public class UserJobSite implements Serializable {
 	public String description;
 	public String login;
 	public String password;
-	public Date lastVisit;
-	public int needUpdateDays;
 	
-	public UserJobSite(String _ID, String _name, String _URL, String _description, String _login, String _password, Date _lastVisit, int needUpdateDays)
+	public UpdatePeriod update;
+	
+	public UserJobSite(String _ID, String _name, String _URL, String _description, String _login, String _password, UpdatePeriod update)
 	{
 		ID = _ID;
 		name = _name;
@@ -25,11 +27,10 @@ public class UserJobSite implements Serializable {
 		description = _description;
 		login = _login;
 		password = _password;
-		lastVisit = _lastVisit;
-		this.needUpdateDays = needUpdateDays;
+		this.update = update;
 	}
 	
-	public UserJobSite(String _ID, String _name, String _URL, String _description, String _login, String _password, Date _lastVisit)
+	public UserJobSite(String _ID, String _name, String _URL, String _description, String _login, String _password)
 	{
 		ID = _ID;
 		name = _name;
@@ -37,8 +38,7 @@ public class UserJobSite implements Serializable {
 		description = _description;
 		login = _login;
 		password = _password;
-		lastVisit = _lastVisit;
-		this.needUpdateDays = 0;
+		this.update = new UpdatePeriod(new Date(), 0, PeriodType.DAY, false);
 	}
 	
 	public UserJobSite()

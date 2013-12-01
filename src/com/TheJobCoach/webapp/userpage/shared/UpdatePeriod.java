@@ -3,6 +3,8 @@ package com.TheJobCoach.webapp.userpage.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
+
 public class UpdatePeriod implements Serializable  {
 
 	private static final long serialVersionUID = 1116255124512443730L;
@@ -73,6 +75,15 @@ public class UpdatePeriod implements Serializable  {
 		}
 		return result;
 	}
-	
+
+	public boolean equals(Object o)
+	{
+		UpdatePeriod up2 = (UpdatePeriod)o;
+		return  periodType.equals(up2.periodType) && 
+				FormatUtil.getDateString(last).equals(FormatUtil.getDateString(up2.last)) && 
+				(length == up2.length) && 
+				(needRecall == up2.needRecall)
+				;
+	}
 }
 
