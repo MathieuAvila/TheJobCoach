@@ -4,6 +4,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.client.MainPage;
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
+import com.TheJobCoach.webapp.userpage.client.CoachSettings.ContentCoachSettings;
 import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
 import com.TheJobCoach.webapp.userpage.client.MyGoals.ContentMyGoals;
@@ -149,6 +150,17 @@ public class UserPage implements EntryPoint {
 				}			
 			});
 		}
+		if (menu.equals("coachsettings"))
+		{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
+				@Override
+				public void Open()
+				{
+					ContentCoachSettings contentCoachSettings = new ContentCoachSettings(simplePanelContent, userId);
+					contentCoachSettings.onModuleLoad();
+				}			
+			});
+		}
 		if (menu.equals("myreports"))
 		{
 			EasyAsync.Check(simplePanelContent, new ToRun() {
@@ -176,22 +188,6 @@ public class UserPage implements EntryPoint {
 	private void setLabelMenu(final Label label, final String menu)
 	{
 		label.setStyleName("userpage-label-normal");
-		if (
-				!menu.equals("account") &&
-				!menu.equals("todo") &&
-				!menu.equals("goals") &&
-				!menu.equals("myreports") &&
-				!menu.equals("news") &&
-				!menu.equals("myjobboards") &&
-				!menu.equals("mydocuments") &&
-				!menu.equals("report") &&
-				!menu.equals("addressbook") &&
-				!menu.equals("applications")
-				)
-		{
-			label.setStyleName("userpage-label-blocked");
-			return;
-		}
 		label.addMouseOutHandler(new MouseOutHandler() {
 			public void onMouseOut(MouseOutEvent event) {
 				if (label == selectedMenu)
@@ -343,11 +339,7 @@ public class UserPage implements EntryPoint {
 		final Label label_Parameters = new Label(lang._TextMyAccount());
 		setLabelMenu(label_Parameters, "account");
 		addLabelWithImage(verticalPanelAccount, label_Parameters, ClientImageBundle.INSTANCE.parametersContent_menu());
-		/*
-		final Label label_Profile = new Label(lang._TextMyProfile());
-		setLabelMenu(label_Profile, "profile");
-		verticalPanelAccount.add(label_Profile);
-*/
+
 		SimplePanel simplePanel_4 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_4);
 		simplePanel_4.setHeight("10px");
@@ -401,6 +393,10 @@ public class UserPage implements EntryPoint {
 		stackPanelStats.add(verticalPanelStats, lang._TextEvaluations(), false);
 		verticalPanelStats.setSize("100%", "100%");
 
+		final Label label_CoachSettings = new Label(lang._TextCoachSettings());
+		setLabelMenu(label_CoachSettings, "coachsettings");
+		addLabelWithImage(verticalPanelStats, label_CoachSettings, ClientImageBundle.INSTANCE.coachSettingsContent_menu());
+		
 		final Label label_Bilans = new Label(lang._TextBilans());
 		setLabelMenu(label_Bilans, "myreports");
 		addLabelWithImage(verticalPanelStats, label_Bilans, ClientImageBundle.INSTANCE.userMyReportsContent_menu());
@@ -410,34 +406,7 @@ public class UserPage implements EntryPoint {
 		addLabelWithImage(verticalPanelStats, lblNewLabel_MyGoals, ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent_menu());
 		//verticalPanelStats.add(lblNewLabel_MyGoals);
 		
-		/*
-		final Label label_Statistics = new Label(lang._TextPerformance());
-		setLabelMenu(label_Statistics, "statistiques");
-		//addLabelWithImage(verticalPanelStats, label_Statistics, ClientImageBundle.INSTANCE.());
-		verticalPanelStats.add(label_Statistics);
-*/
 
-		/*
-		SimplePanel simplePanel_3 = new SimplePanel();
-		verticalPanel_2.add(simplePanel_3);
-		simplePanel_3.setHeight("10px");
-		
-		StackPanel stackPanelAdvices = new StackPanel();
-		verticalPanel_2.add(stackPanelAdvices);
-		stackPanelAdvices.setWidth("100%");
-		
-		VerticalPanel verticalPanelAdvices = new VerticalPanel();
-		stackPanelAdvices.add(verticalPanelAdvices, lang._TextLibrary(), false);
-		verticalPanelAdvices.setSize("100%", "100%");
-
-		final Label label_JobBoards = new Label(lang._TextSites());
-		setLabelMenu(label_JobBoards, "jobboards");
-		verticalPanelAdvices.add(label_JobBoards);
-
-		final Label label_Advices = new Label(lang._TextAdvices());
-		setLabelMenu(label_Advices, "advices");
-		verticalPanelAdvices.add(label_Advices);
-*/
 		SimplePanel simplePanel_5 = new SimplePanel();
 		verticalPanel_2.add(simplePanel_5);
 		simplePanel_5.setHeight("10px");
@@ -449,11 +418,6 @@ public class UserPage implements EntryPoint {
 		VerticalPanel verticalPanelShares = new VerticalPanel();
 		stackPanelShares.add(verticalPanelShares, lang._TextCommunity(), false);
 		verticalPanelShares.setSize("100%", "100%");
-
-
-		//final Label label_Forum = new Label(lang._TextForum());
-		//setLabelMenu(label_Forum, "forum");
-		//verticalPanelShares.add(label_Forum);
 
 		final Label label_Report = new Label(lang._TextReport());
 		setLabelMenu(label_Report, "report");

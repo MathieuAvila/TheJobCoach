@@ -112,6 +112,9 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("content-parameters-32.png")
 	ImageResource parametersContent();
 
+	@Source("content-coachsettings-32.png")
+	ImageResource coachSettingsContent();
+
 	
 
 	@Source("content-comment-24.png")
@@ -146,5 +149,8 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("content-parameters-24.png")
 	ImageResource parametersContent_menu();
+
+	@Source("content-coachsettings-24.png")
+	ImageResource coachSettingsContent_menu();
 
 }

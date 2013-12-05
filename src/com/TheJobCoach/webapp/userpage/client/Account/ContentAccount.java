@@ -72,12 +72,7 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 	
 	CheckedExtendedTextField tfKeywords = new CheckedExtendedTextField(new TextArea(), "[a-zA-Z0-9-\\.\\n ]*");
 	CheckedLabel clKeywords = new CheckedLabel(langAccount.Text_Skills(), false, tfKeywords);
-	
-	CheckedExtendedDropListField tfVirtualCoach = new CheckedExtendedDropListField(
-			UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR_LIST, langAccount.coachNameMap(), "coachNameMap_");
-	CheckedLabel clVirtualCoach = new CheckedLabel(langAccount.Text_MyVirtualCoach(), false, tfVirtualCoach);
-	DynamicLabel dlVirtualCoach = new DynamicLabel(tfVirtualCoach, langAccount.coachDescriptionMap(), "coachDescriptionMap_");
-	
+
 	CheckedExtendedDropListField tfPublishSeeker = new CheckedExtendedDropListField(
 			UserValuesConstantsAccount.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
 	CheckedLabel clPublishSeeker = new CheckedLabel(langAccount.Text_VisibleProfileSeeker(), false, tfPublishSeeker);
@@ -151,26 +146,6 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 		fields.put(UserValuesConstantsAccount.ACCOUNT_STATUS, tfStatus);
 		fields.put(UserValuesConstantsAccount.ACCOUNT_KEYWORDS, tfKeywords);
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitleCoach());
-
-		Grid grid2 = new Grid(1, 4);
-		simplePanelCenter.add(grid2);
-		
-		grid2.setWidget(0,0, clVirtualCoach);
-		grid2.setWidget(0,1, tfVirtualCoach.getItem());
-		grid2.setWidget(0,2, dlVirtualCoach);
-		HashMap<String, ImageResource> images = new HashMap<String, ImageResource>();
-		images.put("DEFAULT_MAN", ClientImageBundle.INSTANCE.coachIconSmall());
-		images.put("DEFAULT_WOMAN", ClientImageBundle.INSTANCE.coachIconWomanSmall());
-		images.put("COACH_MILITARY", ClientImageBundle.INSTANCE.coachIconMilitarySmall());
-		images.put("COACH_SURFER", ClientImageBundle.INSTANCE.coachIconSurferSmall());
-		DynamicImage diVirtualCoach = new DynamicImage(tfVirtualCoach, images);
-			grid2.setWidget(0,3, diVirtualCoach);
-		dlVirtualCoach.setWidth("300px");
-		grid2.setCellSpacing(20);
-		
-		fields.put(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, tfVirtualCoach);
-
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitleVisibility());
 
 		Grid grid3 = new Grid(3, 2);

@@ -264,4 +264,7 @@ public interface Lang extends Constants {
 	
 	@Key("lastupdate")
 	String _TextPeriodLastUpdate();
+
+	@Key("coachsettings")
+	String _TextCoachSettings();
 }
