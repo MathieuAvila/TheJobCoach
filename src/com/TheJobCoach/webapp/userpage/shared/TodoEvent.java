@@ -13,6 +13,7 @@ public class TodoEvent implements Serializable {
 
 	public static final int NO_PLACE = -10000;
 	public static final int MINIMUM_PLACE = 5;
+	public static final int MINIMUM_SIZE = 130;
 	public static final int SHIFT_QUANTUM = 30;
 	public static final int MARGIN_X = 30;
 	public static final int MARGIN_Y = 50; // Must include header
@@ -50,8 +51,24 @@ public class TodoEvent implements Serializable {
 		this.color = color;
 		this.x = x;
 		this.y = y;
-		this.w = w;
-		this.h = h;
+		this.w = MINIMUM_SIZE;
+		this.h = MINIMUM_SIZE;
+	}
+	
+	public TodoEvent(String ID, String text, HashMap<String, String> systemText, String eventSubscriber,
+			Priority priority, Date eventDate, EventColor color)
+	{
+		this.ID = ID;
+		this.text = text;
+		this.systemText = systemText;
+		this.eventSubscriber = eventSubscriber;
+		this.priority = priority;
+		this.eventDate = eventDate;
+		this.color = color;
+		this.x = NO_PLACE;
+		this.y = NO_PLACE;
+		this.w = NO_PLACE;
+		this.h = NO_PLACE;
 	}
 	
 	// For test purposes
@@ -168,7 +185,9 @@ public class TodoEvent implements Serializable {
 		Vector<TodoEvent> resultNew = new Vector<TodoEvent>();
 		for (TodoEvent index: origin)
 		{
-			if ((index.y == NO_PLACE)||(index.y == NO_PLACE))
+			//System.out.println("event X: " + index.x);
+			//System.out.println("event Y: " + index.y);
+			if ((index.x == NO_PLACE)||(index.y == NO_PLACE)||(index.x < -100)||(index.y  < -100))
 				resultNew.add(index);
 			else
 				resultOk.add(index);

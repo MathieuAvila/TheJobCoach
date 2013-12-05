@@ -88,9 +88,6 @@ public class TodoList implements ITodoList
 		if (res == null) throw new CassandraException();
 		ShortMap resultReq = new ShortMap(res);
 		
-		logger.info("subscriber " +resultReq.getString("subscriber"));
-		logger.info("text " + resultReq.getString("text"));
-		
 		TodoEvent te = new TodoEvent(
 				ID, 
 				Convertor.toString(resultReq.getString("text")),
@@ -109,9 +106,6 @@ public class TodoList implements ITodoList
 	
 	public void setTodoEvent(UserId id, TodoEvent result) throws CassandraException 
 	{
-		logger.info("subscriber " +result.eventSubscriber);
-		logger.info("text " + result.text);
-		
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_TODOLIST, id.userName, (new ShortMap()).add(result.ID, result.ID).get());
 		String reqId = id.userName + "_" + result.ID;
 		CassandraAccessor.updateColumn(

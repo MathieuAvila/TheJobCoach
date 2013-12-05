@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.Date;
+
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.google.gwt.core.client.GWT;
@@ -45,6 +46,35 @@ public class ComponentUpdatePeriod extends CaptionPanel
 		intBox.setEnabled(obj.needRecall);
 	}
 	
+	void setUpdatePeriod(UpdatePeriod obj)
+	{
+		this.obj = obj;
+		dateBox.setValue(obj.last);
+		periodType.setEnabled(obj.needRecall);
+		intBox.setEnabled(obj.needRecall);
+		intBox.setValue(obj.length);
+		needRecallCheck.setValue(obj.needRecall);
+		int index = 0;
+		periodType.clear();
+		for (UpdatePeriod.PeriodType t: UpdatePeriod.PeriodType.values() )
+		{
+			periodType.addItem(lang.frequencyTypeMap().get("frequencytypeMap_" + UpdatePeriod.periodType2String(t)), t.toString());
+			if (obj.periodType.equals(t))
+			{
+				periodType.setItemSelected(index, true);
+			}			
+			index++;
+		}
+		checkNeedRecall();
+	}
+	
+	/** for UT purposes only */
+	public void setTimeCount(int c)
+	{
+		intBox.setText(String.valueOf(c));
+		obj.length = c;
+	}
+	
 	/**
 	 * This is the entry point method.
 	 * @wbp.parser.entryPoint
@@ -56,12 +86,10 @@ public class ComponentUpdatePeriod extends CaptionPanel
 		Grid grid = new Grid(3, 2);
 		grid.setBorderWidth(0);
 		grid.setSize("100%", "100%");
-		
 
 		Label lblNeedRecall = new Label(lang._TextPeriodUpdateNeedRecall());
 		grid.setWidget(0, 0, lblNeedRecall);		
 		grid.setWidget(0, 1, needRecallCheck);
-		needRecallCheck.setValue(obj.needRecall);
 		needRecallCheck.addClickHandler(new ClickHandler() {			
 			@Override
 			public void onClick(ClickEvent event) {
@@ -73,17 +101,6 @@ public class ComponentUpdatePeriod extends CaptionPanel
 		grid.setWidget(1, 0, lblType);		
 		HorizontalPanel hpType = new HorizontalPanel();		
 		grid.setWidget(1, 1, hpType);
-		
-		int index = 0;
-		for (UpdatePeriod.PeriodType t: UpdatePeriod.PeriodType.values() )
-		{
-			periodType.addItem(lang.frequencyTypeMap().get("frequencytypeMap_" + UpdatePeriod.periodType2String(t)), t.toString());
-			if (obj.periodType.equals(t))
-			{
-				periodType.setItemSelected(index, true);
-			}			
-			index++;
-		}
 		periodType.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event)
@@ -101,7 +118,6 @@ public class ComponentUpdatePeriod extends CaptionPanel
 			{				
 				obj.length = intBox.getValue();				
 			}});
-		intBox.setValue(obj.length);
 		
 		Label lblLast = new Label(lang._TextPeriodLastUpdate());
 		grid.setWidget(2, 0, lblLast);
@@ -112,9 +128,10 @@ public class ComponentUpdatePeriod extends CaptionPanel
 			{
 				obj.last = event.getValue();
 			}});
-		dateBox.setValue(obj.last);
 		dateBox.setWidth("100%");
-		checkNeedRecall();
+		
+		setUpdatePeriod(obj);
+			
 		setContentWidget(grid);					
 	}
 }

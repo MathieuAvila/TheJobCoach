@@ -1,7 +1,6 @@
 package com.TheJobCoach.webapp.userpage.client.UserSite;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
@@ -25,15 +24,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -113,7 +112,7 @@ public class ContentUserSite implements EntryPoint {
 				jobSiteList.clear();
 				for (String idRes: result)
 				{
-					jobSiteList.add(new UserJobSite(idRes,"", "", "", "", "" , new Date()));
+					jobSiteList.add(new UserJobSite(idRes,"", "", "", "", ""));
 					getOneSite(idRes);
 				}
 				dataProvider.updateRowCount(jobSiteList.size(), true);
@@ -211,15 +210,6 @@ public class ContentUserSite implements EntryPoint {
 			}
 		};
 
-		// Create description column.
-		TextColumn<UserJobSite> descriptionColumn = new TextColumn<UserJobSite>() {
-			@Override
-			public String getValue(UserJobSite site) 
-			{
-				return site.description;
-			}
-		};
-
 		// Create URL column.
 		cellTable.addColumnUrl(new ExtendedCellTable.GetValue<String, UserJobSite>() {
 			public String getValue(UserJobSite contact) {
@@ -250,17 +240,15 @@ public class ContentUserSite implements EntryPoint {
 			@Override
 			public String getValue(UserJobSite site) 
 			{
-				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(site.lastVisit);
+				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(site.update.last);
 			}
 		};
 
 		nameColumn.setSortable(true);
-		descriptionColumn.setSortable(true);
 		loginColumn.setSortable(true);
 		passwordColumn.setSortable(true);
 		lastVisitColumn.setSortable(true);
 		cellTable.addColumn(nameColumn, lang._TextName());
-		cellTable.addColumn(descriptionColumn, lang._TextDescription());
 		cellTable.addColumn(loginColumn, lang._TextLogin());
 		cellTable.addColumn(passwordColumn, lang._TextPassword());
 		cellTable.addColumn(lastVisitColumn, lang._TextLastVisit());

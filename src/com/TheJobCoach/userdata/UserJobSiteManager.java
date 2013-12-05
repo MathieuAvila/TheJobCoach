@@ -103,9 +103,7 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 					TodoCommon.SITEMANAGER_SUBSCRIBER_ID, 
 					TodoEvent.Priority.NORMAL,  
 					nextDate, 
-					TodoEvent.EventColor.BLUE, 
-					-1,-1,
-					150,100);
+					TodoEvent.EventColor.BLUE);
 			todoList.setTodoEvent(id, te);
 		}
 	}

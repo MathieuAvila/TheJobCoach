@@ -15,7 +15,7 @@ public class TodoStrings
 		{
 			return langTodo.Text_perso();
 		}
-		return "&nbsp;";
+		return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.MONTH_ABBR_DAY).format(todo.eventDate);
 	}
 
 	static String getText(TodoEvent todo)

@@ -1,10 +1,10 @@
 package com.TheJobCoach.webapp.userpage.client.UserSite;
 
-import java.util.Date;
-
+import com.TheJobCoach.webapp.userpage.client.ComponentUpdatePeriod;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
@@ -15,6 +15,7 @@ import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -26,7 +27,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.datepicker.client.DateBox;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
@@ -44,7 +44,9 @@ public class EditUserSite implements EntryPoint, IChanged {
 	CheckedLabel lblUrl = new CheckedLabel(lang._TextURL(), true, textBoxUrl);
 	TextBox textBoxLogin = new TextBox();
 	TextBox textBoxPassword = new TextBox();
-	DateBox datePickerLastVisit = new DateBox();
+	
+	UpdatePeriod updatePeriod = new UpdatePeriod();
+	ComponentUpdatePeriod compUpdatePeriod;
 	
 	Panel rootPanel;
 	IChooseResult<UserJobSite> result;
@@ -60,27 +62,26 @@ public class EditUserSite implements EntryPoint, IChanged {
 		user = _user;
 	}
 
-	private void setUserJobSite(UserJobSite opp)
+	private void setUserJobSite(UserJobSite userSite)
 	{
 		if (currentUserSite != null)
 		{
-			currentUserSite = opp;
-			textBoxName.setValue(opp.name);		
-			textAreaDescription.setHTML(opp.description);
-			textBoxUrl.setValue(opp.URL);
-			textBoxLogin.setValue(opp.login);
-			textBoxPassword.setValue(opp.password);
-			datePickerLastVisit.setValue(opp.lastVisit);
+			currentUserSite = userSite;
+			textBoxName.setValue(userSite.name);		
+			textAreaDescription.setHTML(userSite.description);
+			textBoxUrl.setValue(userSite.URL);
+			textBoxLogin.setValue(userSite.login);
+			textBoxPassword.setValue(userSite.password);
 		}
 	}
 
 	private UserJobSite getUserJobSite()
 	{
-		String ID = new Date().toString();
+		String ID = SiteUUID.getDateUuid();
 		if (currentUserSite != null) ID = currentUserSite.ID;
 		return new UserJobSite(ID,
 				textBoxName.getText(), textBoxUrl.getText(), textAreaDescription.getHTML(), textBoxLogin.getValue(),
-				textBoxPassword.getText(), datePickerLastVisit.getValue());
+				textBoxPassword.getText(), updatePeriod);
 	}
 
 	/**
@@ -106,7 +107,11 @@ public class EditUserSite implements EntryPoint, IChanged {
 		grid.addLine(lblUrl, textBoxUrl);
 		grid.addLine(new Label(lang._TextLogin()), textBoxLogin);
 		grid.addLine(new Label(lang._TextPassword()), textBoxPassword);
-		grid.addLine(new Label(lang._TextLastVisit()), datePickerLastVisit);
+		updatePeriod = currentUserSite == null ? new UpdatePeriod(): currentUserSite.update;
+		compUpdatePeriod = new ComponentUpdatePeriod(updatePeriod, ComponentUpdatePeriod.RecallType.UPDATE);
+		compUpdatePeriod.onModuleLoad();
+		vp.add(compUpdatePeriod);
+		//grid.addLine(new Label(lang._TextLastVisit()), datePickerLastVisit);
 
 		setUserJobSite(currentUserSite);
 
