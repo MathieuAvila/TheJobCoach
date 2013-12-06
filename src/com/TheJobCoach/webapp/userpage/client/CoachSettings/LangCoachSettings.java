@@ -18,4 +18,18 @@ public interface LangCoachSettings extends Constants {
 	@Key("title_coach")
 	String Text_TitleCoach();
 	
+	@Key("titletodo")
+	String Text_titletodo();
+	
+	@Key("todointerview")
+	String Text_todointerview();
+	
+	@Key("todosite")
+	String Text_todosite();
+	
+	@Key("todocontact")
+	String Text_todocontact();
+	
+	@Key("todoopportunityrecall")
+	String Text_todoopportunityrecall();
 }

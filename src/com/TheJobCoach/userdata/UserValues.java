@@ -14,6 +14,7 @@ import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 
 public class UserValues {
@@ -95,7 +96,12 @@ public class UserValues {
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_RECALL_GOAL_MIDDLE));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL));
-		
+
+		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_SITE_DELAY, MAX_OPTION_LENGTH, true, "3"));
+		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_CONTACT_DELAY, MAX_OPTION_LENGTH, true, "3"));
+		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_OPPORTUNITY_RECALL, MAX_OPTION_LENGTH, true, "3"));
+		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_INTERVIEW, MAX_OPTION_LENGTH, true, "3"));
+	
 	}
 	
 	public UserValues()

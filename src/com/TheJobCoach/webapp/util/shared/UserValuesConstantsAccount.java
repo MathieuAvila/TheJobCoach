@@ -33,5 +33,4 @@ public class UserValuesConstantsAccount
 	public final static String ACCOUNT_PUBLISH_SEEKER       = "ACCOUNT_PUBLISH_SEEKER";
 	public final static String ACCOUNT_PUBLISH_COACH        = "ACCOUNT_PUBLISH_COACH";
 	public final static String ACCOUNT_PUBLISH_RECRUITER    = "ACCOUNT_PUBLISH_RECRUITER";
-
 }

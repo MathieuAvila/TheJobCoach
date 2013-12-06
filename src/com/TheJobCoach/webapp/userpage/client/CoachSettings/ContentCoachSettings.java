@@ -7,6 +7,7 @@ import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
+import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
@@ -18,6 +19,7 @@ import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IExtendedField;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
@@ -33,8 +35,20 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 	UserId user;
 
 	final static Lang lang = GWT.create(Lang.class);
-	final static LangCoachSettings langAccount = GWT.create(LangCoachSettings.class);
+	final static LangCoachSettings langCoachSettings = GWT.create(LangCoachSettings.class);
 	final static com.TheJobCoach.webapp.util.client.Lang langUtil = GWT.create(com.TheJobCoach.webapp.util.client.Lang.class);
+	
+	CheckedTextField tfTodoSite = new CheckedTextField("[0-9]*");
+	CheckedLabel clTodoSite = new CheckedLabel(langCoachSettings.Text_todosite(), false, tfTodoSite);
+
+	CheckedTextField tfTodoContact = new CheckedTextField("[0-9]*");
+	CheckedLabel clTodoContact = new CheckedLabel(langCoachSettings.Text_todocontact(), false, tfTodoContact);
+
+	CheckedTextField tfTodoOpportunityRecall = new CheckedTextField("[0-9]*");
+	CheckedLabel clTodoOpportunityRecall = new CheckedLabel(langCoachSettings.Text_todoopportunityrecall(), false, tfTodoOpportunityRecall);
+
+	CheckedTextField tfTodoInterview = new CheckedTextField("[0-9]*");
+	CheckedLabel clTodoInterview = new CheckedLabel(langCoachSettings.Text_todointerview(), false, tfTodoInterview);
 
 	ClientUserValuesUtils values = null;
 
@@ -50,13 +64,14 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 	Panel rootPanel = null;
 
 	CheckedExtendedDropListField tfVirtualCoach = new CheckedExtendedDropListField(
-			UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR_LIST, langAccount.coachNameMap(), "coachNameMap_");
-	CheckedLabel clVirtualCoach = new CheckedLabel(langAccount.Text_MyVirtualCoach(), false, tfVirtualCoach);
-	DynamicLabel dlVirtualCoach = new DynamicLabel(tfVirtualCoach, langAccount.coachDescriptionMap(), "coachDescriptionMap_");
+			UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR_LIST, langCoachSettings.coachNameMap(), "coachNameMap_");
+	CheckedLabel clVirtualCoach = new CheckedLabel(langCoachSettings.Text_MyVirtualCoach(), false, tfVirtualCoach);
+	DynamicLabel dlVirtualCoach = new DynamicLabel(tfVirtualCoach, langCoachSettings.coachDescriptionMap(), "coachDescriptionMap_");
 	
 	void getValues()
 	{	
-		values.preloadValueList("ACCOUNT", this);
+		values.preloadValueList("ACCOUNT_COACH_AVATAR", this);
+		values.preloadValueList("COACHSETTINGS", this);
 	}
 
 	HashMap<String, IExtendedField> fields = new HashMap<String, IExtendedField>();
@@ -76,7 +91,7 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextCoachSettings(), ClientImageBundle.INSTANCE.coachSettingsContent());
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitleCoach());
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, langCoachSettings.Text_TitleCoach());
 
 		Grid grid2 = new Grid(1, 4);
 		simplePanelCenter.add(grid2);
@@ -95,7 +110,29 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 		grid2.setCellSpacing(20);
 		
 		fields.put(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, tfVirtualCoach);
+		
+		ContentHelper.insertSubTitlePanel(simplePanelCenter, langCoachSettings.Text_titletodo());
+		
+		Grid grid0 = new Grid(4, 2);
+		simplePanelCenter.add(grid0);
+		
+		grid0.setWidget(0,0, clTodoSite);
+		grid0.setWidget(0,1, tfTodoSite);
 
+		grid0.setWidget(1,0, clTodoContact);
+		grid0.setWidget(1,1, tfTodoContact);
+
+		grid0.setWidget(2,0, clTodoOpportunityRecall);
+		grid0.setWidget(2,1, tfTodoOpportunityRecall);
+
+		grid0.setWidget(3,0, clTodoInterview);
+		grid0.setWidget(3,1, tfTodoInterview);
+
+		fields.put(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_SITE_DELAY, tfTodoSite);
+		fields.put(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_CONTACT_DELAY, tfTodoContact);
+		fields.put(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_OPPORTUNITY_RECALL, tfTodoOpportunityRecall);
+		fields.put(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_INTERVIEW, tfTodoInterview);
+		
 		applyReset = new DialogBlockApplyReset(new ArrayList<IExtendedField>(fields.values()), this);
 
 		for (IExtendedField f: fields.values()) f.registerListener(this);
