@@ -105,8 +105,10 @@ public class ComponentUpdatePeriod extends CaptionPanel
 			@Override
 			public void onChange(ChangeEvent event)
 			{
-				String text = periodType.getItemText(periodType.getSelectedIndex());
-				obj.periodType = UpdatePeriod.string2PeriodType(text);				
+				String text = periodType.getValue(periodType.getSelectedIndex());
+				System.out.println("periodtype: "+text);
+				obj.periodType = UpdatePeriod.string2PeriodType(text);
+				System.out.println("periodtype: "+obj.periodType);
 			}});
 		
 		hpType.add(intBox);
