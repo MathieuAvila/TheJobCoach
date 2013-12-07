@@ -12,4 +12,6 @@ interface ITodoContainer extends HasVisibility{
 	public void onRemoveTodoEvent(TodoEvent id);
 
 	public void confirmRemoveTodoEvent(TodoEvent id);
+
+	public void notifyVisibility(String key, int valueInt);
 }

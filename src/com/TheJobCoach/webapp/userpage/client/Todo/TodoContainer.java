@@ -1,10 +1,15 @@
 package com.TheJobCoach.webapp.userpage.client.Todo;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import sun.java2d.Surface;
 
+import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
+import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
+import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.EventTarget;
@@ -37,7 +42,7 @@ class TodoContainer extends FlowPanel implements ITodoContainer {
 	MouseUpHandler, MouseDownHandler, MouseMoveHandler,
 	ValueChangeHandler<String>, KeyUpHandler
 	{
-		private final TodoEvent myTodoEvent;
+		final TodoEvent myTodoEvent;
 
 		private final DivElement titleElement;
 		private final DivElement bcolor;
@@ -264,6 +269,36 @@ class TodoContainer extends FlowPanel implements ITodoContainer {
 
 	private final IContentTodo contentTodo;
 
+	private HashMap<String, Integer> visibilitySettings = new HashMap<String, Integer>();
+	
+	final static HashMap<String, String> visibilityKeyMap = new HashMap<String, String>();
+	{
+        // Initialize association between KEY value and TodoEvent's system key
+		visibilityKeyMap.put(TodoCommon.SITEMANAGER_SUBSCRIBER_ID, UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_SITE_DELAY);
+		visibilityKeyMap.put(TodoCommon.PERSO_SUBSCRIBER_ID, "PERSO");
+		visibilityKeyMap.put(TodoCommon.SITEMANAGER_SUBSCRIBER_ID, UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_SITE_DELAY);
+		
+		// Initialize PERSO visibility
+		visibilitySettings.put("PERSO", Integer.MAX_VALUE / 1000 /25 /100/100); // Over the beginning of the universe
+	}
+	
+	public boolean isVisible(TodoEvent event)
+	{
+		System.out.println(event.eventSubscriber + " " + visibilitySettings.containsKey(event.eventSubscriber) + visibilitySettings.toString());
+		if (TodoCommon.PERSO_SUBSCRIBER_ID.equals(event.eventSubscriber))
+		{
+			return true;
+		}
+		if (visibilitySettings.containsKey(visibilityKeyMap.get(event.eventSubscriber)))
+		{
+			int days = visibilitySettings.get(visibilityKeyMap.get(event.eventSubscriber));
+			Date newDate = new Date(event.eventDate.getTime() - days * 24*60*60*1000);
+			System.out.println(newDate + " " + event.eventDate);
+			return (newDate.before(new Date()));
+		}
+		return false;
+	}
+	
 	public TodoContainer(IContentTodo contentTodo) 
 	{
 		final Element elem = getElement();
@@ -272,13 +307,13 @@ class TodoContainer extends FlowPanel implements ITodoContainer {
 		this.contentTodo = contentTodo;
 	}
 
-
-	public void onTodoEventReceived(TodoEvent TodoEvent) 
+	public void onTodoEventReceived(TodoEvent todoEvent) 
 	{
-		final TodoEventView view = new TodoEventView(TodoEvent, this);
+		final TodoEventView view = new TodoEventView(todoEvent, this);
 		add(view);
 		select(view);
-		content.put(TodoEvent.ID, view);
+		content.put(todoEvent.ID, view);
+		view.setVisible(isVisible(todoEvent));
 	}
 
 	public void onTodoEventCreated(TodoEvent TodoEvent) 
@@ -308,6 +343,21 @@ class TodoContainer extends FlowPanel implements ITodoContainer {
 			{
 				view.select(TodoEventView == view ? 1 : 0);				
 			}
+		}
+	}	
+
+	@Override
+	public void notifyVisibility(String key, int valueInt)
+	{
+		visibilitySettings.put(key, valueInt);
+		updateVisibility();
+	}
+
+	private void updateVisibility()
+	{
+		for (TodoEventView ev: content.values())
+		{
+			ev.setVisible(isVisible(ev.myTodoEvent));
 		}
 	}
 }

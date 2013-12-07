@@ -13,6 +13,8 @@ import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
+import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
+import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
@@ -27,7 +29,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ContentTodo implements EntryPoint, IContentTodo {
+public class ContentTodo implements EntryPoint, IContentTodo, ReturnValue {
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangTodo langTodo = GWT.create(LangTodo.class);
@@ -38,7 +40,8 @@ public class ContentTodo implements EntryPoint, IContentTodo {
 	ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, langTodo._TextNewPostIt());
 	
 	UserId user;
-
+	ClientUserValuesUtils values = null;
+	
 	public ContentTodo(Panel rootPanel, UserId user) {
 		this.user = user;
 		this.rootPanel = rootPanel;
@@ -54,7 +57,7 @@ public class ContentTodo implements EntryPoint, IContentTodo {
 	ITodoContainer surface = new TodoContainer(this);
 
 	void getAllContent()
-	{		
+	{
 		ServerCallHelper<Vector<TodoEvent>> callback = new ServerCallHelper<Vector<TodoEvent>>(rootPanel) {
 			@Override
 			public void onSuccess(Vector<TodoEvent> result) {
@@ -128,9 +131,12 @@ public class ContentTodo implements EntryPoint, IContentTodo {
 		rootPanel.add(simplePanelCenter);
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextTodo(), ClientImageBundle.INSTANCE.todoContent());
-
+		
+		values = new ClientUserValuesUtils(rootPanel, user);
+		
 		getAllContent();
-
+		values.preloadValueList("COACHSETTINGS", this);
+		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
@@ -144,5 +150,16 @@ public class ContentTodo implements EntryPoint, IContentTodo {
 		simplePanelCenter.add(button);
 
 		simplePanelCenter.add((Widget)surface);
+	}
+
+	@Override
+	public void notifyValue(boolean set, String key, String value)
+	{
+		int valueInt = -1;
+		try {
+			valueInt = Integer.parseInt(value);
+		}
+		catch (Exception e){} // ignore, set to -1, i.e NEVER SHOW
+		surface.notifyVisibility(key, valueInt);
 	}
 }

@@ -187,6 +187,13 @@ public class AutoTestContentTodo extends GwtTest {
 			confirmed.add(event);
 			logger.info("confirmRemoveTodoEvent " + event.ID);
 		}
+
+		@Override
+		public void notifyVisibility(String key, int valueInt)
+		{
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	@Test
