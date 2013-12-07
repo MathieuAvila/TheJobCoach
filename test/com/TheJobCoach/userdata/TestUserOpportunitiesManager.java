@@ -13,12 +13,12 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 
 
 public class TestUserOpportunitiesManager {
-	
+
 	static UserOpportunityManager manager = new UserOpportunityManager();
-	
+
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	static UserId id2 = new UserId("user2", "token2", UserId.UserType.USER_TYPE_SEEKER);
-	
+
 	@SuppressWarnings("deprecation")
 	static Date getDate(int year, int month, int day)
 	{
@@ -28,14 +28,14 @@ public class TestUserOpportunitiesManager {
 		result.setYear(year - 1900);
 		return result;
 	}
-	
+
 	static UserOpportunity opportunity1 = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 2, 1),
 			"title1", "description1", "companyId1",
 			"contractType1",  1,  
 			getDate(2000, 1, 1), getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "note1");
-	
+
 	static UserOpportunity opportunity2 = new UserOpportunity("opp2", getDate(2000, 1, 2), getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  2,  
@@ -49,7 +49,7 @@ public class TestUserOpportunitiesManager {
 			getDate(2000, 1, 2), getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.CLOSED, "note3");
-	
+
 	private void checkOpportunity(UserOpportunity op1, UserOpportunity opRef, boolean shortDefinition)
 	{
 		assertEquals(op1.ID, opRef.ID);
@@ -78,7 +78,7 @@ public class TestUserOpportunitiesManager {
 		assertEquals(op1.status, opRef.status);
 		assertEquals(op1.note, opRef.note);
 	}
-	
+
 	@Test
 	public void testCleanup() throws CassandraException
 	{
@@ -93,17 +93,14 @@ public class TestUserOpportunitiesManager {
 			manager.deleteUserOpportunity(id2, oppId.ID);
 		}
 	}
-	
+
 	@Test
 	public void testAddUserOpportunity() throws CassandraException
 	{		
 		manager.setUserOpportunity(id, opportunity1, "managed");
 		manager.setUserOpportunity(id, opportunity2, "managed");
 		manager.setUserOpportunity(id2, opportunity3, "managed");
-	}
-	
-	@Test
-	public void testGetUserOpportunityList() throws CassandraException {
+
 		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
 		assertEquals(2, result.size());
 		assertEquals(result.get(0).ID, "opp1");
@@ -111,39 +108,27 @@ public class TestUserOpportunitiesManager {
 		result = manager.getOpportunitiesList(id2, "managed");
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "opp3");		
-	}
-	
-	@Test
-	public void testGetUserOpportunityShort() throws CassandraException {
+
 		UserOpportunity opp1 = manager.getOpportunityShort(id, opportunity1.ID);
 		checkOpportunity(opp1, opportunity1, true);		
 		UserOpportunity opp2 = manager.getOpportunityShort(id, opportunity2.ID);
 		checkOpportunity(opp2, opportunity2, true);		
 		UserOpportunity opp3 = manager.getOpportunityShort(id2, opportunity3.ID);
 		checkOpportunity(opp3, opportunity3, true);		
-	}
 
-	@Test
-	public void testGetUserOpportunityLong() throws CassandraException {
-		UserOpportunity opp1 = manager.getOpportunityLong(id, opportunity1.ID);
+		opp1 = manager.getOpportunityLong(id, opportunity1.ID);
 		checkOpportunity(opp1, opportunity1, false);		
-		UserOpportunity opp2 = manager.getOpportunityLong(id, opportunity2.ID);
+		opp2 = manager.getOpportunityLong(id, opportunity2.ID);
 		checkOpportunity(opp2, opportunity2, false);		
-		UserOpportunity opp3 = manager.getOpportunityLong(id2, opportunity3.ID);
+		opp3 = manager.getOpportunityLong(id2, opportunity3.ID);
 		checkOpportunity(opp3, opportunity3, false);		
-	}
-	
-	@Test
-	public void testDeleteUserOpportunity() throws CassandraException {
+
 		manager.deleteUserOpportunity(id, "opp1");
-		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
+		result = manager.getOpportunitiesList(id, "managed");
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "opp2");
-	}
-	
-	@Test
-	public void testDeleteUser() throws CassandraException {
-		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
+
+		result = manager.getOpportunitiesList(id, "managed");
 		assertEquals(1, result.size());
 		manager.deleteUser(id);
 		result = manager.getOpportunitiesList(id, "managed");
