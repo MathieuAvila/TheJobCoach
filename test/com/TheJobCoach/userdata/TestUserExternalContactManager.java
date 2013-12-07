@@ -59,15 +59,13 @@ public class TestUserExternalContactManager {
 		manager.setExternalContact(id2, ujs21);
 		manager.setExternalContact(id2, ujs22);
 		manager.setExternalContact(id2, ujs23);	
-	}
-	
-	@Test
-	public void testgetExternalContactListId() throws CassandraException {
-		List<String> result = manager.getExternalContactListId(id);
-		assertEquals(3, result.size());
-		assertTrue(result.contains(contact1));
-		assertTrue(result.contains(contact2));
-		assertTrue(result.contains(contact3));
+	 
+		// getExternalContactListId 
+		List<String> result4 = manager.getExternalContactListId(id);
+		assertEquals(3, result4.size());
+		assertTrue(result4.contains(contact1));
+		assertTrue(result4.contains(contact2));
+		assertTrue(result4.contains(contact3));
 
 		List<String> result2 = manager.getExternalContactListId(id2);
 		assertEquals(3, result2.size());
@@ -86,20 +84,17 @@ public class TestUserExternalContactManager {
 		manager.setExternalContact(id, ujs1);
 		manager.setExternalContact(id, ujs2);
 		manager.setExternalContact(id, ujs3);
-	}
-	
-	@Test
-	public void testgetExternalContactList() throws CassandraException {
+		
+		// test getExternalContactList
+		
 		Vector<ExternalContact> result = manager.getExternalContactList(id);
 		assertEquals(3, result.size());
 		assertEquals(ujs1.ID, result.get(0).ID);		
 		assertEquals(ujs2.ID, result.get(1).ID);		
 		assertEquals(ujs3.ID, result.get(2).ID);		
-	}
-
-	@Test
-	public void testgetExternalContact() throws CassandraException 
-	{
+	
+		// test getExternalContact
+		
 		ExternalContact copy_ujs1 = manager.getExternalContact(id, contact1);
 		ExternalContact copy_ujs2 = manager.getExternalContact(id, contact2);
 		ExternalContact copy_ujs3 = manager.getExternalContact(id, contact3);
@@ -139,23 +134,21 @@ public class TestUserExternalContactManager {
 		assertEquals(ujs3.update.last, copy_ujs3.update.last);
 		assertEquals(ujs3.update.periodType, copy_ujs3.update.periodType);
 		assertEquals(ujs3.update.needRecall, copy_ujs3.update.needRecall);
-	}
+	 
+		// test deleteExternalContact
 
-	@Test
-	public void testdeleteExternalContact() throws CassandraException 
-	{
 		manager.deleteExternalContact(id, contact2);
 		manager.deleteExternalContact(id2, contact32);
 		
-		List<String> result = manager.getExternalContactListId(id);
-		assertEquals(2, result.size());
-		assertTrue(result.contains(contact1));
-		assertTrue(result.contains(contact3));
-
-		List<String> result2 = manager.getExternalContactListId(id2);
+		List<String> result2 = manager.getExternalContactListId(id);
 		assertEquals(2, result2.size());
-		assertTrue(result2.contains(contact12));
-		assertTrue(result2.contains(contact22));
+		assertTrue(result2.contains(contact1));
+		assertTrue(result2.contains(contact3));
+
+		List<String> result3 = manager.getExternalContactListId(id2);
+		assertEquals(2, result3.size());
+		assertTrue(result3.contains(contact12));
+		assertTrue(result3.contains(contact22));
 	}
 	
 }
