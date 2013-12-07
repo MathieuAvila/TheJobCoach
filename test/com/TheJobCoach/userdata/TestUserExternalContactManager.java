@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Vector;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
@@ -18,6 +21,8 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class TestUserExternalContactManager {
 	
+	Logger logger = LoggerFactory.getLogger(TestUserJobSiteManager.class);
+
 	static UserExternalContactManager manager = new UserExternalContactManager();
 	
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
@@ -38,7 +43,31 @@ public class TestUserExternalContactManager {
 	static ExternalContact ujs21 = new ExternalContact(contact12, "firstName12", "lastName12", "email12", "phone21", "personalNote12", "organization12", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
 	static ExternalContact ujs22 = new ExternalContact(contact22, "firstName22", "lastName22", "email22", "phone22", "personalNote22", "organization22", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
 	static ExternalContact ujs23 = new ExternalContact(contact32, "firstName32", "lastName32", "email32", "phone23", "personalNote32", "organization32", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
-	
+
+	class TestTodoList implements ITodoList
+	{
+		class ListSet {
+			UserId id;
+			TodoEvent result;
+			public ListSet(UserId id, TodoEvent result) {this.id = id; this.result = result;}
+		}
+		
+		public Vector<ListSet> setEvents = new Vector<ListSet>();
+		
+		public void setTodoEvent(UserId id, TodoEvent result)
+				throws CassandraException
+		{
+			logger.info("setTodoEvent ID:" + result.ID);
+			setEvents.add(new ListSet(id, result));
+		}
+
+		public void reset()
+		{
+			setEvents = new Vector<ListSet>();
+		}
+		
+	}
+
 	@Test
 	public void testCleanUsercontact() throws CassandraException
 	{
@@ -78,11 +107,23 @@ public class TestUserExternalContactManager {
 	@Test
 	public void testsetExternalContact() throws CassandraException 
 	{
+		TestTodoList todoInterface = new TestTodoList();
+		UserExternalContactManager.todoList = todoInterface;
+	
 		ujs1.ID = contact1;
 		ujs2.ID = contact2;
 		ujs3.ID = contact3;
-		manager.setExternalContact(id, ujs1);
+		
 		manager.setExternalContact(id, ujs2);
+		// no update: recall == false
+		assertEquals(0, todoInterface.setEvents.size());
+				
+		
+		manager.setExternalContact(id, ujs1);
+		assertEquals(1, todoInterface.setEvents.size());
+		// update: recall == true
+		TodoEvent todoExternalContact1 = todoInterface.setEvents.get(0).result;
+				
 		manager.setExternalContact(id, ujs3);
 		
 		// test getExternalContactList
@@ -134,7 +175,7 @@ public class TestUserExternalContactManager {
 		assertEquals(ujs3.update.last, copy_ujs3.update.last);
 		assertEquals(ujs3.update.periodType, copy_ujs3.update.periodType);
 		assertEquals(ujs3.update.needRecall, copy_ujs3.update.needRecall);
-	 
+		
 		// test deleteExternalContact
 
 		manager.deleteExternalContact(id, contact2);
@@ -149,6 +190,13 @@ public class TestUserExternalContactManager {
 		assertEquals(2, result3.size());
 		assertTrue(result3.contains(contact12));
 		assertTrue(result3.contains(contact22));
+		
+
+		// check return not there anymore after delete
+		assertTrue(manager.isEventValid(id, todoExternalContact1)); // There before delete
+		manager.deleteExternalContact(id, contact1);//  delete
+		assertTrue(!manager.isEventValid(id, todoExternalContact1));// Not There after delete
+
 	}
 	
 }
