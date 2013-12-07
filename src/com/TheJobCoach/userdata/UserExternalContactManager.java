@@ -16,7 +16,6 @@ import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
-import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.UserId;

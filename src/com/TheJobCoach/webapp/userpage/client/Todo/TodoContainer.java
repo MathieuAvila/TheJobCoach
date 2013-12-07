@@ -7,8 +7,6 @@ import sun.java2d.Surface;
 
 import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
-import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
-import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
@@ -274,9 +272,15 @@ class TodoContainer extends FlowPanel implements ITodoContainer {
 	final static HashMap<String, String> visibilityKeyMap = new HashMap<String, String>();
 	{
         // Initialize association between KEY value and TodoEvent's system key
-		visibilityKeyMap.put(TodoCommon.SITEMANAGER_SUBSCRIBER_ID, UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_SITE_DELAY);
-		visibilityKeyMap.put(TodoCommon.PERSO_SUBSCRIBER_ID, "PERSO");
-		visibilityKeyMap.put(TodoCommon.SITEMANAGER_SUBSCRIBER_ID, UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_SITE_DELAY);
+		visibilityKeyMap.put(
+				TodoCommon.SITEMANAGER_SUBSCRIBER_ID, 
+				UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_SITE_DELAY);
+		visibilityKeyMap.put(
+				TodoCommon.PERSO_SUBSCRIBER_ID, 
+				"PERSO");
+		visibilityKeyMap.put(
+				TodoCommon.EXTERNALCONTACTMANAGER_SUBSCRIBER_ID, 
+				UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_CONTACT_DELAY);
 		
 		// Initialize PERSO visibility
 		visibilitySettings.put("PERSO", Integer.MAX_VALUE / 1000 /25 /100/100); // Over the beginning of the universe
