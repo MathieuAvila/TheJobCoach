@@ -124,7 +124,7 @@ public class UserExternalContactManager implements TodoListSubscriber, IUserData
 					result.ID, 
 					"",
 					hash,  
-					TodoCommon.SITEMANAGER_SUBSCRIBER_ID, 
+					TodoCommon.EXTERNALCONTACTMANAGER_SUBSCRIBER_ID, 
 					TodoEvent.Priority.NORMAL,  
 					nextDate, 
 					TodoEvent.EventColor.BLUE);

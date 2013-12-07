@@ -12,10 +12,12 @@ import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
 
@@ -123,7 +125,13 @@ public class TestUserExternalContactManager {
 		assertEquals(1, todoInterface.setEvents.size());
 		// update: recall == true
 		TodoEvent todoExternalContact1 = todoInterface.setEvents.get(0).result;
-				
+		assertEquals(TodoCommon.EXTERNALCONTACTMANAGER_SUBSCRIBER_ID, todoExternalContact1.eventSubscriber);
+		assertEquals(ujs1.firstName, todoExternalContact1.systemText.get(TodoCommon.FIRSTNAME));
+		assertEquals(ujs1.lastName, todoExternalContact1.systemText.get(TodoCommon.LASTNAME));
+		assertEquals(ujs1.organization, todoExternalContact1.systemText.get(TodoCommon.COMPANY));
+		assertEquals(ujs1.ID, todoExternalContact1.ID);
+		assertEquals(FormatUtil.getDateString(ujs1.update.last), todoExternalContact1.systemText.get(TodoCommon.LAST));
+		
 		manager.setExternalContact(id, ujs3);
 		
 		// test getExternalContactList
