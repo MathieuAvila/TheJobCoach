@@ -56,15 +56,17 @@ public class ComponentUpdatePeriod extends CaptionPanel
 		needRecallCheck.setValue(obj.needRecall);
 		int index = 0;
 		periodType.clear();
+		int sIndex = 0;
 		for (UpdatePeriod.PeriodType t: UpdatePeriod.PeriodType.values() )
 		{
 			periodType.addItem(lang.frequencyTypeMap().get("frequencytypeMap_" + UpdatePeriod.periodType2String(t)), t.toString());
 			if (obj.periodType.equals(t))
 			{
-				periodType.setItemSelected(index, true);
+				sIndex = index;
 			}			
 			index++;
 		}
+		periodType.setItemSelected(sIndex, true);
 		checkNeedRecall();
 	}
 	
@@ -106,9 +108,7 @@ public class ComponentUpdatePeriod extends CaptionPanel
 			public void onChange(ChangeEvent event)
 			{
 				String text = periodType.getValue(periodType.getSelectedIndex());
-				System.out.println("periodtype: "+text);
 				obj.periodType = UpdatePeriod.string2PeriodType(text);
-				System.out.println("periodtype: "+obj.periodType);
 			}});
 		
 		hpType.add(intBox);
