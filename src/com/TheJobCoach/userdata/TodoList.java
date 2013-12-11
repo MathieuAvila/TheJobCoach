@@ -70,7 +70,7 @@ public class TodoList implements ITodoList
 		cfDefData = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_DATA, cfDefData);
 	}
 	
-	static private HashMap<String, TodoListSubscriber> subscriberMap = new HashMap<String, TodoListSubscriber>();
+	static HashMap<String, TodoListSubscriber> subscriberMap = new HashMap<String, TodoListSubscriber>();
 		
 	static public void registerTodoListSubscriber(TodoListSubscriber subscriber)
 	{

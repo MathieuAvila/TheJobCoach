@@ -1,22 +1,29 @@
 package com.TheJobCoach.userdata;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
+import com.TheJobCoach.userdata.TodoList.TodoListSubscriber;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
+import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
-public class UserLogManager {
+public class UserLogManager
+{
 
 	final static String COLUMN_FAMILY_NAME_LIST = "loglist";
 	final static String COLUMN_FAMILY_NAME_DATA = "logdata";
@@ -25,9 +32,31 @@ public class UserLogManager {
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
 	static ColumnFamilyDefinition cfDefLogChange = null;
+	
+	static ITodoList todoList = new TodoList();
 
 	public UserLogManager()
 	{
+	}
+	
+	static Set<UserLogEntry.LogEntryType> logWithTodo = new TreeSet<UserLogEntry.LogEntryType>();
+	
+	static boolean inited = false;
+	{
+		if (!inited)
+		{
+			TodoList.registerTodoListSubscriber(new LogTodoListSubscriber(UserLogEntry.LogEntryType.INTERVIEW, this));
+			TodoList.registerTodoListSubscriber(new LogTodoListSubscriber(UserLogEntry.LogEntryType.RECALL, this));
+			TodoList.registerTodoListSubscriber(new LogTodoListSubscriber(UserLogEntry.LogEntryType.EVENT, this));
+			logWithTodo.add(UserLogEntry.LogEntryType.INTERVIEW);
+			logWithTodo.add(UserLogEntry.LogEntryType.RECALL);
+			logWithTodo.add(UserLogEntry.LogEntryType.EVENT);
+			inited = true;
+		}
+	}
+
+	static
+	{		
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
 		cfDefData = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_DATA, cfDefData);
 		cfDefLogChange = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LOG_CHANGE, cfDefLogChange);
@@ -67,8 +96,11 @@ public class UserLogManager {
 		Vector<String> docIdVector = resultReq.getVector("vdoc");	
 		for (String d: docIdVector)
 		{
-			UserDocumentId docId = UserDocumentManager.getInstance().getUserDocumentId(id, d);
-			if (docId != null) docIdList.add(docId);			
+			try {
+				UserDocumentId docId = UserDocumentManager.getInstance().getUserDocumentId(id, d);
+				if (docId != null) docIdList.add(docId);		
+			}
+			catch (Exception e) {} // Removed at next write
 		}
 		
 		Vector<ExternalContact> finalContactVector = new Vector<ExternalContact>();
@@ -76,13 +108,19 @@ public class UserLogManager {
 			
 		for (String contactId: contactVector)
 		{
-			ExternalContact contact = UserExternalContactManager.getInstance().getExternalContact(id, contactId);
-			if (contact != null) 
+			try {
+				ExternalContact contact = UserExternalContactManager.getInstance().getExternalContact(id, contactId);
+				if (contact != null) 
+				{
+					finalContactVector.add(contact);
+				}
+			}
+			catch (Exception e)
 			{
-				finalContactVector.add(contact);
+				// contact removed. Remove from list, purged at next write.
 			}
 		}
-		
+
 		return new UserLogEntry(
 				resultReq.getString("opportunityid"),
 				ID,
@@ -141,6 +179,27 @@ public class UserLogManager {
 				id.userName,
 				(new ShortMap()).add(result.ID, result.ID).get());
 		addUserOppStatusChange(id, result.eventDate, result.ID);
+		
+		// Create a TodoEvent
+		if ((!result.done)&&(logWithTodo.contains(result.type)))
+		{
+			HashMap<String, String> hash = new HashMap<String, String>();
+			hash.put(TodoCommon.ID, result.ID);
+			hash.put(TodoCommon.OPPID, result.opportunityId);
+			hash.put(TodoCommon.LAST, FormatUtil.getDateString(result.eventDate));
+			hash.put(TodoCommon.NAME, result.title);
+			hash.put(TodoCommon.TYPE, UserLogEntry.entryTypeToString(result.type));
+
+			TodoEvent te = new TodoEvent(
+					result.ID, 
+					"",
+					hash,  
+					UserLogEntry.entryTypeToString(result.type), 
+					TodoEvent.Priority.NORMAL,  
+					result.eventDate, 
+					TodoEvent.EventColor.GREEN);
+			todoList.setTodoEvent(id, te);
+		}
 	}
 
 	public void deleteUserLogEntryFromList(UserId id, String ID, String oppId) throws CassandraException
@@ -206,5 +265,75 @@ public class UserLogManager {
 		Map<String, String> values = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME_LOG_CHANGE, id.userName, strStart, strEnd, 
 				1000); // TODO: can be more than that. Do we really care of this use case ?
 		return new Vector<String>(values.values());
+	}
+
+	/*
+	 * Those are for TodoList interface
+	 */
+	private class LogTodoListSubscriber implements TodoListSubscriber 
+	{
+		UserLogEntry.LogEntryType opType;
+	    UserLogManager manager;
+		
+		public LogTodoListSubscriber(UserLogEntry.LogEntryType opType, UserLogManager manager)
+		{
+			this.opType = opType;
+			this.manager = manager;
+		}
+		
+		@Override
+		public String getSubscriberId()
+		{
+			return UserLogEntry.entryTypeToString(opType);
+		}
+
+		@Override
+		public void event(UserId id, TodoEvent event)
+		{
+			manager.event(opType, id, event); 
+		}
+
+		@Override
+		public boolean isEventValid(UserId id, TodoEvent event)
+		{
+			return manager.isEventValid(opType, id, event);
+		}
+
+		@Override
+		public void eventDone(UserId id, TodoEvent event)
+		{
+			manager.eventDone(opType, id, event);
+		}
+	}
+	
+	private void event(UserLogEntry.LogEntryType opType, UserId id, TodoEvent event)
+	{
+		// TODO
+	}
+
+	private boolean isEventValid(UserLogEntry.LogEntryType opType, UserId id, TodoEvent event)
+	{
+		// Does ID exist ? 
+		String logId = event.systemText.get(TodoCommon.ID);
+		String lastDate = event.systemText.get(TodoCommon.LAST);
+		String logType = event.systemText.get(TodoCommon.TYPE);
+		if ((logId == null)||(logType == null)||(lastDate == null)) return false;
+
+		UserLogEntry ujs;
+		try {
+			ujs = getLogEntryLong(id, logId);
+		}
+		catch (CassandraException e)
+		{
+			return false;
+		}
+		UserLogEntry.LogEntryType type = UserLogEntry.entryTypeToString(logType);
+		if (type != opType) return false;
+		return FormatUtil.getDateString(ujs.eventDate).equals(lastDate) && !ujs.done;
+	}
+
+	private void eventDone(UserLogEntry.LogEntryType opType, UserId id, TodoEvent event)
+	{
+		
 	}
 }

@@ -27,7 +27,7 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
 	static ITodoList todoList = new TodoList();
-	
+
 	static boolean inited = false;
 	{
 		if (!inited)

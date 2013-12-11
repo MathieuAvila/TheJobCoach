@@ -8,9 +8,12 @@ import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
+import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
@@ -24,8 +27,10 @@ import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
 
-public class TestUserLogManager {
-	
+public class TestUserLogManager
+{
+	Logger logger = LoggerFactory.getLogger(TestUserLogManager.class);
+
 	static UserLogManager manager = new UserLogManager();
 	static UserExternalContactManager contactManager = new UserExternalContactManager();
 	
@@ -288,6 +293,107 @@ public class TestUserLogManager {
 		result = manager.getPeriodUserOppStatusChange(id_tmp, first_date, last_date);
 		assertEquals(0, result.size());
 	}
+
+	class TestTodoList implements ITodoList
+	{
+		class ListSet {
+			UserId id;
+			TodoEvent result;
+			public ListSet(UserId id, TodoEvent result) {this.id = id; this.result = result;}
+		}
+		
+		public Vector<ListSet> setEvents = new Vector<ListSet>();
+		
+		public void setTodoEvent(UserId id, TodoEvent result)
+				throws CassandraException
+		{
+			logger.info("setTodoEvent ID:" + result.ID);
+			setEvents.add(new ListSet(id, result));
+		}
+
+		public void reset()
+		{
+			setEvents = new Vector<ListSet>();
+		}
+		
+	}
+
+	// Check TodoEvent API
+	@Test
+	public void testTodoEvent() throws CassandraException 
+	{
+		TestTodoList todoInterface = new TestTodoList();
+		UserLogManager.todoList = todoInterface;
+
+		UserLogEntry userLog_undone_EVENT = new UserLogEntry(
+				"opp_timeA", "userLog_undone_EVENT", "title", "description", 
+				CoachTestUtils.getDate(2013, 12, 10),
+				LogEntryType.EVENT, externalContactList_void, docIdListVoid, "note2", false);
+
+		UserLogEntry userLog_undone_INTERVIEW = new UserLogEntry(
+				"opp_timeA", "userLog_undone_INTERVIEW", "title", "description", 
+				CoachTestUtils.getDate(2013, 12, 10),
+				LogEntryType.INTERVIEW, externalContactList_void, docIdListVoid, "note2", false);
+
+		UserLogEntry userLog_undone_RECALL = new UserLogEntry(
+				"opp_timeA", "userLog_undone_RECALL", "title", "description", 
+				CoachTestUtils.getDate(2013, 12, 10),
+				LogEntryType.RECALL, externalContactList_void, docIdListVoid, "note2", false);
+		
+		UserLogEntry userLog_undone_PROPOSAL = new UserLogEntry(
+				"opp_timeA", "userLog_undone_PROPOSAL", "title", "description", 
+				CoachTestUtils.getDate(2013, 12, 10),
+				LogEntryType.PROPOSAL, externalContactList_void, docIdListVoid, "note2", false);
+
+		UserLogEntry userLog_done = new UserLogEntry(
+				"opp_timeA", "userLog_done", "title", "description", 
+				CoachTestUtils.getDate(2013, 12, 11),
+				LogEntryType.EVENT, externalContactList_void, docIdListVoid, "note2", true);
+
+		UserId id_tmp = new UserId("user_tmp", "token", UserId.UserType.USER_TYPE_SEEKER);
+		
+		manager.setUserLogEntry(id_tmp, userLog_undone_EVENT);
+		manager.setUserLogEntry(id_tmp, userLog_undone_INTERVIEW);
+		manager.setUserLogEntry(id_tmp, userLog_undone_RECALL);
+		manager.setUserLogEntry(id_tmp, userLog_undone_PROPOSAL); // no TodoEvent
+		manager.setUserLogEntry(id_tmp, userLog_done); // No TodoEvent
 	
+		assertEquals(3, todoInterface.setEvents.size());
+		TodoEvent ev_EVENT = todoInterface.setEvents.get(0).result;
+		TodoEvent ev_INTERVIEW = todoInterface.setEvents.get(1).result;
+		TodoEvent ev_RECALL = todoInterface.setEvents.get(2).result;
+		
+		assertEquals(UserLogEntry.entryTypeToString(LogEntryType.EVENT), ev_EVENT.eventSubscriber);
+		assertEquals(UserLogEntry.entryTypeToString(LogEntryType.INTERVIEW), ev_INTERVIEW.eventSubscriber);
+		assertEquals(UserLogEntry.entryTypeToString(LogEntryType.RECALL), ev_RECALL.eventSubscriber);
+		assertEquals(userLog_undone_EVENT.ID, ev_EVENT.ID);
+		
+		assertTrue(TodoList.subscriberMap.get(UserLogEntry.entryTypeToString(LogEntryType.EVENT)).isEventValid(id_tmp, ev_EVENT));
+		assertTrue(TodoList.subscriberMap.get(UserLogEntry.entryTypeToString(LogEntryType.INTERVIEW)).isEventValid(id_tmp, ev_INTERVIEW));
+		assertTrue(TodoList.subscriberMap.get(UserLogEntry.entryTypeToString(LogEntryType.RECALL)).isEventValid(id_tmp, ev_RECALL));
+
+		// check bad subscriber
+		assertFalse(TodoList.subscriberMap.get(UserLogEntry.entryTypeToString(LogEntryType.INTERVIEW)).isEventValid(id_tmp, ev_RECALL));
+		
+		// change things & check
+		// change date
+		todoInterface.reset();
+		userLog_undone_INTERVIEW.eventDate = CoachTestUtils.getDate(2113, 12, 10); // 100 yrs later
+		manager.setUserLogEntry(id_tmp, userLog_undone_INTERVIEW);
+		assertEquals(1, todoInterface.setEvents.size());
+		TodoEvent ev_INTERVIEW_2 = todoInterface.setEvents.get(0).result;
+		// new is valid
+		assertTrue(TodoList.subscriberMap.get(UserLogEntry.entryTypeToString(LogEntryType.INTERVIEW)).isEventValid(id_tmp, ev_INTERVIEW_2));
+		// previous is invalid
+		assertFalse(TodoList.subscriberMap.get(UserLogEntry.entryTypeToString(LogEntryType.INTERVIEW)).isEventValid(id_tmp, ev_INTERVIEW));
+		// done
+		todoInterface.reset();
+		userLog_undone_INTERVIEW.done = true; // 100 yrs later
+		manager.setUserLogEntry(id_tmp, userLog_undone_INTERVIEW);
+		assertEquals(0, todoInterface.setEvents.size());
+		// new is NOW invalid
+		assertFalse(TodoList.subscriberMap.get(UserLogEntry.entryTypeToString(LogEntryType.INTERVIEW)).isEventValid(id_tmp, ev_INTERVIEW_2));
+	
+	}
 	
 }
