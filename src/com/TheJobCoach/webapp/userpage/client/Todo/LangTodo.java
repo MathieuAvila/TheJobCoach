@@ -34,4 +34,7 @@ public interface LangTodo extends Constants {
 	@Key("interview")
 	String Text_interview();
 
+	@Key("event")
+	String Text_event();
+
 }

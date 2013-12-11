@@ -7,6 +7,7 @@ import sun.java2d.Surface;
 
 import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
+import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
@@ -281,6 +282,15 @@ class TodoContainer extends FlowPanel implements ITodoContainer {
 		visibilityKeyMap.put(
 				TodoCommon.EXTERNALCONTACTMANAGER_SUBSCRIBER_ID, 
 				UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_CONTACT_DELAY);
+		visibilityKeyMap.put(
+				UserLogEntry.entryTypeToString(UserLogEntry.LogEntryType.INTERVIEW), 
+				UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_INTERVIEW);
+		visibilityKeyMap.put(
+				UserLogEntry.entryTypeToString(UserLogEntry.LogEntryType.RECALL), 
+				UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_OPPORTUNITY_RECALL);
+		visibilityKeyMap.put(
+				UserLogEntry.entryTypeToString(UserLogEntry.LogEntryType.EVENT), 
+				UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_EVENT);
 		
 		// Initialize PERSO visibility
 		visibilitySettings.put("PERSO", Integer.MAX_VALUE / 1000 /25 /100/100); // Over the beginning of the universe
@@ -288,7 +298,6 @@ class TodoContainer extends FlowPanel implements ITodoContainer {
 	
 	public boolean isVisible(TodoEvent event)
 	{
-		System.out.println(event.eventSubscriber + " " + visibilitySettings.containsKey(event.eventSubscriber) + visibilitySettings.toString());
 		if (TodoCommon.PERSO_SUBSCRIBER_ID.equals(event.eventSubscriber))
 		{
 			return true;
@@ -297,7 +306,6 @@ class TodoContainer extends FlowPanel implements ITodoContainer {
 		{
 			int days = visibilitySettings.get(visibilityKeyMap.get(event.eventSubscriber));
 			Date newDate = new Date(event.eventDate.getTime() - days * 24*60*60*1000);
-			System.out.println(newDate + " " + event.eventDate);
 			return (newDate.before(new Date()));
 		}
 		return false;
