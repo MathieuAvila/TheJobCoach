@@ -32,4 +32,7 @@ public interface LangCoachSettings extends Constants {
 	
 	@Key("todoopportunityrecall")
 	String Text_todoopportunityrecall();
+
+	@Key("todoevent")
+	String Text_todoevent();
 }

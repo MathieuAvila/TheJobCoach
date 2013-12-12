@@ -50,6 +50,9 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 	CheckedTextField tfTodoInterview = new CheckedTextField("[0-9]*");
 	CheckedLabel clTodoInterview = new CheckedLabel(langCoachSettings.Text_todointerview(), false, tfTodoInterview);
 
+	CheckedTextField tfTodoEvent = new CheckedTextField("[0-9]*");
+	CheckedLabel clTodoEvent = new CheckedLabel(langCoachSettings.Text_todoevent(), false, tfTodoEvent);
+
 	ClientUserValuesUtils values = null;
 
 	DialogBlockApplyReset applyReset = null;
@@ -113,7 +116,7 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 		
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, langCoachSettings.Text_titletodo());
 		
-		Grid grid0 = new Grid(4, 2);
+		Grid grid0 = new Grid(5, 2);
 		simplePanelCenter.add(grid0);
 		
 		grid0.setWidget(0,0, clTodoSite);
@@ -128,10 +131,14 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 		grid0.setWidget(3,0, clTodoInterview);
 		grid0.setWidget(3,1, tfTodoInterview);
 
+		grid0.setWidget(3,0, clTodoEvent);
+		grid0.setWidget(3,1, tfTodoEvent);
+
 		fields.put(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_SITE_DELAY, tfTodoSite);
 		fields.put(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_CONTACT_DELAY, tfTodoContact);
 		fields.put(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_OPPORTUNITY_RECALL, tfTodoOpportunityRecall);
 		fields.put(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_INTERVIEW, tfTodoInterview);
+		fields.put(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_EVENT, tfTodoEvent);
 		
 		applyReset = new DialogBlockApplyReset(new ArrayList<IExtendedField>(fields.values()), this);
 
