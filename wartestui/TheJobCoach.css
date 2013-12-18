@@ -379,10 +379,15 @@ font-size:18px;
   overflow: hidden;
   min-height:100px;
   min-width:100px;
+  font-family: 'Indie Flower', cursive;
+  
+  word-wrap: break-word;   
+
+  font-size: 1.0em;
 }
 .TodoEvent-content:focus {
   outline: 1px solid #d0c98d;
-  overflow: auto;
+  /*overflow: auto;*/
 }
 
 .gwt-Label {
