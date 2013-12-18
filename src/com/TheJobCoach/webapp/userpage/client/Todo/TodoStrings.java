@@ -27,23 +27,20 @@ public class TodoStrings
 			lastDate = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG)
 					.format(FormatUtil.getStringDate(todo.systemText.get(TodoCommon.LAST)));
 		}
-		if (todo.eventSubscriber.equals(UserLogEntry.LogEntryType.INTERVIEW))
+		if (todo.eventSubscriber.equals(UserLogEntry.entryTypeToString(UserLogEntry.LogEntryType.INTERVIEW)))
 		{
 			return langTodo.Text_interview()
-					.replaceAll("%1", todo.systemText.get(TodoCommon.NAME))
-					.replaceAll("%2", lastDate);
+					.replaceAll("%1", todo.systemText.get(TodoCommon.NAME));
 		}
-		if (todo.eventSubscriber.equals(UserLogEntry.LogEntryType.RECALL))
+		if (todo.eventSubscriber.equals(UserLogEntry.entryTypeToString(UserLogEntry.LogEntryType.RECALL)))
 		{
 			return langTodo.Text_recall()
-					.replaceAll("%1", todo.systemText.get(TodoCommon.NAME))
-					.replaceAll("%2", lastDate);
+					.replaceAll("%1", todo.systemText.get(TodoCommon.NAME));
 		}
-		if (todo.eventSubscriber.equals(UserLogEntry.LogEntryType.EVENT))
+		if (todo.eventSubscriber.equals(UserLogEntry.entryTypeToString(UserLogEntry.LogEntryType.EVENT)))
 		{
 			return langTodo.Text_event()
-					.replaceAll("%1", todo.systemText.get(TodoCommon.NAME))
-					.replaceAll("%2", lastDate);
+					.replaceAll("%1", todo.systemText.get(TodoCommon.NAME));
 		}
 
 		if (todo.eventSubscriber.equals(TodoCommon.SITEMANAGER_SUBSCRIBER_ID))
