@@ -371,7 +371,16 @@ font-size:18px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   background-color: #d0c98d;
+  font-family: 'Indie Flower', cursive;
 }
+
+@font-face {
+  font-family: 'Indie Flower';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Indie Flower'), local('IndieFlower'), url(postit.woff) format('woff');
+}
+
 .TodoEvent-content {
   margin: 5px;
   background: transparent;
