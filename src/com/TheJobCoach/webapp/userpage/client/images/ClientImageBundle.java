@@ -147,5 +147,8 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("content-coachsettings-24.png")
 	ImageResource coachSettingsContent_menu();
+	
+	@Source("bulle.png")
+	ImageResource bulle();
 
 }

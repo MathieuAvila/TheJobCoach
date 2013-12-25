@@ -4,20 +4,18 @@ import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset.IApply;
+import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
@@ -65,7 +63,16 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 		coachPanel.setSize("150px","150px");
 		//coachAdviceDecorator.setSize("100%", "100%");
 		
+		add(new HorizontalSpacer("25px"));
 		add(coachPanel);
+		add(new HorizontalSpacer("25px"));
+		Image bulle = new Image(ClientImageBundle.INSTANCE.bulle());
+		bulle.addStyleName("img-no-border");
+		bulle.addStyleName("img-no-border2");
+		add(bulle);
+		this.setBorderWidth(0);
+		this.setCellWidth(bulle, "24px");
+		//this.setC(0);
 		
 		SimplePanel sp = new SimplePanel();
 		SimplePanel sp2 = new SimplePanel();
@@ -87,25 +94,8 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 		//this.setCellWidth(coachAdviceDecorator, "100%");
 		this.setCellWidth(sp, "100%");
 		
-		//coachAdviceDecorator.setWidget(label);
+		add(new HorizontalSpacer("40px"));
 		
-		
-		//this.setCellWidth(coachAdviceDecorator, "100%");
-		
-		//coachAdviceDecorator.add(adviceListPanel);
-		//adviceListPanel.setSize("100%", "100%");
-		
-		//adviceListPanel.add(label);
-		//label.setSize("100%", "150px");
-		//label.setText("toto oh mon toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>");
-		//adviceListPanel.setHeight("150px");
-		//coachAdvicePanel.setHeight("150px");
-		//adviceListPanel.setWidth("100%");
-		//coachAdvicePanel.setWidth("100%");
-		//scrollAdvicePanel.setHeight("150px");
-		
-		//hPanel.setCellWidth(coachAdvicePanel, "100%");
-		//hPanel.setCellHeight(coachAdvicePanel, "150px");
 		setWidth("100%");
 		getValues();
 		values.addListener(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, this);	

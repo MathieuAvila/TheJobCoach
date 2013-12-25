@@ -16,8 +16,8 @@ import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.client.RoundedPanel;
+import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
@@ -227,10 +226,26 @@ public class UserPage implements EntryPoint {
 		HorizontalPanel hp = new HorizontalPanel();
 		Image image = new Image(imageResource);
 		hp.add(image);
-		hp.setCellWidth(image, "40px");
+		hp.setCellWidth(image, "30px");
 		hp.add(l);
 		hp.setCellVerticalAlignment(l, HasVerticalAlignment.ALIGN_MIDDLE);
 		p.add(hp);
+	}
+	
+	void addLabelMenuWithImage(Panel p, String text, String menu, ImageResource img)
+	{
+		final Label label_Parameters = new Label(text);
+		setLabelMenu(label_Parameters, menu);
+		addLabelWithImage(p, label_Parameters, img);
+	}
+
+	Panel addRoundedPanelWithTitle(Panel container, String text)
+	{
+		VerticalPanel content = new VerticalPanel();
+		RoundedPanel rp = new RoundedPanel(content, new Label(text));
+		container.add(rp);
+		container.add(new VerticalSpacer("15px"));
+		return content;
 	}
 	
 	/**
@@ -307,7 +322,7 @@ public class UserPage implements EntryPoint {
 				EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun()
 				{					
 					@Override
-					public void Run() throws CassandraException, CoachSecurityException
+					public void Run()
 					{					
 						EasyAsync.Check(rootPanel, new EasyAsync.ToRun()
 						{							
@@ -331,109 +346,27 @@ public class UserPage implements EntryPoint {
 		VerticalPanel verticalPanel_2 = new VerticalPanel();
 		horizontalPanel_1.add(verticalPanel_2);
 		horizontalPanel_1.setCellWidth(verticalPanel_2, "300px");
-		verticalPanel_2.setWidth("300px");
-
-		StackPanel stackPanelAccount = new StackPanel();
-		verticalPanel_2.add(stackPanelAccount);
-		stackPanelAccount.setWidth("100%");
-
-		VerticalPanel verticalPanelAccount = new VerticalPanel();
-		stackPanelAccount.add(verticalPanelAccount, lang._TextAccount(), false);
-		verticalPanelAccount.setSize("100%", "100%");
-
-		final Label label_Parameters = new Label(lang._TextMyAccount());
-		setLabelMenu(label_Parameters, "account");
-		addLabelWithImage(verticalPanelAccount, label_Parameters, ClientImageBundle.INSTANCE.parametersContent_menu());
-
-		SimplePanel simplePanel_4 = new SimplePanel();
-		verticalPanel_2.add(simplePanel_4);
-		simplePanel_4.setHeight("10px");
-
-		StackPanel stackPanelMyApplication = new StackPanel();
-		verticalPanel_2.add(stackPanelMyApplication);
-		stackPanelMyApplication.setWidth("100%");
-
-		VerticalPanel verticalPanelMySearch = new VerticalPanel();
-		stackPanelMyApplication.add(verticalPanelMySearch, lang._TextMySearch(), false);
-		verticalPanelMySearch.setSize("100%", "100%");
-
-		final Label label_ActionsTodo = new Label(lang._TextTodo());
-		setLabelMenu(label_ActionsTodo, "todo");
-		addLabelWithImage(verticalPanelMySearch, label_ActionsTodo, ClientImageBundle.INSTANCE.todoContent_menu());
-		//verticalPanelMySearch.add(label_ActionsTodo);
-
-		final Label lblNewLabel_AddressBook = new Label(lang._TextMyAddressBook());
-		setLabelMenu(lblNewLabel_AddressBook, "addressbook");
-		addLabelWithImage(verticalPanelMySearch, lblNewLabel_AddressBook, ClientImageBundle.INSTANCE.userExternalContactContent_menu());
-		//verticalPanelMySearch.add(lblNewLabel_AddressBook);
+		verticalPanel_2.setWidth("200px");
 		
-		final Label lblNewLabel_JobBoards = new Label(lang._TextMyJobBoards());
-		setLabelMenu(lblNewLabel_JobBoards, "myjobboards");
-		addLabelWithImage(verticalPanelMySearch, lblNewLabel_JobBoards, ClientImageBundle.INSTANCE.userJobSiteContent_menu());
-		//verticalPanelMySearch.add(lblNewLabel_JobBoards);
+		Panel contentAccount = addRoundedPanelWithTitle(verticalPanel_2, lang._TextAccount());
+		addLabelMenuWithImage(contentAccount, lang._TextMyAccount(), "account", ClientImageBundle.INSTANCE.parametersContent_menu());
 		
-		final Label lblNewLabel_Documents = new Label(lang._TextMyDocuments());
-		setLabelMenu(lblNewLabel_Documents, "mydocuments");
-		addLabelWithImage(verticalPanelMySearch, lblNewLabel_Documents, ClientImageBundle.INSTANCE.userDocumentContent_menu());
-		//verticalPanelMySearch.add(lblNewLabel_Documents);
-
-		final Label label_MyApplications = new Label(lang._TextApplicationFollowUp());
-		setLabelMenu(label_MyApplications, "applications");
-		addLabelWithImage(verticalPanelMySearch, label_MyApplications, ClientImageBundle.INSTANCE.opportunityContent_menu());
-		//verticalPanelMySearch.add(label_MyApplications);
-/*
-		final Label label_ActionsAgenda = new Label(lang._TextAgenda());
-		setLabelMenu(label_ActionsAgenda, "agenda");
-		verticalPanelMySearch.add(label_ActionsAgenda);
-	*/
-		SimplePanel simplePanel_2 = new SimplePanel();
-		verticalPanel_2.add(simplePanel_2);
-		simplePanel_2.setHeight("10px");
-
-		StackPanel stackPanelStats = new StackPanel();
-		verticalPanel_2.add(stackPanelStats);
-		stackPanelStats.setWidth("100%");
-
-		VerticalPanel verticalPanelStats = new VerticalPanel();
-		stackPanelStats.add(verticalPanelStats, lang._TextEvaluations(), false);
-		verticalPanelStats.setSize("100%", "100%");
-
-		final Label label_CoachSettings = new Label(lang._TextCoachSettings());
-		setLabelMenu(label_CoachSettings, "coachsettings");
-		addLabelWithImage(verticalPanelStats, label_CoachSettings, ClientImageBundle.INSTANCE.coachSettingsContent_menu());
+		Panel contentMyApplication = addRoundedPanelWithTitle(verticalPanel_2, lang._TextMySearch());
+		addLabelMenuWithImage(contentMyApplication, lang._TextTodo(), "todo", ClientImageBundle.INSTANCE.todoContent_menu());
+		addLabelMenuWithImage(contentMyApplication, lang._TextMyAddressBook(), "addressbook", ClientImageBundle.INSTANCE.userExternalContactContent_menu());
+		addLabelMenuWithImage(contentMyApplication, lang._TextMyJobBoards(), "myjobboards", ClientImageBundle.INSTANCE.userJobSiteContent_menu());
+		addLabelMenuWithImage(contentMyApplication, lang._TextMyDocuments(), "mydocuments", ClientImageBundle.INSTANCE.userDocumentContent_menu());
+		addLabelMenuWithImage(contentMyApplication, lang._TextApplicationFollowUp(), "applications", ClientImageBundle.INSTANCE.opportunityContent_menu());
 		
-		final Label label_Bilans = new Label(lang._TextBilans());
-		setLabelMenu(label_Bilans, "myreports");
-		addLabelWithImage(verticalPanelStats, label_Bilans, ClientImageBundle.INSTANCE.userMyReportsContent_menu());
+		Panel contentStats = addRoundedPanelWithTitle(verticalPanel_2, lang._TextEvaluations());
+		addLabelMenuWithImage(contentStats, lang._TextCoachSettings(), "coachsettings", ClientImageBundle.INSTANCE.coachSettingsContent_menu());
+		addLabelMenuWithImage(contentStats, lang._TextBilans(), "myreports", ClientImageBundle.INSTANCE.userMyReportsContent_menu());
+		addLabelMenuWithImage(contentStats, lang._TextMyGoals(), "goals", ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent_menu());
 		
-		final Label lblNewLabel_MyGoals = new Label(lang._TextMyGoals());
-		setLabelMenu(lblNewLabel_MyGoals, "goals");
-		addLabelWithImage(verticalPanelStats, lblNewLabel_MyGoals, ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent_menu());
-		//verticalPanelStats.add(lblNewLabel_MyGoals);
+		Panel contentShares = addRoundedPanelWithTitle(verticalPanel_2, lang._TextCommunity());
+		addLabelMenuWithImage(contentShares, lang._TextReport(), "report", ClientImageBundle.INSTANCE.sendCommentContent_menu());
+		addLabelMenuWithImage(contentShares, lang._TextNews(), "news", ClientImageBundle.INSTANCE.newsContent_menu());
 		
-
-		SimplePanel simplePanel_5 = new SimplePanel();
-		verticalPanel_2.add(simplePanel_5);
-		simplePanel_5.setHeight("10px");
-
-		StackPanel stackPanelShares = new StackPanel();
-		verticalPanel_2.add(stackPanelShares);
-		stackPanelShares.setWidth("100%");
-
-		VerticalPanel verticalPanelShares = new VerticalPanel();
-		stackPanelShares.add(verticalPanelShares, lang._TextCommunity(), false);
-		verticalPanelShares.setSize("100%", "100%");
-
-		final Label label_Report = new Label(lang._TextReport());
-		setLabelMenu(label_Report, "report");
-		addLabelWithImage(verticalPanelShares, label_Report, ClientImageBundle.INSTANCE.sendCommentContent_menu());
-//		verticalPanelShares.add(label_Report);
-
-		final Label label_News = new Label(lang._TextNews());
-		setLabelMenu(label_News, "news");
-		//verticalPanelShares.add(label_News);
-		addLabelWithImage(verticalPanelShares, label_News, ClientImageBundle.INSTANCE.newsContent_menu());
-
 		SimplePanel simplePanel_CentralInter = new SimplePanel();
 		simplePanel_CentralInter.setWidth("30px");
 		horizontalPanel_1.add(simplePanel_CentralInter);
