@@ -7,36 +7,31 @@ import com.google.gwt.resources.client.ImageResource;
 public interface ClientImageBundle extends ClientBundle 
 {
 	public static final ClientImageBundle INSTANCE = GWT.create(ClientImageBundle.class);
-	 
-	/**
-	 * Would match the file 'open_file_icon.gif' located in the same
-	 * package as this type.
-	 * 
-	 * @gwt.resource deleteFile.gif
-	 */
-	@Source("jobcoach.gif")
+
+	@Source("george_1_150_150.png")
 	ImageResource coachIcon();
 
+	/*
 	@Source("jobcoach_military.jpg")
 	ImageResource coachIconMilitary();
 
 	@Source("jobcoach_surfer.gif")
 	ImageResource coachIconSurfer();
-
-	@Source("jobcoach_woman.png")
+*/
+	@Source("christine_1_150_150.png")
 	ImageResource coachIconWoman();
 
 	
-	@Source("jobcoach_small.png")
+	@Source("george_2_150_150.png")
 	ImageResource coachIconSmall();
-
+/*
 	@Source("jobcoach_military_small.png")
 	ImageResource coachIconMilitarySmall();
 
 	@Source("jobcoach_surfer_small.png")
 	ImageResource coachIconSurferSmall();
-
-	@Source("jobcoach_woman_small.png")
+*/
+	@Source("christine_2_150_150.png")
 	ImageResource coachIconWomanSmall();
 
 	@Source("file-delete-24.png")

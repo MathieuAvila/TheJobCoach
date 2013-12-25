@@ -3,6 +3,7 @@
 <module>
 	<inherits name="com.google.gwt.i18n.I18N"/>
 	<inherits name="com.google.gwt.user.RemoteServiceObfuscateTypeNames"/>
+	<inherits name='com.google.gwt.user.theme.standard.Standard'/>
 
    	<extend-property name="locale" values="fr"/>
 	<extend-property name="locale" values="en"/>

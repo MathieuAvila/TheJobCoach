@@ -88,6 +88,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint {
 	public void onModuleLoad() {
 		connectSec = 0;
 		timer.scheduleRepeating(5000);
+		setSize("0","0");
 	}
 
 }

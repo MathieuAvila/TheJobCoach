@@ -9,34 +9,41 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class PanelCoach implements EntryPoint, IChanged, ReturnValue, IApply {
+public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged, ReturnValue, IApply {
 
 	UserId user;
 
 	final static Lang lang = GWT.create(Lang.class);
 	
-	final Panel coachPanel = new SimplePanel();
-	final SimplePanel scrollAdvicePanel = new SimplePanel();
-	final DecoratorPanel coachAdvicePanel = new DecoratorPanel();
-	final Panel adviceListPanel = new VerticalPanel();
+	final SimplePanel coachPanel = new SimplePanel();
+	final DecoratorPanel coachAdviceDecorator = new DecoratorPanel();
+	//final ScrollPanel adviceListPanel = new ScrollPanel();
+	//final SimplePanel adviceListPanel = new SimplePanel();
+	HTML label = new HTML("Salut, bienvenue sur TheJobCoach.fr<br/>Je suis votre coach, ensemble on va vous trouver un super job !");
+
 	
 	ClientUserValuesUtils values = null;
 
 	public PanelCoach(Panel panel, UserId _user)
 	{
+		super();
 		rootPanel = panel;
 		user = _user;
-		values = new ClientUserValuesUtils(rootPanel, user);		
+		values = new ClientUserValuesUtils(rootPanel, user);
 	}
 
 	Panel rootPanel = null;
@@ -52,27 +59,54 @@ public class PanelCoach implements EntryPoint, IChanged, ReturnValue, IApply {
 	 */
 	public void onModuleLoad()
 	{			
-		rootPanel.setSize("100%", "");
-		rootPanel.clear();
+		setSize("100%", "");
+		clear();
 		
-		HorizontalPanel hPanel = new HorizontalPanel();
-		rootPanel.add(hPanel);
-				
-		hPanel.add(coachPanel);
-		hPanel.add(coachAdvicePanel);
+		coachPanel.setSize("150px","150px");
+		//coachAdviceDecorator.setSize("100%", "100%");
 		
-		coachAdvicePanel.add(scrollAdvicePanel);		
-		scrollAdvicePanel.add(adviceListPanel);
+		add(coachPanel);
 		
-		//adviceListPanel.setHeight("200px");
-		//coachAdvicePanel.setHeight("200px");
+		SimplePanel sp = new SimplePanel();
+		SimplePanel sp2 = new SimplePanel();
+		add(sp);
+		sp.add(sp2);
+		sp2.add(label);
+		DOM.setStyleAttribute(sp2.getElement(), "overflow", "hidden");
+		DOM.setStyleAttribute(sp.getElement(), "overflow", "hidden");
+		sp.setSize("100%", "150px");
+		DOM.setStyleAttribute(sp.getElement(), "position", "relative");
+		DOM.setStyleAttribute(sp2.getElement(), "position", "absolute");
+		
+		DOM.setStyleAttribute(sp2.getElement(), "bottom", "5px");
+		DOM.setStyleAttribute(sp2.getElement(), "left", "15px");
+		sp.addStyleName("coachblabla");
+		//add(coachAdviceDecorator);
+		//add(coachAdviceDecorator);
+		this.setCellWidth(coachPanel, "150px");
+		//this.setCellWidth(coachAdviceDecorator, "100%");
+		this.setCellWidth(sp, "100%");
+		
+		//coachAdviceDecorator.setWidget(label);
+		
+		
+		//this.setCellWidth(coachAdviceDecorator, "100%");
+		
+		//coachAdviceDecorator.add(adviceListPanel);
+		//adviceListPanel.setSize("100%", "100%");
+		
+		//adviceListPanel.add(label);
+		//label.setSize("100%", "150px");
+		//label.setText("toto oh mon toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>toto<br/>");
+		//adviceListPanel.setHeight("150px");
+		//coachAdvicePanel.setHeight("150px");
 		//adviceListPanel.setWidth("100%");
 		//coachAdvicePanel.setWidth("100%");
-		//scrollAdvicePanel.setHeight("200px");
+		//scrollAdvicePanel.setHeight("150px");
 		
 		//hPanel.setCellWidth(coachAdvicePanel, "100%");
-		//hPanel.setCellHeight(coachAdvicePanel, "200px");
-		hPanel.setWidth("100%");
+		//hPanel.setCellHeight(coachAdvicePanel, "150px");
+		setWidth("100%");
 		getValues();
 		values.addListener(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, this);	
 	}
@@ -95,15 +129,19 @@ public class PanelCoach implements EntryPoint, IChanged, ReturnValue, IApply {
 			else if (value.equals(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__DEFAULT_WOMAN))
 			{
 				coachPanel.add(new Image(ClientImageBundle.INSTANCE.coachIconWoman()));
+			} else
+			{
+				coachPanel.add(new Image(ClientImageBundle.INSTANCE.coachIconWoman()));
 			}
+			/*
 			else if (value.equals(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__COACH_SURFER))
 			{
-				coachPanel.add(new Image(ClientImageBundle.INSTANCE.coachIconSurfer()));
+				coachPanel.add(new Image(ClientImageBundle.INSTANCE.coachIconSurfer());
 			}
 			else if (value.equals(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__COACH_MILITARY))
 			{
 				coachPanel.add(new Image(ClientImageBundle.INSTANCE.coachIconMilitary()));
-			}
+			}*/
 		}
 	}
 

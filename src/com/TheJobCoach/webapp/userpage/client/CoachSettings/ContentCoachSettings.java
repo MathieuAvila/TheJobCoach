@@ -105,8 +105,8 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 		HashMap<String, ImageResource> images = new HashMap<String, ImageResource>();
 		images.put("DEFAULT_MAN", ClientImageBundle.INSTANCE.coachIconSmall());
 		images.put("DEFAULT_WOMAN", ClientImageBundle.INSTANCE.coachIconWomanSmall());
-		images.put("COACH_MILITARY", ClientImageBundle.INSTANCE.coachIconMilitarySmall());
-		images.put("COACH_SURFER", ClientImageBundle.INSTANCE.coachIconSurferSmall());
+		//images.put("COACH_MILITARY", ClientImageBundle.INSTANCE.coachIconMilitarySmall());
+		//images.put("COACH_SURFER", ClientImageBundle.INSTANCE.coachIconSurferSmall());
 		DynamicImage diVirtualCoach = new DynamicImage(tfVirtualCoach, images);
 			grid2.setWidget(0,3, diVirtualCoach);
 		dlVirtualCoach.setWidth("300px");

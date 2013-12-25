@@ -15,6 +15,7 @@ import com.TheJobCoach.webapp.userpage.client.UserSite.ContentUserSite;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
+import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -253,10 +254,9 @@ public class UserPage implements EntryPoint {
 		HorizontalPanel upperGlobalPanel = new HorizontalPanel();
 		
 		flexTable.setWidget(0, 0, upperGlobalPanel);		
-		//horizontalPanel.setWidth("100%");
-		//Image image = new Image(ClientImageBundle.INSTANCE.coachIcon());
-		//horizontalPanel.add(image);
 		PanelCoach pc = new PanelCoach(upperGlobalPanel, userId);
+		upperGlobalPanel.add(pc);
+		upperGlobalPanel.setCellWidth(pc,  "100%");
 		pc.onModuleLoad();
 		
 		HorizontalPanel panelConnectionInfo = new HorizontalPanel();
@@ -267,8 +267,11 @@ public class UserPage implements EntryPoint {
 		panelConnectedAs.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		Label labelConnectedAs = new Label(lang._Text_ConnectedAs());
 		panelConnectedAs.add(labelConnectedAs);
+		labelConnectedAs.setWidth("12em");
+		panelConnectedAs.add(new HorizontalSpacer("1em"));
 		Label labelUserName = new Label(userId.userName);
 		panelConnectedAs.add(labelUserName);
+		panelConnectedAs.add(new HorizontalSpacer("0.5em"));
 		panelConnectedAs.setCellVerticalAlignment(labelUserName, HasVerticalAlignment.ALIGN_MIDDLE);
 		panelConnectedAs.setCellVerticalAlignment(labelConnectedAs, HasVerticalAlignment.ALIGN_MIDDLE);
 		labelUserName.setStyleName("label-username");
@@ -295,6 +298,8 @@ public class UserPage implements EntryPoint {
 
 		Image imageLogout = new Image(ClientImageBundle.INSTANCE.urlLogout());
 		panelConnectionInfo.add(imageLogout);
+		panelConnectionInfo.setCellVerticalAlignment(labelConnectedAs, HasVerticalAlignment.ALIGN_MIDDLE);
+		
 		imageLogout.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
