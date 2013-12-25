@@ -1,5 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
+import java.util.Vector;
+
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
@@ -11,12 +13,14 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -31,11 +35,51 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 	final DecoratorPanel coachAdviceDecorator = new DecoratorPanel();
 	//final ScrollPanel adviceListPanel = new ScrollPanel();
 	//final SimplePanel adviceListPanel = new SimplePanel();
-	HTML label = new HTML("Salut, bienvenue sur TheJobCoach.fr<br/>Je suis votre coach, ensemble on va vous trouver un super job !");
-
+	HTML label = new HTML("");
+	
+	VerticalPanel sp2 = new VerticalPanel();
+	SimplePanel spacer = new SimplePanel();
+	
 	
 	ClientUserValuesUtils values = null;
 
+	Vector<String> appendQueue = new Vector<String>();
+	int appendCompleted = 0;
+	
+	Timer timer = new Timer() 
+	{
+		public void run() 
+		{
+			//timer.scheduleRepeating(100);
+			if (appendQueue.size() != 0)
+			{
+				appendCompleted += 10;
+				timer.scheduleRepeating(100);
+				if (appendCompleted < 180)
+				{
+					spacer.setHeight(((float)appendCompleted) / 100.0 + "em");
+				}
+				else if (appendCompleted == 180)
+				{
+					spacer.setHeight("0em");
+					String v = appendQueue.get(0);
+					label.setStyleName("coachblablacontent");
+					label.setHTML(label.getHTML() + "<br/>" + v);
+				}
+				else if (appendCompleted > 200)
+				{
+					appendQueue.remove(0);
+					appendCompleted = 0;
+				}
+			}
+			else
+			{
+				//appendQueue.add("Oui, je vais me taire");
+				timer.scheduleRepeating(1000);
+			}
+		}
+	};
+	
 	public PanelCoach(Panel panel, UserId _user)
 	{
 		super();
@@ -75,10 +119,10 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 		//this.setC(0);
 		
 		SimplePanel sp = new SimplePanel();
-		SimplePanel sp2 = new SimplePanel();
 		add(sp);
 		sp.add(sp2);
 		sp2.add(label);
+		sp2.add(spacer);
 		DOM.setStyleAttribute(sp2.getElement(), "overflow", "hidden");
 		DOM.setStyleAttribute(sp.getElement(), "overflow", "hidden");
 		sp.setSize("100%", "150px");
@@ -98,7 +142,11 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 		
 		setWidth("100%");
 		getValues();
-		values.addListener(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, this);	
+		values.addListener(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, this);
+		timer.scheduleRepeating(100);
+		
+		appendQueue.add("Salut, bienvenue sur TheJobCoach.fr");
+		appendQueue.add("Je suis votre coach, ensemble on va vous trouver un super job !");
 	}
 
 	@Override

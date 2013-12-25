@@ -445,6 +445,11 @@ font-size: 1.2em;
 border: 3px solid #AAAAAA;
 }
 
+.coachblablacontent {
+font-family: 'Indie Flower', cursive;
+font-size: 1.2em;
+}
+
 .coachboxtitle {
 	font: 1.2em Helvetica, arial, freesans, clean, sans-serif;
 	-webkit-border-top-left-radius: 15px;
