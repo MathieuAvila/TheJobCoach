@@ -18,9 +18,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class Footer extends VerticalPanel implements EntryPoint {
 
 	Panel rootPanel;
@@ -139,13 +136,18 @@ public class Footer extends VerticalPanel implements EntryPoint {
 		scriptFacebook.setLang("javascript");
 		this.getElement().appendChild(scriptFacebook);
 		
-		System.out.println(scriptFacebook.toString());
-		System.out.println(facebook.toString());
+		// Add Tweeter button
+		HTML twitter = new HTML("<a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-url=\"https://www.thejobcoach.fr\" data-text=\"J'optimise ma recherche d'emploi avec TheJobCoach.fr\" data-lang=\"fr\">Tweeter</a>");
+		horizontalPanel_10.add(twitter);
+		horizontalPanel_10.add(new HorizontalSpacer("40px"));
+		ScriptElement scriptTwitter = doc.createScriptElement();
+		scriptTwitter.setSrc("https://platform.twitter.com/widgets.js");
+		scriptTwitter.setType("text/javascript");
+		scriptTwitter.setLang("javascript");
+		scriptTwitter.setId("twitter-wjs");
+		this.getElement().appendChild(scriptTwitter);
 	}
-	
-	/**
-	 * This is the entry point method.
-	 */
+
 	public void onModuleLoad()
 	{
 		this.add(commonFooter);
