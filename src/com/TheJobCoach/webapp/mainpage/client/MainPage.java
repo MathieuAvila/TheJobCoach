@@ -297,8 +297,8 @@ public class MainPage implements EntryPoint {
 		VerticalPanel simplePanelCenter = new VerticalPanel();
 		simplePanelCenter.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		simplePanelCenter.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		Footer footerPanel = new Footer();
-		footerPanel.setRootPanel(simplePanelCenter);	
+		Footer footerPanel = new Footer(simplePanelCenter);
+		simplePanelCenter.add(footerPanel);	
 		footerPanel.onModuleLoad();
 
 		VerticalPanel verticalPanel_2 = new VerticalPanel();

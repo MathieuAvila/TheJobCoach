@@ -389,8 +389,8 @@ public class UserPage implements EntryPoint {
 		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getCellFormatter().setVerticalAlignment(3, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 
-		Footer footerPanel = new Footer();
-		footerPanel.setRootPanel(verticalPanel);	
+		Footer footerPanel = new Footer(verticalPanel);
+		verticalPanel.add(footerPanel);	
 		footerPanel.onModuleLoad();
 
 		changeMenu("news");

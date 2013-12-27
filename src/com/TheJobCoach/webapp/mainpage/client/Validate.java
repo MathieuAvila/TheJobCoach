@@ -101,10 +101,9 @@ public class Validate implements EntryPoint {
 		verticalPanel.add(verticalPanel_4);
 		verticalPanel.setCellVerticalAlignment(verticalPanel_4, HasVerticalAlignment.ALIGN_BOTTOM);
 		verticalPanel_4.setSize("", "");
-		Footer footerPanel = new Footer();
-		footerPanel.setRootPanel(verticalPanel_4);	
+		Footer footerPanel = new Footer(verticalPanel_4);
 		footerPanel.onModuleLoad();
-		
+		verticalPanel_4.add(footerPanel);
 		
 		String username = com.google.gwt.user.client.Window.Location.getParameter("username");
 		String token = com.google.gwt.user.client.Window.Location.getParameter("token");
