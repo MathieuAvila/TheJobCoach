@@ -167,15 +167,6 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 			}
 		};
 
-		// Create description column.
-		TextColumn<UserDocument> descriptionColumn = new TextColumn<UserDocument>() {
-			@Override
-			public String getValue(UserDocument document) 
-			{
-				return document.description;
-			}
-		};
-
 		// Create lastUpdate column.
 		TextColumn<UserDocument> downloadLastUpdate = new TextColumn<UserDocument>() {
 			@Override
@@ -222,10 +213,8 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 		cellTable.addColumn(typeColumn, langDocument._TextType());
 
 		nameColumn.setSortable(true);
-		descriptionColumn.setSortable(true);
 		downloadLastUpdate.setSortable(true);
 		cellTable.addColumn(nameColumn, lang._TextName());
-		cellTable.addColumn(descriptionColumn, lang._TextDescription());
 		cellTable.addColumn(downloadLastUpdate, langDocument._TextLastUpdate());
 		//cellTable.getColumnSortList().push(nameColumn);		
 
