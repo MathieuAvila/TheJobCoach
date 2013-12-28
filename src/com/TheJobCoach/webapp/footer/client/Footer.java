@@ -55,7 +55,8 @@ public class Footer extends VerticalPanel implements EntryPoint {
 		setStyleName("footer-content");
 		getElement().getStyle().setPosition(Position.RELATIVE);
 		setSize("100%", "100%");
-
+		setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
 		HorizontalPanel horizontalPanel_9 = new HorizontalPanel();
 		horizontalPanel_9.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel_9.setStyleName("mainpage-content");
@@ -139,7 +140,6 @@ public class Footer extends VerticalPanel implements EntryPoint {
 		// Add Tweeter button
 		HTML twitter = new HTML("<a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-url=\"https://www.thejobcoach.fr\" data-text=\"J'optimise ma recherche d'emploi avec TheJobCoach.fr\" data-lang=\"fr\">Tweeter</a>");
 		horizontalPanel_10.add(twitter);
-		horizontalPanel_10.add(new HorizontalSpacer("40px"));
 		ScriptElement scriptTwitter = doc.createScriptElement();
 		scriptTwitter.setSrc("https://platform.twitter.com/widgets.js");
 		scriptTwitter.setType("text/javascript");
