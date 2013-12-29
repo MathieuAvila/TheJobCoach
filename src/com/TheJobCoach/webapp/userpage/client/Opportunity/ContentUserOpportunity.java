@@ -24,7 +24,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Grid;
@@ -284,8 +283,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			@Override
 			public String getValue(UserOpportunity userOpportunity) 
 			{
-				String result = NumberFormat.getFormat("0.00").format(userOpportunity.salary);				
-				return result;
+				return userOpportunity.salary;
 			}
 		};
 

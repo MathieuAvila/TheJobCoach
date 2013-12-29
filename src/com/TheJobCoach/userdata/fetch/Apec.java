@@ -48,13 +48,7 @@ public class Apec extends JobBoard
 		}
 		catch (ParseException e1){}
 		
-		String salaryStr = extractPattern(patternSalaire, text, "");
-		double salary = 0;
-		try {
-		 salary = Double.parseDouble(salaryStr);
-		} catch (Exception e){};
 		String salaryFull = extractPattern(patternSalaireFull, text, "");
-		if (salaryFull.contains("K")) salary*=1000;
 		Date startDate = null;
 		Date endDate = null;
 		String location = extractPattern(patternLieu, text, "");
@@ -62,7 +56,7 @@ public class Apec extends JobBoard
 
 		return new UserOpportunity(iD, firstSeen, lastUpdate,
 				title,  description,  companyId,
-				contractType,  salary,  startDate,  endDate,
+				contractType,  salaryFull,  startDate,  endDate,
 				false, "apec#" + iD, url, location,
 				status, "");
 	}

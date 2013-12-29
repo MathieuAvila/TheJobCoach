@@ -31,21 +31,21 @@ public class TestUserOpportunitiesManager {
 
 	static UserOpportunity opportunity1 = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 2, 1),
 			"title1", "description1", "companyId1",
-			"contractType1",  1,  
+			"contractType1",  "1",  
 			getDate(2000, 1, 1), getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "note1");
 
 	static UserOpportunity opportunity2 = new UserOpportunity("opp2", getDate(2000, 1, 2), getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
-			"contractType2",  2,  
+			"contractType2",  "2",  
 			getDate(2000, 1, 2), getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.NEW, "note2");
 
 	static UserOpportunity opportunity3 = new UserOpportunity("opp3", getDate(2000, 1, 2), getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
-			"contractType2",  2,  
+			"contractType2",  "2",  
 			getDate(2000, 1, 2), getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.CLOSED, "note3");
@@ -71,7 +71,7 @@ public class TestUserOpportunitiesManager {
 		assertEquals(op1.url, opRef.url);
 		assertEquals(op1.companyId, opRef.companyId);
 		assertEquals(op1.contractType, opRef.contractType);
-		assertEquals(op1.salary, opRef.salary, 0.1);
+		assertEquals(op1.salary, opRef.salary);
 		assertEquals(op1.startDate, opRef.startDate);
 		assertEquals(op1.endDate, opRef.endDate);
 		assertEquals(op1.location, opRef.location);

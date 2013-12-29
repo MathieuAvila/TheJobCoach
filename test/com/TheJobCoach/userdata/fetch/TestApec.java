@@ -34,7 +34,7 @@ public class TestApec
 		assertEquals("Cadre du secteur public / Armées", apec_0_opp.contractType);
 		assertEquals("apec#55074623W-2160-6693", apec_0_opp.source);
 		assertTrue(apec_0_opp.description.contains("RECRUTEMENT D'UN AGENT CONTRACTUEL"));
-		assertEquals(25000.0, apec_0_opp.salary, 100);
+		assertEquals("25 K", apec_0_opp.salary);
 		assertTrue(CoachTestUtils.isDateEqualForDay(CoachTestUtils.getDate(2013, 11, 28), apec_0_opp.firstSeen));
 	}	
 }

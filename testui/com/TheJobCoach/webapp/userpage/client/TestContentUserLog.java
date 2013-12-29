@@ -45,7 +45,7 @@ public class TestContentUserLog implements EntryPoint {
 					hp.setSize("100%", "100%");
 					UserOpportunity opp = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 1, 1),
 							"title1", "description1", "companyId1",
-							"contractType1",  1,  
+							"contractType1",  "1",  
 							getDate(2000, 1, 1), getDate(2000, 1, 1),
 							false, "source1", "url1", "location1",
 							UserOpportunity.ApplicationStatus.APPLIED, "note1");

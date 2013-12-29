@@ -54,21 +54,21 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 	static String opp3 = "opp3";
 	static UserOpportunity opportunity1 = new UserOpportunity(opp1, getDate(2000, 1, 1), getDate(2000, 2, 1),
 			"title1", "description1", "companyId1",
-			"contractType1",  1000.10,  
+			"contractType1",  "1000.10",  
 			getDate(2000, 1, 1), getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "note1");
 	
 	static UserOpportunity opportunity2 = new UserOpportunity(opp2, getDate(2000, 1, 2), getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
-			"contractType2",  2,  
+			"contractType2",  "2",  
 			getDate(2000, 1, 2), getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.NEW, "note2");
 
 	static UserOpportunity opportunity3 = new UserOpportunity(opp3, getDate(2000, 1, 2), getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
-			"contractType2",  2,  
+			"contractType2",  "2",  
 			getDate(2000, 1, 2), getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.CLOSED, "note3");
@@ -243,7 +243,7 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 		assertEquals(opportunity1.companyId,                                     cuo.cellTable.getColumn(4).getValue(opportunity1));
 		assertEquals("Candidaté",                                                cuo.cellTable.getColumn(5).getValue(opportunity1));
 		assertEquals(opportunity1.location,                                      cuo.cellTable.getColumn(6).getValue(opportunity1));
-		assertEquals(NumberFormat.getFormat("0.00").format(opportunity1.salary), cuo.cellTable.getColumn(7).getValue(opportunity1));
+		assertEquals(opportunity1.salary,										 cuo.cellTable.getColumn(7).getValue(opportunity1));
 		assertEquals(opportunity1.contractType,                                  cuo.cellTable.getColumn(8).getValue(opportunity1));
 		assertEquals(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(opportunity1.firstSeen),
 																				 cuo.cellTable.getColumn(9).getValue(opportunity1));

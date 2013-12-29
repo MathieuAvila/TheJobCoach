@@ -48,14 +48,14 @@ public class TestUserLogManager
 
 	static UserOpportunity opportunity1 = new UserOpportunity("opp1", CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 2, 1),
 			"title1", "description1", "companyId1",
-			"contractType1",  1,  
+			"contractType1",  "1",  
 			CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "note1");
 
 	static UserOpportunity opportunity2 = new UserOpportunity("opp2", CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
-			"contractType2",  2,  
+			"contractType2",  "2",  
 			CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.NEW, "note2");

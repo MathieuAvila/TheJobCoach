@@ -42,8 +42,9 @@ public class UserOpportunity implements Serializable {
 	/** Type of contract */
 	public String contractType;
 
-	/** How much you expect to earn */
-	public double salary;
+	/** How much you expect to earn 
+	 * Not an integer, but can be converted to if necessary and appropriate */
+	public String salary;
 
 	/** When the job starts. Set to 1/1/1900 if not set */	
 	public Date startDate;
@@ -96,7 +97,7 @@ public class UserOpportunity implements Serializable {
 
 	public UserOpportunity(String iD, Date firstSeen, Date lastUpdate,
 			String title, String description, String companyId,
-			String contractType, double salary, Date startDate, Date endDate,
+			String contractType, String salary, Date startDate, Date endDate,
 			boolean systemSource, String source, String url, String location,
 			ApplicationStatus status, String note) 
 	{

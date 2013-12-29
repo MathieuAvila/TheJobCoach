@@ -14,7 +14,6 @@ public class PoleEmploi extends JobBoard
 	static Pattern patternRef = Pattern.compile(".*detail/(.*)");
 	static Pattern patternLieu = Pattern.compile("Lieu de travail</span></div>(.*)</li><li class=\"link-geolocation\">", Pattern.DOTALL);
 	static Pattern patternSalaire = Pattern.compile("Salaire indicatif</span></div>(.*)Dur.e hebdomadaire de travail", Pattern.DOTALL);
-	static Pattern patternSalaireFull = Pattern.compile("([0-9][0-9,]*)", Pattern.DOTALL);
 	static Pattern patternCompany = Pattern.compile("N/A", Pattern.DOTALL);
 	
 	static Pattern patternStatus = Pattern.compile("<span itemprop=\"employmentType\">(.*)Nature d'offre", Pattern.DOTALL);
@@ -48,12 +47,6 @@ public class PoleEmploi extends JobBoard
 		catch (ParseException e1){}
 		
 		String salaryStr = removeHtml(extractPattern(patternSalaire, text, ""));
-		String salaryStrFull = removeHtml(extractPattern(patternSalaireFull, salaryStr, ""));
-		
-		float salary = 0;
-		try {
-		 salary = Float.parseFloat(salaryStrFull.replace(",","."));
-		} catch (Exception e) {}
 		
 		Date startDate = null;
 		Date endDate = null;
@@ -62,7 +55,7 @@ public class PoleEmploi extends JobBoard
 
 		return new UserOpportunity(iD, firstSeen, lastUpdate,
 				title,  description,  companyId,
-				contractType,  salary,  startDate,  endDate,
+				contractType,  salaryStr,  startDate,  endDate,
 				false, "poleemploi#" + iD, url, location,
 				status, "");
 	}

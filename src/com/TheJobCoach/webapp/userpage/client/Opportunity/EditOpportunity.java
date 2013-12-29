@@ -17,7 +17,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -47,7 +46,7 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 	TextBox txtbxCompany = new TextBox();
 	TextBox txtbxContractType = new TextBox();
 	
-	CheckedTextField txtbxSalary = new CheckedTextField("[0-9]+[,.]?[0-9]*");
+	CheckedTextField txtbxSalary = new CheckedTextField(".*");
 	CheckedLabel lblSalary = new CheckedLabel(lang._TextSalary(), false, txtbxSalary);
 
 	TextBox txtbxSource = new TextBox();
@@ -82,7 +81,7 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 		richTextAreaDescription.setHTML(opp.description);
 		txtbxCompany.setText(opp.companyId);
 		txtbxContractType.setText(opp.contractType);
-		txtbxSalary.setValue(NumberFormat.getFormat("0.00").format(opp.salary));
+		txtbxSalary.setValue(opp.salary);
 		txtbxSource.setText(opp.source);
 		txtbxUrl.setText(opp.url);
 		txtbxLocation.setText(opp.location);
@@ -93,14 +92,12 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 	
 	private UserOpportunity getOpportunity()
 	{
-		double salary = 0;
-		if (txtbxSalary.getValue() != null) salary = Double.parseDouble(txtbxSalary.getValue().replace(",", "."));
 		if (id == null) id = SiteUUID.getDateUuid();
 		return new UserOpportunity(id, 
 				new Date(), 
 				(currentOpportunity != null) ? currentOpportunity.firstSeen : new Date(),
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), txtbxCompany.getValue(),
-				txtbxContractType.getText(), salary, dateBoxStart.getValue(), dateBoxEndDate.getValue(),
+				txtbxContractType.getText(), txtbxSalary.getValue(), dateBoxStart.getValue(), dateBoxEndDate.getValue(),
 				false, txtbxSource.getText(), txtbxUrl.getText(), txtbxLocation.getText(), 
 				UserOpportunity.applicationStatusToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex())), "");
 	}

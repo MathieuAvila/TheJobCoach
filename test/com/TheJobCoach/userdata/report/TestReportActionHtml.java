@@ -35,7 +35,7 @@ public class TestReportActionHtml {
 	
 	static UserOpportunity opportunity1 = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 2, 1),
 			"oppTitle1", "oppDescription1", "companyId1",
-			"contractType1",  1,  
+			"contractType1",  "1",  
 			getDate(2000, 1, 1), getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "");
