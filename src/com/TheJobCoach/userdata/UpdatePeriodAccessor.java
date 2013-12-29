@@ -1,5 +1,6 @@
 package com.TheJobCoach.userdata;
 
+import java.util.Date;
 import java.util.Map;
 
 import com.TheJobCoach.util.Convertor;
@@ -21,6 +22,7 @@ public class UpdatePeriodAccessor
 
 	public static UpdatePeriod.PeriodType periodTypeFromString(String period)
 	{
+		if (period == null) return UpdatePeriod.PeriodType.DAY;
 		if (period.equals("d")) return UpdatePeriod.PeriodType.DAY;
 		if (period.equals("w")) return UpdatePeriod.PeriodType.WEEK;
 		if (period.equals("m")) return UpdatePeriod.PeriodType.MONTH;
@@ -29,6 +31,17 @@ public class UpdatePeriodAccessor
 
 	public static UpdatePeriod fromCassandra(Map<String, String> resultReq)
 	{
+		// migration case
+		if (resultReq == null)
+		{
+			return new UpdatePeriod(
+					new Date(), 
+					0, 
+					UpdatePeriod.PeriodType.DAY,
+					false
+					);
+		}
+		// normal case
 		return new UpdatePeriod(
 				Convertor.toDate(resultReq.get("period_date")), 
 				Convertor.toInt(resultReq.get("period_length")), 

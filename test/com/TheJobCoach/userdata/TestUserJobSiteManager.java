@@ -175,10 +175,12 @@ public class TestUserJobSiteManager {
 		assertEquals(0, result.size());
 		
 		int hasError = 0;
-		try{ manager.getUserSite(id, site1); } catch (CassandraException e) { hasError++; };
-		try{ manager.getUserSite(id, site2); } catch (CassandraException e) { hasError++; };
-		try{ manager.getUserSite(id, site3); } catch (CassandraException e) { hasError++; };
-		assertEquals(3, hasError);
+		int isNull = 0;
+		try{ UserJobSite ujs = manager.getUserSite(id, site1); if (ujs == null) isNull++; } catch (CassandraException e) { hasError++; };
+		try{ UserJobSite ujs = manager.getUserSite(id, site2); if (ujs == null) isNull++;  } catch (CassandraException e) { hasError++; };
+		try{ UserJobSite ujs = manager.getUserSite(id, site3); if (ujs == null) isNull++;  } catch (CassandraException e) { hasError++; };
+		assertEquals(0, hasError);
+		assertEquals(3, isNull);
 	}
 	
 }

@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
 import com.TheJobCoach.userdata.TodoList.TodoListSubscriber;
@@ -27,7 +30,9 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;
 	static ITodoList todoList = new TodoList();
-
+	
+	static Logger logger = LoggerFactory.getLogger(UserJobSiteManager.class);
+	
 	static boolean inited = false;
 	{
 		if (!inited)
@@ -50,8 +55,14 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 		resultReq = CassandraAccessor.getRow(
 				COLUMN_FAMILY_NAME_LIST, 
 				id.userName);
-		if (resultReq == null) return new ArrayList<String>();
-		return new ArrayList<String>(resultReq.keySet());
+		ArrayList<String> result = new ArrayList<String>();
+		if (resultReq == null) return result;
+		for (String key: resultReq.keySet())
+		{
+			CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_DATA, id.userName + "_" + key, "name");
+			result.add(key);
+		}
+		return result;
 	}
 
 	public UserJobSite getUserSite(UserId id, String ID) throws CassandraException 
@@ -60,7 +71,10 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 		Map<String, String> resultReq = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_DATA, reqId);
 		if (resultReq == null)
 		{
-			throw new CassandraException(); 
+			// delete column
+			logger.warn("Delete invalid UserJobSite: " + reqId); 
+			deleteUserSite(id, ID);
+			return null;
 		}
 		return new UserJobSite(
 				ID, 
@@ -156,6 +170,7 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 		{
 			return false;
 		}
+		if (ujs == null) return false;
 		return FormatUtil.getDateString(ujs.update.last).equals(lastDate);
 	}
 
