@@ -1,6 +1,7 @@
 package com.TheJobCoach.userdata;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -85,6 +86,8 @@ public class UserValues {
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_COACH, YES_NO_LENGTH, true, "YES"));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_RECRUITER, YES_NO_LENGTH, true, "YES"));
 
+		addField(new FieldDefinition(UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST, MAX_OPTION_LENGTH, false, "0"));
+
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR));
@@ -101,8 +104,7 @@ public class UserValues {
 		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_CONTACT_DELAY, MAX_OPTION_LENGTH, true, "3"));
 		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_OPPORTUNITY_RECALL, MAX_OPTION_LENGTH, true, "3"));
 		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_INTERVIEW, MAX_OPTION_LENGTH, true, "3"));
-		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_EVENT, MAX_OPTION_LENGTH, true, "3"));
-	
+		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_EVENT, MAX_OPTION_LENGTH, true, "3"));		
 	}
 	
 	public UserValues()
@@ -156,5 +158,25 @@ public class UserValues {
 	public void deleteUser(UserId id) throws CassandraException 
 	{		
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST, id.userName);
+	}
+	
+	public long getForcedWaitTimeMs(UserId id, int minMs)
+	{
+		Map<String, String> value = null;
+		try { value = getValues(id, UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST);}
+		 catch(Exception e) { return 0;} 
+		long time = 0;
+		long result = 0;
+		long current = new Date().getTime();
+		if (value.containsKey(UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST))
+		{
+			time = Long.parseLong((String)value.get(UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST));
+			result = minMs - (current - time);
+			if (result < 0) result = 0;
+		}
+		// Set key to new time	
+		value.put(UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST, String.valueOf(current));
+		try { setValues(id, value, false); } catch(Exception e) {} // Gods of Code, please forgive me.
+		return result;
 	}
 }

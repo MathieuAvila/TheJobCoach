@@ -119,4 +119,20 @@ public class TestUserValues {
 		values.setValues(id, toSet, true);
 	}
 	
+	@Test
+	public void test_getForcedWaitTimeMs() throws InterruptedException
+	{
+		values.getForcedWaitTimeMs(id, 1000); // Just set current time.
+		// now tell me how long to wait.
+		Thread.sleep(500);
+		long wait = values.getForcedWaitTimeMs(id, 1000);
+		System.out.println(wait);
+		assertTrue(wait < 500);
+		assertTrue(wait > 300);
+		Thread.sleep(500);
+		wait = values.getForcedWaitTimeMs(id, 1000);
+		System.out.println(wait);
+		assertTrue(wait < 500);
+		assertTrue(wait > 300);
+	}
 }
