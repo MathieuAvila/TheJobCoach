@@ -297,13 +297,6 @@ public class UserDocumentManager implements IUserDataManager {
 	}
 
 	@Override
-	public void createUser(UserId user)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void deleteUser(UserId user) throws CassandraException
 	{
 		Vector<UserDocumentId> list = getUserDocumentIdList(user);
@@ -318,5 +311,11 @@ public class UserDocumentManager implements IUserDataManager {
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void createUserDefaults(UserId user, String lang)
+	{
+		/* nothing to do */
 	}
 }

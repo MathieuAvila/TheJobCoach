@@ -140,6 +140,7 @@ public class AccountManager implements AccountInterface {
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
 		result = updateUserInformation(id, info, version);
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
+		UserDataCentralManager.createUserDefaults(id, langStr);
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 	
@@ -297,6 +298,7 @@ public class AccountManager implements AccountInterface {
 	public void deleteAccount(String userName) throws CassandraException
 	{
 		UserId id = new UserId(userName, "", UserId.UserType.USER_TYPE_SEEKER);
+		UserDataCentralManager.deleteUser(id);
 		UserReport user = getUserReport(id);
 		if (user != null)
 		{

@@ -15,11 +15,6 @@ public class UserDataCentralManager
 		managerList.add(manager);
 	}
 
-	public static void createUser(UserId user)
-	{
-		for (IUserDataManager manager: managerList) manager.createUser(user);
-	}
-
 	public static void deleteUser(UserId user) throws CassandraException
 	{
 		for (IUserDataManager manager: managerList) manager.deleteUser(user);
@@ -28,5 +23,10 @@ public class UserDataCentralManager
 	public static void createTestUser(UserId user, String lang)
 	{
 		for (IUserDataManager manager: managerList) manager.createTestUser(user, lang);
+	}
+
+	public static void createUserDefaults(UserId user, String lang)
+	{
+		for (IUserDataManager manager: managerList) manager.createUserDefaults(user, lang);
 	}
 }

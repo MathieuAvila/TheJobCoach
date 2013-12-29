@@ -5,7 +5,7 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 
 public interface IUserDataManager
 {
-	void createUser(UserId user);
 	void deleteUser(UserId user) throws CassandraException;
 	void createTestUser(UserId user, String lang);
+	void createUserDefaults(UserId user, String lang);
 }

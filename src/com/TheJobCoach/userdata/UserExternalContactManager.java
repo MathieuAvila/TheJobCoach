@@ -190,17 +190,15 @@ public class UserExternalContactManager implements TodoListSubscriber, IUserData
 	 */
 
 	@Override
-	public void createUser(UserId user)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void createTestUser(UserId user, String lang)
 	{
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
+	public void createUserDefaults(UserId user, String lang)
+	{
+		/* nothing to do */
+	}
 }

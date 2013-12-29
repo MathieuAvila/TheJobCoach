@@ -107,13 +107,14 @@ public class ConnectionLog implements IUserDataManager {
 	}
 
 	@Override
-	public void createUser(UserId user)
-	{
-		
-	}
-	@Override
 	public void createTestUser(UserId user, String lang)
 	{
 		
+	}
+
+	@Override
+	public void createUserDefaults(UserId user, String lang)
+	{
+		/* nothing to do */
 	}
 }

@@ -182,5 +182,21 @@ public class TestUserJobSiteManager {
 		assertEquals(0, hasError);
 		assertEquals(3, isNull);
 	}
+
+	@Test
+	public void testCreateUserDefaults() throws CassandraException 
+	{
+		manager.deleteUser(id);
+
+		manager.createUserDefaults(id, "FR");
+
+		List<String> result = manager.getUserSiteList(id);
+		assertEquals(2, result.size());
+		
+		UserJobSite ujs_popol = manager.getUserSite(id, result.get(0));
+		UserJobSite ujs_apec = manager.getUserSite(id, result.get(1));
+		assertEquals("Pôle Emploi", ujs_popol.name);
+		assertEquals("APEC", ujs_apec.name);
+	}
 	
 }

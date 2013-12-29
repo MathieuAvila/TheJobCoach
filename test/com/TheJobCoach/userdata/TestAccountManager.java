@@ -39,10 +39,50 @@ public class TestAccountManager
 	static String idSeeker =  "seeker" + UUID.randomUUID().hashCode();
 	static String tokenSeeker = "tokenSeeker" + UUID.randomUUID().hashCode();
 
+	static class FakeDataManager implements IUserDataManager
+	{
+		public int deleteCount = 0;
+		public int createTestCount = 0;
+		public int createDefaultCount = 0;
+
+		public void reset()
+		{
+			deleteCount = 0;
+			createTestCount = 0;
+			createDefaultCount = 0;
+		}
+
+		@Override
+		public void deleteUser(UserId user) throws CassandraException
+		{
+			deleteCount++;
+		}
+
+		@Override
+		public void createTestUser(UserId user, String lang)
+		{
+			createTestCount++;
+		}
+
+		@Override
+		public void createUserDefaults(UserId user, String lang)
+		{
+			createDefaultCount++;
+		}
+		
+	}
+	
+	static FakeDataManager fakeManager = new FakeDataManager();
+	
+	static {
+		UserDataCentralManager.addManager(fakeManager);
+	}
+	
 	@Test
 	public void test00CreateAccount() throws CassandraException
 	{
 		account.deleteAccount(id);
+		fakeManager.reset();
 		
 		MailerFactory.setMailer(mockMail);
 		CreateAccountStatus status = account.createAccountWithToken(
@@ -62,6 +102,8 @@ public class TestAccountManager
 		System.out.println("OUTPUT BODY SB :"+sb1);
 		token = sb1.substring(0, sb1.indexOf("</a>"));
 		assertEquals("mytoken", token);
+		// Check data manager is called.
+		assertEquals(1, fakeManager.createDefaultCount);
 	}
 
 	@Test
@@ -142,7 +184,20 @@ public class TestAccountManager
 		account.deleteAccount(idAdmin);
 		account.deleteAccount(idSeeker);
 		account.deleteAccount(idCoach);
-		account.deleteAccount(id);				
+		account.deleteAccount(id);
+		
+		// Check create + delete CentralDataManager calls & counters
+		fakeManager.reset();
+		MailerFactory.setMailer(mockMail);
+		CreateAccountStatus status = account.createAccountWithToken(
+				new UserId(id, "mytoken", UserId.UserType.USER_TYPE_SEEKER),
+				new UserInformation("nom", email, "password","prenom"), 
+				"FR");
+		assertEquals( CreateAccountStatus.CREATE_STATUS_OK, status);
+		assertEquals(0, fakeManager.deleteCount);
+		account.deleteAccount(id);
+		// Check data manager is called.
+		assertEquals(1, fakeManager.deleteCount);				
 	}
 
 	public String getPasswordFromMail(String mail)

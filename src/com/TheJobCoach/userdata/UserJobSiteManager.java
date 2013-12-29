@@ -11,15 +11,19 @@ import org.slf4j.LoggerFactory;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.userdata.TodoList.TodoListSubscriber;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
+import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
+import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
 public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager {
@@ -200,17 +204,25 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 	 */
 
 	@Override
-	public void createUser(UserId user)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void createTestUser(UserId user, String lang)
 	{
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
+	public void createUserDefaults(UserId user, String lang)
+	{
+		// Create a few french user sites, if necessary
+		try
+		{
+			UserJobSite popol = new UserJobSite(SiteUUID.getDateUuid(), "Pôle Emploi", "http://pole-emploi.fr", "Site officiel Pôle Emploi", "", "", 
+					new UpdatePeriod(new Date(), 1, PeriodType.DAY, false));
+			UserJobSite apec = new UserJobSite(SiteUUID.getDateUuid(), "APEC", "http://www.apec.fr/", "Association pour l'emploi des cadres", "", "", 
+					new UpdatePeriod(new Date(), 1, PeriodType.DAY, false));
+			setUserSite(user, popol);
+			setUserSite(user, apec);
+		}
+		catch (CassandraException e){} // please ignore if any, this would break account creation
+	}
 }
