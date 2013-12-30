@@ -35,6 +35,7 @@ public class TestApec
 		assertEquals("apec#55074623W-2160-6693", apec_0_opp.source);
 		assertTrue(apec_0_opp.description.contains("RECRUTEMENT D'UN AGENT CONTRACTUEL"));
 		assertEquals("25 K", apec_0_opp.salary);
+		assertEquals("myurl", apec_0_opp.url);
 		assertTrue(CoachTestUtils.isDateEqualForDay(CoachTestUtils.getDate(2013, 11, 28), apec_0_opp.firstSeen));
 	}	
 }

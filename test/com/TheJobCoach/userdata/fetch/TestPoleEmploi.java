@@ -36,5 +36,6 @@ public class TestPoleEmploi
 		assertTrue(poleemploi_0_opp.description.contains("TECHNICIEN TACHYGRAPHE"));
 		assertEquals("Horaire de 9,43 euros", poleemploi_0_opp.salary);
 		assertTrue(CoachTestUtils.isDateEqualForDay(CoachTestUtils.getDate(2013, 12, 13), poleemploi_0_opp.firstSeen));
+		assertEquals("myurl", poleemploi_0_opp.url);
 	}	
 }
