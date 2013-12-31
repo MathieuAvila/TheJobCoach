@@ -1,6 +1,6 @@
 package com.TheJobCoach.webapp.util.client;
 
-import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.util.client.ClientImageBundle;
 import com.google.gwt.cell.client.IconCellDecorator;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
@@ -18,7 +18,7 @@ public class IconCellSingle extends IconCellDecorator<String>
 	
 	static ImageResource deleteIcon = wpImageBundle.deleteFile();
 	static ImageResource updateIcon = wpImageBundle.updateFile();
-	static ImageResource rightIcon = wpImageBundle.right();
+	static ImageResource rightIcon = wpImageBundle.nextIcon();
 	
 	IconType type;
 	

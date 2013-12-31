@@ -15,7 +15,7 @@
  */
 package com.TheJobCoach.webapp.util.client;
 
-import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.util.client.ClientImageBundle;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.IconCellDecorator;
 import com.google.gwt.core.client.GWT;

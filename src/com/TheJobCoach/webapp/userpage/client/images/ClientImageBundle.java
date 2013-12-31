@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client.images;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ClientBundle.Source;
 
 public interface ClientImageBundle extends ClientBundle 
 {
@@ -11,66 +12,26 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("george_1_150_150.png")
 	ImageResource coachIcon();
 
-	/*
-	@Source("jobcoach_military.jpg")
-	ImageResource coachIconMilitary();
-
-	@Source("jobcoach_surfer.gif")
-	ImageResource coachIconSurfer();
-*/
 	@Source("christine_1_150_150.png")
 	ImageResource coachIconWoman();
 
-	
 	@Source("george_2_150_150.png")
 	ImageResource coachIconSmall();
-/*
-	@Source("jobcoach_military_small.png")
-	ImageResource coachIconMilitarySmall();
 
-	@Source("jobcoach_surfer_small.png")
-	ImageResource coachIconSurferSmall();
-*/
 	@Source("christine_2_150_150.png")
 	ImageResource coachIconWomanSmall();
 
-	@Source("file-delete-24.png")
-	ImageResource deleteFile();
+	//@Source("right_24.png")
+	//ImageResource right();
 
-	@Source("file-icon_doc.png")
-	ImageResource docFile();
-
-	@Source("file-icon_pdf.png")
-	ImageResource pdfFile();
+	//@Source("web_24.png")
+	//ImageResource urlLink();
 	
-	@Source("file-icon_unk.png")
-	ImageResource unkFile();
-
-	@Source("file-edit-24.png")
-	ImageResource updateFile();
-
-	@Source("elementNew.png")
-	ImageResource createNew();
-
-	@Source("button_cancel_32.png")
-	ImageResource createCancel();
-
-	@Source("button_ok_32.png")
-	ImageResource createOk();
-
-	@Source("right_24.png")
-	ImageResource right();
-
-	@Source("web_24.png")
-	ImageResource urlLink();
-	
-	@Source("email-24.png")
-	ImageResource emailLink();
+	//@Source("email-24.png")
+	//ImageResource emailLink();
 
 	@Source("logout_32.png")
 	ImageResource urlLogout();
-
-	
 	
 	
 	
@@ -148,6 +109,8 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("content-coachsettings-24.png")
 	ImageResource coachSettingsContent_menu();
 	
+	
+
 	@Source("bulle.png")
 	ImageResource bulle();
 

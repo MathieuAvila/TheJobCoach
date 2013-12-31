@@ -1,6 +1,6 @@
 package com.TheJobCoach.webapp.util.client;
 
-import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
+import com.TheJobCoach.webapp.util.client.ClientImageBundle;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -68,7 +68,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 			{				
 				return value;
 			}
-		}, wpImageBundle.emailLink());
+		}, wpImageBundle.emailLink24());
 		Column<DocType, String> columnUrl = specialAddColumn(iconCellEmail, getter,
 				new FieldUpdater<DocType, String>() {
 			public void update(int index, DocType object, String value) {				
