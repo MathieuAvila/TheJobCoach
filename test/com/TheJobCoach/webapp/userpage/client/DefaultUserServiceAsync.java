@@ -170,4 +170,10 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 	{
 		logger.info("setPassword " + id.userName);
 	}
+	@Override
+	public void fetchUserOpportunity(UserId id, String ref, String site,
+			AsyncCallback<UserOpportunity> callback)
+	{
+		logger.info("fetchUserOpportunity " + id.userName + " ref:" + ref + " site:" + site);
+	}
 };

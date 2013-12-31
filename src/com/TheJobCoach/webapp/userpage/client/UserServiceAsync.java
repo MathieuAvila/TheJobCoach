@@ -13,8 +13,6 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -39,6 +37,7 @@ public interface UserServiceAsync {
 	public void getUserOpportunity(UserId id, String oppId, AsyncCallback<UserOpportunity> callback);
 	public void setUserOpportunity(UserId id, String list, UserOpportunity opp, AsyncCallback<String> callback);
 	public void deleteUserOpportunity(UserId id, String oppId, AsyncCallback<String> callback);
+	public void fetchUserOpportunity(UserId user, String ref, String site, AsyncCallback<UserOpportunity> callback);
 	
 	public void getExternalContactList(UserId id, AsyncCallback<Vector<ExternalContact>> callback);
 	public void setExternalContact(UserId id, ExternalContact contact, AsyncCallback<String> callback);

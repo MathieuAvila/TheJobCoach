@@ -11,12 +11,13 @@ import com.ibm.icu.text.SimpleDateFormat;
 
 public class Apec extends JobBoard
 {
-	static Pattern patternRef = Pattern.compile("'_([0-9A-Z]*?)____");
+	static Pattern patternRef = Pattern.compile("'_([0-9A-Z-]*?)____");
 	static Pattern patternLieu = Pattern.compile("<th>Lieu :</th>..[ ]*<td>([^<]*)</td>", Pattern.DOTALL);
-	static Pattern patternSalaire = Pattern.compile("<th>Salaire :</th>..[ ]*<td>([ 0-9]*)", Pattern.DOTALL);
-	static Pattern patternSalaireFull = Pattern.compile("<th>Salaire :</th>..[ ]*<td>([ 0-9Kk]*)", Pattern.DOTALL);
+	static Pattern patternSalaireFull = Pattern.compile("<th>Salaire :</th>(.*)Exp.rience :", Pattern.DOTALL);
 	static Pattern patternCompany = Pattern.compile("Soci.t. :</th>(.*)Voir toutes les offres", Pattern.DOTALL);
 	static Pattern patternStatus = Pattern.compile("Statut : </th>(.*)<th>Lieu :</th>", Pattern.DOTALL);
+	static Pattern patternStatusContract = Pattern.compile("Nombre de postes : </th>(.*)<th>Statut : ", Pattern.DOTALL);
+	
 	static Pattern patternPublication = Pattern.compile("Date de publication :</th>(.*)Soci.t. :", Pattern.DOTALL);
 	static Pattern patternDescription = Pattern.compile("Signaler cette offre(.*)Postuler . cette offre</a></div>", Pattern.DOTALL);
 	static Pattern patternDescriptionPrefix = Pattern.compile("<div class=\"boxContentInside\">(.*)<div class=\"spacer\">", Pattern.DOTALL);
@@ -33,13 +34,18 @@ public class Apec extends JobBoard
 		}
 		catch (UnsupportedEncodingException e3){}
 		String iD = removeHtml(extractPattern(patternReference, text, "")); 
+		iD = removeHtml(iD.replaceAll("R.f.rence soci.t.*", "")); 
+		if (iD.equals("")) return null;
 		Date firstSeen = new Date(); 
 		Date lastUpdate = new Date(); 
 		String title = removeHtml(extractPattern(patternTitle, text, ""));
 		String description = extractPattern(patternDescription, text, "");
 		description = extractPattern(patternDescriptionPrefix, description, "");
 		String companyId = removeHtml(extractPattern(patternCompany, text, ""));
+		companyId = removeHtml(companyId.replace("Voir plus d'infos sur la société", ""));
 		String contractType = removeHtml(extractPattern(patternStatus, text, ""));
+		String contractType2 = removeHtml(extractPattern(patternStatusContract, text, "").replace("1 en ", ""));
+		contractType = contractType2 +" - " + contractType;
 		String pubDateStr = removeHtml(extractPattern(patternPublication, text, ""));
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		try
@@ -48,10 +54,10 @@ public class Apec extends JobBoard
 		}
 		catch (ParseException e1){}
 		
-		String salaryFull = extractPattern(patternSalaireFull, text, "");
+		String salaryFull = removeHtml(extractPattern(patternSalaireFull, text, ""));
 		Date startDate = null;
 		Date endDate = null;
-		String location = extractPattern(patternLieu, text, "");
+		String location = removeHtml(extractPattern(patternLieu, text, ""));
 		ApplicationStatus status = ApplicationStatus.DISCOVERED;
 
 		return new UserOpportunity(iD, firstSeen, lastUpdate,
@@ -64,11 +70,8 @@ public class Apec extends JobBoard
 	@Override
 	public String getOpportunityUrl(String ref)
 	{
-		if (ref.contains("http://"))
-		{
-			return extractPattern(patternRef, ref, null);
-		}
-		return ref;
+		if (ref.contains("http://")) return ref;
+		return "http://cadres.apec.fr/offres-emploi-cadres/0_0_1_" + ref+"__________offre-d-emploi";
 	}
 
 }

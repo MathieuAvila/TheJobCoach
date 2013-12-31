@@ -41,7 +41,8 @@ public interface UserService extends RemoteService
 	public UserOpportunity getUserOpportunity(UserId id, String oppId) throws CassandraException, CoachSecurityException;
 	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException, CoachSecurityException;
 	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException, CoachSecurityException;
-	
+	public UserOpportunity fetchUserOpportunity(UserId user, String ref, String site) throws CoachSecurityException;
+
 	public Vector<ExternalContact> getExternalContactList(UserId id) throws CassandraException, CoachSecurityException;
 	public String setExternalContact(UserId id, ExternalContact contact) throws CassandraException, CoachSecurityException;
 	public String deleteExternalContact(UserId id, String contact) throws CassandraException, CoachSecurityException;

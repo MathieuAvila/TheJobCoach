@@ -23,7 +23,7 @@ public class UserOpportunityManager {
 	final public static String MANAGED_LIST = "managed";
 	
 	final static UserLogManager log = new UserLogManager();
-
+	
 	public UserOpportunityManager()
 	{
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);

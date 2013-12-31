@@ -45,4 +45,19 @@ public interface LangLogEntry extends Constants {
 	@Key("contacts")
 	String _Text_Contacts();
 
+	@Key("feed_from")
+	String _Text_feed_from();
+
+	@Key("feed_ref_id")
+	String _Text_feed_ref_id();
+
+	@Key("feed_result_ok")
+	String _Text_feed_result_ok();
+
+	@Key("feed_result_error")
+	String _Text_feed_result_error();
+
+	@Key("feed_site")
+	String _Text_feed_site();
+
 }

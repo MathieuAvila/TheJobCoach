@@ -37,6 +37,7 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.view.client.Range;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -57,6 +58,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 	final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
 
 	ButtonImageText buttonNewOpportunity;
+	ButtonImageText buttonFeedOpportunity;
 
 	private IEditDialogModel<UserOpportunity> editModel;
 	private IContentUserLog logContent;
@@ -69,6 +71,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 				currentOpportunity = result;
 				panelDescriptionContent.setHTML(currentOpportunity.description);
 				labelTextSource.setText(currentOpportunity.source);
+				System.out.println("LONG " + currentOpportunity.title + " " +currentOpportunity.lastUpdate  + " " + currentOpportunity.firstSeen);
 				labelCreationDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(currentOpportunity.lastUpdate));
 				labelStartDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(currentOpportunity.startDate));
 				labelEndDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(currentOpportunity.endDate));
@@ -179,23 +182,35 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			eus.onModuleLoad();
 		}
 	}
+	
+	class LocalIChooseResult implements IChooseResult<UserOpportunity> 
+	{
+		@Override
+		public void setResult(UserOpportunity result) {
+			if (result != null)
+			{
+				userService.setUserOpportunity(user, "managed", result, new ServerCallHelper<String>(rootPanel) {
+					public void onSuccess(String result)
+					{
+						getAllContent();
+					}
+				});
+			}
+		}
+	};
+	
+	class FeedOpportunityHandler implements ClickHandler
+	{
+		public void onClick(ClickEvent event)
+		{
+			AutoFeed eus = new AutoFeed(rootPanel, user, new LocalIChooseResult());
+			eus.onModuleLoad();
+		}
+	}
 
 	private void updateUserOpportunity(UserOpportunity opp)
 	{
-		IEditDialogModel<UserOpportunity> eus = editModel.clone(rootPanel, user, opp, new IChooseResult<UserOpportunity>() {
-			@Override
-			public void setResult(UserOpportunity result) {
-				if (result != null)
-				{
-					userService.setUserOpportunity(user, "managed", result, new ServerCallHelper<String>(rootPanel) {
-						public void onSuccess(String result)
-						{
-							getAllContent();
-						}
-					});
-				}
-			}
-		});
+		IEditDialogModel<UserOpportunity> eus = editModel.clone(rootPanel, user, opp, new LocalIChooseResult());
 		eus.onModuleLoad();
 	}
 
@@ -296,11 +311,12 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			}
 		};
 
-		// Create last visit column.
+		// Create first seen column.
 		TextColumn<UserOpportunity> firstSeenColumn = new TextColumn<UserOpportunity>() {
 			@Override
 			public String getValue(UserOpportunity userOpportunity) 
 			{
+				System.out.println("SHORT " + userOpportunity.lastUpdate  + " " + userOpportunity.firstSeen + " " + userOpportunity.title);
 				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userOpportunity.firstSeen);				
 			}
 		};
@@ -362,6 +378,9 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		buttonNewOpportunity = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewOpportunity());
 		horizontalPanel.add(buttonNewOpportunity);
 
+		buttonFeedOpportunity = new ButtonImageText(ButtonImageText.Type.FEED, langLogEntry._Text_feed_from());
+		horizontalPanel.add(buttonFeedOpportunity);
+
 		HTML htmlDescriptionhtml = new HTML("", true);
 		simplePanelCenter.add(htmlDescriptionhtml);
 		htmlDescriptionhtml.setSize("100%", "100%");
@@ -381,7 +400,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		grid_1.setWidget(0, 1, labelTextSource);
 		labelTextSource.setWidth("100%");
 
-		Label labelCreated = new Label(langLogEntry._TextCreated());
+		Label labelCreated = new Label(lang._TextFirstSeen());
 		labelCreated.setStyleName("summary-title");
 		grid_1.setWidget(1, 0, labelCreated);
 
@@ -411,6 +430,10 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		// Add a handler to the new button.
 		NewOpportunityHandler newHandler = new NewOpportunityHandler();
 		buttonNewOpportunity.addClickHandler(newHandler);
+
+		// Add a handler to the feed button.
+		FeedOpportunityHandler feedHandler = new FeedOpportunityHandler();
+		buttonFeedOpportunity.addClickHandler(feedHandler);
 
 		getAllContent();		
 	}

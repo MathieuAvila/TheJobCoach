@@ -16,6 +16,8 @@ import com.TheJobCoach.userdata.UserExternalContactManager;
 import com.TheJobCoach.userdata.UserJobSiteManager;
 import com.TheJobCoach.userdata.UserLogManager;
 import com.TheJobCoach.userdata.UserOpportunityManager;
+import com.TheJobCoach.userdata.UserValues;
+import com.TheJobCoach.userdata.fetch.JobBoard;
 import com.TheJobCoach.userdata.report.GoalReport;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
@@ -50,7 +52,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	static private GoalReport goalReport = new GoalReport();
 	
 	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
+	
+	UserValues userValues = new UserValues();
+	
 	@Override
 	public List<String> getUserSiteList(UserId id) throws CassandraException, CoachSecurityException 
 	{
@@ -142,6 +146,19 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		userOpportunityManager.deleteUserOpportunity(id, oppId);
 		return oppId;
+	}
+
+	@Override
+	public UserOpportunity fetchUserOpportunity(UserId id, String ref, String site) throws CoachSecurityException
+	{
+		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+		long time = userValues.getForcedWaitTimeMs(id, 5000);
+		try
+		{
+			Thread.sleep(time);
+		}
+		catch (InterruptedException e)	{	}
+		return JobBoard.getOpportunity(site, ref);
 	}
 
 	@Override
