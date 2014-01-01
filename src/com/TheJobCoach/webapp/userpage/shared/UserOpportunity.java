@@ -87,6 +87,7 @@ public class UserOpportunity implements Serializable {
 	static public ApplicationStatus applicationStatusToString(String t)
 	{
 		if ("NEW".equals(t)) return ApplicationStatus.NEW;
+		if ("DISCOVERED".equals(t)) return ApplicationStatus.DISCOVERED;
 		if ("APPLIED".equals(t)) return ApplicationStatus.APPLIED;
 		if ("INTERVIEWS".equals(t)) return ApplicationStatus.INTERVIEWS;
 		if ("SUCCESS".equals(t)) return ApplicationStatus.SUCCESS;
