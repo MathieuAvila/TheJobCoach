@@ -81,6 +81,11 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("images/email_24.png")
 	ImageResource emailLink24();
 
-
 	
+	
+	@Source("images/magic_24.png")
+	ImageResource magic_24();
+
+	@Source("images/lock_24.png")
+	ImageResource lockIcon();	
 }

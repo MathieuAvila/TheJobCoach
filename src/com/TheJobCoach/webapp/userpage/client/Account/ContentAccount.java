@@ -41,7 +41,7 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 	final static com.TheJobCoach.webapp.util.client.Lang langUtil = GWT.create(com.TheJobCoach.webapp.util.client.Lang.class);
 	
 	Label lblPassword = new Label(lang._TextPassword());
-	ButtonImageText btnChangePassword = new ButtonImageText(ButtonImageText.Type.NEW, langAccount.Text_changespassword());
+	ButtonImageText btnChangePassword = new ButtonImageText(ButtonImageText.Type.LOCK, langAccount.Text_changespassword());
 	
 	ClientUserValuesUtils values = null;
 
