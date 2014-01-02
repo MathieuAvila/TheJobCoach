@@ -5,6 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.webapp.userpage.shared.JobBoardDefinition;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
@@ -15,19 +17,19 @@ public abstract class JobBoard
 	public abstract String getOpportunityUrl(String ref);
 	
 	final static HashMap<String, JobBoard> jobBoardList = new HashMap<String, JobBoard>();
-
+	
+	static Logger logger = LoggerFactory.getLogger(JobBoard.class);
+	
 	static {
 		jobBoardList.put(JobBoardDefinition.APEC_ID, new Apec());
-		jobBoardList.put(JobBoardDefinition.POLE_EMPLOI_ID, new Apec());
+		jobBoardList.put(JobBoardDefinition.POLE_EMPLOI_ID, new PoleEmploi());
 	}
 	
 	public static UserOpportunity getOpportunity(String site, String ref)
 	{
 		JobBoard jobboard = jobBoardList.get(site);
-		System.out.println(jobboard);
 		if (jobboard == null) return null;
 		UserOpportunity opp = jobboard.getOpportunity(ref);
-		System.out.println(opp.title);
 		return opp;
 	}
 	
@@ -44,13 +46,18 @@ public abstract class JobBoard
 	public UserOpportunity getOpportunity(String ref)
 	{
 		String url = getOpportunityUrl(ref);
-		System.out.println(url);
+		logger.info("getOpportunity complete URL: " + ref + " " + url);
 		if (url == null) return null;
 		byte[] text = null;
-		try {
+		try 
+		{
 			text = Web.get(url);
-			System.out.println(text);
-		} catch (Exception e) { return null;} // I plead not guilty, Mr Judge.
+		} 
+		catch (Exception e) 
+		{ 
+			logger.info("getOpportunity exception: " + e.getMessage());
+			return null;
+		} // I plead not guilty, Mr Judge.
 		if (text == null) return null;
 		return getOpportunityFromText(text, url);
 	}
@@ -67,13 +74,13 @@ public abstract class JobBoard
 		char lastCurrent = ' ';
 		String result = "";
 		int position = 0;
-		do {
+		while (position < origTxt.length()) {
 			current = origTxt.charAt(position);
 			if ((current != lastCurrent) || (current != ' '))
 				result += current;
 			lastCurrent = current;
 			position++;
-		} while (position < origTxt.length());
+		};
 		return result;
 	}
 }

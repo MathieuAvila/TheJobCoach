@@ -71,7 +71,7 @@ public class Apec extends JobBoard
 	public String getOpportunityUrl(String ref)
 	{
 		if (ref.contains("http://")) return ref;
-		return "http://cadres.apec.fr/offres-emploi-cadres/0_0_1_" + ref+"__________offre-d-emploi";
+		return "http://candidat.pole-emploi.fr/candidat/rechercheoffres/detail/" + ref;
 	}
 
 }
