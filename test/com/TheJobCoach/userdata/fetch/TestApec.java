@@ -64,5 +64,15 @@ public class TestApec
 		UserOpportunity apec_0_opp = apec.getOpportunityFromText(apec_0, "myurl");
 		
 		assertEquals("apec#56268943W-5417-6876", apec_0_opp.source);
+	}
+	
+	@Test
+	public void test_getOpportunity_multiple_places()
+	{
+		byte[] apec_0 = get_file("apec_3.txt");
+		
+		UserOpportunity apec_0_opp = apec.getOpportunityFromText(apec_0, "myurl");
+		
+		assertEquals("3 en CDI - Cadre du secteur privé", apec_0_opp.contractType);
 	}	
 }
