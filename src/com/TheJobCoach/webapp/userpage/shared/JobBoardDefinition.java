@@ -14,10 +14,14 @@ public class JobBoardDefinition implements Serializable {
 	final public static String POLE_EMPLOI_ID = "poleemploi";
 	
 	public static HashMap<String, String> JOBBOARD_MAP =  new HashMap<String, String>(); 
+	public static HashMap<String, String> JOBBOARD_REGEXP =  new HashMap<String, String>(); 
 
 	static {
-		JOBBOARD_MAP.put(APEC, APEC_ID);
-		JOBBOARD_MAP.put(POLE_EMPLOI, POLE_EMPLOI_ID);
+		JOBBOARD_MAP.put(APEC_ID, APEC_ID);
+		JOBBOARD_MAP.put(POLE_EMPLOI_ID, POLE_EMPLOI_ID);
+		
+		JOBBOARD_REGEXP.put(APEC_ID, "http://.*apec.fr.*");
+		JOBBOARD_REGEXP.put(POLE_EMPLOI_ID, "http://candidat.pole-emploi.fr/.*");
 	}
 
 }

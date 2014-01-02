@@ -78,11 +78,11 @@ public class AutoTestAutoFeed extends GwtTest {
 		cud.onModuleLoad();	
 		assertFalse(cud.okCancel.getOk().isEnabled());
 		cud.comboBoxSite.setSelectedIndex(1);
-		cud.onChange(null);
+		//cud.checkChange();
 		assertFalse(cud.okCancel.getOk().isEnabled());
 		
 		cud.txtbxId.setValue("123456");
-		cud.onChange(null);
+		//cud.checkChange();
 		assertTrue(cud.okCancel.getOk().isEnabled());
 		
 		cud.okCancel.getOk().click();
