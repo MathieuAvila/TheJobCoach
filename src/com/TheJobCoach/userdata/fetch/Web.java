@@ -5,10 +5,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Web
 {
 	static final int MAX_TMP = 1024*1024;
-
+	static Logger logger = LoggerFactory.getLogger(Web.class);
+	
 	public static byte[] get(String urlStr) throws IOException
 	{
 		URL url;
@@ -31,7 +35,7 @@ public class Web
 			try {
 				if (is != null) is.close();
 			} catch (IOException ioe) {
-				System.out.println(ioe);
+				logger.error("Error closing stream " + ioe.getMessage());
 				return result;
 			}
 		}

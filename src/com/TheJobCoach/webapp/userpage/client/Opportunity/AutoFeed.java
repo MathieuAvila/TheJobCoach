@@ -74,7 +74,6 @@ public class AutoFeed implements EntryPoint, ChangeHandler, KeyUpHandler, ValueC
 				new ServerCallHelper<UserOpportunity>(rootPanel) {
 			public void onSuccess(UserOpportunity tmp)
 			{
-				System.out.println("commit " + tmp);
 				if (tmp != null)
 				{
 					dBox.hide();
@@ -82,7 +81,6 @@ public class AutoFeed implements EntryPoint, ChangeHandler, KeyUpHandler, ValueC
 				}
 				else
 				{	
-					System.out.println("commit error");
 					MessageBox errorBox = MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR, langLogEntry._Text_feed_result_error());
 					errorBox.onModuleLoad();
 					okCancel.setEnabled(true);
@@ -154,16 +152,9 @@ public class AutoFeed implements EntryPoint, ChangeHandler, KeyUpHandler, ValueC
 
 	public void checkChange()
 	{
-		System.out.println("checkChange");
-		
 		// check it corresponds to a given site
 		for (String key: JobBoardDefinition.JOBBOARD_REGEXP.keySet())
 		{
-			System.out.println("------------------");
-			System.out.println(txtbxId.getValue());
-			System.out.println(key);
-			System.out.println(JobBoardDefinition.JOBBOARD_REGEXP.get(key));
-			System.out.println(txtbxId.getValue().matches(JobBoardDefinition.JOBBOARD_REGEXP.get(key)));
 			if (txtbxId.getValue().matches(JobBoardDefinition.JOBBOARD_REGEXP.get(key)))
 			{
 				comboBoxSite.setSelectedIndex(reverseKey.get(key));
@@ -179,28 +170,24 @@ public class AutoFeed implements EntryPoint, ChangeHandler, KeyUpHandler, ValueC
 	@Override
 	public void onChange(ChangeEvent event)
 	{
-		System.out.println("onChange");
 		checkChange();
 	}
 
 	@Override
 	public void onKeyUp(KeyUpEvent event)
 	{
-		System.out.println("onKeyUp");
 		checkChange();
 	}
 
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event)
 	{
-		System.out.println("onValueChange");
 		checkChange();
 	}
 
 	@Override
 	public void call()
 	{
-		System.out.println("call");
 		checkChange();
 	}
 
