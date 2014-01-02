@@ -10,6 +10,7 @@ import com.TheJobCoach.webapp.util.client.DetectChangeTextBox;
 import com.TheJobCoach.webapp.util.client.DetectChangeTextBox.CustomChangeHandler;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
@@ -41,6 +42,8 @@ public class AutoFeed implements EntryPoint, ChangeHandler, KeyUpHandler, ValueC
 
 	private static final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
 	
+	private IEditDialogModel<UserOpportunity> editModel;
+	
 	final DialogBox dBox = new DialogBox();
 	
 	UserId user;
@@ -54,17 +57,18 @@ public class AutoFeed implements EntryPoint, ChangeHandler, KeyUpHandler, ValueC
 
 	IChooseResult<UserOpportunity> chooseResult;
 	
-	public AutoFeed(Panel panel, UserId _user, IChooseResult<UserOpportunity> chooseResult)
+	public AutoFeed(Panel panel, UserId _user, IChooseResult<UserOpportunity> chooseResult, IEditDialogModel<UserOpportunity> editModel)
 	{
 		user = _user;
 		rootPanel = panel;
 		this.chooseResult = chooseResult;
+		this.editModel = editModel;
 	}
 
 	private void launchEdition(UserOpportunity tmp)
 	{
 		tmp.ID = SiteUUID.getDateUuid();
-		EditOpportunity ele = new EditOpportunity(rootPanel, user, tmp, chooseResult);
+		IEditDialogModel<UserOpportunity> ele = editModel.clone(rootPanel, user, tmp, chooseResult);
 		ele.onModuleLoad();
 	}
 	

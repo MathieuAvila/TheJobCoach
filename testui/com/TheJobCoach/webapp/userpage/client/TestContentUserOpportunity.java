@@ -2,6 +2,7 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.userpage.client.Opportunity.AutoFeed;
 import com.TheJobCoach.webapp.userpage.client.Opportunity.ContentUserOpportunity;
+import com.TheJobCoach.webapp.userpage.client.Opportunity.EditOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
@@ -54,9 +55,9 @@ public class TestContentUserOpportunity implements EntryPoint {
 					hp.setSize("100%", "100%");
 					AutoFeed cuo = new AutoFeed(hp, TestSecurity.defaultUser, new IChooseResult<UserOpportunity>() {
 						@Override
-						public void setResult(UserOpportunity result) {
-							
-						}});
+						public void setResult(UserOpportunity result) {	
+						}}, 
+						new EditOpportunity());
 
 					cuo.onModuleLoad();
 				}});

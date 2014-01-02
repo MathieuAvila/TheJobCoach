@@ -160,24 +160,27 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		mb.onModuleLoad();
 	}
 
+	class localChooseResult implements IChooseResult<UserOpportunity>
+	{
+		public void setResult(UserOpportunity result) {
+			if (result != null)
+			{
+				result.ID = new Date().toString();
+				userService.setUserOpportunity(user, "managed", result, new ServerCallHelper<String>(rootPanel) {
+					public void onSuccess(String result)
+					{
+						getAllContent();
+					}
+				});
+			}
+		}
+	}
+	
 	class NewOpportunityHandler implements ClickHandler
 	{
 		public void onClick(ClickEvent event)
 		{
-			IEditDialogModel<UserOpportunity> eus = editModel.clone(rootPanel, user, null, new IChooseResult<UserOpportunity>() {
-				public void setResult(UserOpportunity result) {
-					if (result != null)
-					{
-						result.ID = new Date().toString();
-						userService.setUserOpportunity(user, "managed", result, new ServerCallHelper<String>(rootPanel) {
-							public void onSuccess(String result)
-							{
-								getAllContent();
-							}
-						});
-					}
-				}
-			});
+			IEditDialogModel<UserOpportunity> eus = editModel.clone(rootPanel, user, null, new localChooseResult());
 			eus.onModuleLoad();
 		}
 	}
@@ -202,7 +205,8 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 	{
 		public void onClick(ClickEvent event)
 		{
-			AutoFeed eus = new AutoFeed(rootPanel, user, new LocalIChooseResult());
+			AutoFeed eus = new AutoFeed(rootPanel, user, new LocalIChooseResult(), 
+					editModel.clone(rootPanel, user, null, new localChooseResult()));
 			eus.onModuleLoad();
 		}
 	}

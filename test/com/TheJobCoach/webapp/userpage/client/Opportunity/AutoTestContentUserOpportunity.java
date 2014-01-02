@@ -6,12 +6,12 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.ErrorCatcherMessageBox;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
@@ -34,40 +34,30 @@ import com.googlecode.gwt.test.utils.events.EventBuilder;
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestContentUserOpportunity extends GwtTest {
 
-
-	@SuppressWarnings("deprecation")
-	static Date getDate(int year, int month, int day)
-	{
-		Date result = new Date();
-		result.setDate(day);
-		result.setMonth(month);
-		result.setYear(year - 1900);
-		return result;
-	}
 	
 	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 
 	static String opp1 = "opp1";
 	static String opp2 = "opp2";
 	static String opp3 = "opp3";
-	static UserOpportunity opportunity1 = new UserOpportunity(opp1, getDate(2000, 1, 1), getDate(2000, 2, 1),
+	static UserOpportunity opportunity1 = new UserOpportunity(opp1, CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 2, 1),
 			"title1", "description1", "companyId1",
 			"contractType1",  "1000.10",  
-			getDate(2000, 1, 1), getDate(2000, 1, 1),
+			CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "note1");
 	
-	static UserOpportunity opportunity2 = new UserOpportunity(opp2, getDate(2000, 1, 2), getDate(2000, 2, 2),
+	static UserOpportunity opportunity2 = new UserOpportunity(opp2, CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  "2",  
-			getDate(2000, 1, 2), getDate(2000, 1, 2),
+			CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.NEW, "note2");
 
-	static UserOpportunity opportunity3 = new UserOpportunity(opp3, getDate(2000, 1, 2), getDate(2000, 2, 2),
+	static UserOpportunity opportunity3 = new UserOpportunity(opp3, CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  "2",  
-			getDate(2000, 1, 2), getDate(2000, 1, 2),
+			CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.CLOSED, "note3");
 	
