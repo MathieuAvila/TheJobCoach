@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html class="no-js" dir="ltr" lang="fr" xmlns="http://www.w3.org/1999/xhtml"><head><link href="../../assets/5.0.18/tapestry/default.css" rel="stylesheet" type="text/css"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/css/candidat/style_ancien_sad.css" rel="stylesheet" type="text/css"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/css/candidat/candidat-offres.css" rel="stylesheet" type="text/css"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/css/stylesheets.css" rel="stylesheet" type="text/css"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/css/old_content_wrap.css" rel="stylesheet" type="text/css"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/css/tapestry.css" rel="stylesheet" type="text/css"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/css/02_u_header.css" rel="stylesheet" type="text/css"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/css/05_popup.css" rel="stylesheet" type="text/css"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/css/footer.css" rel="stylesheet" type="text/css"></link><title>Les offres de Pôle emploi | pole-emploi.fr</title><meta content="fr" http-equiv="Content-language"></meta><meta content="text/javascript" http-equiv="Content-Script-Type"></meta><meta content="text/css" http-equiv="Content-Style-Type"></meta><meta content="" http-equiv="Expires"></meta><meta content="" http-equiv="Last-Update"></meta><meta content="private" http-equiv="Cache-control"></meta><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"></meta><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"></meta><meta content="nofollow" name="robots"></meta><!-- Mobile Device --><link href="../../assets/fr/pe/internet/composantIhm/statics/img/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/img/apple-touch-icon-72x72-precomposed.png" rel="apple-touch-icon-precomposed"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/img/apple-touch-icon-114x114-precomposed.png" rel="apple-touch-icon-precomposed"></link><link href="../../assets/fr/pe/internet/composantIhm/statics/img/apple-touch-icon-144x144-precomposed.png" rel="apple-touch-icon-precomposed"></link><script type="text/javascript">
+			document.documentElement.className =
+			document.documentElement.className.replace(/\bno-js\b/,'js');
+		</script></head><body class="candidat espace-personnel detail-offre postuler-ligne"><div class="wrapper"><a class="skip" href="#contents" shape="rect" title="Accès direct au contenu">Accès direct au contenu de la page</a><!-- Header unifié --><div class="u_base u_header sp_0" id="bandeau_header"><h1><span>Pôle Emploi<br/></span><a href="../detail.layoutrechercheoffres.bandeau.lienlogo?t:ac=011KFPC" onclick="xt_med=('C','candidat','candidat::accueil','S')" title="Accueil pole-emploi.fr"><img alt="Accueil pole-emploi.fr" src="../../assets/fr/pe/internet/composantIhm/statics/img/polemploi.gif"/></a></h1><ul class="u_toplinks"><li>Jeudi 02 janvier 2014</li><li>| <a href="../detail.layoutrechercheoffres.bandeau.lienplansite?t:ac=011KFPC" onclick="xt_med=('C','candidat','candidat::plan_site','S')">Plan du site</a></li></ul><div class="u_divbotlinks sp_0"></div><ul class="u_botlinks"><li class="sp_0 u_first"><a class="sp_0 u_home" href="../detail.layoutrechercheoffres.bandeau.lienaccueil?t:ac=011KFPC" onclick="xt_med=('C','candidat','candidat::accueil','S')">Accueil pole-emploi.fr</a></li><li><a class="sp_0 u_de_active" href="../detail.layoutrechercheoffres.bandeau.liencandidat?t:ac=011KFPC" onclick="xt_med=('C','candidat','candidat::candidat','S')">Candidat</a></li><li><a class="sp_0 u_e" href="../detail.layoutrechercheoffres.bandeau.lienemployeur?t:ac=011KFPC" onclick="xt_med=('C','candidat','candidat::employeur','S')">Employeur</a></li><li><a class="sp_0 u_misc" href="../detail.layoutrechercheoffres.bandeau.lienactualite?t:ac=011KFPC" onclick="xt_med=('C','candidat','candidat::actualites','S')">Actualités</a></li><li><a class="sp_0 u_misc" href="../detail.layoutrechercheoffres.bandeau.lienreglementation?t:ac=011KFPC" onclick="xt_med=('C','candidat','candidat::reglementation','S')">Réglementation</a></li><li><a class="sp_0 u_misc" href="../detail.layoutrechercheoffres.bandeau.lienenregion?t:ac=011KFPC" onclick="xt_med=('C','candidat','candidat::en_region','S')">En région</a></li></ul></div><!-- Header unifié --><!-- CONTENU INTERNE DE LA PAGE --><div class="contents panel-area-lc" id="contents"><STYLE type="text/css">
+.divVoile{
+position:fixed;
+top: 0;
+left:0;
+width:100%;
+height:100%;
+background-color: rgb(255, 255, 255);
+z-index: 1000;
+opacity: 0.10; /* pour firefox */
+filter:alpha(opacity=10); /* pour ce brave IE */
+display:none;
+}
+</STYLE><div class="divVoile" id="divVoile"></div><!-- CONTENU PAGE --><div class="contents-body"><div class="panel-left"><div class="menu-service"><div class="titreMenu titreMenuTop">Offres d'emploi</div><ul><li id="liMenuSelected"><a href="../../rechercheoffres">Recherche d'offres</a></li><li id=""><a href="../abonnements">Créer un abonnement</a></li><li id=""><a href="../../offresspecifiques">Contrats en alternance</a></li></ul><div class="titreMenu">Mon espace personnel</div><ul><li><a href="../detail.layoutrechercheoffres.menucandidat.menuitemexterne_5:debrancherVersUneUrl?t:ac=011KFPC" shape="rect">Accéder à mon espace personnel</a></li><li><a href="../detail.layoutrechercheoffres.menucandidat.menuitemexterne_6:debrancherVersUneUrl?t:ac=011KFPC" shape="rect">Créer mon espace personnel</a></li><li><a href="../detail.layoutrechercheoffres.menucandidat.menuitemexterne_7:debrancherVersUneUrl?t:ac=011KFPC" shape="rect">A quoi sert un espace personnel ?</a></li></ul></div></div><div class="panel-center"><div class="bd heading"><!-- FIL ARIANE --><div id="fileAriane"><ul class="nav fil-ariane"><li>Vous êtes : </li><li><a href="../detail.layoutrechercheoffres.filarianecandidat.filariane_0:clickArianeRacine?t:ac=011KFPC">Accueil candidat</a></li><li> &raquo; <a href="../detail.layoutrechercheoffres.filarianecandidat.filariane_0:clickArianeRubrique?t:ac=011KFPC">Recherche d'offres d'emploi</a></li><li> &raquo; Détail de l'offre</li></ul></div><!-- / FIL ARIANE --><!-- BLOC TITRE --><div class="titre-block"><a class="back-link" href="../detail.layoutrechercheoffres.bloctitrepage:clickPageRetour?t:ac=011KFPC">Retour aux résultats</a><h2>Recherche d'offres d'emploi</h2><div class="nav action-page"><ul><li><a class="print-link" href="../detail.layoutrechercheoffres.bloctitrepage:clicklienVersionImprimable?t:ac=011KFPC" target="_blank" title="Version imprimable">
+Version imprimable
+</a></li><li><a class="help-page-link js-help-link" href="../detail.layoutrechercheoffres.bloctitrepage.aidepage.lienaidepage.afficheraide?t:ac=011KFPC" id="afficherAide" target="_blank" title="Aide sur la page" type="pageLink">
+Aide
+</a><!-- Attention, cette popin sera déplacée en fin de DOM en JavaScript !
+		(Cf. aide.js) --><div class="popin-aide" id="helpPopup"><div class="hd"><div class="titre-block"><h3>Recherche d'une offre par son numéro</h3></div></div><div class="content-aide"><div class="bd"><div class="noheto" id="noheto-pop"><!-- ==========================================================================
+						Aide avec onglets 
+						========================================================================== --><ul class="link list-rubrique" id="top-page"><li><a href="#A_quoi_sert_cet_écran__" shape="rect">A quoi sert cet écran ?</a></li><li><a href="#Comment_utiliser_cet_écran__" shape="rect">Comment utiliser cet écran ?</a></li></ul><br clear="none"/><hr/><div id="A_quoi_sert_cet_écran__"><h3 class="parallel-block-4-1"><span class="primary">A quoi sert cet écran ?</span><span class="secondary"><a class="top-link" href="#top-page" shape="rect">Haut de page</a></span></h3><div class="check-info-content"><a href="#" target="_blank"></a>
+
+
+
+
+
+
+
+
+
+				
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+•	Cet écran vous présente la description de l’offre d’emploi que vous avez sélectionnée.<br />
+•	Un indicateur de pertinence représenté par une jauge vous permet d’apprécier visuellement l’adéquation de l’offre avec vos critères. Cet indicateur n’est pas présent dans le cas d’une recherche par numéro d’offre. <br />
+•	Si elle vous intéresse, vous pouvez y répondre selon les indications et modalités décrites au bas de l’offre. Vous pouvez également l’imprimer, l’enregistrer (en l’ajoutant à votre classeur) ou l’envoyer à un(e) ami(e).</div></div><hr/><div id="Comment_utiliser_cet_écran__"><h3 class="parallel-block-4-1"><span class="primary">Comment utiliser cet écran ?</span><span class="secondary"><a class="top-link" href="#top-page" shape="rect">Haut de page</a></span></h3><div class="check-info-content"><a href="#" target="_blank"></a>
+
+
+
+
+
+
+
+
+
+				
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+•	Pour accéder à l’offre située juste avant dans la liste, cliquez sur le lien <strong>Offre précédente</strong>.<br />
+•	Pour accéder à l’offre située juste après dans la liste, cliquez sur le lien <strong>Offre suivante</strong>.<br />
+•	Sur certaines offres, vous pouvez cliquer sur le lien <strong>Compétences spécifiques</strong> qui vous permet de consulter les compétences spécifiques demandées par l’employeur pour le poste proposé.<br />
+<br />
+•	Pour répondre à l’offre, suivez les indications et les modalités précisées au bas de l’offre : les coordonnées et le moyen de contact y sont précisés. <br />
+<br />
+Sur certaines offres, un bouton <strong>Postuler </strong>vous permet de « télécandidater » en ligne à l’offre d’emploi (envoi automatique d’un formulaire au conseiller Pôle Emploi). <br />
+Certaines offres sont proposées par nos partenaires, pour y postuler il vous suffit de cliquer sur le logo du partenaire proposant l’offre. Vous serez alors redirigé vers son site internet dans lequel vous pourrez postuler à l’offre en question.<br />
+<br />
+•	Si vous souhaitez conserver une offre d’emploi dans votre classeur d’offres (pour la consulter ultérieurement), cliquez sur le bouton <strong>Ajouter à mon classeur</strong> (une fois l’offre enregistrée dans votre classeur, le bouton devient non cliquable). <br />
+<strong>A noter </strong>: l’ajout de l’offre dans votre classeur nécessite de créer votre espace personnel ou de vous identifier si vous en avez déjà un. <br />
+<br />
+•	Si vous souhaitez envoyer cette offre par e-mail à une personne de votre connaissance (dont vous connaissez l’adresse e-mail), cliquez sur le bouton Envoyer à un ami. <br />
+<br />
+•	Si vous souhaitez réutiliser les critères définis dans cette recherche pour éviter de les ressaisir à chaque nouvelle consultation ou afin de recevoir les offres d’emploi automatiquement par e-mail (abonnement aux offres), cliquez sur le bouton Enregistrer les critères(une fois les critères enregistrés, le bouton devient non cliquable). <br />
+<strong>A noter </strong>: l’enregistrement des critères de recherche nécessite de créer votre espace personnel ou de vous identifier si vous en avez déjà un. <br />
+<br />
+•	Les critères de votre recherche vous sont rappelés en cliquant sur<strong> </strong><strong>Afficher les critères</strong> : si vous souhaitez les modifier, cliquez sur le bouton <strong>Modifier les critères</strong>. <br />
+<br />
+•	Pour démarrer une nouvelle recherche avec d’autres critères que ceux en cours, cliquez sur le bouton Nouvelle recherche.<br />
+<br />
+•	Pour imprimer la page, cliquez sur le bouton <strong>version imprimable</strong> en haut de page.<br />
+<br />
+•	Pour revenir à la page précédente, cliquez sur le bouton <strong>Retour aux résultats</strong>.</div></div><!-- ==========================================================================
+						Aide sans onglets 
+						========================================================================== --></div></div><div class="ft"><ul class="nav button-list"><li><span class="button primary-button"><a class="js-close-popin" href="#" shape="rect">Quitter l'aide</a></span></li></ul></div></div></div></li></ul></div></div><!-- / BLOC TITRE --></div><!-- DONNEES --><!-- Définition des composants du layout --><div class="bd"><h3 class="page-subtitle">Détail de l'offre</h3></div><div class="main-content"><div class="bd"><div class="row-2 no-print"><p class="col"><a class="js-open show-link" href="#" id="metier-open" shape="rect">Afficher les critères</a><a class="js-close hide-link hide" href="#" id="metier-close" shape="rect">Masquer les critères</a></p><p class="col link-unit"><a class="link-change" href="../detail.criteresrechercheoffre:modifierLesCriteres?t:ac=011KFPC"><span>Modifier les critères</span></a></p></div><div class="showhide-sep parallel-block-3-2 js-hide" id="metier"><div class="primary"><div class="parallel-unit"><h4 class="small-title first">Vos critères</h4><ul class="first"><li><strong>Métier</strong> : linux</li><li><strong>Lieu de travail</strong> : France</li></ul></div></div><div class="secondary"><div class="parallel-unit"><p class="link-unit"><a class="save-link" href="../detail.criteresrechercheoffre:enregistrerLesCriteres?t:ac=011KFPC"><span>Enregistrer les critères</span></a></p></div></div></div><div class="block popin show" id="popinrecherchessauvegardeesmaxatteint" style="display: none;"><div class="outer-block"><div class="hd"><h3 class="block-title"><span>Enregistrement de la recherche</span></h3></div><!-- Contenu --><div class="bd">Vous avez déjà créé 5 recherches sauvegardées (nombre maximum autorisé).<br /> Vous devez en supprimer au moins une pour pouvoir en enregistrer une nouvelle.</div><!-- Boutons --><div class="ft"><ul class="nav button-list"><li><span class="button primary-button icon-arrow"><!-- ==================================== --><!-- Valider --><!-- ==================================== --><!-- Sans Xiti --><a href="../detail.criteresrechercheoffre.popinrecherchessauvegardeesmaxatteint.layoutpopinavertissement.validersansxiti?t:ac=011KFPC">Ok </a></span></li></ul></div></div></div></div><div class="hd"><div class="nav action-content"><ul><li><a class="binder-link" href="../detail.actiondetailoffre:ajouterAuClasseur/011KFPC?t:ac=011KFPC">Ajouter à mon classeur</a></li><li><a class="sent-link" href="../detail.actiondetailoffre:envoyerUneOffreAUnAmi?t:ac=011KFPC">Envoyer à un ami</a></li></ul></div><div class="block popin show" id="confirmation" style="display: none;"><div class="outer-block"><div class="hd"><h3 class="block-title"><span>Information</span></h3></div><!-- Contenu --><div class="bd">
+L'offre sélectionnée a été ajoutée à votre classeur.
+</div><!-- Boutons --><div class="ft"><ul class="nav button-list"><li><span class="button primary-button icon-arrow"><!-- ==================================== --><!-- Valider --><!-- ==================================== --><!-- Sans Xiti --><a href="../detail.actiondetailoffre.confirmation.layoutpopinavertissement.validersansxiti?t:ac=011KFPC">OK</a></span></li></ul></div></div></div><div class="block popin show" id="ajoutImpossible" style="display: none;"><div class="outer-block"><div class="hd"><h3 class="block-title"><span>Information</span></h3></div><!-- Contenu --><div class="bd">L’offre n’a pas pu être ajoutée car vous possédez déjà 100 offres dans votre classeur.<br/> Pour pouvoir ajouter cette offre vous devez supprimer au moins une offre de votre classeur.</div><!-- Boutons --><div class="ft"><ul class="nav button-list"><li><span class="button primary-button icon-arrow"><!-- ==================================== --><!-- Valider --><!-- ==================================== --><!-- Sans Xiti --><a href="../detail.actiondetailoffre.ajoutimpossible.layoutpopinavertissement.validersansxiti?t:ac=011KFPC">OK</a></span></li></ul></div></div></div><div class="block popin show" id="avertissement" style="display: none;"><div class="outer-block"><div class="hd"><h3 class="block-title"><span>Demande de confirmation</span></h3></div><!-- Contenu --><div class="bd">
+Êtes-vous sûr de vouloir supprimer l'offre "011KFPC" de votre classeur ?
+</div><div class="ft"><ul class="nav button-list"><li><span class="button secondary-button null"><!-- ==================================== --><!-- Annuler --><!-- ==================================== --><a class="js_PasDePopInQuitterLeProcessus popin_boutonAnnuler" href="../detail.actiondetailoffre.avertissement.layoutpopinconfirmation.annulersansxiti?t:ac=011KFPC" tabindex="100" title="Annuler">Annuler</a></span></li><li><span class="button primary-button null"><!-- ==================================== --><!-- Confirmer --><!-- ==================================== --><!-- Sans Xiti --><a class="js_PasDePopInQuitterLeProcessus popin_boutonConfirmer" href="../detail.actiondetailoffre.avertissement.layoutpopinconfirmation.confirmersansxiti?t:ac=011KFPC" tabindex="101" title="OK">OK</a></span></li></ul></div></div></div><div class="block popin show" id="existeDejaDansLeClasseur" style="display: none;"><div class="outer-block"><div class="hd"><h3 class="block-title"><span>Ajout d'une offre dans votre classeur</span></h3></div><!-- Contenu --><div class="bd">Cette offre figure déjà dans votre classeur.</div><!-- Boutons --><div class="ft"><ul class="nav button-list"><li><span class="button primary-button icon-arrow"><!-- ==================================== --><!-- Valider --><!-- ==================================== --><!-- Sans Xiti --><a href="../detail.actiondetailoffre.existedejadansleclasseur.layoutpopinavertissement.validersansxiti?t:ac=011KFPC">OK</a></span></li></ul></div></div></div></div><div class="block block-result pagination"><!-- Pagination en zone haute --><div class="bd"><div class="block-pagination-top parallel-block-1-3-1"><div class="primary"><div class="parallel-unit">
+ 
+</div></div><div class="secondary"><div class="parallel-unit">
+Offre 1 sur 3
+</div></div><div class="tertiary"><div class="parallel-unit">
+ 
+<a href="../detail.contenudetailoffre.paginationdetailoffre:detailOffre/011MPXJ?t:ac=011KFPC">
+Offre suivante &gt;&gt;
+</a></div></div></div></div><!-- /Pagination en zone haute --><div class="block-content"><div class="bd" itemscope="" itemtype="http://schema.org/JobPosting"><!-- schema.org propriétés JobPosting 
+					du détail d'une offre --><ul class="parallel-block-3-2 form-line form-result reverse-block"><li class="primary"><ul><li><div class="label"><span>Numéro de l'offre</span></div><div class="value"><span>011KFPC</span></div></li><li class="relevance"><div class="label"><span>Pertinence</span><img alt="optimale" class="relevance" src="../../assets/fr/pe/internet/composantIhm/statics/img/relevance-optimale.png"/></div></li></ul></li><!-- primary --><li class="secondary"><div class="label"><span>Offre actualisée le</span></div><div class="value"><span itemprop="datePosted">07/12/2013</span></div></li><!-- /secondary --></ul><h4 class="small-title" itemprop="title">
+Administrateur / Administratrice de serveurs</h4><p class="first" itemprop="occupationalCategory">
+Métier du ROME M1801 -
+Administration de systèmes d'information</p><!-- Description de l'offre --><h4 class="block-subtitle"><span>Description de l'offre</span></h4><p itemprop="description">Le chef de projets infrastructure système intervient au sein de la direction des architectures techniques.<br />Dans le cadre de son activité, le chef de projets prend en charge :<br />-Les projets liés à l'évolution de l'infrastructure système<br />-La définition des architectures systèmes <br />-Le pilotage et la supervision des systèmes existants<br />Il assure une veille technologique et échange avec les autres équipes afin de permettre un échange de compétences.<br />En tant que chef de projet ayant une expertise technique, il est en mesure d'assurer un support de niveau 3.<br /></p><p class="link"></p><!-- Entreprise --><div class="vcard"><h4 class="block-subtitle"><span>Entreprise</span></h4><p class="title" itemprop="hiringOrganization" itemscope="" itemtype="http://schema.org/Organization"><span itemprop="name">KALYPTUS</span></p><p></p><!-- appel au format hCard --><ul class="adr first"><!-- propriété globale d’adresse hCard --></ul><p class="link-geolocation first"></p></div><!-- Détail de l'offre --><h4 class="block-subtitle"><span>Détail de l'offre</span></h4><ul class="parallel-form-1-2 form-result"><li><div class="label"><span>Lieu de travail</span></div><div class="value" itemprop="jobLocation" itemscope="" itemtype="http://schema.org/Place"><ul><li itemprop="addressRegion">
+59 - LILLE</li><li class="link-geolocation"><a href="../detail.contenudetailoffre.descriptionoffre:redirigerVersMappyDuLieuDeLOffre?t:ac=011KFPC" target="_blank">
+Localiser avec
+<img alt="Google Maps" src="../../img/google_maps_logo.png"/></a></li></ul></div></li><li><div class="label"><span>Type de contrat</span></div><div class="value"><span itemprop="employmentType">Contrat à durée indéterminée</span></div></li><li><div class="label"><span>Nature d'offre</span></div><div class="value"><span>Contrat tout public</span></div></li><li><div class="label"><span>Expérience</span></div><div class="value"><span itemprop="experienceRequirements">Expérience exigée de 4 An(s)</span></div></li><li><div class="label"><span>Formation</span></div><div class="value"><span itemprop="educationRequirements"></span></div></li><!-- itemprop="skills" --><li itemprop="skills"><ul><li><div class="label"><span>Langues</span></div><div class="value"><span></span></div></li><li><div class="label"><span>Permis</span></div><div class="value"><span></span></div></li><li><div class="label"><span>Connaissances bureautiques</span></div><div class="value"><span></span></div></li></ul></li><!-- /itemprop="skills" --><li><div class="label"><span>Qualification</span></div><div class="value"><span itemprop="qualifications">Cadre</span></div></li><li><div class="label"><span>Salaire indicatif</span></div><div class="value"><span itemprop="baseSalary">
+Annuel de 35 000,00 à 47 000,00 euros sur 12 mois </span></div></li><li><div class="label"><span>Durée hebdomadaire de travail</span></div><div class="value"><span itemprop="workHours">35h00 HEBDO Horaires normaux</span></div></li><li><div class="label"><span>Déplacements</span></div><div class="value"><span></span></div></li><li><div class="label"><span>Taille de l'entreprise</span></div><div class="value"><span>NON DEFINI</span></div></li><li><div class="label"><span>Secteur d'activité</span></div><div class="value"><span itemprop="industry">Conseil pour les affaires et autres conseils de gestion</span></div></li></ul></div></div><div class="hd"><h3 class="block-title"><span>Pour postuler à cette offre</span></h3></div><div class="bd"><p class="paragraph-embed">
+Veuillez adresser par mail, votre CV et une lettre de motivation en précisant le numéro de l'offre à :
+</p><div class="row-2 apply"><div class="col subgroup"><div class="application"><p><a href="../detail.contenudetailoffre.postulerparmail.contenupostulerparmail:postulerEnLigne?t:ac=011KFPC">
+Postulez en ligne avec votre
+<abbr title="Curriculum vitæ">CV</abbr></a></p><ol><li>Choisissez un CV dans votre espace personnel</li><li>Saisissez votre lettre de motivation</li><li>pole-emploi.fr se charge d'envoyer votre candidature</li></ol></div></div></div></div><div class="bd"><div class="block-pagination-bottom parallel-block-1-3-1"><div class="primary"><div class="parallel-unit">
+ 
+</div></div><div class="secondary"><div class="parallel-unit">
+Offre 1 sur 3
+</div></div><div class="tertiary"><div class="parallel-unit">
+ 
+<a href="../detail.contenudetailoffre.paginationdetailoffre_0:detailOffre/011MPXJ?t:ac=011KFPC">
+Offre suivante &gt;&gt;
+</a></div></div></div></div><!-- /Pagination en zone basse --></div><div class="ft"><div class="nav action-content"><ul><li><a class="binder-link" href="../detail.actiondetailoffre_0:ajouterAuClasseur/011KFPC?t:ac=011KFPC">Ajouter à mon classeur</a></li><li><a class="sent-link" href="../detail.actiondetailoffre_0:envoyerUneOffreAUnAmi?t:ac=011KFPC">Envoyer à un ami</a></li></ul></div></div></div><div class="block popin show" id="confirmationApresAjoutOffresAuClasseur" style="display: none;"><div class="outer-block"><div class="hd"><h3 class="block-title"><span>Information</span></h3></div><!-- Contenu --><div class="bd">
+L'offre sélectionnée a été ajoutée à votre classeur.
+</div><!-- Boutons --><div class="ft"><ul class="nav button-list"><li><span class="button primary-button icon-arrow"><!-- ==================================== --><!-- Valider --><!-- ==================================== --><!-- Sans Xiti --><a href="../detail.confirmationapresajoutoffresauclasseur.layoutpopinavertissement.validersansxiti?t:ac=011KFPC">OK</a></span></li></ul></div></div></div><div class="block popin show" id="ajoutImpossibleDansLeClasseur" style="display: none;"><div class="outer-block"><div class="hd"><h3 class="block-title"><span>Information</span></h3></div><!-- Contenu --><div class="bd">L’offre n’a pas pu être ajoutée car vous possédez déjà 100 offres dans votre classeur.<br/> Pour pouvoir ajouter cette offre vous devez supprimer au moins une offre de votre classeur.</div><!-- Boutons --><div class="ft"><ul class="nav button-list"><li><span class="button primary-button icon-arrow"><!-- ==================================== --><!-- Valider --><!-- ==================================== --><!-- Sans Xiti --><a href="../detail.ajoutimpossibledansleclasseur.layoutpopinavertissement.validersansxiti?t:ac=011KFPC">OK</a></span></li></ul></div></div></div><div class="block popin show" id="existeDejaDansClasseur" style="display: none;"><div class="outer-block"><div class="hd"><h3 class="block-title"><span>Ajout d'une offre dans votre classeur</span></h3></div><!-- Contenu --><div class="bd">Cette offre figure déjà dans votre classeur.</div><!-- Boutons --><div class="ft"><ul class="nav button-list"><li><span class="button primary-button icon-arrow"><!-- ==================================== --><!-- Valider --><!-- ==================================== --><!-- Sans Xiti --><a href="../detail.existedejadansclasseur.layoutpopinavertissement.validersansxiti?t:ac=011KFPC">OK</a></span></li></ul></div></div></div><div class="block popin show" id="popinrecherchessauvegardeesmaxatteint" style="display: none;"><div class="outer-block"><div class="hd"><h3 class="block-title"><span>Enregistrement de la recherche</span></h3></div><!-- Contenu --><div class="bd">Vous avez déjà créé 5 recherches sauvegardées (nombre maximum autorisé).<br /> Vous devez en supprimer au moins une pour pouvoir en enregistrer une nouvelle.</div><!-- Boutons --><div class="ft"><ul class="nav button-list"><li><span class="button primary-button icon-arrow"><!-- ==================================== --><!-- Valider --><!-- ==================================== --><!-- Sans Xiti --><a href="../detail.popinrecherchessauvegardeesmaxatteint.layoutpopinavertissement.validersansxiti?t:ac=011KFPC">Ok </a></span></li></ul></div></div></div><!-- / DONNEES --></div><div class="panel-right"><div class="menu-service"><!-- t:delegate to="menuDroite"/ --></div></div><!-- Bloc du lien page précédente bas --><!-- BOUTON HAUT DE PAGE --><!-- LIEN DE RETOUR --><div class="footer-body"><div class="bd"><a class="back-link" href="../detail.layoutrechercheoffres.blocretour:clickPageRetour?t:ac=011KFPC">Retour aux résultats</a><a class="top-link" href="#">Haut de page</a></div></div><!-- / Lien page précédente bas --><!-- / CONTENU PAGE --></div><!-- XITI --><script type="text/javascript">
+xt1='.pole-emploi.fr';
+xtnv = document;
+xtsd = "http://logp6.xiti.com/hit.xiti";
+xtsite = "475540";
+xtn2 = "91";
+xtpage = "non_identifie::Recherche_avancee::Detail_offre_PE";
+xtergo = "0";
+xtdi = "";
+xt_multc = "&amp;x1=Tapestry&amp;x2=Candidat&amp;x3=0";
+xt_an = "0";
+xt_ac = "0";
+<!-- //do not modify below
+		if (window.xtparam!=null){window.xtparam+=xt_multc+"&ac="+xt_ac+"&an="+xt_an;}
+		else{window.xtparam=xt_multc+"&ac="+xt_ac+"&an="+xt_an;}; 
+	// --></script><noscript><img alt="" height="1" src="http://logp6.xiti.com/hit.xiti?s=475540&amp;s2=91&amp;p=non_identifie::Recherche_avancee::Detail_offre_PE&amp;di=&amp;an=&amp;ac=" width="1"/></noscript></div><!-- FOOTER --><div class="spr_footer" id="unified-footer"><p><a class="accessibility spr_footer" href="../detail.layoutrechercheoffres.pieddepage.liendeficientsvisuels?t:ac=011KFPC" title="Les services de pole-emploi.fr HandicapZero"><span class="spr_footer">Accès déficients visuels</span></a> |
+<a href="../detail.layoutrechercheoffres.pieddepage.lienvotrepoleemploi?t:ac=011KFPC" title="Trouver votre Pôle emploi le plus proche">Votre Pôle emploi</a> |
+<a href="http://www.pole-emploi.org" onclick="window.open(this.href);return false;" title="Le site institutionnel pole-emploi.org">Site institutionnel</a> |
+<a href="../detail.layoutrechercheoffres.pieddepage.lienfaq?t:ac=011KFPC" title="Vos questions et vos réponses">Foire aux questions</a> |
+<a href="../detail.layoutrechercheoffres.pieddepage.liencontacteznous?t:ac=011KFPC">Contactez-nous</a> |
+<a href="../detail.layoutrechercheoffres.pieddepage.liensitesutiles?t:ac=011KFPC" title="Liens vers les sites utiles">Sites utiles</a> |
+<a href="../detail.layoutrechercheoffres.pieddepage.liennospartenaires?t:ac=011KFPC" title="Les partenaires de pole-emploi.fr">Nos partenaires</a><br/><a href="../detail.layoutrechercheoffres.pieddepage.lienaccessibilite?t:ac=011KFPC" title="Liens vers les services d'Accessibilité">Accessibilité</a> |
+<a href="../detail.layoutrechercheoffres.pieddepage.lieninformationslegales?t:ac=011KFPC" title="Liens vers les informations légales">Informations légales</a> |
+<a href="../detail.layoutrechercheoffres.pieddepage.lienlexique?t:ac=011KFPC" title="L'explication des sigles et des acronymes">Lexique</a> |
+<a href="../detail.layoutrechercheoffres.pieddepage.lieninfotrafic?t:ac=011KFPC" title="Les meilleures périodes pour naviguer sur pole-emploi.fr">Info trafic</a> |
+<a class="rss spr_footer" href="../detail.layoutrechercheoffres.pieddepage.lienfluxrss?t:ac=011KFPC" title="Abonnez-vous aux derniers articles parus sur pole-emploi.fr">Flux <acronym title="Really Simple Syndication">RSS</acronym></a> -
+Copyright 2014 © POLE EMPLOI</p></div><!-- / FOOTER --></div><script src="../../assets/5.0.18/scriptaculous/prototype.js" type="text/javascript"></script><script src="../../assets/5.0.18/scriptaculous/scriptaculous.js" type="text/javascript"></script><script src="../../assets/5.0.18/scriptaculous/effects.js" type="text/javascript"></script><script src="../../assets/5.0.18/tapestry/tapestry.js" type="text/javascript"></script><script src="../../assets/fr/pe/internet/composantIhm/statics/js/scriptPrototype.js" type="text/javascript"></script><script src="../../assets/fr/pe/internet/composantIhm/statics/js/bandeau.js" type="text/javascript"></script><script src="../../assets/fr/pe/internet/composantIhm/statics/js/voile.js" type="text/javascript"></script><script src="../../assets/fr/pe/internet/composantIhm/statics/js/commun.js" type="text/javascript"></script><script src="../../assets/fr/pe/mc/commun/tapestry/ihm/mixins/TaggerLienAvecXitiSansRedirection.js" type="text/javascript"></script><script src="../../assets/fr/pe/internet/composantIhm/statics/js/popin.js" type="text/javascript"></script><script src="../../assets/fr/pe/internet/composantIhm/statics/js/aide.js" type="text/javascript"></script><script src="../../assets/fr/pe/mc/commun/tapestry/ihm/components/xtcore.js" type="text/javascript"></script><script type="text/javascript">
+<!--
+Tapestry.onDOMLoaded(function() {
+deplacerPopinDansLeDOMPourLaCentrer('popinrecherchessauvegardeesmaxatteint');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('popinrecherchessauvegardeesmaxatteint', 'PopinRecherchesSauvegardeesMaxAtteint');
+deplacerPopinDansLeDOMPourLaCentrer('confirmation');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('confirmation', 'ConfirmationApresAjoutOffresAuClasseur');
+deplacerPopinDansLeDOMPourLaCentrer('ajoutImpossible');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('ajoutImpossible', 'AjoutImpossibleAuClasseurOffres');
+binderFermerPopin($$('#avertissement .popin_boutonAnnuler').first(), $$('#avertissement').first());
+deplacerPopinDansLeDOMPourLaCentrer('avertissement');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('avertissement', 'AvertissementSuppressionDuClasseur');
+deplacerPopinDansLeDOMPourLaCentrer('existeDejaDansLeClasseur');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('existeDejaDansLeClasseur', 'ExisteDejaDansLeClasseurOffres');
+deplacerPopinDansLeDOMPourLaCentrer('confirmation');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('confirmation', 'ConfirmationApresAjoutOffresAuClasseur');
+deplacerPopinDansLeDOMPourLaCentrer('ajoutImpossible');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('ajoutImpossible', 'AjoutImpossibleAuClasseurOffres');
+deplacerPopinDansLeDOMPourLaCentrer('avertissement');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('avertissement', 'AvertissementSuppressionDuClasseur');
+deplacerPopinDansLeDOMPourLaCentrer('existeDejaDansLeClasseur');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('existeDejaDansLeClasseur', 'ExisteDejaDansLeClasseurOffres');
+deplacerPopinDansLeDOMPourLaCentrer('confirmationApresAjoutOffresAuClasseur');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('confirmationApresAjoutOffresAuClasseur', 'ConfirmationApresAjoutOffresAuClasseur');
+deplacerPopinDansLeDOMPourLaCentrer('ajoutImpossibleDansLeClasseur');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('ajoutImpossibleDansLeClasseur', 'AjoutImpossibleAuClasseurOffres');
+deplacerPopinDansLeDOMPourLaCentrer('existeDejaDansClasseur');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('existeDejaDansClasseur', 'ExisteDejaDansLeClasseurOffres');
+deplacerPopinDansLeDOMPourLaCentrer('popinrecherchessauvegardeesmaxatteint');
+rattacherUnElementPourOuvertureAuClicAPartirIdPopinEtClasse('popinrecherchessauvegardeesmaxatteint', 'PopinRecherchesSauvegardeesMaxAtteint');
+Tapestry.init({"initPopinAide":[[]],"taggerLienFlashAvecXitiSansRedirection":[["afficherAide","",""]]});
+});
+// -->
+</script></body></html>
