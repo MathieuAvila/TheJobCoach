@@ -16,6 +16,6 @@ public interface LoginServiceAsync {
 	void validateAccount(String userName, String token,AsyncCallback<MainPageReturnCode.ValidateAccountStatus> callback);
 	void lostCredentials(String email, String lang , AsyncCallback<Boolean> callback);
 	void createTestUser(String lang, UserId.UserType type, AsyncCallback<UserId> callback);
-	void disconnect(String lang, UserId.UserType type, AsyncCallback<String> callback);	
+	void disconnect(AsyncCallback<String> callback);	
 
 }

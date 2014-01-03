@@ -77,7 +77,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public String disconnect(String lang, UserId.UserType type)
+	public String disconnect()
 			throws CassandraException, SystemException
 	{
 		HttpServletRequest request = this.getThreadLocalRequest();

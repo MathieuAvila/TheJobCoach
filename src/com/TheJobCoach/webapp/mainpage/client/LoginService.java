@@ -27,5 +27,5 @@ public interface LoginService extends RemoteService {
 	
 	UserId createTestUser(String lang, UserId.UserType type) throws CassandraException, SystemException ;	
 
-	String disconnect(String lang, UserId.UserType type) throws CassandraException, SystemException ;	
+	String disconnect() throws CassandraException, SystemException ;	
 }
