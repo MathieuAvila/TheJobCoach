@@ -2,12 +2,12 @@ package com.TheJobCoach.userdata.fetch;
 
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
-import com.ibm.icu.text.SimpleDateFormat;
 
 public class Apec extends JobBoard
 {

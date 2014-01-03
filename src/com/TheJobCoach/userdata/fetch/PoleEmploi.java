@@ -2,6 +2,7 @@ package com.TheJobCoach.userdata.fetch;
 
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -10,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
-import com.ibm.icu.text.SimpleDateFormat;
 
 public class PoleEmploi extends JobBoard
 {
