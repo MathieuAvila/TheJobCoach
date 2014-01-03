@@ -3,7 +3,6 @@ package com.TheJobCoach.webapp.userpage.client.images;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
 
 public interface ClientImageBundle extends ClientBundle 
 {
@@ -30,7 +29,7 @@ public interface ClientImageBundle extends ClientBundle
 	//@Source("email-24.png")
 	//ImageResource emailLink();
 
-	@Source("logout_32.png")
+	@Source("logout_24.png")
 	ImageResource urlLogout();
 	
 	

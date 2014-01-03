@@ -2,7 +2,8 @@ package com.TheJobCoach.webapp.userpage.client;
 
 
 import com.TheJobCoach.webapp.footer.client.Footer;
-import com.TheJobCoach.webapp.mainpage.client.MainPage;
+import com.TheJobCoach.webapp.mainpage.client.LoginService;
+import com.TheJobCoach.webapp.mainpage.client.LoginServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.userpage.client.CoachSettings.ContentCoachSettings;
 import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
@@ -17,6 +18,7 @@ import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
 import com.TheJobCoach.webapp.util.client.RoundedPanel;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
@@ -29,6 +31,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -47,7 +50,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class UserPage implements EntryPoint {
 
 	final static Lang lang = GWT.create(Lang.class);
-
+	private static final LoginServiceAsync loginService = GWT.create(LoginService.class);
+	
 	final VerticalPanel simplePanelContent = new VerticalPanel();
 	Label selectedMenu = null;
 
@@ -329,8 +333,21 @@ public class UserPage implements EntryPoint {
 							@Override
 							public void Open()
 							{
-								MainPage main = new MainPage();
-								main.onModuleLoad();
+								loginService.disconnect(new ServerCallHelper<String>(simplePanelContent) {
+
+									@Override
+									public void onFailure(Throwable caught)
+									{
+										Window.Location.reload();
+									}
+
+									@Override
+									public void onSuccess(String result)
+									{
+										Window.Location.reload();
+									}
+									
+								});
 							}
 						});
 					}
