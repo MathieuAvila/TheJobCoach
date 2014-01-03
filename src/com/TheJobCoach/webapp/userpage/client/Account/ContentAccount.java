@@ -17,6 +17,7 @@ import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset;
 import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset.IApply;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IExtendedField;
+import com.TheJobCoach.webapp.util.client.LangUtil;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.google.gwt.core.client.EntryPoint;
@@ -28,8 +29,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Grid;
-// TODO
-//import com.TheJobCoach.webapp.util.client.Lang;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -40,7 +39,7 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangAccount langAccount = GWT.create(LangAccount.class);
-	final static com.TheJobCoach.webapp.util.client.LangUtil langUtil = GWT.create(com.TheJobCoach.webapp.util.client.LangUtil.class);
+	final static LangUtil langUtil = GWT.create(LangUtil.class);
 	
 	Label lblPassword = new Label(lang._TextPassword());
 	ButtonImageText btnChangePassword = new ButtonImageText(ButtonImageText.Type.LOCK, langAccount.Text_changespassword());
