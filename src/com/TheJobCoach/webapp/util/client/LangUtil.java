@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.google.gwt.i18n.client.Constants;
 
-public interface Lang extends Constants {
+public interface LangUtil extends Constants {
 
 	@Key("ok")
 	String _TextOk();

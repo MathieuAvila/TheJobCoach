@@ -36,7 +36,7 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangCoachSettings langCoachSettings = GWT.create(LangCoachSettings.class);
-	final static com.TheJobCoach.webapp.util.client.Lang langUtil = GWT.create(com.TheJobCoach.webapp.util.client.Lang.class);
+	final static com.TheJobCoach.webapp.util.client.LangUtil langUtil = GWT.create(com.TheJobCoach.webapp.util.client.LangUtil.class);
 	
 	CheckedTextField tfTodoSite = new CheckedTextField("[0-9]*");
 	CheckedLabel clTodoSite = new CheckedLabel(langCoachSettings.Text_todosite(), false, tfTodoSite);

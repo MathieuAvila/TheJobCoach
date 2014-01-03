@@ -21,7 +21,7 @@ public class MessageBox implements EntryPoint {
 
 	Panel rootPanel;
 	
-	static final Lang lang = GWT.create(Lang.class);
+	static final LangUtil lang = GWT.create(LangUtil.class);
 
 	public enum TYPE { INFO, WARNING, QUESTION, ERROR, WAIT, NONE };
 	public interface ICallback
@@ -188,7 +188,7 @@ public class MessageBox implements EntryPoint {
 	public static MessageBox messageBox(Panel rootPanel, TYPE type, String message)
 	{
 		String title = null;
-		Lang lang = GWT.create(Lang.class);
+		LangUtil lang = GWT.create(LangUtil.class);
 		switch (type)
 		{
 		case INFO: title = lang._TextINFO(); break;

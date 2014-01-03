@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class DialogBlockOkCancel extends HorizontalPanel {
 	
-	final Lang lang = GWT.create(Lang.class);
+	final LangUtil lang = GWT.create(LangUtil.class);
 	ButtonImageText btnOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
 	ButtonImageText btnCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
 	

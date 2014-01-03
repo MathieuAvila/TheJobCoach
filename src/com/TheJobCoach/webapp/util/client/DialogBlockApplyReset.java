@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 public class DialogBlockApplyReset extends HorizontalPanel 
 {
 	
-	final Lang lang = GWT.create(Lang.class);
+	final LangUtil lang = GWT.create(LangUtil.class);
 	ButtonImageText btnApply = new ButtonImageText(ButtonImageText.Type.OK, lang._TextApply());
 	ButtonImageText btnReset = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextReset());
 	
