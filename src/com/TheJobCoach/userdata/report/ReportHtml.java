@@ -30,7 +30,12 @@ public class ReportHtml {
 	
 	static String addWithSeparator(String src, String append, String sep, String end)
 	{
-		if (append != "")
+		return addWithSeparatorCheck(src, append, sep, end, append);
+	}
+	
+	static String addWithSeparatorCheck(String src, String append, String sep, String end, String check)
+	{
+		if (!"".equals(check))
 		{
 			if (src != "") src += sep;
 			src += append + end;

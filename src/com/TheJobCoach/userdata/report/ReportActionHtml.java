@@ -34,8 +34,8 @@ public class ReportActionHtml extends ReportAction {
 		content += "<H2>" + ReportHtml.writeToString(opp.title) + " - " + lang.getOpportunityStatusName(UserOpportunity.applicationStatusToString(opp.status)) + "</H2>";
 		if (includeOpportunityDetail)
 		{
-			detail = ReportHtml.addWithSeparator(detail, ReportHtml.writeToString(opp.description), "", "</BR>");
-			detail = ReportHtml.addWithSeparator(detail, ReportHtml.writeToString(opp.url), "", "</BR>");
+			detail = ReportHtml.addWithSeparator(detail, "<div style=\"border-width:1px; border-color:black ; border-style:solid\">" + opp.description + "</div>", "", "</BR>");
+			detail = ReportHtml.addWithSeparatorCheck(detail, "<a href=\""+opp.url+"\">" + opp.url + "</a>", "", "</BR>", opp.url);
 			detail = ReportHtml.addWithSeparator(detail, ReportHtml.writeToString(opp.location), "", "</BR>");
 		}
 		String logHeader = "";
