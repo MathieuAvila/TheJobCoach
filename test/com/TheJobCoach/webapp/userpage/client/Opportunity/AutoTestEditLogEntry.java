@@ -1,7 +1,6 @@
 package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -22,7 +21,6 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.shared.TestFormatUtil;
 import com.TheJobCoach.webapp.util.shared.UserId;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
@@ -75,6 +73,8 @@ public class AutoTestEditLogEntry extends GwtTest {
 	class EditLogEntryResultTest implements IChooseResult<UserLogEntry>
 	{
 		UserLogEntry expect;
+		boolean fromNull = false;
+		
 		EditLogEntryResultTest(UserLogEntry expect)
 		{
 			this.expect = expect;
@@ -82,6 +82,7 @@ public class AutoTestEditLogEntry extends GwtTest {
 		
 		public int calls = 0;
 		
+		@SuppressWarnings("deprecation")
 		@Override
 		public void setResult(UserLogEntry result)
 		{
@@ -91,7 +92,14 @@ public class AutoTestEditLogEntry extends GwtTest {
 			assertEquals(expect.description, result.description);
 			assertEquals(expect.done, result.done);
 			assertEquals(expect.eventDate.toString(), result.eventDate.toString());
-			assertEquals(expect.ID, result.ID);
+			if (!fromNull)
+				assertEquals(expect.ID, result.ID);
+			else
+			{
+				Integer i = new Date().getYear() + 1900;
+				String d = new Integer(i).toString();
+				assertTrue(result.ID.subSequence(0, 4).equals(d));
+			}
 			assertEquals(expect.opportunityId, result.opportunityId);
 			assertEquals(expect.type, result.type);
 			assertEquals(expect.note, result.note);
@@ -145,6 +153,36 @@ public class AutoTestEditLogEntry extends GwtTest {
 				);
 		cud.onModuleLoad();	
 		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());	
+		
+		cud.txtbxTitle.setText(ule_modified.title);
+		cud.dateBoxEvent.setValue(ule_modified.eventDate);
+		cud.richTextAreaDescription.setText(ule_modified.description);
+		cud.richTextAreaNote.setText(ule_modified.note);
+		cud.doneBox.setValue(ule_modified.done);
+		cud.comboBoxStatus.setSelectedIndex(0);
+		cud.contactList = contactList_modified;
+		cud.okCancel.getOk().click();
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());		
+		assertEquals(1, userService.calls);
+		assertEquals(1, result.calls);
+	}
+	
+	@Test
+	public void testValid_from_null() throws InterruptedException
+	{
+		HorizontalPanel p = new HorizontalPanel();
+		userService.calls = 0;
+		EditLogEntryResultTest result = new EditLogEntryResultTest(ule_modified);
+		result.fromNull = true;
+		EditLogEntry cud = new EditLogEntry(
+				p, null, "oppId",
+				userId, result
+				);
+		
+		cud.onModuleLoad();
+		GwtTestUtilsWrapper.waitCallProcessor(this, getBrowserSimulator());	
+		
+		assertTrue(CoachTestUtils.isDateEqualForDay(cud.dateBoxEvent.getValue(), new Date()));
 		
 		cud.txtbxTitle.setText(ule_modified.title);
 		cud.dateBoxEvent.setValue(ule_modified.eventDate);

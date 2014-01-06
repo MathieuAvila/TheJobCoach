@@ -52,6 +52,10 @@ public class UpdatePeriodAccessor
 	
 	public static ShortMap toCassandra(ShortMap map, UpdatePeriod period)
 	{
+		if (period.last == null) // manage invalid date: set to current.
+		{
+			period.last = new Date();
+		}
 		return map
 				.add("period_date", period.last)
 				.add("period_length", period.length)

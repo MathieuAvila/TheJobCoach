@@ -135,6 +135,10 @@ public class UserLogManager
 
 	public void setUserLogEntry(UserId id, UserLogEntry result) throws CassandraException 
 	{
+		if (result.eventDate == null) // manage invalid date: set to current.
+		{
+			result.eventDate = new Date();
+		}
 		UserLogEntry previousLog = getLogEntryLong(id, result.ID);
 		if (previousLog != null)
 			removeUserOppStatusChange(id, previousLog.eventDate, result.ID);

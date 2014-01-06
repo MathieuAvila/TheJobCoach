@@ -22,9 +22,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged, ReturnValue, IApply {
 
 	UserId user;
@@ -33,8 +30,6 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 	
 	final SimplePanel coachPanel = new SimplePanel();
 	final DecoratorPanel coachAdviceDecorator = new DecoratorPanel();
-	//final ScrollPanel adviceListPanel = new ScrollPanel();
-	//final SimplePanel adviceListPanel = new SimplePanel();
 	HTML label = new HTML("");
 	
 	VerticalPanel sp2 = new VerticalPanel();
@@ -50,7 +45,6 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 	{
 		public void run() 
 		{
-			//timer.scheduleRepeating(100);
 			if (appendQueue.size() != 0)
 			{
 				appendCompleted += 10;
@@ -74,7 +68,6 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 			}
 			else
 			{
-				//appendQueue.add("Oui, je vais me taire");
 				timer.scheduleRepeating(1000);
 			}
 		}
@@ -95,17 +88,12 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 		values.preloadValueList(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, this);
 	}
 
-	/**
-	 * This is the entry point method.
-	 * @wbp.parser.entryPoint
-	 */
 	public void onModuleLoad()
 	{			
 		setSize("100%", "");
 		clear();
 		
 		coachPanel.setSize("150px","150px");
-		//coachAdviceDecorator.setSize("100%", "100%");
 		
 		add(new HorizontalSpacer("25px"));
 		add(coachPanel);
@@ -116,7 +104,6 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 		add(bulle);
 		this.setBorderWidth(0);
 		this.setCellWidth(bulle, "24px");
-		//this.setC(0);
 		
 		SimplePanel sp = new SimplePanel();
 		add(sp);
@@ -132,10 +119,7 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 		DOM.setStyleAttribute(sp2.getElement(), "bottom", "5px");
 		DOM.setStyleAttribute(sp2.getElement(), "left", "15px");
 		sp.addStyleName("coachblabla");
-		//add(coachAdviceDecorator);
-		//add(coachAdviceDecorator);
 		this.setCellWidth(coachPanel, "150px");
-		//this.setCellWidth(coachAdviceDecorator, "100%");
 		this.setCellWidth(sp, "100%");
 		
 		add(new HorizontalSpacer("40px"));
@@ -171,15 +155,6 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 			{
 				coachPanel.add(new Image(ClientImageBundle.INSTANCE.coachIconWoman()));
 			}
-			/*
-			else if (value.equals(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__COACH_SURFER))
-			{
-				coachPanel.add(new Image(ClientImageBundle.INSTANCE.coachIconSurfer());
-			}
-			else if (value.equals(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__COACH_MILITARY))
-			{
-				coachPanel.add(new Image(ClientImageBundle.INSTANCE.coachIconMilitary()));
-			}*/
 		}
 	}
 

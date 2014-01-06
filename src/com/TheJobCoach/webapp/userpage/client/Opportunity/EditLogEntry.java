@@ -1,5 +1,6 @@
 package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
+import java.util.Date;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
@@ -84,11 +85,13 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 			id = currentLogEntry.ID;
 			oppId = currentLogEntry.opportunityId;
 		}
+		Date eventDate = dateBoxEvent.getValue();
+		if (eventDate == null) eventDate = new Date();
 		return new UserLogEntry(
 				oppId,
 				id, 
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), 
-				dateBoxEvent.getValue(),
+				eventDate,
 				UserLogEntry.entryTypeToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex())),
 				contactList, userDocumentList, richTextAreaNote.getHTML(), doneBox.getValue().booleanValue());
 	}
@@ -198,7 +201,11 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 			richTextAreaDescription.setHTML(currentLogEntry.description);
 			richTextAreaNote.setHTML(currentLogEntry.note);
 			dateBoxEvent.setValue(currentLogEntry.eventDate);
-		}		
+		}
+		else
+		{
+			dateBoxEvent.setValue(new Date());
+		}
 		
 		dBox.center();
 	}

@@ -3,6 +3,7 @@ package com.TheJobCoach.util;
 
 import static me.prettyprint.hector.api.factory.HFactory.createMultigetSliceQuery;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +126,13 @@ public class CassandraAccessor {
 		{
 			// do something ...
 			logger.error("Updater error: " + e.getMessage());
+			for (String printKey: mapUpdate.keySet()) {
+				logger.error("key: " + printKey + " value:" + mapUpdate.get(key));
+			}
+			//PrintStream stream = new PrintStream();
+			//e.printStackTrace(stream);
+			e.printStackTrace();
+			
 			throw new CassandraException();
 		}
 		return true;
