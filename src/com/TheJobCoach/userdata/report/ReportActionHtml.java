@@ -69,7 +69,7 @@ public class ReportActionHtml extends ReportAction {
 		if (includeLogDetail)
 		{
 			logDetail = 
-					"<TD>" + ReportHtml.writeToString(log.description) + "</TD>" + 
+					"<TD>" + log.description + "</TD>" + 
 					"<TD>" + (log.done ? "X": "") + "</TD><TD>";
 			for (UserDocumentId file: log.attachedDocumentId)
 			{
