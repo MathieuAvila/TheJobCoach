@@ -1,5 +1,6 @@
 package com.TheJobCoach.webapp.userpage.client;
 
+import com.TheJobCoach.webapp.userpage.client.MyReports.ContentMyReports;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.TestSecurity;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
@@ -30,7 +31,7 @@ public class TestContentUserReport implements EntryPoint {
 					hp.setStyleName("mainpage-content");
 					root.add(hp);
 					hp.setSize("100%", "100%");
-					ContentReport cud = new ContentReport(hp, TestSecurity.defaultUser);
+					ContentMyReports cud = new ContentMyReports(hp, TestSecurity.defaultUser);
 					cud.onModuleLoad();
 				}});
 		}
