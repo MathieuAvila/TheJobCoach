@@ -1,7 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
+import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
@@ -17,6 +17,7 @@ import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
@@ -25,7 +26,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -33,8 +33,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
@@ -44,8 +42,11 @@ import com.google.gwt.view.client.SingleSelectionModel;
 public class ContentUserOpportunity implements EntryPoint, IContentUserOpportunity {
 
 	UserId user;
+	
+	// The list of data to display.
+	private Vector<UserOpportunity> userOpportunityList = new Vector<UserOpportunity>();
 
-	final ExtendedCellTable<UserOpportunity> cellTable = new ExtendedCellTable<UserOpportunity>();
+	final ExtendedCellTable<UserOpportunity> cellTable = new ExtendedCellTable<UserOpportunity>(userOpportunityList);
 	UserOpportunity currentOpportunity = null;
 	final HTML panelDescriptionContent = new HTML("");
 	final Label labelTextSource = new Label();
@@ -71,9 +72,9 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 				panelDescriptionContent.setHTML(currentOpportunity.description);
 				labelTextSource.setText(currentOpportunity.source);
 				System.out.println("LONG " + currentOpportunity.title + " " +currentOpportunity.lastUpdate  + " " + currentOpportunity.firstSeen);
-				labelCreationDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(currentOpportunity.lastUpdate));
-				labelStartDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(currentOpportunity.startDate));
-				labelEndDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(currentOpportunity.endDate));
+				labelCreationDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.lastUpdate));
+				labelStartDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.startDate));
+				labelEndDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.endDate));
 				cellTable.redraw();				
 			}
 		};
@@ -104,27 +105,6 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 
 	Panel rootPanel;
 
-	// The list of data to display.
-	private Vector<UserOpportunity> userOpportunityList = new Vector<UserOpportunity>();
-
-	// Create a data provider.
-	AsyncDataProvider<UserOpportunity> dataProvider = new AsyncDataProvider<UserOpportunity>() {
-		@Override
-		protected void onRangeChanged(HasData<UserOpportunity> display) 
-		{
-			final com.google.gwt.view.client.Range range = display.getVisibleRange();
-			int start = range.getStart();
-			int end = start + range.getLength();
-			if (end >= userOpportunityList.size() ) end = userOpportunityList.size();
-			if (userOpportunityList.size() != 0)
-			{
-				List<UserOpportunity> dataInRange = userOpportunityList.subList(start, end);
-				// Push the data back into the list.
-				cellTable.setRowData(start, dataInRange);
-			}
-		}
-	};
-
 	void getAllContent()
 	{		
 		ServerCallHelper<Vector<UserOpportunity>>callback = new ServerCallHelper<Vector<UserOpportunity>>(rootPanel) {
@@ -132,9 +112,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			public void onSuccess(Vector<UserOpportunity> result) {
 				userOpportunityList.clear();
 				userOpportunityList.addAll(result);
-				dataProvider.updateRowCount(userOpportunityList.size(), true);
-				dataProvider.updateRowData(0, userOpportunityList.subList(0, userOpportunityList.size()));
-				cellTable.redraw();				
+				cellTable.updateData();				
 			}
 		};
 		userService.getUserOpportunityList(user, "managed", callback);
@@ -223,15 +201,8 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		cul.onModuleLoad();
 	}
 
-	/**
-	 * This is the entry point method.
-	 * @wbp.parser.entryPoint
-	 */
 	public void onModuleLoad()
 	{			
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		//RootPanel rootPanel = RootPanel.get("centercontent");
 		rootPanel.setSize("100%", "100%");
 		rootPanel.clear();
 
@@ -261,86 +232,73 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		});
 
 		// Create title column.
-		TextColumn<UserOpportunity> titleColumn = new TextColumn<UserOpportunity>() 	{
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserOpportunity>() {
 			@Override
-			public String getValue(UserOpportunity userOpportunity) 
+			public String getValue(UserOpportunity opp)
 			{
-				return userOpportunity.title;
-			}
-		};
-
+				return opp.title;
+			}			
+		},  lang._TextName());
+		
 		// Create company column.
-		TextColumn<UserOpportunity> companyColumn = new TextColumn<UserOpportunity>() {
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserOpportunity>() {
 			@Override
-			public String getValue(UserOpportunity userOpportunity) 
+			public String getValue(UserOpportunity opp)
 			{
-				return userOpportunity.companyId;
-			}
-		};
+				return opp.companyId;
+			}			
+		},  lang._TextCompany());
 
 		// Create status column.
-		TextColumn<UserOpportunity> statusColumn = new TextColumn<UserOpportunity>() {
+		cellTable.specialAddColumnSortableWithComparator(new GetValue<String, UserOpportunity>() {
+
 			@Override
-			public String getValue(UserOpportunity userOpportunity) 
+			public String getValue(UserOpportunity userOpportunity)
 			{
 				return lang.applicationStatusMap().get("ApplicationStatus_" + UserOpportunity.applicationStatusToString(userOpportunity.status));
-			}
-		};
+			}}
+		, new Comparator<UserOpportunity>(){
+			@Override
+			public int compare(UserOpportunity o1, UserOpportunity o2)
+			{
+				return o1.status.compareTo(o2.status);
+			}}, lang._TextStatus());
 
 		// Create location column.
-		TextColumn<UserOpportunity> locationColumn = new TextColumn<UserOpportunity>() {
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserOpportunity>() {
 			@Override
-			public String getValue(UserOpportunity userOpportunity) 
+			public String getValue(UserOpportunity opp)
 			{
-				return userOpportunity.location;
-			}
-		};
+				return opp.location;
+			}			
+		},  lang._TextLocation());
 
 		// Create salary column.
-		TextColumn<UserOpportunity> salaryColumn = new TextColumn<UserOpportunity>() {
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserOpportunity>() {
 			@Override
-			public String getValue(UserOpportunity userOpportunity) 
+			public String getValue(UserOpportunity opp)
 			{
-				return userOpportunity.salary;
-			}
-		};
+				return opp.salary;
+			}			
+		},  lang._TextSalary());
 
 		// Create contract type column.
-		TextColumn<UserOpportunity> contractTypeColumn = new TextColumn<UserOpportunity>() {
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserOpportunity>() {
 			@Override
-			public String getValue(UserOpportunity userOpportunity) 
+			public String getValue(UserOpportunity opp)
 			{
-				return userOpportunity.contractType;
-			}
-		};
+				return opp.contractType;
+			}			
+		},  lang._TextContractType());
 
 		// Create first seen column.
-		TextColumn<UserOpportunity> firstSeenColumn = new TextColumn<UserOpportunity>() {
+		cellTable.specialAddColumnSortableDate(new GetValue<Date, UserOpportunity>() {
 			@Override
-			public String getValue(UserOpportunity userOpportunity) 
+			public Date getValue(UserOpportunity opp)
 			{
-				System.out.println("SHORT " + userOpportunity.lastUpdate  + " " + userOpportunity.firstSeen + " " + userOpportunity.title);
-				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userOpportunity.firstSeen);				
-			}
-		};
-
-		titleColumn.setSortable(true);
-		companyColumn.setSortable(true);
-		locationColumn.setSortable(true);
-		salaryColumn.setSortable(true);
-		contractTypeColumn.setSortable(true);
-		firstSeenColumn.setSortable(true);
-
-		cellTable.addColumn(titleColumn, lang._TextName());
-		cellTable.addColumn(companyColumn, lang._TextCompany());
-		cellTable.addColumn(statusColumn, lang._TextStatus());
-		cellTable.addColumn(locationColumn, lang._TextLocation());
-		cellTable.addColumn(salaryColumn, lang._TextSalary());
-		cellTable.addColumn(contractTypeColumn, lang._TextContractType());
-		cellTable.addColumn(firstSeenColumn, lang._TextFirstSeen());
-		//cellTable.getColumnSortList().push(titleColumn);	
-		cellTable.setStyleName("filecelltable");
-
+				return opp.firstSeen;
+			}			
+		},  lang._TextFirstSeen());
 
 		cellTable.addColumnWithIcon(IconCellSingle.IconType.RIGHT, new FieldUpdater<UserOpportunity, String>() {
 			@Override
@@ -363,7 +321,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			}
 		});
 
-		dataProvider.addDataDisplay(cellTable);
+		//dataProvider.addDataDisplay(cellTable);
 
 		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
 		cellTable.setRowData(0, userOpportunityList);

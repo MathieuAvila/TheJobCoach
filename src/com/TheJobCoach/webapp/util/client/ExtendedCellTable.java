@@ -1,22 +1,123 @@
 package com.TheJobCoach.webapp.util.client;
 
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 import com.TheJobCoach.webapp.util.client.ClientImageBundle;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortList;
+import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.Range;
 
 public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 
 	enum COLUMN_TYPE {URL, DELETE, UPDATE, RIGHT, EMAIL};
-	
+
 	static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
-	  
+
+	private List<DocType> list = null;
+
 	public interface GetValue<C, D> {
 		C getValue(D contact);
 	}
+
+	HashMap<Column<DocType, String>, Comparator<DocType>> compareMethodColumn = new HashMap<Column<DocType, String>, Comparator<DocType>>();
+
+	// Create a data provider.
+	AsyncDataProvider<DocType> dataProvider = new AsyncDataProvider<DocType>() {
+
+		@Override
+		protected void onRangeChanged(HasData<DocType> display) {
+			final Range range = display.getVisibleRange();
+
+			// Get the ColumnSortInfo from the table.
+			final ColumnSortList sortList = getColumnSortList();
+
+			int start = range.getStart();
+			// This sorting code is here so the example works. In practice, you
+			// would sort on the server.
+			java.util.Collections.sort(list, new Comparator<DocType>() 
+					{
+				@Override
+				public int compare(DocType o1, DocType o2) 
+				{
+					if (o1 == o2) 
+					{
+						return 0;
+					}
+					int diff = 0;
+					if ((o1 != null) && (o2 != null))
+					{
+						Comparator<DocType> comp = compareMethodColumn.get(sortList.get(0).getColumn());
+						if (comp != null)
+						{
+							diff = comp.compare(o1, o2);
+						}
+					}
+					return sortList.get(0).isAscending() ? diff : -diff;
+				}
+					});
+			//List<UserOpportunity> dataInRange = userOpportunityList.subList(start, end);
+
+			// Push the data back into the list.
+			setRowData(start, list);
+		}
+	};
+
+	public Column<DocType, String> specialAddColumnSortableString(final GetValue<String, DocType> getter, String title) 
+	{
+		return specialAddColumnSortableWithComparator(getter, new Comparator<DocType>() {
+
+			@Override
+			public int compare(DocType o1, DocType o2)
+			{
+				return getter.getValue(o1).compareTo(getter.getValue(o2));
+			}}, title);
+	}
+
+	public Column<DocType, String> specialAddColumnSortableDate(final GetValue<Date, DocType> getter, String title) 
+	{
+		return specialAddColumnSortableWithComparator(new GetValue<String, DocType>(){
+
+			@Override
+			public String getValue(DocType doc)
+			{
+				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(getter.getValue(doc));
+			}
+		}, new Comparator<DocType>() {
+
+			@Override
+			public int compare(DocType o1, DocType o2)
+			{
+				return getter.getValue(o1).before(getter.getValue(o2)) ? -1:1;
+			}}, title);
+	}
+
+	public Column<DocType, String> specialAddColumnSortableWithComparator(final GetValue<String, DocType> getter, Comparator<DocType> comparator, String title) 
+	{
+		Column<DocType, String> column = new TextColumn<DocType>() {
+			@Override
+			public String getValue(DocType doc) 
+			{
+				return getter.getValue(doc);
+			}
+		};
+		addColumn(column, title);
+		compareMethodColumn.put(column, comparator);
+		column.setSortable(true);
+		return column;
+	}
+
 
 	private <C> Column<DocType, C> specialAddColumn(Cell<C> cell, final GetValue<C, DocType> getter, FieldUpdater<DocType, C> fieldUpdater) 
 	{
@@ -116,7 +217,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		addColumn(column, cName);
 		//this.(column, "20px");
 	}
-	
+
 	public void addColumnHtml(FieldUpdater<DocType, String> fieldUpdater, final GetValue<String, DocType> getter, String cName)
 	{
 		ClickableTextCell anchorcolumn = new ClickableTextCell()
@@ -136,11 +237,31 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		addColumn(column, cName);
 	}
 
-	public ExtendedCellTable()
+	private void init()
 	{
-		super();
 		setVisibleRange(0, 20);
 		setStyleName("filecelltable");
 		setSize("100%", "");
+	}
+
+	public ExtendedCellTable()
+	{
+		super();
+		init();
+	}
+
+	public void updateData()
+	{
+		dataProvider.updateRowCount(list.size(), true);
+		dataProvider.updateRowData(0, list.subList(0, list.size()));
+		redraw();			
+	}
+
+	public ExtendedCellTable(List<DocType> list)
+	{
+		super();
+		this.list = list;
+		dataProvider.addDataDisplay(this);
+		init();
 	}
 }
