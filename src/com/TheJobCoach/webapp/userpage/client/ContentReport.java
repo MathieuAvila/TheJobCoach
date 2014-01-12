@@ -14,9 +14,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class ContentReport implements EntryPoint {
 
 	UserId user;
