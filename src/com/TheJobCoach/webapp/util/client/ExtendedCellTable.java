@@ -15,6 +15,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortList;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
@@ -242,6 +243,8 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		setVisibleRange(0, 20);
 		setStyleName("filecelltable");
 		setSize("100%", "");
+		AsyncHandler columnSortHandler = new AsyncHandler(this);
+		addColumnSortHandler(columnSortHandler);
 	}
 
 	public ExtendedCellTable()

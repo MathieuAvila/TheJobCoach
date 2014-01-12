@@ -30,7 +30,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -339,12 +338,6 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 							}
 							return result;
 						}}, langLogEntry._Text_Contacts());
-
-				AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
-				cellTable.setRowData(0, userLogEntryList);
-				cellTable.setRowCount(userLogEntryList.size(), true);
-				cellTable.setVisibleRange(0, 20);
-				cellTable.addColumnSortHandler(columnSortHandler);
 
 				SimplePanel simplePanel_1 = new SimplePanel();
 				simplePanel_1.setStyleName("#closeButton");

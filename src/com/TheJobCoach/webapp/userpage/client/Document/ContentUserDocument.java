@@ -1,6 +1,8 @@
 package com.TheJobCoach.webapp.userpage.client.Document;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -27,13 +29,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -42,9 +39,11 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangDocument langDocument = GWT.create(LangDocument.class);
-	
+
 	UserId user;
-	final ExtendedCellTable<UserDocument> cellTable = new ExtendedCellTable<UserDocument>();
+	// The list of data to display.
+	private List<UserDocument> userDocumentList = new ArrayList<UserDocument>();
+	final ExtendedCellTable<UserDocument> cellTable = new ExtendedCellTable<UserDocument>(userDocumentList);
 	UserDocument currentSite = null;
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 	Panel rootPanel;
@@ -54,28 +53,6 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 		user = userId;
 		rootPanel = _rootPanel;
 	}
-
-	// The list of data to display.
-	private List<UserDocument> userDocumentList = new ArrayList<UserDocument>();
-
-	// Create a data provider.
-	AsyncDataProvider<UserDocument> dataProvider = new AsyncDataProvider<UserDocument>() {
-		@Override
-		protected void onRangeChanged(HasData<UserDocument> display) 
-		{
-			final com.google.gwt.view.client.Range range = display.getVisibleRange();
-			int start = range.getStart();
-			int end = start + range.getLength();
-			if (end >= userDocumentList.size() ) end = userDocumentList.size();
-			if (userDocumentList.size() != 0)
-			{
-				List<UserDocument> dataInRange = userDocumentList.subList(start, end);
-				// Push the data back into the list.
-				cellTable.setRowData(start, dataInRange);
-				cellTable.redraw();				
-			}
-		}
-	};
 
 	void getAllContent()
 	{
@@ -87,9 +64,7 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 					public void onSuccess(Vector<UserDocument> r)	{
 						userDocumentList.clear();
 						userDocumentList.addAll(r);				
-						dataProvider.updateRowCount(userDocumentList.size(), true);
-						dataProvider.updateRowData(0, userDocumentList.subList(0, userDocumentList.size()));
-						cellTable.redraw();
+						cellTable.updateData();
 					}});
 			}});
 	}
@@ -124,7 +99,7 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 				});
 		mb.onModuleLoad();
 	}
-	
+
 	/**
 	 * This is the entry point method.
 	 * @wbp.parser.entryPoint
@@ -140,42 +115,6 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, langDocument._TextUserDocument(), ClientImageBundle.INSTANCE.userDocumentContent());
 
-		// Create name column.
-		TextColumn<UserDocument> nameColumn = new TextColumn<UserDocument>() 	{
-			@Override
-			public String getValue(UserDocument document) 
-			{
-				return document.name;
-			}
-		};
-
-		// Create type column.
-		TextColumn<UserDocument> typeColumn = new TextColumn<UserDocument>() 	{
-			@Override
-			public String getValue(UserDocument document) 
-			{
-				return langDocument.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(document.type));
-			}
-		};
-
-		// Create status column.
-		TextColumn<UserDocument> statusColumn = new TextColumn<UserDocument>() 	{
-			@Override
-			public String getValue(UserDocument document) 
-			{
-				return langDocument.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(document.status));
-			}
-		};
-
-		// Create lastUpdate column.
-		TextColumn<UserDocument> downloadLastUpdate = new TextColumn<UserDocument>() {
-			@Override
-			public String getValue(UserDocument document) 
-			{
-				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(document.lastUpdate);							
-			}
-		};
-		
 		cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserDocument, String>() {
 			@Override
 			public void update(int index, UserDocument object, String value) {
@@ -189,6 +128,17 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 				updateDoc(object);
 			}}	
 				);
+
+		// Create name column.
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserDocument>() {
+			@Override
+			public String getValue(UserDocument doc)
+			{
+				return doc.name;
+			}			
+		},  lang._TextName());
+
+		// file name + link
 		cellTable.addColumnWithIconCellFile(
 				new FieldUpdater<UserDocument, String>() {
 					@Override
@@ -206,26 +156,46 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 						public String getValue(UserDocument contact) {
 							return contact.fileName;
 						}},
-						langDocument._TextFilename());
+						langDocument._TextFilename()
+				);
 
-		statusColumn.setSortable(true);
-		cellTable.addColumn(statusColumn, lang._TextStatus());
-		cellTable.addColumn(typeColumn, langDocument._TextType());
+		// Create type column.
+		cellTable.specialAddColumnSortableWithComparator(new GetValue<String, UserDocument>() {
+			@Override
+			public String getValue(UserDocument document)
+			{
+				return langDocument.documentTypeMap().get("documentTypeMap_" + UserDocument.documentTypeToString(document.type));
+			}}
+		, new Comparator<UserDocument>(){
+			@Override
+			public int compare(UserDocument o1, UserDocument o2)
+			{
+				return o1.type.compareTo(o2.type);
+			}}, langDocument._TextType());
 
-		nameColumn.setSortable(true);
-		downloadLastUpdate.setSortable(true);
-		cellTable.addColumn(nameColumn, lang._TextName());
-		cellTable.addColumn(downloadLastUpdate, langDocument._TextLastUpdate());
-		//cellTable.getColumnSortList().push(nameColumn);		
+		// Create status column.
+		cellTable.specialAddColumnSortableWithComparator(new GetValue<String, UserDocument>() {
 
-		dataProvider.addDataDisplay(cellTable);
-		dataProvider.updateRowCount(userDocumentList.size(), true);
+			@Override
+			public String getValue(UserDocument document)
+			{
+				return langDocument.documentStatusMap().get("documentStatusMap_" + UserDocument.documentStatusToString(document.status));
+			}}
+		, new Comparator<UserDocument>(){
+			@Override
+			public int compare(UserDocument o1, UserDocument o2)
+			{
+				return o1.status.compareTo(o2.status);
+			}}, lang._TextStatus());
 
-		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
-
-		cellTable.setRowData(0, userDocumentList);
-		cellTable.setRowCount(userDocumentList.size(), true);
-		cellTable.addColumnSortHandler(columnSortHandler);
+		// Create lastUpdate column.
+		cellTable.specialAddColumnSortableDate(new GetValue<Date, UserDocument>() {
+			@Override
+			public Date getValue(UserDocument document)
+			{
+				return document.lastUpdate;
+			}			
+		},  langDocument._TextLastUpdate());
 		simplePanelCenter.add(cellTable);		
 
 		ButtonImageText button = new ButtonImageText(ButtonImageText.Type.NEW, langDocument._TextNewUserDocument());
@@ -238,7 +208,11 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 			}
 		});
 		simplePanelCenter.add(button);
-
+		
+		cellTable.setRowData(0, userDocumentList);
+		cellTable.setRowCount(userDocumentList.size(), true);
+		cellTable.setVisibleRange(0, 20);
+		
 		getAllContent();
 	}
 

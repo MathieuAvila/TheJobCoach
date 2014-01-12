@@ -12,12 +12,12 @@ import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
-import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
@@ -25,7 +25,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -320,14 +319,6 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 				}
 			}
 		});
-
-		//dataProvider.addDataDisplay(cellTable);
-
-		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
-		cellTable.setRowData(0, userOpportunityList);
-		cellTable.setRowCount(userOpportunityList.size(), true);
-		cellTable.setVisibleRange(0, 20);
-		cellTable.addColumnSortHandler(columnSortHandler);
 
 		simplePanelCenter.add(cellTable);
 		cellTable.setSize("100%", "");		
