@@ -85,7 +85,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 			}}, title);
 	}
 
-	public Column<DocType, String> specialAddColumnSortableDate(final GetValue<Date, DocType> getter, String title) 
+	public Column<DocType, String> specialAddColumnSortableDate(final GetValue<Date, DocType> getter, String title)
 	{
 		return specialAddColumnSortableWithComparator(new GetValue<String, DocType>(){
 

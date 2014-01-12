@@ -1,7 +1,8 @@
 package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -29,9 +30,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
@@ -40,8 +39,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -50,7 +47,10 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 
 	UserId user;
 
-	final ExtendedCellTable<UserLogEntry> cellTable = new ExtendedCellTable<UserLogEntry>();
+	// The list of data to display.
+	private Vector<UserLogEntry> userLogEntryList = new Vector<UserLogEntry>();
+
+	final ExtendedCellTable<UserLogEntry> cellTable = new ExtendedCellTable<UserLogEntry>(userLogEntryList);
 
 	final Lang lang = GWT.create(Lang.class);
 	final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
@@ -89,27 +89,6 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 
 	Panel rootPanel;
 
-	// The list of data to display.
-	private Vector<UserLogEntry> UserLogEntryList = new Vector<UserLogEntry>();
-
-	// Create a data provider.
-	AsyncDataProvider<UserLogEntry> dataProvider = new AsyncDataProvider<UserLogEntry>() {
-		@Override
-		protected void onRangeChanged(HasData<UserLogEntry> display) 
-		{
-			final com.google.gwt.view.client.Range range = display.getVisibleRange();
-			int start = range.getStart();
-			int end = start + range.getLength();
-			if (end >= UserLogEntryList.size() ) end = UserLogEntryList.size();
-			if (UserLogEntryList.size() != 0)
-			{
-				List<UserLogEntry> dataInRange = UserLogEntryList.subList(start, end);
-				// Push the data back into the list.
-				cellTable.setRowData(start, dataInRange);
-			}
-		}
-	};
-
 	void getAllContent()
 	{
 		EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
@@ -120,11 +99,9 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 					@Override
 					public void onSuccess(Vector<UserLogEntry> r)
 					{
-						UserLogEntryList.clear();
-						UserLogEntryList.addAll(r);
-						dataProvider.updateRowCount(UserLogEntryList.size(), true);
-						dataProvider.updateRowData(0, UserLogEntryList.subList(0, UserLogEntryList.size()));
-						cellTable.redraw();
+						userLogEntryList.clear();
+						userLogEntryList.addAll(r);
+						cellTable.updateData();	
 					}
 						});
 			}});
@@ -153,7 +130,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 				}
 				UserLogEntry lastLog = null;
 				UserLogEntry lastLogNotSame = null;
-				for (UserLogEntry currentLog : UserLogEntryList)
+				for (UserLogEntry currentLog : userLogEntryList)
 				{
 					// Only if relevant
 					if (changeOpportunityStatus.containsKey(currentLog.type))
@@ -266,10 +243,6 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 				eus.onModuleLoad();
 			}	
 
-			/**
-			 * This is the entry point method.
-			 * @wbp.parser.entryPoint
-			 */
 			public void onModuleLoad()
 			{			
 				rootPanel.setSize("100%", "100%");
@@ -282,31 +255,38 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 				ContentHelper.insertTitlePanel(simplePanelCenter, langLogEntry._Text_EditLog(), ClientImageBundle.INSTANCE.userLogContent());
 
 				// Create title column.
-				TextColumn<UserLogEntry> titleColumn = new TextColumn<UserLogEntry>() 	{
+				cellTable.specialAddColumnSortableString(new GetValue<String, UserLogEntry>() {
 					@Override
-					public String getValue(UserLogEntry userLog) 
+					public String getValue(UserLogEntry userLog)
 					{
 						return userLog.title;
-					}
-				};
+					}			
+				},  lang._TextName());
+				
 
 				// Create status column.
-				TextColumn<UserLogEntry> statusColumn = new TextColumn<UserLogEntry>() {
+				cellTable.specialAddColumnSortableWithComparator(new GetValue<String, UserLogEntry>() {
+
 					@Override
-					public String getValue(UserLogEntry userLog) 
+					public String getValue(UserLogEntry userLog)
 					{
-						return langLogEntry.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(userLog.type));
-					}
-				};
+						return  langLogEntry.logEntryStatusMap().get("logEntryStatus_" + UserLogEntry.entryTypeToString(userLog.type));
+					}}
+				, new Comparator<UserLogEntry>(){
+					@Override
+					public int compare(UserLogEntry o1, UserLogEntry o2)
+					{
+						return o1.type.compareTo(o2.type);
+					}}, lang._TextStatus());
 
 				// Create event column.
-				TextColumn<UserLogEntry> createdColumn = new TextColumn<UserLogEntry>() {
+				cellTable.specialAddColumnSortableDate(new GetValue<Date, UserLogEntry>() {
 					@Override
-					public String getValue(UserLogEntry userLog) 
+					public Date getValue(UserLogEntry log)
 					{
-						return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userLog.eventDate);
-					}
-				};
+						return log.eventDate;
+					}			
+				},  langLogEntry._TextCreated());
 
 				cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserLogEntry, String>() {
 					@Override
@@ -320,14 +300,8 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 						updateLogEntry(object);
 					}});
 
-				titleColumn.setSortable(true);
-				statusColumn.setSortable(true);
-				createdColumn.setSortable(true);
 				cellTable.setStyleName("filecelltable");
-				cellTable.addColumn(titleColumn, lang._TextName());
-				cellTable.addColumn(statusColumn, lang._TextStatus());
-				cellTable.addColumn(createdColumn, langLogEntry._TextCreated());
-
+				
 				cellTable.addColumnHtml(new FieldUpdater<UserLogEntry, String>() {
 					@Override
 					public void update(int index, UserLogEntry object, String value) {				
@@ -366,11 +340,9 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 							return result;
 						}}, langLogEntry._Text_Contacts());
 
-				dataProvider.addDataDisplay(cellTable);
-
 				AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
-				cellTable.setRowData(0, UserLogEntryList);
-				cellTable.setRowCount(UserLogEntryList.size(), true);
+				cellTable.setRowData(0, userLogEntryList);
+				cellTable.setRowCount(userLogEntryList.size(), true);
 				cellTable.setVisibleRange(0, 20);
 				cellTable.addColumnSortHandler(columnSortHandler);
 
