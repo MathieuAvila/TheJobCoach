@@ -29,7 +29,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 	private List<DocType> list = null;
 
 	public interface GetValue<C, D> {
-		C getValue(D contact);
+		C getValue(D element);
 	}
 
 	HashMap<Column<DocType, String>, Comparator<DocType>> compareMethodColumn = new HashMap<Column<DocType, String>, Comparator<DocType>>();
