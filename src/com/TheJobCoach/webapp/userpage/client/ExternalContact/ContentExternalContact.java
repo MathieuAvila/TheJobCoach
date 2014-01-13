@@ -1,6 +1,5 @@
 package com.TheJobCoach.webapp.userpage.client.ExternalContact;
 
-import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
@@ -25,10 +24,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
-import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 /**
@@ -38,7 +33,10 @@ public class ContentExternalContact implements EntryPoint {
 
 	UserId user;
 
-	final ExtendedCellTable<ExternalContact> cellTable = new ExtendedCellTable<ExternalContact>();
+	// The list of data to display.
+	private Vector<ExternalContact> externalContactList = new Vector<ExternalContact>();
+	
+	final ExtendedCellTable<ExternalContact> cellTable = new ExtendedCellTable<ExternalContact>(externalContactList);
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
@@ -53,37 +51,14 @@ public class ContentExternalContact implements EntryPoint {
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
-	// The list of data to display.
-	private Vector<ExternalContact> ExternalContactList = new Vector<ExternalContact>();
-
-	// Create a data provider.
-	AsyncDataProvider<ExternalContact> dataProvider = new AsyncDataProvider<ExternalContact>() {
-		@Override
-		protected void onRangeChanged(HasData<ExternalContact> display) 
-		{
-			final com.google.gwt.view.client.Range range = display.getVisibleRange();
-			int start = range.getStart();
-			int end = start + range.getLength();
-			if (end >= ExternalContactList.size() ) end = ExternalContactList.size();
-			if (ExternalContactList.size() != 0)
-			{
-				List<ExternalContact> dataInRange = ExternalContactList.subList(start, end);
-				// Push the data back into the list.
-				cellTable.setRowData(start, dataInRange);
-			}
-		}
-	};
-
 	void getAllContent()
 	{	
 		ServerCallHelper<Vector<ExternalContact>> callback = new ServerCallHelper<Vector<ExternalContact>>(rootPanel) {
 			@Override
 			public void onSuccess(Vector<ExternalContact> result) {
-				ExternalContactList.clear();
-				ExternalContactList.addAll(result);
-				dataProvider.updateRowCount(ExternalContactList.size(), true);
-				dataProvider.updateRowData(0, ExternalContactList.subList(0, ExternalContactList.size()));
-				cellTable.redraw();				
+				externalContactList.clear();
+				externalContactList.addAll(result);
+				cellTable.updateData();				
 			}
 		};
 		userService.getExternalContactList(user, callback);
@@ -184,48 +159,32 @@ public class ContentExternalContact implements EntryPoint {
 			}});
 
 		// Create first name column.
-		TextColumn<ExternalContact> firstNameColumn = new TextColumn<ExternalContact>() 	{
+		cellTable.specialAddColumnSortableString(new GetValue<String, ExternalContact>() {
 			@Override
-			public String getValue(ExternalContact ExternalContact) 
+			public String getValue(ExternalContact contact)
 			{
-				return ExternalContact.firstName;
-			}
-		};
-
+				return contact.firstName;
+			}			
+		},  langExternalContact._TextFirstName());
+		
 		// Create last name column.
-		TextColumn<ExternalContact> lastColumn = new TextColumn<ExternalContact>() {
+		cellTable.specialAddColumnSortableString(new GetValue<String, ExternalContact>() {
 			@Override
-			public String getValue(ExternalContact ExternalContact) 
+			public String getValue(ExternalContact contact)
 			{
-				return ExternalContact.lastName;
-			}
-		};
-
+				return contact.lastName;
+			}			
+		},  langExternalContact._TextLastName());
+		
 		// Create organization column.
-		TextColumn<ExternalContact> organizationColumn = new TextColumn<ExternalContact>() {
+		cellTable.specialAddColumnSortableString(new GetValue<String, ExternalContact>() {
 			@Override
-			public String getValue(ExternalContact ExternalContact) 
+			public String getValue(ExternalContact contact)
 			{
-				return ExternalContact.organization;
-			}
-		};
+				return contact.organization;
+			}			
+		},  langExternalContact._Text_Organization());
 
-		// Create phone column.
-		TextColumn<ExternalContact> phoneColumn = new TextColumn<ExternalContact>() {
-			@Override
-			public String getValue(ExternalContact ExternalContact) 
-			{
-				return ExternalContact.phone;
-			}
-		};
-
-		firstNameColumn.setSortable(true);
-		lastColumn.setSortable(true);
-		organizationColumn.setSortable(true);
-
-		cellTable.addColumn(firstNameColumn, langExternalContact._TextFirstName());
-		cellTable.addColumn(lastColumn, langExternalContact._TextLastName());
-		cellTable.addColumn(organizationColumn, langExternalContact._Text_Organization());
 		cellTable.addColumnEmail(new GetValue<String, ExternalContact>() {
 			@Override
 			public String getValue(ExternalContact contact)
@@ -233,18 +192,16 @@ public class ContentExternalContact implements EntryPoint {
 				return contact.email;
 			}			
 		});
-		cellTable.addColumn(phoneColumn, langExternalContact._Text_Phone());
-		//cellTable.getColumnSortList().push(firstNameColumn);	
-		cellTable.setStyleName("filecelltable");
 
-		dataProvider.addDataDisplay(cellTable);
-
-		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
-		cellTable.setRowData(0, ExternalContactList);
-		cellTable.setRowCount(ExternalContactList.size(), true);
-		cellTable.setVisibleRange(0, 20);
-		cellTable.addColumnSortHandler(columnSortHandler);
-
+		// Create phone column.
+		cellTable.specialAddColumnSortableString(new GetValue<String, ExternalContact>() {
+			@Override
+			public String getValue(ExternalContact contact)
+			{
+				return contact.organization;
+			}			
+		},  langExternalContact._Text_Phone());
+		
 		simplePanelCenter.add(cellTable);
 		cellTable.setSize("100%", "");		
 
