@@ -94,7 +94,7 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 	{
 		if (id == null) id = SiteUUID.getDateUuid();
 		return new UserOpportunity(id, 
-				(currentOpportunity != null) ? currentOpportunity.firstSeen : new Date(), 
+				(currentOpportunity != null) ? currentOpportunity.pubDate : new Date(), 
 				new Date(),
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), txtbxCompany.getValue(),
 				txtbxContractType.getText(), txtbxSalary.getValue(), dateBoxStart.getValue(), dateBoxEndDate.getValue(),

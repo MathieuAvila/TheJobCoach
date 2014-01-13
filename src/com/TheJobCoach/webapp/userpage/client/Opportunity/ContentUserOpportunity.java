@@ -70,7 +70,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 				currentOpportunity = result;
 				panelDescriptionContent.setHTML(currentOpportunity.description);
 				labelTextSource.setText(currentOpportunity.source);
-				System.out.println("LONG " + currentOpportunity.title + " " +currentOpportunity.lastUpdate  + " " + currentOpportunity.firstSeen);
+				System.out.println("LONG " + currentOpportunity.title + " " +currentOpportunity.lastUpdate  + " " + currentOpportunity.pubDate);
 				labelCreationDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.lastUpdate));
 				labelStartDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.startDate));
 				labelEndDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.endDate));
@@ -295,7 +295,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			@Override
 			public Date getValue(UserOpportunity opp)
 			{
-				return opp.firstSeen;
+				return opp.pubDate;
 			}			
 		},  lang._TextFirstSeen());
 

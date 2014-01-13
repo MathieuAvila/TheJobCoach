@@ -36,7 +36,7 @@ public class GoalReport
 		Vector<UserOpportunity> oppList = oppManager.getOpportunitiesList(id, UserOpportunityManager.MANAGED_LIST);
 		for (UserOpportunity opp: oppList)
 		{
-			if (start.before(opp.firstSeen) && (end.after(opp.firstSeen)))
+			if (start.before(opp.pubDate) && (end.after(opp.pubDate)))
 			{
 				result.newOpportunities++;
 			}

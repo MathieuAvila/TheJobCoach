@@ -8,6 +8,7 @@ public class UserOpportunity implements Serializable {
 
 	private static final long serialVersionUID = 1115255124501443736L;
 
+	/** Order is used for sorting in the opp table. Edit with care ! */
 	public enum ApplicationStatus 
 	{
 		NEW,
@@ -21,10 +22,11 @@ public class UserOpportunity implements Serializable {
 	/** UUID. Same as @UserApplication. */
 	public String ID;
 
-	/** First time spotted */	
-	public Date firstSeen;
+	/** Publication Date OR creation date if created manually */	
+	public Date pubDate;
 
-	/** Last time spotted */
+	/** Last time spotted by search engine, OR user creation date 
+	 * if created by importer OR creation date if created manually. */
 	public Date lastUpdate;
 
 	/** Title for the job */
@@ -104,7 +106,7 @@ public class UserOpportunity implements Serializable {
 	{
 		super();
 		ID = iD;
-		this.firstSeen = firstSeen;
+		this.pubDate = firstSeen;
 		this.lastUpdate = lastUpdate;
 		this.title = title;
 		this.description = description;

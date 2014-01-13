@@ -119,7 +119,7 @@ public class UserOpportunityManager {
 				COLUMN_FAMILY_NAME_DATA, 
 				result.ID, 
 				(new ShortMap())
-				.add("firstseen", result.firstSeen)
+				.add("firstseen", result.pubDate)
 				.add("lastupdate", result.lastUpdate)
 				.add("title", result.title)
 				.add("description", result.description)

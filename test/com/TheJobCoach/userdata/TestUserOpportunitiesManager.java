@@ -53,7 +53,7 @@ public class TestUserOpportunitiesManager {
 	private void checkOpportunity(UserOpportunity op1, UserOpportunity opRef, boolean shortDefinition)
 	{
 		assertEquals(op1.ID, opRef.ID);
-		assertEquals(op1.firstSeen, opRef.firstSeen);
+		assertEquals(op1.pubDate, opRef.pubDate);
 		assertEquals(op1.lastUpdate, opRef.lastUpdate);
 		assertEquals(op1.title, opRef.title);
 		if (shortDefinition)
