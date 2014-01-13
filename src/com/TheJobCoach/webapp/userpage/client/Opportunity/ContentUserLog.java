@@ -253,6 +253,18 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 
 				ContentHelper.insertTitlePanel(simplePanelCenter, langLogEntry._Text_EditLog(), ClientImageBundle.INSTANCE.userLogContent());
 
+				cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserLogEntry, String>() {
+					@Override
+					public void update(int index, UserLogEntry object, String value) {
+						deleteLogEntry(object);
+					}});
+
+				cellTable.addColumnWithIcon(IconCellSingle.IconType.UPDATE, new FieldUpdater<UserLogEntry, String>() {
+					@Override
+					public void update(int index, UserLogEntry object, String value) {
+						updateLogEntry(object);
+					}});
+
 				// Create title column.
 				cellTable.specialAddColumnSortableString(new GetValue<String, UserLogEntry>() {
 					@Override
@@ -286,18 +298,6 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 						return log.eventDate;
 					}			
 				},  langLogEntry._TextCreated());
-
-				cellTable.addColumnWithIcon(IconCellSingle.IconType.DELETE, new FieldUpdater<UserLogEntry, String>() {
-					@Override
-					public void update(int index, UserLogEntry object, String value) {
-						deleteLogEntry(object);
-					}});
-
-				cellTable.addColumnWithIcon(IconCellSingle.IconType.UPDATE, new FieldUpdater<UserLogEntry, String>() {
-					@Override
-					public void update(int index, UserLogEntry object, String value) {
-						updateLogEntry(object);
-					}});
 
 				cellTable.setStyleName("filecelltable");
 				

@@ -257,7 +257,7 @@ public class AutoTestContentUserLog extends GwtTest {
 		assertEquals(7, cul.cellTable.getColumnCount());
 		assertEquals(opportunity1.title,                                         cul.cellTable.getColumn(2).getValue(userLog1));
 		assertEquals("Entretien",                                                cul.cellTable.getColumn(3).getValue(userLog1));
-		assertEquals(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(userLog1.eventDate), cul.cellTable.getColumn(4).getValue(userLog1));
+		assertEquals(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(userLog1.eventDate), cul.cellTable.getColumn(4).getValue(userLog1));
 		
 		assertEquals("fileName1<br/>fileName2<br/>fileName3",                                          cul.cellTable.getColumn(5).getValue(userLog1));
 		assertEquals("firstName1 lastName1<br/>firstName2 lastName2<br/>firstName3 lastName3",         cul.cellTable.getColumn(6).getValue(userLog1));
