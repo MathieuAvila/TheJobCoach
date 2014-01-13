@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client.UserSite;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
@@ -16,6 +17,7 @@ import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
+import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -23,14 +25,9 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
@@ -43,7 +40,10 @@ public class ContentUserSite implements EntryPoint {
 
 	UserId user;
 
-	final ExtendedCellTable<UserJobSite> cellTable = new ExtendedCellTable<UserJobSite>();
+	// The list of data to display.
+	private List<UserJobSite> jobSiteList = new ArrayList<UserJobSite>();
+
+	final ExtendedCellTable<UserJobSite> cellTable = new ExtendedCellTable<UserJobSite>(jobSiteList);
 	UserJobSite currentSite = null;
 
 	public ContentUserSite(Panel rootPanel, UserId user) {
@@ -65,27 +65,6 @@ public class ContentUserSite implements EntryPoint {
 		rootPanel = panel;
 	}
 
-	// The list of data to display.
-	private List<UserJobSite> jobSiteList = new ArrayList<UserJobSite>();
-
-	// Create a data provider.
-	AsyncDataProvider<UserJobSite> dataProvider = new AsyncDataProvider<UserJobSite>() {
-		@Override
-		protected void onRangeChanged(HasData<UserJobSite> display) 
-		{
-			final com.google.gwt.view.client.Range range = display.getVisibleRange();
-			int start = range.getStart();
-			int end = start + range.getLength();
-			if (end >= jobSiteList.size() ) end = jobSiteList.size();
-			if (jobSiteList.size() != 0)
-			{
-				List<UserJobSite> dataInRange = jobSiteList.subList(start, end);
-				// Push the data back into the list.
-				cellTable.setRowData(start, dataInRange);
-			}
-		}
-	};
-
 	void getOneSite(String siteId)
 	{
 		ServerCallHelper<UserJobSite> callback = new ServerCallHelper<UserJobSite>(rootPanel)	{
@@ -98,7 +77,7 @@ public class ContentUserSite implements EntryPoint {
 						jobSiteList.set(count, result);
 					}
 				}
-				dataProvider.updateRowData(0, jobSiteList);
+				cellTable.updateData();
 			}
 		};
 		userService.getUserSite(user, siteId, callback);
@@ -115,8 +94,7 @@ public class ContentUserSite implements EntryPoint {
 					jobSiteList.add(new UserJobSite(idRes,"", "", "", "", ""));
 					getOneSite(idRes);
 				}
-				dataProvider.updateRowCount(jobSiteList.size(), true);
-				cellTable.redraw();
+				cellTable.updateData();
 			}
 		};
 		userService.getUserSiteList(user, callback);
@@ -201,15 +179,6 @@ public class ContentUserSite implements EntryPoint {
 			}}	
 				);
 
-		// Create name column.
-		TextColumn<UserJobSite> nameColumn = new TextColumn<UserJobSite>() 	{
-			@Override
-			public String getValue(UserJobSite site) 
-			{
-				return site.name;
-			}
-		};
-
 		// Create URL column.
 		cellTable.addColumnUrl(new ExtendedCellTable.GetValue<String, UserJobSite>() {
 			public String getValue(UserJobSite contact) {
@@ -217,43 +186,42 @@ public class ContentUserSite implements EntryPoint {
 			}
 		});
 
-		// Create login column.
-		TextColumn<UserJobSite> loginColumn = new TextColumn<UserJobSite>() {
+		// Create name column.
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserJobSite>() {
 			@Override
-			public String getValue(UserJobSite site) 
+			public String getValue(UserJobSite site)
+			{
+				return site.name;
+			}			
+		},  lang._TextName());
+
+		// Create login column.
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserJobSite>() {
+			@Override
+			public String getValue(UserJobSite site)
 			{
 				return site.login;
-			}
-		};
+			}			
+		},  lang._TextLogin());
 
 		// Create password column.
-		TextColumn<UserJobSite> passwordColumn = new TextColumn<UserJobSite>() {
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserJobSite>() {
 			@Override
-			public String getValue(UserJobSite site) 
+			public String getValue(UserJobSite site)
 			{
 				return site.password;
-			}
-		};
+			}			
+		},  lang._TextPassword());
 
 		// Create lastVisit column.
-		TextColumn<UserJobSite> lastVisitColumn = new TextColumn<UserJobSite>() {
+		cellTable.specialAddColumnSortableDate(new GetValue<Date, UserJobSite>() {
 			@Override
-			public String getValue(UserJobSite site) 
+			public Date getValue(UserJobSite site)
 			{
-				return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_LONG).format(site.update.last);
-			}
-		};
-
-		nameColumn.setSortable(true);
-		loginColumn.setSortable(true);
-		passwordColumn.setSortable(true);
-		lastVisitColumn.setSortable(true);
-		cellTable.addColumn(nameColumn, lang._TextName());
-		cellTable.addColumn(loginColumn, lang._TextLogin());
-		cellTable.addColumn(passwordColumn, lang._TextPassword());
-		cellTable.addColumn(lastVisitColumn, lang._TextLastVisit());
-		cellTable.getColumnSortList().push(nameColumn);	
-
+				return site.update.last;
+			}			
+		},  lang._TextLastVisit());
+		
 		// Add a selection model to handle user selection.
 		final SingleSelectionModel<UserJobSite> selectionModel = new SingleSelectionModel<UserJobSite>();
 		cellTable.setSelectionModel(selectionModel);
@@ -268,16 +236,10 @@ public class ContentUserSite implements EntryPoint {
 				}
 			}
 		});
-
-		dataProvider.addDataDisplay(cellTable);
-		dataProvider.updateRowCount(jobSiteList.size(), true);
-
-		AsyncHandler columnSortHandler = new AsyncHandler(cellTable);
 		getAllContent();
 		cellTable.setRowData(0, jobSiteList);
 		cellTable.setRowCount(jobSiteList.size(), true);
-		cellTable.addColumnSortHandler(columnSortHandler);
-
+		
 		simplePanelCenter.add(cellTable);
 
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
