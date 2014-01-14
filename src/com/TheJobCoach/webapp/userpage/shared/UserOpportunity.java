@@ -98,7 +98,7 @@ public class UserOpportunity implements Serializable {
 	}
 
 
-	public UserOpportunity(String iD, Date firstSeen, Date lastUpdate,
+	public UserOpportunity(String iD, Date pubDate, Date lastUpdate,
 			String title, String description, String companyId,
 			String contractType, String salary, Date startDate, Date endDate,
 			boolean systemSource, String source, String url, String location,
@@ -106,7 +106,7 @@ public class UserOpportunity implements Serializable {
 	{
 		super();
 		ID = iD;
-		this.pubDate = firstSeen;
+		this.pubDate = pubDate;
 		this.lastUpdate = lastUpdate;
 		this.title = title;
 		this.description = description;

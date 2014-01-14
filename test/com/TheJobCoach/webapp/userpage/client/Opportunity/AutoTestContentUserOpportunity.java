@@ -233,7 +233,7 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 		assertEquals(opportunity1.location,                                      cuo.cellTable.getColumn(6).getValue(opportunity1));
 		assertEquals(opportunity1.salary,										 cuo.cellTable.getColumn(7).getValue(opportunity1));
 		assertEquals(opportunity1.contractType,                                  cuo.cellTable.getColumn(8).getValue(opportunity1));
-		assertEquals(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(opportunity1.pubDate),
+		assertEquals(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(opportunity1.lastUpdate),
 																				 cuo.cellTable.getColumn(9).getValue(opportunity1));
 		
 		// Click on 2nd element		
@@ -241,14 +241,11 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 		assertEquals(1, userService.callsGet);
 		assertEquals(1, userService.callsGetSingle);
 		
-		assertEquals(opportunity2.source,       cuo.labelTextSource.getText());
 		assertEquals(opportunity2.description,  cuo.panelDescriptionContent.getHTML());
-		assertEquals(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(opportunity2.lastUpdate),
-				cuo.labelCreationDate.getText());
+		assertEquals(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(opportunity2.pubDate),
+				cuo.labelPubDate.getText());
 		assertEquals(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(opportunity2.startDate),
 				cuo.labelStartDate.getText());
-		assertEquals(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(opportunity2.endDate),
-				cuo.labelEndDate.getText());
 		
 		// Click on delete element
 		userService.reset();

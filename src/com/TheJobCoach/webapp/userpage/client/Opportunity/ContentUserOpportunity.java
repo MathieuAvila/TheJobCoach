@@ -48,10 +48,8 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 	final ExtendedCellTable<UserOpportunity> cellTable = new ExtendedCellTable<UserOpportunity>(userOpportunityList);
 	UserOpportunity currentOpportunity = null;
 	final HTML panelDescriptionContent = new HTML("");
-	final Label labelTextSource = new Label();
-	final Label labelCreationDate = new Label();
+	final Label labelPubDate = new Label();
 	final Label labelStartDate = new Label();
-	final Label labelEndDate = new Label();
 
 	final Lang lang = GWT.create(Lang.class);
 	final LangLogEntry langLogEntry = GWT.create(LangLogEntry.class);
@@ -69,11 +67,8 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			public void onSuccess(UserOpportunity result) {
 				currentOpportunity = result;
 				panelDescriptionContent.setHTML(currentOpportunity.description);
-				labelTextSource.setText(currentOpportunity.source);
-				System.out.println("LONG " + currentOpportunity.title + " " +currentOpportunity.lastUpdate  + " " + currentOpportunity.pubDate);
-				labelCreationDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.lastUpdate));
+				labelPubDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.pubDate));
 				labelStartDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.startDate));
-				labelEndDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.endDate));
 				cellTable.redraw();				
 			}
 		};
@@ -290,14 +285,14 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			}			
 		},  lang._TextContractType());
 
-		// Create first seen column.
+		// Create creation date column.
 		cellTable.specialAddColumnSortableDate(new GetValue<Date, UserOpportunity>() {
 			@Override
 			public Date getValue(UserOpportunity opp)
 			{
-				return opp.pubDate;
-			}			
-		},  lang._TextFirstSeen());
+				return opp.lastUpdate;
+			}
+		},  lang._TextCreationDate());
 
 		cellTable.addColumnWithIcon(IconCellSingle.IconType.RIGHT, new FieldUpdater<UserOpportunity, String>() {
 			@Override
@@ -341,37 +336,22 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		simplePanelCenter.add(simplePanel);
 		simplePanel.setHeight("10px");
 
-		Grid grid_1 = new Grid(4, 2);
+		Grid grid_1 = new Grid(2, 2);
 		simplePanelCenter.add(grid_1);
 
-		Label lblSource = new Label(lang._TextSource());
-		lblSource.setStyleName("summary-title");
-		grid_1.setWidget(0, 0, lblSource);
+		Label lblPubDate = new Label(lang._TextPubDate());
+		lblPubDate.setStyleName("summary-title");
+		grid_1.setWidget(0, 0, lblPubDate);
 
-		labelTextSource.setStyleName("summary-text");
-		grid_1.setWidget(0, 1, labelTextSource);
-		labelTextSource.setWidth("100%");
-
-		Label labelCreated = new Label(lang._TextFirstSeen());
-		labelCreated.setStyleName("summary-title");
-		grid_1.setWidget(1, 0, labelCreated);
-
-		labelCreationDate.setStyleName("summary-text");
-		grid_1.setWidget(1, 1, labelCreationDate);
+		labelPubDate.setStyleName("summary-text");
+		grid_1.setWidget(0, 1, labelPubDate);
 
 		Label lblStartDate = new Label(lang._TextStartDate());
 		lblStartDate.setStyleName("summary-title");
-		grid_1.setWidget(2, 0, lblStartDate);
+		grid_1.setWidget(1, 0, lblStartDate);
 
 		labelStartDate.setStyleName("summary-text");
-		grid_1.setWidget(2, 1, labelStartDate);
-
-		Label lblEndDate = new Label(lang._TextEndDate());
-		lblEndDate.setStyleName("summary-title");
-		grid_1.setWidget(3, 0, lblEndDate);
-
-		labelEndDate.setStyleName("summary-text");
-		grid_1.setWidget(3, 1, labelEndDate);
+		grid_1.setWidget(1, 1, labelStartDate);
 
 		Label labelDescription = new Label(lang._TextDescription());
 		labelDescription.setStyleName("summary-title");

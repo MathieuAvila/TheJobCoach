@@ -40,7 +40,7 @@ public class PoleEmploi extends JobBoard
 		}
 		
 		String iD = removeHtml(extractPattern(patternReference, text, "")); 
-		Date firstSeen = new Date(); 
+		Date pubDate = new Date(); 
 		Date lastUpdate = new Date(); 
 		String title = removeHtml(extractPattern(patternTitle, text, ""));
 		String description = extractPattern(patternDescription, text, "");
@@ -50,7 +50,7 @@ public class PoleEmploi extends JobBoard
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		try
 		{
-			firstSeen = sdf.parse(pubDateStr);
+			pubDate = sdf.parse(pubDateStr);
 		}
 		catch (ParseException e1){}
 		
@@ -61,7 +61,7 @@ public class PoleEmploi extends JobBoard
 		String location = removeHtml(extractPattern(patternLieu, text, ""));
 		ApplicationStatus status = ApplicationStatus.DISCOVERED;
 
-		return new UserOpportunity(iD, firstSeen, lastUpdate,
+		return new UserOpportunity(iD, pubDate, lastUpdate,
 				title,  description,  companyId,
 				contractType,  salaryStr,  startDate,  endDate,
 				false, "poleemploi#" + iD, url, location,

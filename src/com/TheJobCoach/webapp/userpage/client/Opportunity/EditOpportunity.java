@@ -56,7 +56,6 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 	String id = null;
 	DialogBlockOkCancel okCancel;
 	DateBox dateBoxStart;
-	DateBox dateBoxEndDate;
 
 	public EditOpportunity(Panel panel, UserId _user, UserOpportunity _currentOpportunity, IChooseResult<UserOpportunity> result)
 	{	
@@ -86,8 +85,6 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 		txtbxUrl.setText(opp.url);
 		txtbxLocation.setText(opp.location);
 		dateBoxStart.setValue(opp.startDate);
-		dateBoxEndDate.setValue(opp.endDate);
-		
 	}
 	
 	private UserOpportunity getOpportunity()
@@ -97,7 +94,7 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 				(currentOpportunity != null) ? currentOpportunity.pubDate : new Date(), 
 				new Date(),
 				txtbxTitle.getText(), richTextAreaDescription.getHTML(), txtbxCompany.getValue(),
-				txtbxContractType.getText(), txtbxSalary.getValue(), dateBoxStart.getValue(), dateBoxEndDate.getValue(),
+				txtbxContractType.getText(), txtbxSalary.getValue(), dateBoxStart.getValue(), new Date() /* end date is deprecated */,
 				false, txtbxSource.getText(), txtbxUrl.getText(), txtbxLocation.getText(), 
 				UserOpportunity.applicationStatusToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex())), "");
 	}
@@ -115,7 +112,7 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 		
 		VerticalPanel vp = new VerticalPanel();
 		
-		Grid grid = new Grid(12, 2);
+		Grid grid = new Grid(11, 2);
 		grid.setBorderWidth(0);
 		dBox.add(vp);		
 		grid.setWidth("95%");
@@ -170,35 +167,28 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 		dateBoxStart = new DateBox();
 		grid.setWidget(6, 1, dateBoxStart);
 		dateBoxStart.setWidth("95%");
-				
-		Label lblEndDate = new Label(lang._TextEndDate());
-		grid.setWidget(7, 0, lblEndDate);
-		
-		dateBoxEndDate = new DateBox();
-		grid.setWidget(7, 1, dateBoxEndDate);
-		dateBoxEndDate.setWidth("95%");
-		
+
 		Label lblSource = new Label(lang._TextSource());
-		grid.setWidget(8, 0, lblSource);		
-		grid.setWidget(8, 1, txtbxSource);
+		grid.setWidget(7, 0, lblSource);		
+		grid.setWidget(7, 1, txtbxSource);
 		grid.getCellFormatter().setWidth(8, 1, "100%");
 		txtbxSource.setWidth("95%");
 				
 		Label lblUrl = new Label(lang._TextUrl());
-		grid.setWidget(9, 0, lblUrl);
+		grid.setWidget(8, 0, lblUrl);
 		txtbxUrl.setWidth("95%");
-		grid.setWidget(9, 1, txtbxUrl);
+		grid.setWidget(8, 1, txtbxUrl);
 		grid.getCellFormatter().setWidth(9, 1, "100%");
 			
 		Label lblLocation = new Label(lang._TextLocation());
-		grid.setWidget(10, 0, lblLocation);		
-		grid.setWidget(10, 1, txtbxLocation);
+		grid.setWidget(9, 0, lblLocation);		
+		grid.setWidget(9, 1, txtbxLocation);
 		grid.getCellFormatter().setWidth(10, 1, "100%");
 		txtbxLocation.setWidth("95%");
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid.setWidget(11, 1, horizontalPanel);
+		grid.setWidget(10, 1, horizontalPanel);
 
 		vp.add(grid);		
 		

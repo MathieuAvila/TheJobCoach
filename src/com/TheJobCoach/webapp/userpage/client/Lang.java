@@ -164,8 +164,11 @@ public interface Lang extends Constants {
 	@Key("contracttype")
 	String _TextContractType();
 	
-	@Key("firstseen")
-	String _TextFirstSeen();
+	@Key("creationdate")
+	String _TextCreationDate();
+	
+	@Key("pubdate")
+	String _TextPubDate();
 
 	@Key("status")
 	String  _TextStatus();
