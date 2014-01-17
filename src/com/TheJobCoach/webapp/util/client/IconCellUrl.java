@@ -55,7 +55,7 @@ public class IconCellUrl implements Cell<String> {
   /**
    * The default spacing between the icon and the text in pixels.
    */
-  private static final int DEFAULT_SPACING = 6;
+  private static final int DEFAULT_SPACING = 0;
 
   private static Template template;
 

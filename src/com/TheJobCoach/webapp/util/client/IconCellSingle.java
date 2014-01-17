@@ -56,7 +56,7 @@ public class IconCellSingle extends IconCellDecorator<String>
 				new SafeStylesBuilder().appendTrustedString("left" + ":0px;");
 
 		//int height = (int)wpImageBundle.deleteFile().getHeight();
-		cssStyles.appendTrustedString("margin-top:-" + "2px;top:4px;");
+		cssStyles.appendTrustedString("margin-top:-" + "2px;top:2px;");
 		return SafeHtmlUtils.fromSafeConstant("<div style=\"" + cssStyles.toSafeStyles().asString() + "position:absolute;line-height:0px;text-decoration:underline;color:blue;a:hover{color:#001760;text-decoration: underline;}\"><a href='javascript:;'>" + html.asString() + "</a></div>");
 		// return this.template.imageWrapperMiddle(cssStyles.toSafeStyles(), wpImageBundle.deleteFile());
 	}

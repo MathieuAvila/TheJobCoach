@@ -31,7 +31,14 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 	public interface GetValue<C, D> {
 		C getValue(D element);
 	}
-
+	
+	public interface TableRes extends CellTable.Resources {
+		@Source({CellTable.Style.DEFAULT_CSS, "com/TheJobCoach/webapp/util/client/CellTable.css"})
+		TableStyle cellTableStyle();
+		 
+		interface TableStyle extends CellTable.Style {}
+		}
+	
 	HashMap<Column<DocType, String>, Comparator<DocType>> compareMethodColumn = new HashMap<Column<DocType, String>, Comparator<DocType>>();
 
 	// Create a data provider.
@@ -246,10 +253,12 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		AsyncHandler columnSortHandler = new AsyncHandler(this);
 		addColumnSortHandler(columnSortHandler);
 	}
-
+	
+	private static CellTable.Resources tableRes = GWT.create(TableRes.class);
+	
 	public ExtendedCellTable()
 	{
-		super();
+		super(20, tableRes);
 		init();
 	}
 
@@ -262,7 +271,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 
 	public ExtendedCellTable(List<DocType> list)
 	{
-		super();
+		super(20, tableRes);
 		this.list = list;
 		dataProvider.addDataDisplay(this);
 		init();
