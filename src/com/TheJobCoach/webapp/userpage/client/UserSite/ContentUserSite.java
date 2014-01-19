@@ -14,6 +14,7 @@ import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
@@ -43,21 +44,24 @@ public class ContentUserSite implements EntryPoint {
 	ButtonImageText buttonNewSite = new ButtonImageText(ButtonImageText.Type.NEW, lang._TextNewSite());
 	
 	final ExtendedCellTable<UserJobSite> cellTable = new ExtendedCellTable<UserJobSite>(jobSiteList);
-	UserJobSite currentSite = null;
+	
+	IEditDialogModel<UserJobSite> editSiteInterface;
+
+	public ContentUserSite(Panel rootPanel, UserId user, IEditDialogModel<UserJobSite> editSiteInterface) {
+		this.user = user;
+		this.rootPanel = rootPanel;
+		this.editSiteInterface = editSiteInterface;
+	}
 
 	public ContentUserSite(Panel rootPanel, UserId user) {
 		this.user = user;
 		this.rootPanel = rootPanel;
+		this.editSiteInterface = new EditUserSite();
 	}
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
 	Panel rootPanel;
-
-	public void setRootPanel(Panel panel)
-	{
-		rootPanel = panel;
-	}
 
 	void getAllContent()
 	{		
@@ -70,7 +74,6 @@ public class ContentUserSite implements EntryPoint {
 			}
 		};
 		userService.getUserSiteList(user, callback);
-		
 	}
 
 	void deleteSite(final UserJobSite currentSite)
@@ -94,23 +97,12 @@ public class ContentUserSite implements EntryPoint {
 		mb.onModuleLoad();
 	}
 
-	public void newSite()
-	{
-		EditUserSite eus = new EditUserSite(rootPanel, null, user, new IChooseResult<UserJobSite>() {
-			@Override
-			public void setResult(UserJobSite result) {				
-				getAllContent();				
-			}
-		});
-		eus.onModuleLoad();
-	}
-
 	void updateSite(UserJobSite currentSite)
 	{
-		EditUserSite eus = new EditUserSite(rootPanel, currentSite, user, new IChooseResult<UserJobSite>() {
+		IEditDialogModel<UserJobSite> eus = editSiteInterface.clone(rootPanel, user, currentSite, new IChooseResult<UserJobSite>() {
 			@Override
 			public void setResult(UserJobSite result) {				
-				getAllContent();				
+				if (result != null) getAllContent();				
 			}
 		});
 		eus.onModuleLoad();
@@ -201,7 +193,7 @@ public class ContentUserSite implements EntryPoint {
 		buttonNewSite.addClickHandler(new ClickHandler()
 		{			
 			public void onClick(ClickEvent event) {
-				newSite();
+				updateSite(null);
 			}
 		});
 		simplePanelCenter.add(buttonNewSite);

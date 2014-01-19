@@ -13,6 +13,7 @@ import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.GridHelper;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
@@ -30,7 +31,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class EditUserSite implements EntryPoint, IChanged {
+public class EditUserSite implements EntryPoint, IChanged, IEditDialogModel<UserJobSite> {
 
 	static Lang lang = GWT.create(Lang.class);
 	private final UserServiceAsync userService = GWT.create(UserService.class);
@@ -60,6 +61,11 @@ public class EditUserSite implements EntryPoint, IChanged {
 		currentUserSite = _currentUserSite;
 		result = _result;
 		user = _user;
+	}
+
+	// void constructor to pass as argument for ContentUserSite
+	public EditUserSite()
+	{
 	}
 
 	private void setUserJobSite(UserJobSite userSite)
@@ -154,5 +160,12 @@ public class EditUserSite implements EntryPoint, IChanged {
 		setOk = setOk && textBoxName.isValid();
 		setOk = setOk && textBoxUrl.isValid();
 		okCancel.getOk().setEnabled(setOk);	
+	}
+
+	@Override
+	public IEditDialogModel<UserJobSite> clone(Panel rootPanel, UserId userId,
+			UserJobSite edition, IChooseResult<UserJobSite> result)
+	{
+		return new EditUserSite(rootPanel, edition, userId, result);
 	}
 }
