@@ -61,7 +61,7 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.CLOSED, "note3");
 	
-	Vector<UserOpportunity> contactList =  new Vector<UserOpportunity>(Arrays.asList(opportunity1, opportunity2, opportunity3));
+	Vector<UserOpportunity> opportunityList =  new Vector<UserOpportunity>(Arrays.asList(opportunity1, opportunity2, opportunity3));
 	
 	class SpecialUserServiceAsync extends DefaultUserServiceAsync
 	{
@@ -80,7 +80,7 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 				AsyncCallback<Vector<UserOpportunity>> callback)
 				{
 			callsGet++;
-			callback.onSuccess(contactList);
+			callback.onSuccess(opportunityList);
 		}
 		@Override
 		public void getUserOpportunity(UserId id, String oppId,
