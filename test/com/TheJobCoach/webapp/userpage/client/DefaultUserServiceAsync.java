@@ -27,7 +27,7 @@ public class DefaultUserServiceAsync implements UserServiceAsync
    		
 	@Override
 	public void getUserSiteList(UserId id,
-			AsyncCallback<List<String>> callback) {
+			AsyncCallback<Vector<UserJobSite>> callback) {
 		logger.info("getUserSiteList " + id.userName);
 	}
 	@Override

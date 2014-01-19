@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface UserServiceAsync {
 	
-	void getUserSiteList(UserId id, AsyncCallback<List<String>> callback);
+	void getUserSiteList(UserId id, AsyncCallback<Vector<UserJobSite>> callback);
 	void getUserSite(UserId id, String siteId, AsyncCallback<UserJobSite> callback);
 	void deleteUserSite(UserId id, String siteId, AsyncCallback<Integer> callback);
 	void setUserSite(UserId id, UserJobSite data, AsyncCallback<Integer> callback);

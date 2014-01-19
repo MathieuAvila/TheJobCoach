@@ -56,10 +56,17 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	UserValues userValues = new UserValues();
 	
 	@Override
-	public List<String> getUserSiteList(UserId id) throws CassandraException, CoachSecurityException 
+	public Vector<UserJobSite> getUserSiteList(UserId id) throws CassandraException, CoachSecurityException 
 	{
 		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
-		List<String> result = jobSiteManager.getUserSiteList(id);
+		List<String> idList = jobSiteManager.getUserSiteList(id);
+		Vector<UserJobSite> result = new Vector<UserJobSite>(); 
+		for (String siteId: idList)
+		{
+			UserJobSite site = jobSiteManager.getUserSite(id, siteId);
+			if (site != null)
+				result.add(jobSiteManager.getUserSite(id, siteId));
+		}
 		return result;
 	}
 

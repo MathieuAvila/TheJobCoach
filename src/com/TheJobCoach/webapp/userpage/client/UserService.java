@@ -25,7 +25,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("user")
 public interface UserService extends RemoteService 
 {	
-	public List<String> getUserSiteList(UserId id) throws CassandraException, CoachSecurityException;
+	public Vector<UserJobSite> getUserSiteList(UserId id) throws CassandraException, CoachSecurityException;
 	public Integer deleteUserSite(UserId id, String siteId) throws CassandraException, CoachSecurityException;
 	public Integer setUserSite(UserId id, UserJobSite site) throws CassandraException, CoachSecurityException;
 	public UserJobSite getUserSite(UserId id, String siteId) throws CassandraException, CoachSecurityException;
