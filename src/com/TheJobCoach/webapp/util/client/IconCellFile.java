@@ -31,7 +31,7 @@ public class IconCellFile extends IconCellDecorator<String>
 	static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
 	public IconCellFile(Cell<String> cell)
 	{				
-		super(wpImageBundle.deleteFile(), cell, HasVerticalAlignment.ALIGN_MIDDLE, 10);
+		super(wpImageBundle.deleteFile(), cell, HasVerticalAlignment.ALIGN_MIDDLE, 0);
 	}
 
 
@@ -48,7 +48,7 @@ public class IconCellFile extends IconCellDecorator<String>
 
 		// Create the wrapper based on the vertical alignment.
 		SafeStylesBuilder cssStyles =
-				new SafeStylesBuilder().appendTrustedString("left" + ":-15px;");
+				new SafeStylesBuilder().appendTrustedString("left" + ":0px;");
 
 		//int height = (int)wpImageBundle.deleteFile().getHeight();
 		//cssStyles.appendTrustedString("margin-top:-" + height + "px;");

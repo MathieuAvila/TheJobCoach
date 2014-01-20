@@ -19,6 +19,8 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 
@@ -207,7 +209,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		ClickableTextCell anchorcolumn = new ClickableTextCell()
 		{
 			@Override
-			protected void render(Context context, com.google.gwt.safehtml.shared.SafeHtml value, com.google.gwt.safehtml.shared.SafeHtmlBuilder sb) {
+			protected void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
 				if (value != null) {
 					sb.appendHtmlConstant(
 							"<div class=\"clickableText\">" + 
