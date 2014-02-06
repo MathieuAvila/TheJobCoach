@@ -49,7 +49,6 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		@Override
 		protected void onRangeChanged(HasData<DocType> display) {
 			final Range range = display.getVisibleRange();
-
 			// Get the ColumnSortInfo from the table.
 			final ColumnSortList sortList = getColumnSortList();
 
@@ -68,19 +67,22 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 					int diff = 0;
 					if ((o1 != null) && (o2 != null))
 					{
-						Comparator<DocType> comp = compareMethodColumn.get(sortList.get(0).getColumn());
+						Comparator<DocType> comp = null;
+						if (sortList.size() != 0)
+							comp = compareMethodColumn.get(sortList.get(0).getColumn());
 						if (comp != null)
 						{
 							diff = comp.compare(o1, o2);
+							return sortList.get(0).isAscending() ? diff : -diff;
 						}
 					}
-					return sortList.get(0).isAscending() ? diff : -diff;
+					return 0;
 				}
 					});
-			//List<UserOpportunity> dataInRange = userOpportunityList.subList(start, end);
-
 			// Push the data back into the list.
-			setRowData(start, list);
+			setRowData(0, list);
+			//setVisibleRange(0, list.size());
+			redraw();
 		}
 	};
 
@@ -91,7 +93,11 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 			@Override
 			public int compare(DocType o1, DocType o2)
 			{
-				return getter.getValue(o1).compareTo(getter.getValue(o2));
+				String v1 = getter.getValue(o1);
+				String v2 = getter.getValue(o1);
+				if (v1 != null && v2 != null)
+					return getter.getValue(o1).compareTo(getter.getValue(o2));
+				return 0;
 			}}, title);
 	}
 
@@ -250,6 +256,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 	private void init()
 	{
 		setVisibleRange(0, 20);
+		setPageSize(20);
 		setStyleName("filecelltable");
 		setSize("100%", "");
 		AsyncHandler columnSortHandler = new AsyncHandler(this);

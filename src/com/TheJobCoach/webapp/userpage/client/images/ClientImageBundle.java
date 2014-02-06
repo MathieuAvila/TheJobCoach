@@ -20,19 +20,8 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("christine_2_150_150.png")
 	ImageResource coachIconWomanSmall();
 
-	//@Source("right_24.png")
-	//ImageResource right();
-
-	//@Source("web_24.png")
-	//ImageResource urlLink();
-	
-	//@Source("email-24.png")
-	//ImageResource emailLink();
-
 	@Source("logout_24.png")
 	ImageResource urlLogout();
-	
-	
 	
 	@Source("content-comment-32.png")
 	ImageResource sendCommentContent();
@@ -70,6 +59,9 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("content-coachsettings-32.png")
 	ImageResource coachSettingsContent();
 
+	@Source("content-library-32.png")
+	ImageResource siteLibraryContent();
+	
 	
 
 	@Source("content-comment-24.png")
@@ -107,6 +99,9 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("content-coachsettings-24.png")
 	ImageResource coachSettingsContent_menu();
+	
+	@Source("content-library-24.png")
+	ImageResource siteLibraryContent_menu();
 	
 	
 

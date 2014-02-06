@@ -8,6 +8,7 @@ import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.userpage.client.CoachSettings.ContentCoachSettings;
 import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
+import com.TheJobCoach.webapp.userpage.client.Library.ContentSiteLibrary;
 import com.TheJobCoach.webapp.userpage.client.MyGoals.ContentMyGoals;
 import com.TheJobCoach.webapp.userpage.client.MyReports.ContentMyReports;
 import com.TheJobCoach.webapp.userpage.client.Opportunity.ContentUserOpportunity;
@@ -184,6 +185,17 @@ public class UserPage implements EntryPoint {
 				{
 					ContentExternalContact contentExternalContact = new ContentExternalContact(simplePanelContent, userId);
 					contentExternalContact.onModuleLoad();
+				}	
+			});
+		}
+		if (menu.equals("sitelibrary"))
+		{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
+				@Override
+				public void Open()
+				{
+					simplePanelContent.clear();
+					simplePanelContent.add(new ContentSiteLibrary(simplePanelContent, userId));
 				}	
 			});
 		}
@@ -378,6 +390,7 @@ public class UserPage implements EntryPoint {
 		Panel contentShares = addRoundedPanelWithTitle(verticalPanel_2, lang._TextCommunity());
 		addLabelMenuWithImage(contentShares, lang._TextReport(), "report", ClientImageBundle.INSTANCE.sendCommentContent_menu());
 		addLabelMenuWithImage(contentShares, lang._TextNews(), "news", ClientImageBundle.INSTANCE.newsContent_menu());
+		addLabelMenuWithImage(contentShares, lang._TextSiteLibrary(), "sitelibrary", ClientImageBundle.INSTANCE.siteLibraryContent_menu());
 
 		SimplePanel simplePanel_CentralInter = new SimplePanel();
 		simplePanel_CentralInter.setWidth("30px");

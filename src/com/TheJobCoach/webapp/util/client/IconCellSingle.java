@@ -20,10 +20,11 @@ public class IconCellSingle extends IconCellDecorator<String>
 	static ImageResource updateIcon = wpImageBundle.updateFile();
 	static ImageResource rightIcon = wpImageBundle.nextIcon();
 	static ImageResource urlIcon = wpImageBundle.urlLink();
+	static ImageResource addIcon = wpImageBundle.buttonAdd24();
 	
 	IconType type;
 	
-	public enum IconType { DELETE, UPDATE, RIGHT, URL };
+	public enum IconType { DELETE, UPDATE, RIGHT, URL, ADD };
 	
 	public IconCellSingle(IconType type)
 	{			
@@ -50,6 +51,7 @@ public class IconCellSingle extends IconCellDecorator<String>
 		case UPDATE: ic = updateIcon; break;
 		case RIGHT:  ic = rightIcon; break;
 		case URL:    ic = urlIcon; break;
+		case ADD:    ic = addIcon; break;
 		}
 		html = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(ic).getHTML());
 

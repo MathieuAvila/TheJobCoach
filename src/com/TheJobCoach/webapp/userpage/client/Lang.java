@@ -100,6 +100,9 @@ public interface Lang extends Constants {
 	@Key("report")
 	String _TextReport();
 	
+	@Key("sitelibrary")
+	String _TextSiteLibrary();
+	
 	// Footer
 	
 	@Key("about")
@@ -270,4 +273,5 @@ public interface Lang extends Constants {
 
 	@Key("coachsettings")
 	String _TextCoachSettings();
+
 }

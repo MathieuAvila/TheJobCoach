@@ -41,6 +41,18 @@ public class UserJobSite implements Serializable {
 		this.update = new UpdatePeriod(new Date(), 0, PeriodType.DAY, false);
 	}
 	
+	/** Used by ContentSiteLibrary to add a site*/
+	public UserJobSite(String _ID, String _name, String _URL)
+	{
+		ID = _ID;
+		name = _name;
+		URL = _URL;
+		login = "";
+		password = "";
+		description = "";
+		this.update = new UpdatePeriod(new Date(), 0, PeriodType.DAY, false);
+	}
+	
 	public UserJobSite()
 	{
 	}
