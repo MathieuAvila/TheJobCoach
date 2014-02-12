@@ -1,7 +1,8 @@
-package com.TheJobCoach.webapp.userpage.client;
+package com.TheJobCoach.webapp.userpage.client.Coach;
 
 import java.util.Vector;
 
+import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
@@ -10,7 +11,6 @@ import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged, ReturnValue, IApply {
+public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValue, IApply {
 
 	UserId user;
 
@@ -79,6 +79,7 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 		rootPanel = panel;
 		user = _user;
 		values = new ClientUserValuesUtils(rootPanel, user);
+		init();
 	}
 
 	Panel rootPanel = null;
@@ -88,7 +89,7 @@ public class PanelCoach extends HorizontalPanel  implements EntryPoint, IChanged
 		values.preloadValueList(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, this);
 	}
 
-	public void onModuleLoad()
+	private void init()
 	{			
 		setSize("100%", "");
 		clear();

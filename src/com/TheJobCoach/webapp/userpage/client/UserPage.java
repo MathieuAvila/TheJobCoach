@@ -5,6 +5,7 @@ import com.TheJobCoach.webapp.footer.client.Footer;
 import com.TheJobCoach.webapp.mainpage.client.LoginService;
 import com.TheJobCoach.webapp.mainpage.client.LoginServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
+import com.TheJobCoach.webapp.userpage.client.Coach.PanelCoach;
 import com.TheJobCoach.webapp.userpage.client.CoachSettings.ContentCoachSettings;
 import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
@@ -288,7 +289,6 @@ public class UserPage implements EntryPoint {
 		PanelCoach pc = new PanelCoach(upperGlobalPanel, userId);
 		upperGlobalPanel.add(pc);
 		upperGlobalPanel.setCellWidth(pc,  "100%");
-		pc.onModuleLoad();
 
 		HorizontalPanel panelConnectionInfo = new HorizontalPanel();
 
