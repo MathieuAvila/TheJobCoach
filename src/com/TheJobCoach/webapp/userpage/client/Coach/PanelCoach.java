@@ -33,36 +33,37 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 	HTML label = new HTML("");
 	
 	VerticalPanel sp2 = new VerticalPanel();
-	SimplePanel spacer = new SimplePanel();
-	
 	
 	ClientUserValuesUtils values = null;
 
 	Vector<String> appendQueue = new Vector<String>();
 	int appendCompleted = 0;
+	int totalSize = 0;
+	String currentMessage;
 	
 	Timer timer = new Timer() 
 	{
 		public void run() 
 		{
-			if (appendQueue.size() != 0)
+			if ((appendQueue.size() != 0)||(appendCompleted != 0))
 			{
+				if (appendCompleted == 0)
+				{
+					// Get the diff in size.
+					int orgSize = label.getOffsetHeight();
+					currentMessage = appendQueue.get(0);
+					appendQueue.remove(0);
+					label.setHTML(label.getHTML() + "<br/>" + currentMessage);
+					totalSize = label.getOffsetHeight() - orgSize;
+				}
 				appendCompleted += 10;
 				timer.scheduleRepeating(100);
-				if (appendCompleted < 180)
+				if (appendCompleted < 100)
 				{
-					spacer.setHeight(((float)appendCompleted) / 100.0 + "em");
+					DOM.setStyleAttribute(sp2.getElement(), "bottom", ((float)(-totalSize * (100.0 - appendCompleted)) / 100.0)  + "px");
 				}
-				else if (appendCompleted == 180)
+				else if (appendCompleted >= 100)
 				{
-					spacer.setHeight("0em");
-					String v = appendQueue.get(0);
-					label.setStyleName("coachblablacontent");
-					label.setHTML(label.getHTML() + "<br/>" + v);
-				}
-				else if (appendCompleted > 200)
-				{
-					appendQueue.remove(0);
 					appendCompleted = 0;
 				}
 			}
@@ -110,7 +111,9 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 		add(sp);
 		sp.add(sp2);
 		sp2.add(label);
-		sp2.add(spacer);
+		label.setHTML("<br/>");
+		label.setStyleName("coachblablacontent");
+		
 		DOM.setStyleAttribute(sp2.getElement(), "overflow", "hidden");
 		DOM.setStyleAttribute(sp.getElement(), "overflow", "hidden");
 		sp.setSize("100%", "150px");
