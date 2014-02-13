@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
-import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Panel;
@@ -71,25 +68,7 @@ public class ClientUserValuesUtils {
 				}
 			}
 		};
-		try
-		{
-			utilService.getValues(id, key, callback);
-		}
-		catch (CassandraException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (SystemException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (CoachSecurityException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		utilService.getValues(id, key, callback);
 	}
 
 	public void setValues(final HashMap<String, String> map, final ReturnValue result)
@@ -105,25 +84,7 @@ public class ClientUserValuesUtils {
 			}
 		};
 		insertKeys(map, true);
-		try
-		{
-			utilService.setValues(id, map, callback);
-		}
-		catch (CassandraException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (SystemException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (CoachSecurityException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		utilService.setValues(id, map, callback);
 	}	
 
 	public void setValue(String key, String value)
