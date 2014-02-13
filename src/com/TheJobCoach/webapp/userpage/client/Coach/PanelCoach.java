@@ -135,7 +135,7 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 		
 		appendQueue.add("Salut, bienvenue sur TheJobCoach.fr");
 		appendQueue.add("Je suis votre coach, ensemble on va vous trouver un super job !");
-	}
+		}
 
 	@Override
 	public void changed(boolean ok, boolean changed, boolean init) 
