@@ -5,12 +5,13 @@ import java.util.Vector;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
-import com.TheJobCoach.webapp.userpage.client.ExternalContact.EditExternalContact.EditExternalContactResult;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IconCellSingle;
@@ -40,13 +41,26 @@ public class ContentExternalContact implements EntryPoint {
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
-
+	ButtonImageText buttonNewExternalContact;
+	private IEditDialogModel<ExternalContact> editModel;
+	
 	Panel rootPanel;
 
-	public ContentExternalContact(Panel panel, UserId _user)
+	void init(Panel panel, UserId _user, IEditDialogModel<ExternalContact> editModel)
 	{
 		user = _user;
 		rootPanel = panel;
+		this.editModel = editModel;
+	}
+	
+	public ContentExternalContact(Panel panel, UserId _user)
+	{
+		init(panel, _user, new EditExternalContact());		
+	}
+	
+	public ContentExternalContact(Panel panel, UserId _user, IEditDialogModel<ExternalContact> editModel)
+	{
+		init(panel, _user,  editModel);
 	}
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
@@ -87,7 +101,7 @@ public class ContentExternalContact implements EntryPoint {
 	{		
 		public void onClick(ClickEvent event)
 		{
-			EditExternalContact eus = new EditExternalContact(rootPanel, null, user, new EditExternalContactResult() {
+			 IEditDialogModel<ExternalContact> eus = editModel.clone(rootPanel, user, null, new IChooseResult<ExternalContact>() {
 
 				@Override
 				public void setResult(ExternalContact result) {
@@ -109,8 +123,8 @@ public class ContentExternalContact implements EntryPoint {
 	}
 
 	private void updateExternalContact(ExternalContact contact)
-	{		
-		EditExternalContact eus = new EditExternalContact(rootPanel, contact, user, new EditExternalContactResult() {
+	{	
+		IEditDialogModel<ExternalContact> eus = editModel.clone(rootPanel, user, contact, new IChooseResult<ExternalContact>() {
 			@Override
 			public void setResult(ExternalContact result) {
 				if (result != null)
@@ -185,6 +199,16 @@ public class ContentExternalContact implements EntryPoint {
 			}			
 		},  langExternalContact._Text_Organization());
 
+		// Create phone column.
+		cellTable.specialAddColumnSortableString(new GetValue<String, ExternalContact>() {
+			@Override
+			public String getValue(ExternalContact contact)
+			{
+				return contact.phone;
+			}			
+		},  langExternalContact._Text_Phone());
+
+		 // email
 		cellTable.addColumnEmail(new GetValue<String, ExternalContact>() {
 			@Override
 			public String getValue(ExternalContact contact)
@@ -193,15 +217,6 @@ public class ContentExternalContact implements EntryPoint {
 			}			
 		});
 
-		// Create phone column.
-		cellTable.specialAddColumnSortableString(new GetValue<String, ExternalContact>() {
-			@Override
-			public String getValue(ExternalContact contact)
-			{
-				return contact.organization;
-			}			
-		},  langExternalContact._Text_Phone());
-		
 		simplePanelCenter.add(cellTable);
 		cellTable.setSize("100%", "");		
 
@@ -209,7 +224,7 @@ public class ContentExternalContact implements EntryPoint {
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
 
-		ButtonImageText buttonNewExternalContact = new ButtonImageText(ButtonImageText.Type.NEW, langExternalContact._TextNewExternalContact());
+		buttonNewExternalContact = new ButtonImageText(ButtonImageText.Type.NEW, langExternalContact._TextNewExternalContact());
 		horizontalPanel.add(buttonNewExternalContact);
 
 		// Add a handler to the new button.

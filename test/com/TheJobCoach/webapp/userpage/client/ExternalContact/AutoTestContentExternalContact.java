@@ -1,6 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client.ExternalContact;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -10,17 +13,27 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.TheJobCoach.CoachTestUtils;
+import com.TheJobCoach.webapp.ErrorCatcherMessageBox;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
+import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.IEditDialogModel;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.UserId;
-
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
+import com.googlecode.gwt.test.utils.events.Browser;
+import com.googlecode.gwt.test.utils.events.EventBuilder;
 
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestContentExternalContact extends GwtTest {
@@ -54,6 +67,8 @@ public class AutoTestContentExternalContact extends GwtTest {
 	{
 		public int callsGet, callsSet, callsDelete;
 
+		public String lastId;
+		
 		@Override
 		public void getExternalContactList(UserId id,
 				AsyncCallback<Vector<ExternalContact>> callback)
@@ -76,9 +91,14 @@ public class AutoTestContentExternalContact extends GwtTest {
 				AsyncCallback<String> callback) 
 		{
 			callsDelete++;
+			lastId = contact;
 			callback.onSuccess("");			
 		}
 
+		public void reset()
+		{
+			callsGet = callsSet = callsDelete = 0;
+		}
 	}
 
 	SpecialUserServiceAsync userService = new SpecialUserServiceAsync();
@@ -101,13 +121,56 @@ public class AutoTestContentExternalContact extends GwtTest {
 		);
 		p = new HorizontalPanel();		
 	}
+
+	static final int COLUMN_DELETE       = 0;
+	static final int COLUMN_UPDATE       = 1;
+
+	final Vector<TestEditContact> creationStack =  new Vector<TestEditContact>();
 	
+	class TestEditContact implements IEditDialogModel<ExternalContact>
+	{
+		public int loaded;
+		public Panel rootPanel;
+		public UserId userId;
+		public ExternalContact edition;
+		public IChooseResult<ExternalContact> result;
+		
+		public TestEditContact(Panel rootPanel,	UserId userId, ExternalContact edition,	IChooseResult<ExternalContact> result2)
+		{
+			this.rootPanel = rootPanel;
+			this.userId = userId;
+			this.edition = edition;
+			this.result = result2;
+		}
+		
+		public TestEditContact()
+		{
+		}
+
+		@Override
+		public IEditDialogModel<ExternalContact> clone(Panel rootPanel,
+				UserId userId, ExternalContact edition,
+				IChooseResult<ExternalContact> result)
+		{
+			TestEditContact fnResult = new TestEditContact(rootPanel, userId, edition, result);
+			creationStack.add(fnResult);
+			return fnResult;
+		}
+
+		@Override
+		public void onModuleLoad()
+		{
+			loaded++;
+		}
+	}
 	@Test
 	public void testGetAll() throws InterruptedException
 	{
+		ErrorCatcherMessageBox mbCatcher = new ErrorCatcherMessageBox();
+		
 		userService.callsGet = 0;
 		cud = new ContentExternalContact(
-				p, userId);
+				p, userId, new TestEditContact());
 		cud.onModuleLoad();
 		assertEquals(1, userService.callsGet);
 		assertEquals(3, cud.cellTable.getRowCount());
@@ -115,5 +178,68 @@ public class AutoTestContentExternalContact extends GwtTest {
 		assertEquals(contact1, cud.cellTable.getVisibleItem(0).ID);
 		assertEquals(contact2, cud.cellTable.getVisibleItem(1).ID);
 		assertEquals(contact3, cud.cellTable.getVisibleItem(2).ID);
+		
+
+		// Check columns values
+		
+		assertEquals(7, cud.cellTable.getColumnCount());
+		assertEquals(ec1.firstName,                             cud.cellTable.getColumn(2).getValue(ec1));
+		assertEquals(ec1.lastName,                              cud.cellTable.getColumn(3).getValue(ec1));
+		assertEquals(ec1.organization,                          cud.cellTable.getColumn(4).getValue(ec1));
+		assertEquals(ec1.phone,									cud.cellTable.getColumn(5).getValue(ec1));
+		assertEquals(ec1.email,                                 cud.cellTable.getColumn(6).getValue(ec1));
+		
+		// Click on 2nd element		
+		Browser.click(cud.cellTable, ec2);
+
+		// Click on delete element
+		userService.reset();
+		mbCatcher.clearError();
+		Event event = EventBuilder.create(Event.ONCLICK).build();		
+		cud.cellTable.getColumn(COLUMN_DELETE).onBrowserEvent(new Cell.Context(1, COLUMN_DELETE, ec2), cud.cellTable.getElement(), ec2, event);
+		assertEquals(0, userService.callsDelete);
+		assertNotNull(mbCatcher.currentBox);
+		assertEquals(mbCatcher.type, MessageBox.TYPE.QUESTION);
+		assertTrue(mbCatcher.message.contains("supprimer le contact"));
+		assertTrue(mbCatcher.title.contains("Supprimer le contact"));
+		//assertEquals(mbCatcher, MessageBox.TYPE.QUESTION);
+		mbCatcher.currentBox.clickOk();
+		
+		assertEquals(1, userService.callsDelete);
+		assertEquals(1, userService.callsGet);
+		assertEquals(ec2.ID, userService.lastId);
+				
+		// Click on edit element
+		userService.reset();
+		mbCatcher.clearError();
+		event = EventBuilder.create(Event.ONCLICK).build();		
+		cud.cellTable.getColumn(COLUMN_UPDATE).onBrowserEvent(new Cell.Context(1, COLUMN_UPDATE, ec2), cud.cellTable.getElement(), ec2, event);
+		assertEquals(1, creationStack.size());
+		TestEditContact editDialog = creationStack.get(0);
+		assertEquals(1, editDialog.loaded);
+		assertEquals(ec2.ID, editDialog.edition.ID);
+		creationStack.clear();
+		// If edition is validated, ... it triggers an update, otherwise nothing.
+		editDialog.result.setResult(null); // try nothing
+		assertEquals(0, userService.callsGet);
+		editDialog.result.setResult(ec2); // try something now
+		assertEquals(1, userService.callsGet);
+
+		// Click on new
+		creationStack.clear();
+		userService.reset();
+		mbCatcher.clearError();
+		event = EventBuilder.create(Event.ONCLICK).build();		
+		cud.buttonNewExternalContact.click();
+		assertEquals(1, creationStack.size());
+		editDialog = creationStack.get(0);
+		assertEquals(1, editDialog.loaded);
+		assertNull(editDialog.edition);
+		// If edition is validated, ... it triggers an update, otherwise nothing.
+		editDialog.result.setResult(null); // try nothing
+		assertEquals(0, userService.callsGet);
+		editDialog.result.setResult(ec2); // try something now
+		assertEquals(1, userService.callsGet);
+		
 	}	
 }

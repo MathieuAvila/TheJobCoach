@@ -7,6 +7,8 @@ import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.DialogBlockOkCancel;
 import com.TheJobCoach.webapp.util.client.IChanged;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -22,15 +24,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class EditExternalContact implements EntryPoint, IChanged {
+public class EditExternalContact implements EntryPoint, IChanged, IEditDialogModel<ExternalContact>  {
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
 
-	public interface EditExternalContactResult
-	{
-		public void setResult(ExternalContact result);
-	}
 
 	UserId user;
 
@@ -48,14 +46,14 @@ public class EditExternalContact implements EntryPoint, IChanged {
 	Label lblPersonalNote = new Label(langExternalContact._Text_PersonalNote());
 
 	Panel rootPanel;
-	EditExternalContactResult result;
+	IChooseResult<ExternalContact> result;
 	ExternalContact currentExternalContact;
 	
 	DialogBlockOkCancel okCancel;
 
 	ComponentUpdatePeriod updatePeriod;
 	
-	public EditExternalContact(Panel panel, ExternalContact _currentExternalContact, UserId _user, EditExternalContactResult editExternalContactResult)
+	public EditExternalContact(Panel panel, ExternalContact _currentExternalContact, UserId _user, IChooseResult<ExternalContact> editExternalContactResult)
 	{
 		rootPanel = panel;
 		currentExternalContact = _currentExternalContact;
@@ -63,6 +61,10 @@ public class EditExternalContact implements EntryPoint, IChanged {
 		user = _user;
 	}
 
+	public EditExternalContact()
+	{
+	}
+	
 	private void setExternalContact()
 	{
 		if (currentExternalContact != null)
@@ -184,6 +186,14 @@ public class EditExternalContact implements EntryPoint, IChanged {
 		setOk = setOk && textBoxEmail.isValid();
 		setOk = setOk && textBoxPhone.isValid();
 		okCancel.getOk().setEnabled(setOk);	
+	}
+
+	@Override
+	public IEditDialogModel<ExternalContact> clone(Panel rootPanel,
+			UserId userId, ExternalContact edition,
+			IChooseResult<ExternalContact> result)
+	{
+		return new EditExternalContact(rootPanel, edition, userId, result);
 	}
 
 }
