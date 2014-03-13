@@ -1,7 +1,5 @@
 package com.TheJobCoach.webapp.userpage.client.Coach;
 
-import java.util.Vector;
-
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
@@ -11,6 +9,7 @@ import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
@@ -26,6 +25,8 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 
 	UserId user;
 
+	MessagePipe pipe;
+	
 	final static Lang lang = GWT.create(Lang.class);
 	
 	final SimplePanel coachPanel = new SimplePanel();
@@ -36,7 +37,6 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 	
 	ClientUserValuesUtils values = null;
 
-	Vector<String> appendQueue = new Vector<String>();
 	int appendCompleted = 0;
 	int totalSize = 0;
 	String currentMessage;
@@ -45,27 +45,30 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 	{
 		public void run() 
 		{
-			if ((appendQueue.size() != 0)||(appendCompleted != 0))
+			String newMessage = null;
+			if (appendCompleted != 0)
 			{
-				if (appendCompleted == 0)
-				{
-					// Get the diff in size.
-					int orgSize = label.getOffsetHeight();
-					currentMessage = appendQueue.get(0);
-					appendQueue.remove(0);
-					label.setHTML(label.getHTML() + "<br/>" + currentMessage);
-					totalSize = label.getOffsetHeight() - orgSize;
-				}
 				appendCompleted += 10;
 				timer.scheduleRepeating(100);
-				if (appendCompleted < 100)
+				if (appendCompleted <= 100)
 				{
 					DOM.setStyleAttribute(sp2.getElement(), "bottom", ((float)(-totalSize * (100.0 - appendCompleted)) / 100.0)  + "px");
 				}
-				else if (appendCompleted >= 100)
+				else if (appendCompleted > 100)
 				{
 					appendCompleted = 0;
 				}
+			}
+			else if ((newMessage = pipe.getMessage()) != null)
+			{
+				// Get the diff in size.
+				int orgSize = label.getOffsetHeight();
+				currentMessage = newMessage;
+				label.setHTML(label.getHTML() + "<br/>" + currentMessage);
+				totalSize = label.getOffsetHeight() - orgSize;
+				timer.scheduleRepeating(100);
+				DOM.setStyleAttribute(sp2.getElement(), "bottom", ((float)(-totalSize)  + "px"));
+				appendCompleted += 10;
 			}
 			else
 			{
@@ -80,6 +83,7 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 		rootPanel = panel;
 		user = _user;
 		values = new ClientUserValuesUtils(rootPanel, user);
+		pipe = new MessagePipe(_user, panel);
 		init();
 	}
 
@@ -97,9 +101,9 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 		
 		coachPanel.setSize("150px","150px");
 		
-		add(new HorizontalSpacer("25px"));
+		add(new HorizontalSpacer("10px"));
 		add(coachPanel);
-		add(new HorizontalSpacer("25px"));
+		//add(new HorizontalSpacer("25px"));
 		Image bulle = new Image(ClientImageBundle.INSTANCE.bulle());
 		bulle.addStyleName("img-no-border");
 		bulle.addStyleName("img-no-border2");
@@ -133,8 +137,6 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 		values.addListener(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, this);
 		timer.scheduleRepeating(100);
 		
-		appendQueue.add("Salut, bienvenue sur TheJobCoach.fr");
-		appendQueue.add("Je suis votre coach, ensemble on va vous trouver un super job !");
 		}
 
 	@Override

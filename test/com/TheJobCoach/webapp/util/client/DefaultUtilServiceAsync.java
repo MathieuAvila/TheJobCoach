@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.util.client;
 
 import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +9,11 @@ import com.TheJobCoach.webapp.util.shared.UpdateRequest;
 import com.TheJobCoach.webapp.util.shared.UpdateResponse;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import org.slf4j.Logger;
 
 public class DefaultUtilServiceAsync implements UtilServiceAsync
@@ -45,7 +49,35 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL);
 
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_RECALL_GOAL_MIDDLE);
-			
+
+		addValue(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_SITE_DELAY, "3");
+		addValue(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_CONTACT_DELAY, "3");
+		addValue(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_OPPORTUNITY_RECALL, "3");
+		addValue(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_INTERVIEW, "3");
+		addValue(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_EVENT, "3");	
+		
+		addValue(UserValuesConstantsCoachMessages.COACH_WELCOME, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_HELLO, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_HELLO_AGAIN, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_PRESENTING, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LATE_ARRIVAL, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LATE_DEPARTURE, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_VERY_LATE_ARRIVAL, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_VERY_LATE_DEPARTURE, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_DEPARTURE_WARNING, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_DEPARTURE_TIME, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_GOAL_END_PERIOD, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_GOAL_SEND_EMAIL, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_OPP_NONE, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_OPP_NO_LOG, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_OPP_NO_APPLICATION, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LOG_RECALL, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LOG_INTERVIEW, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LOG_FAILURE, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LOG_SUCCESS, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING, "0");
+
 	}
 	
 	public static void addValue(String key, String value)
@@ -89,6 +121,6 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 			AsyncCallback<UpdateResponse> callback)
 	{
 		// TODO Auto-generated method stub
-		
+		callback.onSuccess(new UpdateResponse());
 	}
 };

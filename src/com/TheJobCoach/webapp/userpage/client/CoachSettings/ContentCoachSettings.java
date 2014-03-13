@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
@@ -19,9 +20,12 @@ import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IExtendedField;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -33,7 +37,9 @@ import com.google.gwt.user.client.ui.Grid;
 public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, IApply {
 
 	UserId user;
-
+	
+	MessagePipe message;
+	
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangCoachSettings langCoachSettings = GWT.create(LangCoachSettings.class);
 	final static com.TheJobCoach.webapp.util.client.LangUtil langUtil = GWT.create(com.TheJobCoach.webapp.util.client.LangUtil.class);
@@ -61,7 +67,8 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 	{
 		rootPanel = panel;
 		user = _user;
-		values = new ClientUserValuesUtils(rootPanel, user);		
+		values = new ClientUserValuesUtils(rootPanel, user);
+		message = new MessagePipe(user, rootPanel);
 	}
 
 	Panel rootPanel = null;
@@ -113,6 +120,7 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 		grid2.setCellSpacing(20);
 		
 		fields.put(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, tfVirtualCoach);
+
 		
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, langCoachSettings.Text_titletodo());
 		

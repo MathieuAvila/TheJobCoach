@@ -15,6 +15,7 @@ import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 
@@ -53,6 +54,7 @@ public class UserValues {
 	}
 	
 	static final int MAX_OPTION_LENGTH = 100;
+	static final int MAX_OPTION_LENGTH_INT = 5;
 
 	static final int YES_NO_LENGTH = 4;
 	
@@ -104,7 +106,30 @@ public class UserValues {
 		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_CONTACT_DELAY, MAX_OPTION_LENGTH, true, "3"));
 		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_OPPORTUNITY_RECALL, MAX_OPTION_LENGTH, true, "3"));
 		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_INTERVIEW, MAX_OPTION_LENGTH, true, "3"));
-		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_EVENT, MAX_OPTION_LENGTH, true, "3"));		
+		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_EVENT, MAX_OPTION_LENGTH, true, "3"));	
+		
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_WELCOME, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_HELLO, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_HELLO_AGAIN, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_PRESENTING, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_LATE_ARRIVAL, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_LATE_DEPARTURE, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_VERY_LATE_ARRIVAL, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_VERY_LATE_DEPARTURE, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_DEPARTURE_WARNING, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_DEPARTURE_TIME, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_GOAL_END_PERIOD, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_GOAL_SEND_EMAIL, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_OPP_NONE, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_OPP_NO_LOG, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_OPP_NO_APPLICATION, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_LOG_RECALL, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_LOG_INTERVIEW, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_LOG_FAILURE, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_LOG_SUCCESS, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING, MAX_OPTION_LENGTH_INT, true, "0"));
+
 	}
 	
 	public UserValues()
