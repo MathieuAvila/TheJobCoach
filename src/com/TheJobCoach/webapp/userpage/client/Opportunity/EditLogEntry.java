@@ -25,6 +25,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
@@ -119,7 +122,7 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 		dBox.setAnimationEnabled(true);
 
 		VerticalPanel hp = new VerticalPanel();		
-		Grid grid = new Grid(6, 2);
+		Grid grid = new Grid(5, 2);
 		grid.setBorderWidth(0);
 		dBox.setWidget(hp);		
 		grid.setSize("100%", "100%");
@@ -156,14 +159,21 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 		richTextAreaDescription.setHeight("5em");
 		
 		Label lblEndDate = new Label(langLogEntry._TextCreated());
-		grid.setWidget(3, 0, lblEndDate);
-		grid.setWidget(3, 1, dateBoxEvent);
-		
-		grid.setWidget(4, 0, new Label(langLogEntry._TextDone()));
-		grid.setWidget(4, 1, doneBox);
 
-		grid.setWidget(5, 0, new Label(lang._TextPersonalNote()));
-		grid.setWidget(5, 1, richTextAreaNote);
+		grid.setWidget(3, 0, lblEndDate);
+		HorizontalPanel eventDonePanel = new HorizontalPanel();
+		eventDonePanel.add(dateBoxEvent);
+		Label doneText = new Label(langLogEntry._TextDone());
+		eventDonePanel.add(doneText);
+		eventDonePanel.add(doneBox);
+		grid.setWidget(3, 1, eventDonePanel);
+		eventDonePanel.setCellVerticalAlignment(dateBoxEvent, HasVerticalAlignment.ALIGN_MIDDLE);
+		eventDonePanel.setCellVerticalAlignment(doneBox, HasVerticalAlignment.ALIGN_MIDDLE);
+		eventDonePanel.setCellVerticalAlignment(doneText, HasVerticalAlignment.ALIGN_MIDDLE);
+		eventDonePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		
+		grid.setWidget(4, 0, new Label(lang._TextPersonalNote()));
+		grid.setWidget(4, 1, richTextAreaNote);
 		richTextAreaNote.setHeight("5em");
 		
 		okCancel = new DialogBlockOkCancel(null, dBox);
