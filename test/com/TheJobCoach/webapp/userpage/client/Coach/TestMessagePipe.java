@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.util.client.DefaultUtilServiceAsync;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
@@ -50,13 +49,12 @@ public class TestMessagePipe  extends GwtTest {
 	public void test_getMessage()
 	{
 		MessagePipe mp = new MessagePipe(userId, null);
-		mp.strings = new ICoachStrings()
+		MessagePipe.strings = new ICoachStrings()
 		{
 
 			@Override
 			public String getMessage(String key, String coach)
 			{
-				// TODO Auto-generated method stub
 				return key;
 			}
 		};
