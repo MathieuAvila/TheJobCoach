@@ -1,7 +1,6 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
