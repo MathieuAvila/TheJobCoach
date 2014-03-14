@@ -15,9 +15,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.CaptionPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
@@ -89,7 +90,7 @@ public class ComponentExternalContactList extends CaptionPanel
 	{
 		rootPanel.add(this);
 		
-		VerticalPanel vp = new VerticalPanel();
+		HorizontalPanel vp = new HorizontalPanel();
 		this.add(vp);
 		vp.setWidth("100%");
 		vp.setSpacing(5);
@@ -136,10 +137,13 @@ public class ComponentExternalContactList extends CaptionPanel
 		
 		vp.add(cellTable);
 		cellTable.setWidth("100%");
-		vp.setCellWidth(cellTable, "100%");
+		//vp.setCellWidth(cellTable, "100%");
 
 		buttonAdd = new ButtonImageText(ButtonImageText.Type.ADD_16, langExternalContact._Text_AddExternalContact());		
 		vp.add(buttonAdd);
+
+		vp.setCellVerticalAlignment(cellTable, HasVerticalAlignment.ALIGN_MIDDLE);
+		vp.setCellVerticalAlignment(buttonAdd, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		buttonAdd.addClickHandler(new ClickHandler()
 		{

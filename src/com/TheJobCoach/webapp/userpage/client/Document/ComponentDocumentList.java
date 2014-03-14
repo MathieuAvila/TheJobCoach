@@ -21,8 +21,9 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.CaptionPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
@@ -93,7 +94,8 @@ public class ComponentDocumentList extends CaptionPanel
 	{	
 		rootPanel.add(this);
 
-		final VerticalPanel vp = new VerticalPanel();
+		final HorizontalPanel vp = new HorizontalPanel();
+
 		this.add(vp);
 		vp.setWidth("100%");
 		vp.setSpacing(5);
@@ -147,6 +149,9 @@ public class ComponentDocumentList extends CaptionPanel
 		vp.add(cellTable);		
 		ButtonImageText buttonAdd = new ButtonImageText(ButtonImageText.Type.ADD_16, langDocument._TextAttachUserDocument());		
 		vp.add(buttonAdd);
+		
+		vp.setCellVerticalAlignment(cellTable, HasVerticalAlignment.ALIGN_MIDDLE);
+		vp.setCellVerticalAlignment(buttonAdd, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		buttonAdd.addClickHandler(new ClickHandler()
 		{

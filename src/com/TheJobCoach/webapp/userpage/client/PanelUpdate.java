@@ -38,11 +38,10 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 	Date arrivalTime = null;
 	Date arrivalTimeMore30minutes = null;
 	
-	Date departureTime = null;
 	Date departureTimeLess15minutes = null;
 	Date departureTimeMore30minutes = null;
 	
-	int warningDeparture = 0;
+	int timePhase = 0;
 	
 	static UtilServiceAsync utilService =  GWT.create(UtilService.class);
 
@@ -57,14 +56,16 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				message.addMessage(UserValuesConstantsCoachMessages.COACH_WELCOME);
 				message.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO);
 				// Check arrival time.
-				if ((arrivalTime != null && (currentTime.after(arrivalTime))))
+				if ((arrivalTime != null && (currentTime.after(arrivalTime))) && (timePhase ==0))
 				{
 					message.addMessage(UserValuesConstantsCoachMessages.COACH_LATE_ARRIVAL);
+					timePhase = 1;
 				}
 			}
 			else
 			{
 				message.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO_AGAIN);
+				timePhase = 1;
 			}
 			previousTime = totalTime;
 			firstTime = false;
@@ -72,14 +73,14 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		else
 		{
 			// Check logout time.
-			if ((departureTimeLess15minutes != null && (currentTime.after(departureTimeLess15minutes))) && (warningDeparture == 0))
+			if ((departureTimeLess15minutes != null && (currentTime.after(departureTimeLess15minutes))) && (timePhase == 1))
 			{
-				warningDeparture++;
-				message.addMessage(UserValuesConstantsCoachMessages.COACH_LATE_ARRIVAL);
+				timePhase = 2;
+				message.addMessage(UserValuesConstantsCoachMessages.COACH_DEPARTURE_TIME);
 			} 
-			else if ((departureTimeMore30minutes != null && (currentTime.after(departureTimeMore30minutes))) && (warningDeparture == 1))
+			else if ((departureTimeMore30minutes != null && (currentTime.after(departureTimeMore30minutes))) && (timePhase == 2))
 			{
-				warningDeparture++;
+				timePhase = 3;
 				message.addMessage(UserValuesConstantsCoachMessages.COACH_DEPARTURE_WARNING);
 			}
 		}
@@ -144,6 +145,8 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				arrivalTime = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value));
 				arrivalTimeMore30minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value) + 30*60*1000);
 				System.out.println("arrivalTime is: " + arrivalTime + " late is " + arrivalTimeMore30minutes);
+				if (currentTime.after(arrivalTime)) timePhase = 1;
+				if (currentTime.after(arrivalTimeMore30minutes)) timePhase = 2;
 			}
 		}
 		else if (key.equals(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR))
@@ -151,9 +154,10 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 			System.out.println("departureTime time is: " + value);
 			if (!"".equals(value))
 			{
-				departureTime = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value));
 				departureTimeLess15minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value) - 15*60*1000);
 				departureTimeMore30minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value) + 30*60*1000);
+				if (currentTime.after(departureTimeLess15minutes)) timePhase = 2;
+				if (currentTime.after(departureTimeMore30minutes)) timePhase = 3;
 			}
 		}
 	}
