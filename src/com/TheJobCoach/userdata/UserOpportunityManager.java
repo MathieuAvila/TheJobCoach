@@ -10,7 +10,9 @@ import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 
 public class UserOpportunityManager {
 
@@ -23,6 +25,7 @@ public class UserOpportunityManager {
 	final public static String MANAGED_LIST = "managed";
 	
 	final static UserLogManager log = new UserLogManager();
+	final static UserValues values = new UserValues();
 	
 	public UserOpportunityManager()
 	{
@@ -106,7 +109,7 @@ public class UserOpportunityManager {
 				);
 	}
 
-	public void setUserOpportunity(UserId id, UserOpportunity result, String listName) throws CassandraException 
+	public void setUserOpportunity(UserId id, UserOpportunity result, String listName) throws CassandraException, SystemException 
 	{
 		String key = id.userName + "#" + listName;		
 		CassandraAccessor.updateColumn(
@@ -139,6 +142,7 @@ public class UserOpportunityManager {
 				COLUMN_FAMILY_NAME_LIST, 
 				id.userName,
 				(new ShortMap()).add(result.ID, result.ID).get());
+		values.setValue(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY, "1", false);
 	}
 
 	public void deleteUserOpportunityFromList(UserId id, String ID, String listName) throws CassandraException

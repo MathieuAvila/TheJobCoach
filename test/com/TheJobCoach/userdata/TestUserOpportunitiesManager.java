@@ -3,18 +3,22 @@ package com.TheJobCoach.userdata;
 import static org.junit.Assert.*;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Vector;
 
 import org.junit.Test;
 
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 
 
 public class TestUserOpportunitiesManager {
 
 	static UserOpportunityManager manager = new UserOpportunityManager();
+	static UserValues values = new UserValues();
 
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	static UserId id2 = new UserId("user2", "token2", UserId.UserType.USER_TYPE_SEEKER);
@@ -95,12 +99,22 @@ public class TestUserOpportunitiesManager {
 	}
 
 	@Test
-	public void testAddUserOpportunity() throws CassandraException
+	public void testAddUserOpportunity() throws CassandraException, SystemException
 	{		
+		// Check that we don't have any update yet
+		Map<String, String> setUp = values.getValues(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY);
+		assertEquals(1, setUp.size());
+		assertEquals("0", setUp.get(UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY));
+		
 		manager.setUserOpportunity(id, opportunity1, "managed");
 		manager.setUserOpportunity(id, opportunity2, "managed");
 		manager.setUserOpportunity(id2, opportunity3, "managed");
 
+		// Check we've set up the coach flag.
+		setUp = values.getValues(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY);
+		assertEquals(1, setUp.size());
+		assertEquals("1", setUp.get(UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY));
+		
 		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
 		assertEquals(2, result.size());
 		assertEquals(result.get(0).ID, "opp1");

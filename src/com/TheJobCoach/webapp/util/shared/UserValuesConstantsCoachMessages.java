@@ -20,12 +20,23 @@ public class UserValuesConstantsCoachMessages
 	public final static String COACH_OPP_NONE                 = "COACH_OPP_NONE";
 	public final static String COACH_OPP_NO_LOG               = "COACH_OPP_NO_LOG";
 	public final static String COACH_OPP_NO_APPLICATION       = "COACH_OPP_NO_APPLICATION";
+	public final static String COACH_OPP_NO_CONTACT           = "COACH_OPP_NO_CONTACT";
+	public final static String COACH_OPP_NO_JOB_SITE          = "COACH_OPP_NO_JOB_SITE";
 	public final static String COACH_LOG_RECALL               = "COACH_LOG_RECALL";
 	public final static String COACH_LOG_INTERVIEW            = "COACH_LOG_INTERVIEW";
 	public final static String COACH_LOG_FAILURE              = "COACH_LOG_FAILURE";
 	public final static String COACH_LOG_SUCCESS              = "COACH_LOG_SUCCESS";
 	public final static String COACH_PERSONAL_NOTE            = "COACH_PERSONAL_NOTE";
 	public final static String COACH_PASSWORD_WARNING         = "COACH_PASSWORD_WARNING";
+
+	/* This is set by the server the first time the user creates an opportunity */
+	public final static String COACH_USER_ACTION_OPPORTUNITY  = "COACH_USER_ACTION_OPPORTUNITY";
+	/* This is set by the server the first time the user creates a log */
+	public final static String COACH_USER_ACTION_LOG          = "COACH_USER_ACTION_LOG";
+	/* This is set by the server the first time the user creates a contact */
+	public final static String COACH_USER_ACTION_CONTACT      = "COACH_USER_ACTION_CONTACT";
+	/* This is set by the server the first time the user creates a job site */
+	public final static String COACH_USER_ACTION_JOB_SITE     = "COACH_USER_ACTION_JOB SITE";
 
 	static public class messageMinMax 
 	{
