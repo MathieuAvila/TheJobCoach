@@ -32,6 +32,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -141,7 +142,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 
 	@Override
-	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException , CoachSecurityException
+	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException , CoachSecurityException, SystemException
 	{
 		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		userOpportunityManager.setUserOpportunity(id, opp, list);

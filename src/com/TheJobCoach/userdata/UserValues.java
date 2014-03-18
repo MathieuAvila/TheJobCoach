@@ -130,6 +130,10 @@ public class UserValues {
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE, MAX_OPTION_LENGTH_INT, true, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING, MAX_OPTION_LENGTH_INT, true, "0"));
 
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_CONTACT, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_JOB_SITE, MAX_OPTION_LENGTH_INT, false, "0"));
 	}
 	
 	public UserValues()
@@ -178,6 +182,13 @@ public class UserValues {
 			def.check(val, client);
 		}
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST, id.userName, values);
+	}
+	
+	public void setValue(UserId id, String key, String value, boolean client) throws CassandraException, SystemException 
+	{
+		Map<String,String> values = new HashMap<String,String>();
+		values.put(key, value);
+		setValues(id, values, client);
 	}
 
 	public void deleteUser(UserId id) throws CassandraException 

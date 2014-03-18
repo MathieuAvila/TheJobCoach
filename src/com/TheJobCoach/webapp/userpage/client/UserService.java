@@ -14,6 +14,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -38,7 +39,7 @@ public interface UserService extends RemoteService
 	
 	public Vector<UserOpportunity> getUserOpportunityList(UserId id, String list) throws CassandraException, CoachSecurityException;
 	public UserOpportunity getUserOpportunity(UserId id, String oppId) throws CassandraException, CoachSecurityException;
-	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException, CoachSecurityException;
+	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException, CoachSecurityException, SystemException;
 	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException, CoachSecurityException;
 	public UserOpportunity fetchUserOpportunity(UserId user, String ref, String site) throws CoachSecurityException;
 

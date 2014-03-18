@@ -22,6 +22,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
 
@@ -79,7 +80,7 @@ public class TestReportAction {
 			getDate(2000, 12, 2),
 			LogEntryType.RECALL, null, docIdList, "note22", true);
 	
-	public static void prepareUserContextStatic() throws CassandraException
+	public static void prepareUserContextStatic() throws CassandraException, SystemException
 	{
 		UserOpportunityManager manager = new UserOpportunityManager();	
 		Vector<UserOpportunity> idList = manager.getOpportunitiesList(user, "managed");
@@ -148,7 +149,7 @@ public class TestReportAction {
 	}
 	
 	@Before
-	public void prepareUserContext() throws CassandraException
+	public void prepareUserContext() throws CassandraException, SystemException
 	{
 		 prepareUserContextStatic();
 	}

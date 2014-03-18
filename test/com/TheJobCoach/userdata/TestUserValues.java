@@ -29,6 +29,7 @@ public class TestUserValues {
 		UserValues.addField(new FieldDefinition("test1.test2"));
 		UserValues.addField(new FieldDefinition("test2.test1"));
 		UserValues.addField(new FieldDefinition("test2.test2"));
+		UserValues.addField(new FieldDefinition("test4.test4"));
 		UserValues.addField(new FieldDefinition("test3.testsystem", 10, false, "DEFAULT"));
 	}
 	
@@ -117,6 +118,15 @@ public class TestUserValues {
 		toSet.put("test1.test1", "value1");
 		toSet.put("test1.test2", "value2");		
 		values.setValues(id, toSet, true);
+	}
+	
+	@Test
+	public void testSetUserValue() throws CassandraException, SystemException
+	{
+		values.setValue(id, "test4.test4", "value1", true); // No throw
+		Map<String, String> val = values.getValues(id, "test4");
+		assertEquals(val.size(), 1);
+		assertEquals("value1", val.get("test4.test4"));
 	}
 	
 	@Test
