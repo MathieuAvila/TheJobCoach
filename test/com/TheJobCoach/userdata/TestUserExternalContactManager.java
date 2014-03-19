@@ -18,7 +18,9 @@ import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 
 
 public class TestUserExternalContactManager {
@@ -71,7 +73,7 @@ public class TestUserExternalContactManager {
 	}
 
 	@Test
-	public void testCleanUsercontact() throws CassandraException
+	public void testCleanUsercontact() throws CassandraException, SystemException
 	{
 		List<String> result = manager.getExternalContactListId(id);
 		for (String contact: result)
@@ -83,6 +85,11 @@ public class TestUserExternalContactManager {
 		{
 			manager.deleteExternalContact(id2, contact);
 		}
+
+		// Check that we don't have any update yet
+		TestUserValues.clean(id);
+		TestUserValues.checkValue(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_CONTACT, "0");
+
 		manager.setExternalContact(id, ujs1);
 		manager.setExternalContact(id, ujs2);
 		manager.setExternalContact(id, ujs3);
@@ -90,7 +97,9 @@ public class TestUserExternalContactManager {
 		manager.setExternalContact(id2, ujs21);
 		manager.setExternalContact(id2, ujs22);
 		manager.setExternalContact(id2, ujs23);	
-	 
+		
+		TestUserValues.checkValue(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_CONTACT, "1");
+
 		// getExternalContactListId 
 		List<String> result4 = manager.getExternalContactListId(id);
 		assertEquals(3, result4.size());
@@ -107,7 +116,7 @@ public class TestUserExternalContactManager {
 	}
 
 	@Test
-	public void testsetExternalContact() throws CassandraException 
+	public void testsetExternalContact() throws CassandraException, SystemException 
 	{
 		TestTodoList todoInterface = new TestTodoList();
 		UserExternalContactManager.todoList = todoInterface;

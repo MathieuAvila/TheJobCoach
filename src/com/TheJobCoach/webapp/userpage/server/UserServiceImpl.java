@@ -250,7 +250,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
 	@Override
 	public String setExternalContact(UserId id, ExternalContact contact)
-			throws CassandraException, CoachSecurityException
+			throws CassandraException, CoachSecurityException, SystemException
 	{
 		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		userExternalContactManager.setExternalContact(id, contact);

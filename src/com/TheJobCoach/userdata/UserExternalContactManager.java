@@ -18,7 +18,9 @@ import com.TheJobCoach.webapp.userpage.shared.TodoCommon;
 import com.TheJobCoach.webapp.userpage.shared.TodoEvent;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 
 public class UserExternalContactManager implements TodoListSubscriber, IUserDataManager  {
 
@@ -31,7 +33,8 @@ public class UserExternalContactManager implements TodoListSubscriber, IUserData
 	static UserExternalContactManager instance = new UserExternalContactManager();
 	
 	static ITodoList todoList = new TodoList();
-	
+	final static UserValues values = new UserValues();
+
 	public static UserExternalContactManager getInstance() 
 	{
 		return instance;
@@ -91,7 +94,7 @@ public class UserExternalContactManager implements TodoListSubscriber, IUserData
 				UpdatePeriodAccessor.fromCassandra(resultReq));
 		}
 
-	public void setExternalContact(UserId id, ExternalContact result) throws CassandraException 
+	public void setExternalContact(UserId id, ExternalContact result) throws CassandraException, SystemException 
 	{
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (new ShortMap()).add(result.ID, result.ID).get());
 		String reqId = id.userName + "_" + result.ID;
@@ -129,6 +132,7 @@ public class UserExternalContactManager implements TodoListSubscriber, IUserData
 					TodoEvent.EventColor.BLUE);
 			todoList.setTodoEvent(id, te);
 		}
+		values.setValue(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_CONTACT, "1", false);
 	}
 	
 	public void deleteExternalContact(UserId id, String ID) throws CassandraException 

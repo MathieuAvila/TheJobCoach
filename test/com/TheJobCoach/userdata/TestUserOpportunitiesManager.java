@@ -17,7 +17,6 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 public class TestUserOpportunitiesManager {
 
 	static UserOpportunityManager manager = new UserOpportunityManager();
-	static UserValues values = new UserValues();
 
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	static UserId id2 = new UserId("user2", "token2", UserId.UserType.USER_TYPE_SEEKER);

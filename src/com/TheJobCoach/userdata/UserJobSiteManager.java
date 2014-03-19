@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
-import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.userdata.TodoList.TodoListSubscriber;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
@@ -91,7 +90,7 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 				);
 	}
 
-	public void setUserSite(UserId id, UserJobSite result) throws CassandraException 
+	public void setUserSite(UserId id, UserJobSite result) throws CassandraException
 	{
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST, id.userName, (new ShortMap()).add(result.ID, result.ID).get());
 		String reqId = id.userName + "_" + result.ID;

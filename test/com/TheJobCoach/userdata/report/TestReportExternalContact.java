@@ -16,6 +16,7 @@ import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
 
@@ -33,7 +34,7 @@ public class TestReportExternalContact {
 	static ExternalContact ujs2 = new ExternalContact(contact2, "firstName2", "lastName2", "email2", "phone2", "personalNote2", "organization2", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, false));
 	static ExternalContact ujs3 = new ExternalContact(contact3, "firstName3", "lastName3", "email3", "phone3", "personalNote3", "organization3", new UpdatePeriod(CoachTestUtils.getDate(2000, 1, 1), 2, PeriodType.DAY, true));
 	
-	public static void prepareUserContextStatic() throws CassandraException
+	public static void prepareUserContextStatic() throws CassandraException, SystemException
 	{
 		List<String> result = manager.getExternalContactListId(id);
 		for (String contact: result)
@@ -77,13 +78,13 @@ public class TestReportExternalContact {
 	}
 	
 	@Before
-	public void prepareUserContext() throws CassandraException
+	public void prepareUserContext() throws CassandraException, SystemException
 	{
 		 prepareUserContextStatic();
 	}
 
 	@Test
-	public void testFull() throws CassandraException, UnsupportedEncodingException 
+	public void testFull() throws CassandraException, UnsupportedEncodingException, SystemException 
 	{
 		prepareUserContextStatic();
 		ReportExternalContactLocal report = new ReportExternalContactLocal(id, "FR", true);
