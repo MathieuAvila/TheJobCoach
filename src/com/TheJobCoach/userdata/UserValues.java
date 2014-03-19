@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
@@ -22,8 +23,10 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 public class UserValues {
 
 	final static String COLUMN_FAMILY_NAME_LIST = "uservalues";
+	final static String COLUMN_FAMILY_NAME_LIST_UPDATED = "updateduservalues";
 
 	static ColumnFamilyDefinition cfDefList = null;
+	static ColumnFamilyDefinition cfDefListUpdated = null;
 
 	static protected class FieldDefinition
 	{
@@ -134,11 +137,18 @@ public class UserValues {
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, MAX_OPTION_LENGTH_INT, false, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_CONTACT, MAX_OPTION_LENGTH_INT, false, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_JOB_SITE, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG_APPLICATION, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG_SUCCESS, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG_FAILURE, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_POST_IT_CONTACT, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_POST_IT_JOB_SITE, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, MAX_OPTION_LENGTH_INT, false, "0"));
 	}
 	
 	public UserValues()
 	{
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
+		cfDefListUpdated = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST_UPDATED, cfDefListUpdated);
 	}
 
 	public Map<String, String> getValues(UserId id, String rootKey) throws CassandraException, SystemException 
@@ -176,12 +186,31 @@ public class UserValues {
 		for (String key: values.keySet())
 		{
 			if (key == null) throw new SystemException();
-			if (!keysName.contains(key)) throw new SystemException();
+			if (!keysName.contains(key)) 
+				{
+				throw new SystemException();
+				}
 			String val = values.get(key);
 			FieldDefinition def = keysMap.get(key);
 			def.check(val, client);
 		}
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST, id.userName, values);
+		if (!client)
+		{
+			CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST_UPDATED, id.userName, values);
+		}
+	}
+	
+	public Map<String,String> getUpdatedValues(UserId id) throws CassandraException
+	{
+		Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_LIST_UPDATED, id.userName);
+		if (result == null)
+			result = new TreeMap<String, String>();
+		for (String key: result.keySet())
+		{
+			CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_LIST_UPDATED, id.userName, key);
+		}
+		return result;
 	}
 	
 	public void setValue(UserId id, String key, String value, boolean client) throws CassandraException, SystemException 
@@ -194,6 +223,7 @@ public class UserValues {
 	public void deleteUser(UserId id) throws CassandraException 
 	{		
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST, id.userName);
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST_UPDATED, id.userName);
 	}
 	
 	public long getForcedWaitTimeMs(UserId id, int minMs)

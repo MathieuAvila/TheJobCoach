@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.TheJobCoach.userdata.UserValues.FieldDefinition;
@@ -19,7 +20,8 @@ public class TestUserValues {
 	
 	static UserId id = new UserId("uservalues", "tokenuservalues", UserId.UserType.USER_TYPE_SEEKER);
 	
-	protected void setUp() throws CassandraException	
+	@Before
+	public void setUp() throws CassandraException	
 	{
 		// Clear...
 		values.deleteUser(id);
@@ -31,6 +33,8 @@ public class TestUserValues {
 		UserValues.addField(new FieldDefinition("test2.test2"));
 		UserValues.addField(new FieldDefinition("test4.test4"));
 		UserValues.addField(new FieldDefinition("test3.testsystem", 10, false, "DEFAULT"));
+		UserValues.addField(new FieldDefinition("test5.testsystem", 10, false, "DEFAULT"));
+		UserValues.addField(new FieldDefinition("test5.notserver", 10, true, "DEFAULT"));
 	}
 	
 	// Helper for other tests.
@@ -158,5 +162,24 @@ public class TestUserValues {
 		System.out.println(wait);
 		assertTrue(wait < 500);
 		assertTrue(wait > 300);
+	}
+	
+	@Test
+	public void test_getUpdatedValues() throws CassandraException, SystemException
+	{
+		values.deleteUser(id);
+		Map<String,String> update = values.getUpdatedValues(id);
+		assertEquals(0, update.size());
+		values.setValue(id, "test3.testsystem", "toto", false);
+		values.setValue(id, "test5.testsystem", "toto", false);
+		values.setValue(id, "test5.notserver", "toto", true);
+		
+		update = values.getUpdatedValues(id);
+		assertEquals(2, update.size());
+		assertTrue(update.containsKey("test3.testsystem"));
+		assertTrue(update.containsKey("test5.testsystem"));
+		
+		update = values.getUpdatedValues(id);
+		assertEquals(0, update.size());
 	}
 }
