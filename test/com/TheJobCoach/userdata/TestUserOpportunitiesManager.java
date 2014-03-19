@@ -3,7 +3,6 @@ package com.TheJobCoach.userdata;
 import static org.junit.Assert.*;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.Vector;
 
 import org.junit.Test;
@@ -100,20 +99,17 @@ public class TestUserOpportunitiesManager {
 
 	@Test
 	public void testAddUserOpportunity() throws CassandraException, SystemException
-	{		
+	{
 		// Check that we don't have any update yet
-		Map<String, String> setUp = values.getValues(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY);
-		assertEquals(1, setUp.size());
-		assertEquals("0", setUp.get(UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY));
-		
+		TestUserValues.clean(id);
+		TestUserValues.checkValue(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY, "0");
+				
 		manager.setUserOpportunity(id, opportunity1, "managed");
 		manager.setUserOpportunity(id, opportunity2, "managed");
 		manager.setUserOpportunity(id2, opportunity3, "managed");
 
 		// Check we've set up the coach flag.
-		setUp = values.getValues(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY);
-		assertEquals(1, setUp.size());
-		assertEquals("1", setUp.get(UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY));
+		TestUserValues.checkValue(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY, "1");
 		
 		Vector<UserOpportunity> result = manager.getOpportunitiesList(id, "managed");
 		assertEquals(2, result.size());

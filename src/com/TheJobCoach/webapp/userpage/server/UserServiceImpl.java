@@ -185,7 +185,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
 	@Override
 	public String setUserLogEntry(UserId id, UserLogEntry log)
-			throws CassandraException, CoachSecurityException {
+			throws CassandraException, CoachSecurityException, SystemException {
 		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		userLogManager.setUserLogEntry(id, log);
 		return log.ID;

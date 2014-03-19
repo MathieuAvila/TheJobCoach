@@ -20,7 +20,9 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 
 public class UserLogManager
 {
@@ -34,6 +36,8 @@ public class UserLogManager
 	static ColumnFamilyDefinition cfDefLogChange = null;
 	
 	static ITodoList todoList = new TodoList();
+	
+	final static UserValues values = new UserValues();
 
 	public UserLogManager()
 	{
@@ -133,7 +137,7 @@ public class UserLogManager
 				resultReq.getBoolean("done"));
 	}
 
-	public void setUserLogEntry(UserId id, UserLogEntry result) throws CassandraException 
+	public void setUserLogEntry(UserId id, UserLogEntry result) throws CassandraException, SystemException 
 	{
 		if (result.eventDate == null) // manage invalid date: set to current.
 		{
@@ -204,6 +208,7 @@ public class UserLogManager
 					TodoEvent.EventColor.GREEN);
 			todoList.setTodoEvent(id, te);
 		}
+		values.setValue(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, "1", false);
 	}
 
 	public void deleteUserLogEntryFromList(UserId id, String ID, String oppId) throws CassandraException

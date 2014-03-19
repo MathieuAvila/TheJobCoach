@@ -24,7 +24,9 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentStatus;
 import com.TheJobCoach.webapp.userpage.shared.UserDocument.DocumentType;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 
 
 public class TestUserLogManager
@@ -33,7 +35,8 @@ public class TestUserLogManager
 
 	static UserLogManager manager = new UserLogManager();
 	static UserExternalContactManager contactManager = new UserExternalContactManager();
-	
+	static UserValues values = new UserValues();
+
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	
 	static String contact1 = "contact1";
@@ -131,13 +134,18 @@ public class TestUserLogManager
 	}
 	
 	@Before
-	public void setTest() throws CassandraException
+	public void setTest() throws CassandraException, SystemException
 	{
 		// Create necessary external contact
 		contactManager.deleteUser(id);
+		TestUserValues.clean(id);
+		
+		TestUserValues.checkValue(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, "0");
+
 		contactManager.setExternalContact(id, external_contact1);
 		contactManager.setExternalContact(id, external_contact2);
 		contactManager.setExternalContact(id, external_contact3);
+		
 	}
 	
 	@Test
@@ -159,11 +167,13 @@ public class TestUserLogManager
 	}
 	
 	@Test
-	public void testAddUserLogEntry() throws CassandraException
-	{		
+	public void testAddUserLogEntry() throws CassandraException, SystemException
+	{
 		manager.setUserLogEntry(id, userLog1);
 		manager.setUserLogEntry(id, userLog2);
-		manager.setUserLogEntry(id, userLog3);		
+		manager.setUserLogEntry(id, userLog3);
+		
+		TestUserValues.checkValue(id, UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, "1");
 	}
 
 	@Test
@@ -177,7 +187,7 @@ public class TestUserLogManager
 	}
 	
 	@Test
-	public void testGetUserLogEntryLong_less() throws CassandraException {
+	public void testGetUserLogEntryLong_less() throws CassandraException, SystemException {
 		manager.setUserLogEntry(id, userLog1_less);
 		UserLogEntry opp1 = manager.getLogEntryLong(id, userLog1.ID);
 		checkUserLogEntry(opp1, userLog1_less, true);		
@@ -203,7 +213,7 @@ public class TestUserLogManager
 	}
 	
 	@Test
-	public void testDeletedContact() throws CassandraException {
+	public void testDeletedContact() throws CassandraException, SystemException {
 		manager.setUserLogEntry(id, userLog1);
 		contactManager.deleteExternalContact(id, external_contact2.ID);
 		UserLogEntry log1 = manager.getLogEntryLong(id, userLog1.ID);
@@ -212,7 +222,7 @@ public class TestUserLogManager
 	}
 	
 	@Test
-	public void testStatusChange() throws CassandraException 
+	public void testStatusChange() throws CassandraException, SystemException 
 	{
 		UserLogEntry userLog_timeA = new UserLogEntry("opp_timeA", "log_opp1_timeA", "title", "description", 
 				CoachTestUtils.getDate(2100, 2, 10),
@@ -320,7 +330,7 @@ public class TestUserLogManager
 
 	// Check TodoEvent API
 	@Test
-	public void testTodoEvent() throws CassandraException 
+	public void testTodoEvent() throws CassandraException, SystemException 
 	{
 		TestTodoList todoInterface = new TestTodoList();
 		UserLogManager.todoList = todoInterface;

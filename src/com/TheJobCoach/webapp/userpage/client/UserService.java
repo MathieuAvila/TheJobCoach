@@ -49,7 +49,7 @@ public interface UserService extends RemoteService
 
 	public Vector<UserLogEntry> getUserLogEntryList(UserId id, String oppId) throws CassandraException, CoachSecurityException;
 	public UserLogEntry getUserLogEntry(UserId id, String logId) throws CassandraException, CoachSecurityException;
-	public String setUserLogEntry(UserId id, UserLogEntry opp) throws CassandraException, CoachSecurityException;
+	public String setUserLogEntry(UserId id, UserLogEntry opp) throws CassandraException, CoachSecurityException, SystemException;
 	public String deleteUserLogEntry(UserId id, String logId) throws CassandraException, CoachSecurityException;
 	
 	public String sendComment(UserId user, String value) throws CassandraException, CoachSecurityException;

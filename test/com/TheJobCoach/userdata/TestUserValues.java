@@ -33,6 +33,20 @@ public class TestUserValues {
 		UserValues.addField(new FieldDefinition("test3.testsystem", 10, false, "DEFAULT"));
 	}
 	
+	// Helper for other tests.
+	public static void clean(UserId id) throws CassandraException, SystemException
+	{
+		values.deleteUser(id);
+	}
+
+	// Helper for other tests.
+	public static void checkValue(UserId id, String key, String value) throws CassandraException, SystemException
+	{
+		Map<String, String> setUp = values.getValues(id, key);
+		assertEquals(1, setUp.size());
+		assertEquals(value, setUp.get(key));
+	}
+	
 	@Test
 	public void testFetchUserValuesFromVoid() throws CassandraException, SystemException
 	{
