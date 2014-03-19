@@ -37,6 +37,16 @@ public class UserValuesConstantsCoachMessages
 	public final static String COACH_USER_ACTION_CONTACT      = "COACH_USER_ACTION_CONTACT";
 	/* This is set by the server the first time the user creates a job site */
 	public final static String COACH_USER_ACTION_JOB_SITE     = "COACH_USER_ACTION_JOB SITE";
+	/* This is set by the server the first time the user creates a log of type application */
+	public static final String COACH_USER_ACTION_LOG_APPLICATION = "COACH_USER_ACTION_LOG_APPLICATION";
+	/* This is set by the server the first time the user creates a log of type failure */
+	public static final String COACH_USER_ACTION_LOG_FAILURE = "COACH_USER_ACTION_LOG_FAILURE";
+	/* This is set by the server the first time the user creates a log of type success */
+	public static final String COACH_USER_ACTION_LOG_SUCCESS = "COACH_USER_ACTION_LOG_SUCCESS";
+	/* This is set by the server the first time the coach creates a post-it for a job site */
+	public static final String COACH_USER_ACTION_POST_IT_JOB_SITE      = "COACH_USER_ACTION_POST_IT_JOB_SITE";
+	/* This is set by the server the first time the coach creates a post-it for an external contact */
+	public static final String COACH_USER_ACTION_POST_IT_CONTACT      = "COACH_USER_ACTION_POST_IT_CONTACT";
 
 	static public class messageMinMax 
 	{
@@ -66,28 +76,5 @@ public class UserValuesConstantsCoachMessages
 		//minMaxKeyMap.put(COACH_LOG_INTERVIEW,           new messageMinMax(0, 0));
 		//minMaxKeyMap.put(COACH_LOG_FAILURE,             new messageMinMax(0, 0));
 		//minMaxKeyMap.put(COACH_LOG_SUCCESS,             new messageMinMax(0, 0));
-	}
-	
-	/*
-	Arrivée sur le site
-	Heure d'arrivée 20 minutes après l'heure paramétrée
-	L'heure d'arrivée est avancée de -5 minutes : normal
-	L'heure d'arrivée est avancée de -20 minutes : warning + Invitation à changer le réglage
-	Heure de quitter le site
-	Signaler l'heure de quitter le site 5 minutes avant.
-	Signaler l'heure de quitter le site si heure dépassée de 20+ minutes
-	Opportunités
-	Pas d'opportunité créée : indiquer la rubrique des opportunités, demander d'aller chercher des sites web d'emploi (cf chomothèque). Indiquer ce qu'est une opportunité :offre, discussion avec un ami, un collègue, information dans les journaux, sur un site, prise de contact avec un cabinet.
-	Objectifs
-	Signaler lors de l'arrivée sur le site le premier jour de la fin d'une période que les résultats sont disponibles.
-	Insister de faire envoyer les résultats par mail
-	Journaux
-	Pas de journal dans les opportunités (>50%) : signaler l'importance des journaux pour suivre les opportunités
-	Pas de candidature dans les journaux (>50%, +2 opportunités) : rappeler de se porter candidat aux offres pour avoir des chances. Sinon ça ne sert à rien.
-	Nouvelle entrée de journal sur un rappel : informer de la création d'un post-it 3 jours avant. (seulement 3x). Rappeler de préparer les éléments fondamentaux d'un appel.
-	Nouvelle entrée de journal sur un entretien : informer de la création d'un post-it 3 jours avant. (seulement 3x). Informer de la nécessité de se préparer dès maintenant.
-	Nouvelle entrée de journal sur un échec : inciter à continuer en cherchant d'autres opportunités (citer la plus avancée)
-	Nouvelle entrée de journal sur une réussite: inciter à réfléchir sur la pertinence de l'emploi.
-    */
-	
+	}	
 }
