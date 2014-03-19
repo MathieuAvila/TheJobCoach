@@ -18,7 +18,6 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.Range;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
@@ -48,11 +47,9 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 
 		@Override
 		protected void onRangeChanged(HasData<DocType> display) {
-			final Range range = display.getVisibleRange();
 			// Get the ColumnSortInfo from the table.
 			final ColumnSortList sortList = getColumnSortList();
 
-			int start = range.getStart();
 			// This sorting code is here so the example works. In practice, you
 			// would sort on the server.
 			java.util.Collections.sort(list, new Comparator<DocType>() 
