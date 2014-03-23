@@ -18,7 +18,7 @@ public class MessagePipe implements ReturnValue
 	static boolean loaded = false;
 	static String coachIs = null;
 	
-	static ICoachStrings strings = new CoachStrings();
+	public static ICoachStrings strings = new CoachStrings();
 	
 	public MessagePipe(UserId user, Panel root)
 	{
@@ -44,9 +44,6 @@ public class MessagePipe implements ReturnValue
 
 	private void checkQueue()
 	{
-		System.out.println("loaded: " + loaded);
-		System.out.println("coachIs: " + coachIs);
-	
 		if ((loaded == true)&&(coachIs != null))
 		{
 			for (String key: pipedQueue)
@@ -60,12 +57,10 @@ public class MessagePipe implements ReturnValue
 				if (minMax == null) minMax = defaultMinMax;
 				if ((v >= minMax.min)&&( (minMax.max == 0) || (v < minMax.max) ))
 				{
-					System.out.println("Append key " + key + " min: " + minMax.min + " max: " + minMax.max + " v is: " + v);
 					appendQueue.add(strings.getMessage(key, coachIs));
 				}
 				v++;
 				String newValue = String.valueOf(v);
-				System.out.println("Set value of "+ key + " to " + newValue);
 				userValues.setValue(key, newValue);
 			}
 			pipedQueue.clear();
