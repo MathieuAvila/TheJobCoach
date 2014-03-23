@@ -38,11 +38,11 @@ public class UserValuesConstantsCoachMessages
 	/* This is set by the server the first time the user creates a job site */
 	public final static String COACH_USER_ACTION_JOB_SITE     = "COACH_USER_ACTION_JOB SITE";
 	/* This is set by the server the first time the user creates a log of type application */
-	public static final String COACH_USER_ACTION_LOG_APPLICATION = "COACH_USER_ACTION_LOG_APPLICATION";
+	public static final String COACH_USER_ACTION_TYPE_LOG_APPLICATION = "COACH_USER_ACTION_TYPE_LOG_APPLICATION";
 	/* This is set by the server the first time the user creates a log of type failure */
-	public static final String COACH_USER_ACTION_LOG_FAILURE = "COACH_USER_ACTION_LOG_FAILURE";
+	public static final String COACH_USER_ACTION_TYPE_LOG_FAILURE = "COACH_USER_ACTION_TYPE_LOG_FAILURE";
 	/* This is set by the server the first time the user creates a log of type success */
-	public static final String COACH_USER_ACTION_LOG_SUCCESS = "COACH_USER_ACTION_LOG_SUCCESS";
+	public static final String COACH_USER_ACTION_TYPE_LOG_SUCCESS = "COACH_USER_ACTION_TYPE_LOG_SUCCESS";
 	/* This is set by the server the first time the coach creates a post-it for a job site */
 	public static final String COACH_USER_ACTION_POST_IT_JOB_SITE      = "COACH_USER_ACTION_POST_IT_JOB_SITE";
 	/* This is set by the server the first time the coach creates a post-it for an external contact */
