@@ -137,9 +137,9 @@ public class UserValues {
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, MAX_OPTION_LENGTH_INT, false, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_CONTACT, MAX_OPTION_LENGTH_INT, false, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_JOB_SITE, MAX_OPTION_LENGTH_INT, false, "0"));
-		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG_APPLICATION, MAX_OPTION_LENGTH_INT, false, "0"));
-		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG_SUCCESS, MAX_OPTION_LENGTH_INT, false, "0"));
-		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG_FAILURE, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_TYPE_LOG_APPLICATION, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_TYPE_LOG_SUCCESS, MAX_OPTION_LENGTH_INT, false, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_TYPE_LOG_FAILURE, MAX_OPTION_LENGTH_INT, false, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_POST_IT_CONTACT, MAX_OPTION_LENGTH_INT, false, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_POST_IT_JOB_SITE, MAX_OPTION_LENGTH_INT, false, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, MAX_OPTION_LENGTH_INT, false, "0"));

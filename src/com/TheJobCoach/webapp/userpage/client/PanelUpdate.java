@@ -51,15 +51,31 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		Date currentTime = new Date();
 		if (firstTime) // send hello message, or reconnect message
 		{
-			if (totalTime < 10000) //== 5) // really first time of the day
+			if (totalTime <= 5) // really first time of the day
 			{
 				message.addMessage(UserValuesConstantsCoachMessages.COACH_WELCOME);
 				message.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO);
 				// Check arrival time.
-				if ((arrivalTime != null && (currentTime.after(arrivalTime))) && (timePhase ==0))
+				if (arrivalTime != null)
 				{
-					message.addMessage(UserValuesConstantsCoachMessages.COACH_LATE_ARRIVAL);
-					timePhase = 1;
+				System.out.println(arrivalTime);
+				System.out.println(arrivalTimeMore30minutes);
+				System.out.println(currentTime.after(arrivalTime));
+				System.out.println(currentTime.after(arrivalTimeMore30minutes));
+				System.out.println(timePhase);
+				}
+				if ((arrivalTime != null) && (timePhase == 0))
+				{
+					if (currentTime.after(arrivalTimeMore30minutes))
+					{
+						message.addMessage(UserValuesConstantsCoachMessages.COACH_VERY_LATE_ARRIVAL);
+						timePhase = 1;
+					} 
+					else if (currentTime.after(arrivalTime))
+					{
+						message.addMessage(UserValuesConstantsCoachMessages.COACH_LATE_ARRIVAL);
+						timePhase = 1;
+					}
 				}
 			}
 			else
@@ -87,30 +103,36 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		// Store response. Send appropriate callbacks.				
 	}
 	
+	public void fireTimer()
+	{
+		// Wait for next run.
+		connectSec+=5;
+		long total = connectSec + previousTime;
+		long h = total / 60 / 60;
+		long m = total / 60 - h * 60;
+		long s = total % 60;
+		if (!firstTime) connectionTime.setText(" " +
+				((h != 0) ? (String.valueOf(h) + "h ") : new String()) + 
+				((m != 0)  ? (String.valueOf(m) + "mn ") : new String()) + 
+				String.valueOf(s) + "s");
+		UpdateRequest request = new UpdateRequest(today, connectSec, firstTime);
+
+		ServerCallHelper<UpdateResponse> callback =  new ServerCallHelper<UpdateResponse>(rootPanel){
+			@Override
+			public void onSuccess(UpdateResponse result)
+			{
+				checkTime(result.totalDayTime);
+				values.callbackServerSetValues(result.updatedValues);
+			}
+		};	
+		utilService.sendUpdateList(userId, request, callback);
+	}
+	
 	Timer timer = new Timer() 
 	{
 		public void run() 
 		{
-			// Wait for next run.
-			connectSec+=5;
-			long total = connectSec + previousTime;
-			long h = total / 60 / 60;
-			long m = total / 60 - h * 60;
-			long s = total % 60;
-			if (!firstTime) connectionTime.setText(" " +
-					((h != 0) ? (String.valueOf(h) + "h ") : new String()) + 
-					((m != 0)  ? (String.valueOf(m) + "mn ") : new String()) + 
-					String.valueOf(s) + "s");
-			UpdateRequest request = new UpdateRequest(today, connectSec, firstTime);
-			
-			ServerCallHelper<UpdateResponse> callback =  new ServerCallHelper<UpdateResponse>(rootPanel){
-				@Override
-				public void onSuccess(UpdateResponse result)
-				{
-					checkTime(result.totalDayTime);		
-				}
-			};	
-			utilService.sendUpdateList(userId, request, callback);
+			fireTimer();
 		};
 	};
 
@@ -145,8 +167,9 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				arrivalTime = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value));
 				arrivalTimeMore30minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value) + 30*60*1000);
 				System.out.println("arrivalTime is: " + arrivalTime + " late is " + arrivalTimeMore30minutes);
-				if (currentTime.after(arrivalTime)) timePhase = 1;
-				if (currentTime.after(arrivalTimeMore30minutes)) timePhase = 2;
+				//if (currentTime.after(arrivalTime)) timePhase = 1;
+				//if (currentTime.after(arrivalTimeMore30minutes)) timePhase = 2;
+				timePhase = 0;
 			}
 		}
 		else if (key.equals(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR))

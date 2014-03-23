@@ -45,8 +45,8 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 		logManager.addLogTimeDay(
 				id.userName, 
 				request.from, 
-				request.seconds); 
-		UpdateResponse response = new UpdateResponse();
+				request.seconds);
+		UpdateResponse response = new UpdateResponse(userValues.getUpdatedValues(id));
 		if (request.getFirstTime)
 			response.totalDayTime = logManager.getLogTimeDay(id.userName, request.from);
 		return response;

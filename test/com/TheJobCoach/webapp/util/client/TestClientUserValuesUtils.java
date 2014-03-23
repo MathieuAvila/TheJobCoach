@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.shared.UserId;
-
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
@@ -82,4 +81,17 @@ public class TestClientUserValuesUtils extends GwtTest
 		assertEquals(1, count2.size());
 	}
 	
+	@Test
+	public void test_callbackServerSetValues()
+	{
+		final Vector<String> count = new Vector<String>();
+		values.addListener("ACCOUNT_MODEL", new ReturnValue() {
+			public void notifyValue(boolean set, String key, String value) {
+				count.add(key);
+			}});
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("ACCOUNT_MODEL", "v");
+		values.callbackServerSetValues(map);
+		assertEquals(1, count.size());
+	}
 }
