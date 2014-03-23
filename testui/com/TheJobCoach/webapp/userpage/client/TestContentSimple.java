@@ -2,7 +2,6 @@ package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.userpage.client.Coach.PanelCoach;
 import com.TheJobCoach.webapp.userpage.client.Library.ContentSiteLibrary;
-import com.TheJobCoach.webapp.userpage.client.Library.SiteLibraryData;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.TestSecurity;
