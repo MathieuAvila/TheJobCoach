@@ -78,6 +78,39 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 		addValue(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE, "0");
 		addValue(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING, "0");
 
+		addValue(UserValuesConstantsCoachMessages.COACH_WELCOME,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_HELLO,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_HELLO_AGAIN,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_PRESENTING,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LATE_ARRIVAL,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LATE_DEPARTURE,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_VERY_LATE_ARRIVAL,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_VERY_LATE_DEPARTURE,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_DEPARTURE_WARNING,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_DEPARTURE_TIME,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_GOAL_END_PERIOD,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_GOAL_SEND_EMAIL,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_OPP_NONE,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_OPP_NO_LOG,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_OPP_NO_APPLICATION,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LOG_RECALL,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LOG_INTERVIEW,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LOG_FAILURE,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_LOG_SUCCESS,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE,"0");
+		addValue(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING,"0");
+
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_CONTACT, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_JOB_SITE, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_TYPE_LOG_APPLICATION, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_TYPE_LOG_SUCCESS, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_TYPE_LOG_FAILURE, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_POST_IT_CONTACT, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_POST_IT_JOB_SITE, "0");
+		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, "0");
+
 	}
 	
 	public static void addValue(String key, String value)
@@ -110,7 +143,15 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 	{
 		for (String k: map.keySet())
 		{
-			if (values.containsKey(k)) values.put(k, map.get(k));
+			if (values.containsKey(k)) 
+			{
+				values.put(k, map.get(k));
+				logger.info("Set " + k + " to: " + map.get(k));
+			}
+			else
+			{
+				logger.info("Unknown key: " + k);
+			}
 		}
 		calls++;
 		callback.onSuccess("");
@@ -120,7 +161,6 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 	public void sendUpdateList(UserId user, UpdateRequest request,
 			AsyncCallback<UpdateResponse> callback)
 	{
-		// TODO Auto-generated method stub
 		callback.onSuccess(new UpdateResponse());
 	}
 };
