@@ -87,6 +87,15 @@ public class ClientUserValuesUtils {
 		utilService.setValues(id, map, callback);
 	}	
 
+	public void callbackServerSetValues(Map<String, String> map)
+	{
+		if (map.size() != 0)
+		{
+			System.out.println("Received keys update: " + map.toString());
+			insertKeys(map, true);
+		}
+	}	
+
 	public void setValue(String key, String value)
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
