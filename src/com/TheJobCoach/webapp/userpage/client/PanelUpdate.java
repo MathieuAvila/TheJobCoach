@@ -45,8 +45,56 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 	
 	static UtilServiceAsync utilService =  GWT.create(UtilService.class);
 
-	void checkTime(int totalTime)
+	// Simple check list
+	class SimpleCheckList
 	{
+		long time;
+		boolean checked;
+		String messageKey;
+		String checkedKey;
+		public SimpleCheckList(long time, String messageKey, String checkedKey){
+			this.time = time;
+			this.checked = false;
+			this.messageKey = messageKey;
+			this.checkedKey = checkedKey;
+		}
+		public void check(UserId userId, int totalTime)
+		{
+			if ((!checked)&&(totalTime > time))
+			{
+				// Not checked for the moment (during the day)
+				if ("0".equals(values.getValueFromCache(checkedKey)))
+				{
+					// Send message.
+					message.addMessage(messageKey);
+					checked = true;
+				}
+			}
+		};
+	};
+
+	SimpleCheckList[] checkList = {
+			new SimpleCheckList(
+					15*60, 
+					UserValuesConstantsCoachMessages.COACH_OPP_NONE,
+					UserValuesConstantsCoachMessages.COACH_USER_ACTION_OPPORTUNITY),
+			new SimpleCheckList(
+					20*60, 
+					UserValuesConstantsCoachMessages.COACH_OPP_NO_LOG,
+					UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG),
+			new SimpleCheckList(
+					30*60, 
+					UserValuesConstantsCoachMessages.COACH_OPP_NO_CONTACT,
+					UserValuesConstantsCoachMessages.COACH_USER_ACTION_CONTACT),
+			new SimpleCheckList(
+					40*60, 
+					UserValuesConstantsCoachMessages.COACH_OPP_NO_APPLICATION,
+					UserValuesConstantsCoachMessages.COACH_USER_ACTION_TYPE_LOG_APPLICATION)
+	};
+	
+	void checkTime(UpdateResponse response)
+	{
+		int totalTime = response.totalDayTime;
 		System.out.println("total time: " + totalTime);
 		Date currentTime = new Date();
 		if (firstTime) // send hello message, or reconnect message
@@ -100,7 +148,15 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				message.addMessage(UserValuesConstantsCoachMessages.COACH_DEPARTURE_WARNING);
 			}
 		}
-		// Store response. Send appropriate callbacks.				
+		
+		// Check opportunity creation
+		for (SimpleCheckList checker : checkList)
+		{
+			checker.check(userId, totalTime);
+		}
+		
+		// Store response. Send appropriate callbacks.	
+		values.callbackServerSetValues(response.updatedValues);
 	}
 	
 	public void fireTimer()
@@ -121,8 +177,8 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 			@Override
 			public void onSuccess(UpdateResponse result)
 			{
-				checkTime(result.totalDayTime);
-				values.callbackServerSetValues(result.updatedValues);
+				result.totalDayTime += connectSec;
+				checkTime(result);
 			}
 		};	
 		utilService.sendUpdateList(userId, request, callback);

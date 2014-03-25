@@ -55,6 +55,7 @@ public class MessagePipe implements ReturnValue
 				} catch (Exception e) {} // Ignore, should never happen
 				UserValuesConstantsCoachMessages.messageMinMax minMax = UserValuesConstantsCoachMessages.minMaxKeyMap.get(key);
 				if (minMax == null) minMax = defaultMinMax;
+				System.out.println("Check message: " + key + " min: " + minMax.min + " max: " + minMax.max + " current: " + v);
 				if ((v >= minMax.min)&&( (minMax.max == 0) || (v < minMax.max) ))
 				{
 					appendQueue.add(strings.getMessage(key, coachIs));

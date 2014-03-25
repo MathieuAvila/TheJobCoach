@@ -173,6 +173,15 @@ public class AutoTestPanelUpdate extends GwtTest {
 		// set time back to "".
 		DefaultUtilServiceAsync.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, "");
 		
+		// Before COACH_OPP_NONE
+		cul.checkTime(new UpdateResponse(15*60 - 1));
+		assertEquals(msg.getMessage(), null);
 		
+		// After COACH_OPP_NONE
+		cul.checkTime(new UpdateResponse(15*60 + 1));
+		assertEquals(msg.getMessage(), "COACH_OPP_NONE");
+		assertEquals(msg.getMessage(), null);
+
+		// Other simple keys behave the same way => no test.
 	}	
 }

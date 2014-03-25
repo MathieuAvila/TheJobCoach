@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client.Opportunity;
 import java.util.Date;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
@@ -13,6 +14,7 @@ import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -209,6 +211,10 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 		if (currentOpportunity != null) setOpportunity(currentOpportunity);
 
 		dBox.center();
+		
+		// Inform user about personal note
+		new MessagePipe(user,  rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
+
 	}
 
 	@Override

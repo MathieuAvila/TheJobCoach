@@ -2,6 +2,7 @@ package com.TheJobCoach.webapp.userpage.client.ExternalContact;
 
 import com.TheJobCoach.webapp.userpage.client.ComponentUpdatePeriod;
 import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
@@ -10,6 +11,7 @@ import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -173,6 +175,9 @@ public class EditExternalContact implements EntryPoint, IChanged, IEditDialogMod
 		textBoxPhone.registerListener(this);
 		
 		changed(false, true, false);
+		
+		// Inform user about personal note
+		new MessagePipe(user,  rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
 	}
 
 	@Override

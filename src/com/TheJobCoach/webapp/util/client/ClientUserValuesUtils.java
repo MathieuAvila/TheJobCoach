@@ -89,7 +89,7 @@ public class ClientUserValuesUtils {
 
 	public void callbackServerSetValues(Map<String, String> map)
 	{
-		if (map.size() != 0)
+		if (map != null && map.size() != 0)
 		{
 			System.out.println("Received keys update: " + map.toString());
 			insertKeys(map, true);

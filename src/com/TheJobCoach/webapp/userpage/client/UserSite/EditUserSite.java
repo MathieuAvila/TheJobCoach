@@ -4,6 +4,7 @@ import com.TheJobCoach.webapp.userpage.client.ComponentUpdatePeriod;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
@@ -18,6 +19,7 @@ import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -149,6 +151,9 @@ public class EditUserSite implements EntryPoint, IChanged, IEditDialogModel<User
 		vp.add(okCancel);
 		changed(false, true, false);
 		dBox.center();
+		
+		// Warn user about clear password filling.
+		new MessagePipe(user,  rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING);
 	}
 
 	@Override

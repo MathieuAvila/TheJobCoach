@@ -67,11 +67,11 @@ public class UserValuesConstantsCoachMessages
 		//minMaxKeyMap.put(COACH_HELLO_AGAIN,             new messageMinMax(0, 0));
 		minMaxKeyMap.put(COACH_GOAL_END_PERIOD,         new messageMinMax(1, 0));
 		minMaxKeyMap.put(COACH_GOAL_SEND_EMAIL,         new messageMinMax(5, 10));
-		minMaxKeyMap.put(COACH_OPP_NONE,                new messageMinMax(1, 0));
-		minMaxKeyMap.put(COACH_OPP_NO_LOG,              new messageMinMax(3, 0));
-		minMaxKeyMap.put(COACH_OPP_NO_APPLICATION,      new messageMinMax(3, 0));
-		minMaxKeyMap.put(COACH_PERSONAL_NOTE,           new messageMinMax(0, 1));
-		minMaxKeyMap.put(COACH_PASSWORD_WARNING,        new messageMinMax(0, 1));
+		minMaxKeyMap.put(COACH_OPP_NONE,                new messageMinMax(0, 5));
+		minMaxKeyMap.put(COACH_OPP_NO_LOG,              new messageMinMax(0, 5));
+		minMaxKeyMap.put(COACH_OPP_NO_APPLICATION,      new messageMinMax(0, 5));
+		minMaxKeyMap.put(COACH_PERSONAL_NOTE,           new messageMinMax(0, 3));
+		minMaxKeyMap.put(COACH_PASSWORD_WARNING,        new messageMinMax(0, 3));
 		minMaxKeyMap.put(COACH_LOG_RECALL,              new messageMinMax(0, 3));
 		//minMaxKeyMap.put(COACH_LOG_INTERVIEW,           new messageMinMax(0, 0));
 		//minMaxKeyMap.put(COACH_LOG_FAILURE,             new messageMinMax(0, 0));

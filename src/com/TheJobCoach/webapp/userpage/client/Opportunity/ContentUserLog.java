@@ -9,6 +9,7 @@ import java.util.Vector;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
@@ -25,6 +26,7 @@ import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -117,7 +119,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 			CLOSED*/
 			put(UserLogEntry.LogEntryType.APPLICATION, UserOpportunity.ApplicationStatus.APPLIED);
 		}
-			};
+		};
 
 
 			protected void checkOpportunityChange(UserLogEntry log)
@@ -273,7 +275,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 						return userLog.title;
 					}			
 				},  lang._TextName());
-				
+
 
 				// Create status column.
 				cellTable.specialAddColumnSortableWithComparator(new GetValue<String, UserLogEntry>() {
@@ -300,7 +302,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 				},  langLogEntry._TextCreated());
 
 				cellTable.setStyleName("filecelltable");
-				
+
 				cellTable.addColumnHtml(new FieldUpdater<UserLogEntry, String>() {
 					@Override
 					public void update(int index, UserLogEntry object, String value) {				
@@ -409,9 +411,11 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 				NewLogEntryHandler newHandler = new NewLogEntryHandler();
 				buttonNewLogEntry.addClickHandler(newHandler);
 
-				getAllContent();		
-			}
+				getAllContent();
 
+				// Inform user about personal note
+				new MessagePipe(user,  rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
+			}
 
 			@Override
 			public IContentUserLog clone(Panel panel, UserId _user, UserOpportunity opp)
