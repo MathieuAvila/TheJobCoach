@@ -25,6 +25,8 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 
 	enum COLUMN_TYPE {URL, DELETE, UPDATE, RIGHT, EMAIL};
 
+	static final int COUNT_VISIBLE_ROWS = 20;
+	
 	static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
 
 	private List<DocType> list = null;
@@ -252,8 +254,8 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 
 	private void init()
 	{
-		setVisibleRange(0, 20);
-		setPageSize(20);
+		setVisibleRange(0, COUNT_VISIBLE_ROWS);
+		setPageSize(COUNT_VISIBLE_ROWS);
 		setStyleName("filecelltable");
 		setSize("100%", "");
 		AsyncHandler columnSortHandler = new AsyncHandler(this);
@@ -264,7 +266,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 	
 	public ExtendedCellTable()
 	{
-		super(20, tableRes);
+		super(COUNT_VISIBLE_ROWS, tableRes);
 		init();
 	}
 
@@ -277,7 +279,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 
 	public ExtendedCellTable(List<DocType> list)
 	{
-		super(20, tableRes);
+		super(COUNT_VISIBLE_ROWS, tableRes);
 		this.list = list;
 		dataProvider.addDataDisplay(this);
 		init();
