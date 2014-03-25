@@ -319,8 +319,14 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		});
 
 		simplePanelCenter.add(cellTable);
-		cellTable.setSize("100%", "");		
-
+		cellTable.setSize("100%", "");	
+		
+		// Create a Pager to control the table.		
+	    SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+	    SimplePager pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+	    pager.setDisplay(cellTable);
+	    simplePanelCenter.add(pager);
+	    
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		simplePanelCenter.add(horizontalPanel);
 		horizontalPanel.setWidth("100%");
@@ -370,13 +376,6 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		FeedOpportunityHandler feedHandler = new FeedOpportunityHandler();
 		buttonFeedOpportunity.addClickHandler(feedHandler);
 
-	    // Create a Pager to control the table.
-		
-	    SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-	    SimplePager pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-	    pager.setDisplay(cellTable);
-	    simplePanelCenter.add(pager);
-	    
 		getAllContent();		
 	}
 
