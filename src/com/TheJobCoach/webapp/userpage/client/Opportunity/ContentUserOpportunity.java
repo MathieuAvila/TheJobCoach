@@ -25,6 +25,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -106,7 +108,8 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 			public void onSuccess(Vector<UserOpportunity> result) {
 				userOpportunityList.clear();
 				userOpportunityList.addAll(result);
-				cellTable.updateData();				
+				cellTable.updateData();
+				cellTable.redraw();
 			}
 		};
 		userService.getUserOpportunityList(user, "managed", callback);
@@ -367,6 +370,13 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 		FeedOpportunityHandler feedHandler = new FeedOpportunityHandler();
 		buttonFeedOpportunity.addClickHandler(feedHandler);
 
+	    // Create a Pager to control the table.
+		
+	    SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+	    SimplePager pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+	    pager.setDisplay(cellTable);
+	    simplePanelCenter.add(pager);
+	    
 		getAllContent();		
 	}
 
