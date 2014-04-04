@@ -258,7 +258,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 		diff = next2.getTime() - prev2.getTime();
 		assertTrue(diff > 24*60*60*1000 * 12);
 		assertTrue(diff < 24*60*60*1000 * 15);
-		assertTrue(next2.before(prev));
+		assertTrue(next2.before(next));
 		assertTrue(cud.nextButton.isEnabled());
 		assertTrue(cud.prevButton.isEnabled());
 
