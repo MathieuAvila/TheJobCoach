@@ -153,7 +153,7 @@ public class EditUserSite implements EntryPoint, IChanged, IEditDialogModel<User
 		dBox.center();
 		
 		// Warn user about clear password filling.
-		new MessagePipe(user,  rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING);
+		MessagePipe.getMessagePipe(user, rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING);
 	}
 
 	@Override

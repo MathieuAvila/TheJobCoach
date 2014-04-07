@@ -75,6 +75,8 @@ public class AutoTestPanelUpdate extends GwtTest {
 
 	SpecialUtilServiceAsync utilService = new SpecialUtilServiceAsync();
 
+	MessagePipe msg;
+	
 	@Before
 	public void before()
 	{
@@ -93,6 +95,14 @@ public class AutoTestPanelUpdate extends GwtTest {
 				return null;
 			}}
 		);
+		msg = MessagePipe.getMessagePipe(userId, null);
+	}
+
+	void reset()
+	{
+		MessagePipe.instance = null;
+		msg = MessagePipe.getMessagePipe(userId, null);
+		userService.callsGet = 0;
 	}
 	
 	@Test
@@ -101,7 +111,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		PanelUpdate cul;
 		HorizontalPanel p = new HorizontalPanel();
 		Label connectionTime = new Label();
-		MessagePipe msg = new MessagePipe(userId, p);
+		reset();
 		MessagePipe.strings = new ICoachStrings()
 		{
 			@Override
@@ -112,7 +122,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		};
 
 		// first update must trigger a few updates and message WELCOME.
-		userService.callsGet = 0;
+		reset();
 		cul = new PanelUpdate(p, userId, connectionTime);
 		cul.onModuleLoad();
 		cul.fireTimer();
@@ -120,7 +130,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		assertEquals(msg.getMessage(), null);
 		
 		// Second connection says HELLO.
-		userService.callsGet = 0;
+		reset();
 		cul = new PanelUpdate(p, userId, connectionTime);
 		cul.onModuleLoad();
 		cul.fireTimer();
@@ -128,7 +138,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		assertEquals(msg.getMessage(), null);
 		
 		// Third connection on the same day
-		userService.callsGet = 0;
+		reset();
 		utilService.time = 10;
 		cul = new PanelUpdate(p, userId, connectionTime);
 		cul.onModuleLoad();
@@ -139,6 +149,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		long currentTimeSec = new Date().getTime() - FormatUtil.startOfTheDay(new Date()).getTime();
 
 		// now set-up incoming hour and check what happens when we connect 1/2 hour after it.
+		reset();
 		utilService.time = 0;
 		DefaultUtilServiceAsync.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
 				String.valueOf(currentTimeSec - 60*31*1000));
@@ -150,6 +161,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		assertEquals(msg.getMessage(), null);
 		
 		// now set-up incoming hour and check what happens when we connect 10 sec after it.
+		reset();
 		utilService.time = 0;
 		DefaultUtilServiceAsync.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
 				String.valueOf(currentTimeSec - 10*1000));
@@ -161,6 +173,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		assertEquals(msg.getMessage(), null);
 		
 		// now set-up incoming hour and check what happens when we connect before it.
+		reset();
 		utilService.time = 0;
 		DefaultUtilServiceAsync.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
 				String.valueOf(currentTimeSec + 10*1000));

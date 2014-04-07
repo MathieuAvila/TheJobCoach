@@ -1,5 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client.Coach;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
@@ -11,16 +13,26 @@ import com.google.gwt.user.client.ui.Panel;
 
 public class MessagePipe implements ReturnValue
 {
-	static Vector<String> pipedQueue = new Vector<String>();
-	static Vector<String> appendQueue = new Vector<String>();
-	static ClientUserValuesUtils userValues = null;
-	
-	static boolean loaded = false;
-	static String coachIs = null;
-	
+	Vector<String> pipedQueue = new Vector<String>();
+	Vector<String> appendQueue = new Vector<String>();
+	ClientUserValuesUtils userValues = null;
+
+	boolean loaded = false;
+	String coachIs = null;
+
 	public static ICoachStrings strings = new CoachStrings();
+
+	public Set<String> messageSet = new HashSet<String>();
+
+	static public MessagePipe instance = null;
+
+	public static MessagePipe getMessagePipe(UserId user, Panel root)
+	{
+		if (instance == null) instance = new MessagePipe(user, root);
+		return instance;
+	}
 	
-	public MessagePipe(UserId user, Panel root)
+	private MessagePipe(UserId user, Panel root)
 	{
 		if (userValues == null)
 		{
@@ -70,6 +82,9 @@ public class MessagePipe implements ReturnValue
 
 	public void addMessage(String messageKey)
 	{
+		if (messageSet.contains(messageKey))
+			return; // each message only once.
+		messageSet.add(messageKey);
 		pipedQueue.add(messageKey);
 		checkQueue();
 	}

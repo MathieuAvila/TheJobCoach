@@ -197,7 +197,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		this.connectionTime = connectionTime;
 		this.rootPanel = rootPanel;
 		this.userId = userId;
-		message = new MessagePipe(userId, rootPanel);
+		message = MessagePipe.getMessagePipe(userId, rootPanel);
 		// Get time goals.
 		values = new ClientUserValuesUtils(rootPanel, userId);
 		values.preloadValueList(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, this);

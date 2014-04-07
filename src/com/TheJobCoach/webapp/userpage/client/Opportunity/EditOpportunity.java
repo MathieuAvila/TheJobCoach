@@ -213,7 +213,7 @@ public class EditOpportunity implements EntryPoint, IChanged, IEditDialogModel<U
 		dBox.center();
 		
 		// Inform user about personal note
-		new MessagePipe(user,  rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
+		MessagePipe.getMessagePipe(user, rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
 
 	}
 

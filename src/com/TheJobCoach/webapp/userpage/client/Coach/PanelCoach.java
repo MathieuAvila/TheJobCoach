@@ -82,7 +82,7 @@ public class PanelCoach extends HorizontalPanel  implements IChanged, ReturnValu
 		rootPanel = panel;
 		user = _user;
 		values = new ClientUserValuesUtils(rootPanel, user);
-		pipe = new MessagePipe(_user, panel);
+		pipe = MessagePipe.getMessagePipe(_user, panel);
 		init();
 	}
 

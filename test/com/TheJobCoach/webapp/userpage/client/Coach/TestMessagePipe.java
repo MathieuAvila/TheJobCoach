@@ -42,13 +42,14 @@ public class TestMessagePipe  extends GwtTest {
 				return null;
 			}}
 		);
-		p = new HorizontalPanel();		
+		p = new HorizontalPanel();
+		MessagePipe.instance = null;
 	}
 	
 	@Test
 	public void test_getMessage()
 	{
-		MessagePipe mp = new MessagePipe(userId, null);
+		MessagePipe mp = MessagePipe.getMessagePipe(userId, null);
 		MessagePipe.strings = new ICoachStrings()
 		{
 
@@ -67,8 +68,12 @@ public class TestMessagePipe  extends GwtTest {
 		// Hello after 1st time.
 		mp.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO);
 		assertEquals(null,mp.getMessage());
+		MessagePipe.instance = null;
+		mp = MessagePipe.getMessagePipe(userId, null);
 		mp.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO);
 		assertEquals("COACH_HELLO",mp.getMessage());
+		MessagePipe.instance = null;
+		mp = MessagePipe.getMessagePipe(userId, null);
 		mp.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO);
 		assertEquals("COACH_HELLO",mp.getMessage());
 		

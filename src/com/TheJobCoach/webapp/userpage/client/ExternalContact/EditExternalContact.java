@@ -177,7 +177,7 @@ public class EditExternalContact implements EntryPoint, IChanged, IEditDialogMod
 		changed(false, true, false);
 		
 		// Inform user about personal note
-		new MessagePipe(user,  rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
+		MessagePipe.getMessagePipe(user, rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
 	}
 
 	@Override
