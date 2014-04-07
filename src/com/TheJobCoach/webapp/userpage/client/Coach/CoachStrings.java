@@ -23,8 +23,6 @@ public class CoachStrings implements ICoachStrings
 		messages.put(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__DEFAULT_MAN, messages_DEFAULT_MAN);
 		messages.put(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__DEFAULT_WOMAN, messages_DEFAULT_WOMAN);
 		
-		if ((GwtConfig.get() != null) && (GwtConfig.get().getModuleRunner() != null) && (GwtConfig.get().getModuleRunner().getLocale() != null))
-		{
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_WELCOME             , DEFAULT_MAN.COACH_WELCOME             ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_PRESENTING          , DEFAULT_MAN.COACH_PRESENTING          ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_HELLO               , DEFAULT_MAN.COACH_HELLO               ());
@@ -69,7 +67,6 @@ public class CoachStrings implements ICoachStrings
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_LOG_SUCCESS         , DEFAULT_WOMAN.COACH_LOG_SUCCESS         ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE       , DEFAULT_WOMAN.COACH_PERSONAL_NOTE       ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING    , DEFAULT_WOMAN.COACH_PASSWORD_WARNING    ());
-		}
 	}
 	
 	public String getMessage(String key, String coach)
