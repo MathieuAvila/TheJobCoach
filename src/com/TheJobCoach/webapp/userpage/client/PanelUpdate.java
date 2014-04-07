@@ -162,7 +162,6 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 	public void fireTimer()
 	{
 		// Wait for next run.
-		connectSec+=5;
 		long total = connectSec + previousTime;
 		long h = total / 60 / 60;
 		long m = total / 60 - h * 60;
@@ -182,6 +181,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 			}
 		};	
 		utilService.sendUpdateList(userId, request, callback);
+		connectSec+=5;
 	}
 	
 	Timer timer = new Timer() 
