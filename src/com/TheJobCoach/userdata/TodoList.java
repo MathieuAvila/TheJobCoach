@@ -18,7 +18,7 @@ import com.TheJobCoach.webapp.userpage.shared.TodoEvent.Priority;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
-public class TodoList implements ITodoList
+public class TodoList implements ITodoList, IUserDataManager
 {	
 	private static Logger logger = LoggerFactory.getLogger(TodoList.class);
 	
@@ -180,6 +180,27 @@ public class TodoList implements ITodoList
 			// possible if partially destroyed
 		}
 		rawDeleteTodo(id, todoKey);
+	}
+
+	@Override
+	public void deleteUser(UserId user) throws CassandraException
+	{
+		Vector<TodoEvent> list = getTodoEventList(user, "");
+		for (TodoEvent event: list) 
+		{
+			rawDeleteTodo(user, event.ID);
+		}
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_TODOLIST, user.userName);
+	}
+
+	@Override
+	public void createTestUser(UserId user, String lang)
+	{
+	}
+
+	@Override
+	public void createUserDefaults(UserId user, String lang)
+	{
 	}
 
 }

@@ -20,7 +20,7 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 
-public class UserValues {
+public class UserValues implements IUserDataManager {
 
 	final static String COLUMN_FAMILY_NAME_LIST = "uservalues";
 	final static String COLUMN_FAMILY_NAME_LIST_UPDATED = "updateduservalues";
@@ -220,6 +220,7 @@ public class UserValues {
 		setValues(id, values, client);
 	}
 
+	@Override
 	public void deleteUser(UserId id) throws CassandraException 
 	{		
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST, id.userName);
@@ -244,5 +245,15 @@ public class UserValues {
 		value.put(UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST, String.valueOf(current));
 		try { setValues(id, value, false); } catch(Exception e) {} // Gods of Code, please forgive me.
 		return result;
+	}
+
+	@Override
+	public void createTestUser(UserId user, String lang)
+	{
+	}
+
+	@Override
+	public void createUserDefaults(UserId user, String lang)
+	{
 	}
 }

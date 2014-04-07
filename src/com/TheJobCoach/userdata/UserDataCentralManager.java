@@ -9,7 +9,16 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 public class UserDataCentralManager
 {
 	static Set<IUserDataManager> managerList = new HashSet<IUserDataManager>();
-		
+	
+	static {
+		UserDataCentralManager.addManager(new UserOpportunityManager());
+		UserDataCentralManager.addManager(new UserValues());
+		UserDataCentralManager.addManager(new UserDocumentManager());
+		UserDataCentralManager.addManager(new UserExternalContactManager());
+		UserDataCentralManager.addManager(new UserJobSiteManager());
+		UserDataCentralManager.addManager(new TodoList());
+	}
+	
 	static public void addManager(IUserDataManager manager)
 	{
 		managerList.add(manager);

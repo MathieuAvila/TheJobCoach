@@ -14,7 +14,7 @@ import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 
-public class UserOpportunityManager {
+public class UserOpportunityManager implements IUserDataManager {
 
 	final static String COLUMN_FAMILY_NAME_LIST = "opportunitieslist";
 	final static String COLUMN_FAMILY_NAME_DATA = "opportunitiesdata";
@@ -26,7 +26,7 @@ public class UserOpportunityManager {
 	
 	final static UserLogManager log = new UserLogManager();
 	final static UserValues values = new UserValues();
-	
+
 	public UserOpportunityManager()
 	{
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
@@ -170,10 +170,21 @@ public class UserOpportunityManager {
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST, key);
 	}
 
+	@Override
 	public void deleteUser(UserId id) throws CassandraException
 	{
 		deleteUserList(id, MANAGED_LIST);
 		log.deleteUser(id);
+	}
+
+	@Override
+	public void createTestUser(UserId user, String lang)
+	{
+	}
+
+	@Override
+	public void createUserDefaults(UserId user, String lang)
+	{
 	}
 	
 }

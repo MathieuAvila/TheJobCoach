@@ -43,11 +43,7 @@ public class AccountManager implements AccountInterface {
 	final static String COLUMN_FAMILY_TEST_LIST = "accounttestlist";
 
 	final static int LAST_VERSION = 1;
-	
-	UserOpportunityManager oppManager = new UserOpportunityManager();
-	UserValues valuesManager = new UserValues();
-	UserJobSiteManager siteManager = new UserJobSiteManager();
-	
+
 	Logger logger = LoggerFactory.getLogger(AccountManager.class);
 	
 	public AccountManager()

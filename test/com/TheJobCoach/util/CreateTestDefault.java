@@ -5,7 +5,6 @@ import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
-
 import org.junit.Test;
 
 public class CreateTestDefault {
