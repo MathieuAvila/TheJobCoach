@@ -103,9 +103,7 @@ public class TestUserDocumentManager {
 	
 	@Test
 	public void testgetUserDocument() throws CassandraException 
-	{
-		
-		
+	{		
 		UserDocument copy_ud1 = manager.getUserDocument(id, ud1_id);
 		UserDocument copy_ud2 = manager.getUserDocument(id, ud2_id);
 		UserDocument copy_ud21 = manager.getUserDocument(id2, ud21_id);
@@ -229,8 +227,15 @@ public class TestUserDocumentManager {
 		assertFalse(manager.checkDocExist(rev0, id));
 		assertFalse(manager.checkDocExist(rev1, id));
 		assertFalse(manager.checkDocExist(rev2, id));
-		
-		
 	}
-	
+
+	@Test
+	public void testDeleteUser() throws CassandraException
+	{
+		manager.setUserDocumentContent(id, ud1_id, "f1", c1);
+		manager.setUserDocumentContent(id, ud2_id, "f2", c2);
+		manager.deleteUser(id);
+		Vector<UserDocument> list = manager.getUserDocumentList(id);
+		assertEquals(0, list.size());
+	}
 }

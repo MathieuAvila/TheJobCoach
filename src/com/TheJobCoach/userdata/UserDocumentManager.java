@@ -303,7 +303,9 @@ public class UserDocumentManager implements IUserDataManager {
 		for (UserDocumentId doc: list) 
 		{
 			deleteUserDocument(user, doc.ID);
+			deleteUserDocumentFromList(user, doc.ID);
 		}
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_LIST, user.userName);	
 	}
 
 	@Override
