@@ -17,6 +17,7 @@ public class UserDataCentralManager
 		UserDataCentralManager.addManager(new UserExternalContactManager());
 		UserDataCentralManager.addManager(new UserJobSiteManager());
 		UserDataCentralManager.addManager(new TodoList());
+		UserDataCentralManager.addManager(new ConnectionLog());
 	}
 	
 	static public void addManager(IUserDataManager manager)
