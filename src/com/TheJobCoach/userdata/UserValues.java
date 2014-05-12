@@ -74,6 +74,7 @@ public class UserValues implements IUserDataManager {
 		keysMap.put(f.name, f);
 	}
 	
+	static
 	{
 		keys = new ArrayList<FieldDefinition>();
 		keysName = new HashSet<String>();
@@ -174,6 +175,8 @@ public class UserValues implements IUserDataManager {
 		if (start.equals("")) throw new SystemException();
 		end = end + "Z";
 		Map<String, String> result = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME_LIST, id.userName, start, end, 1000);
+		if (result == null)
+				result = new HashMap<String, String>(); 
 		for (String key: subSet)
 		{
 			if (result.get(key) == null) result.put(key, keysMap.get(key).defaultValue);
