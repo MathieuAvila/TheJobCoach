@@ -2,8 +2,10 @@ package com.TheJobCoach.userdata;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Vector;
 
 import org.junit.Test;
 
@@ -11,13 +13,16 @@ import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MockMailer;
 import com.TheJobCoach.util.MailerInterface.Attachment;
+import com.TheJobCoach.webapp.adminpage.shared.UserSearchResult;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 
 
 public class TestAccountManager
@@ -98,8 +103,8 @@ public class TestAccountManager
 		assertEquals(true, mail.contains("demandé")); // encoding
 		assertEquals(1, mockMail.lastParts.size()); // image header
 		String sb1 = mail.substring(mail.indexOf("token=") + new String("token=").length());
-		System.out.println("OUTPUT BODY :"+mail);
-		System.out.println("OUTPUT BODY SB :"+sb1);
+		//System.out.println("OUTPUT BODY :"+mail);
+		//System.out.println("OUTPUT BODY SB :"+sb1);
 		token = sb1.substring(0, sb1.indexOf("</a>"));
 		assertEquals("mytoken", token);
 		// Check data manager is called.
@@ -298,7 +303,7 @@ public class TestAccountManager
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
 		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
 		
-		// Now change
+	 	// Now change
 		account.setPassword(id, "NEWPASS");
 		
 		// Check new login with NEW password
@@ -310,4 +315,193 @@ public class TestAccountManager
 		loginCred = account.loginAccount(idSeeker, "password");
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_PASSWORD, loginCred.getLoginStatus());
 	}
+	
+	void checkOneSearchResult(UserSearchResult result, int pos, String id, String lastName, String firstName, String job, UserId.UserType type)
+	{
+		assertTrue(result.entries.size() > pos);
+		assertEquals(id, result.entries.get(pos).userName);
+		assertEquals(lastName, result.entries.get(pos).lastName);
+		assertEquals(firstName, result.entries.get(pos).firstName);
+		assertEquals(type, result.entries.get(pos).type);
+		assertEquals(job, result.entries.get(pos).job);
+	}
+	
+	@Test
+	public void searchUsersTest() throws CassandraException, SystemException
+	{
+		final int TOTAL_RANGE_SIZE = 100;
+		UserValues userValues = new UserValues();
+		class UserDef {
+			
+			public UserDef(UserId id, UserInformation info,
+					boolean allowSeeker, boolean allowCoach,
+					boolean allowRecruiter)
+			{
+				super();
+				this.id = id;
+				this.info = info;
+				this.allowSeeker = allowSeeker;
+				this.allowCoach = allowCoach;
+				this.allowRecruiter = allowRecruiter;
+				this.setValues = true;
+			}
+			
+			public UserDef(UserId id, UserInformation info)
+			{
+				super();
+				this.id = id;
+				this.info = info;
+				this.setValues = false;
+			}
+
+			public UserDef(UserId id, UserInformation info, String job)
+			{
+				super();
+				this.id = id;
+				this.info = info;
+				this.setValues = false;
+				this.job = job;
+			}
+			
+			public UserId id;
+			public UserInformation info;
+			public String job;
+			
+			public boolean allowSeeker;
+			public boolean allowCoach;
+			public boolean allowRecruiter;
+			public boolean setValues;
+			
+		}
+		// seeker user, used for search
+		UserDef seekerSearch = new UserDef(
+				new UserId("u_seeker", "u_seeker", UserId.UserType.USER_TYPE_SEEKER), 
+				new UserInformation("SEEKER USER", "", "", "SEEKER USER"));
+		// coach user, used for search
+		UserDef coachSearch = new UserDef(
+				new UserId("u_coach", "u_coach", UserId.UserType.USER_TYPE_COACH), 
+				new UserInformation("COACH USER", "", "", "COACH USER"));
+		
+		UserDef static_users[] = {
+				seekerSearch,
+				coachSearch,
+				// OK for ALL
+				new UserDef(
+						new UserId("u1", "u1", UserId.UserType.USER_TYPE_SEEKER), 
+						new UserInformation("TEST_U NameA", "", "", "TEST_U FirstNameA"), 
+						true, true, true)
+				,				
+				// NOT OK for COACH
+				new UserDef(
+						new UserId("u2", "u2", UserId.UserType.USER_TYPE_SEEKER), 
+						new UserInformation("TEST_U NameB", "", "", "TEST_U FirstNameB"), 
+						true, false, true)
+				,
+				// NOT OK for SEEKER
+				new UserDef(
+						new UserId("u3", "u3", UserId.UserType.USER_TYPE_SEEKER), 
+						new UserInformation("TEST_U NameC", "", "", "TEST_U FirstNameC"), 
+						false, true, true)
+				,
+				// Values NOT SET
+				new UserDef(
+						new UserId("u4", "u4", UserId.UserType.USER_TYPE_SEEKER), 
+						new UserInformation("TEST_U NameD", "", "", "TEST_U FirstNameD"))
+				,
+				// NameE - FirstNameE
+				new UserDef(
+						new UserId("u5", "u5", UserId.UserType.USER_TYPE_SEEKER), 
+						new UserInformation("TEST_U NameE", "", "", "TEST_U FirstNameE"), 
+						true, true, true)
+				,
+				// NameE - FirstNameF
+				new UserDef(
+						new UserId("u6", "u6", UserId.UserType.USER_TYPE_SEEKER), 
+						new UserInformation("TEST_U NameE", "", "", "TEST_U FirstNameF"),
+						true, true, true)
+				,
+				// NameF - FirstNameF - Job is set - Type is COACH
+				new UserDef(
+						new UserId("u7", "u7", UserId.UserType.USER_TYPE_COACH), 
+						new UserInformation("TEST_U NameF", "", "", "TEST_U FirstNameF"), 
+						"this is my job")
+		};
+		
+		// Range checking
+		Vector<UserDef> users = new Vector<UserDef>(Arrays.asList(static_users));
+		for (int i = 0; i != TOTAL_RANGE_SIZE; i++)
+		{
+			String val = String.format("%05d", i);
+			users.add(new UserDef(
+					new UserId("urange"+val, "urange"+val, UserId.UserType.USER_TYPE_SEEKER), 
+					new UserInformation("TEST_U RangeName" + val, "", "", "TEST_U RangeFirstName" + val)));
+		}
+		
+		for (UserDef user: users)
+		{
+			account.deleteAccount(user.id.userName);
+			MailerFactory.setMailer(mockMail);
+			user.info.email = user.id.userName + "@toto.com";
+			CreateAccountStatus status = account.createAccountWithToken(user.id, user.info, "en");
+			assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
+			ValidateAccountStatus validated = account.validateAccount(user.id.userName, user.id.token);
+			assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, validated);
+			if (user.setValues)
+			{
+				 userValues.setValue(user.id, UserValuesConstantsAccount.ACCOUNT_PUBLISH_COACH, user.allowCoach ? "YES":"NO", false);
+				 userValues.setValue(user.id, UserValuesConstantsAccount.ACCOUNT_PUBLISH_SEEKER, user.allowSeeker ? "YES":"NO", false);
+				 userValues.setValue(user.id, UserValuesConstantsAccount.ACCOUNT_PUBLISH_RECRUITER, user.allowRecruiter ? "YES":"NO", false);
+			}
+			if (user.job != null)
+			{
+				userValues.setValue(user.id, UserValuesConstantsAccount.ACCOUNT_TITLE, user.job, false);
+			}
+		}
+		
+		// 1/ normal search - as a SEEKER
+		UserSearchResult result = account.searchUsers(seekerSearch.id, "TEST_U FirstName", "TEST_U Name", 100 /* sizeRange */, 0 /* startRange*/);
+		assertEquals(6, result.totalCount);
+		assertEquals(6, result.entries.size());
+		
+		checkOneSearchResult(result, 0, "u1", "TEST_U NameA", "TEST_U FirstNameA", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 1, "u2", "TEST_U NameB", "TEST_U FirstNameB", "", UserId.UserType.USER_TYPE_SEEKER);
+		// EXCLUDING SEEKER - checkOneSearchResult(result, 2, "u3", "TEST_U NameC", "TEST_U FirstNameC", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 2, "u4", "TEST_U NameD", "TEST_U FirstNameD", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 3, "u5", "TEST_U NameE", "TEST_U FirstNameE", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 4, "u6", "TEST_U NameE", "TEST_U FirstNameF", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 5, "u7", "TEST_U NameF", "TEST_U FirstNameF", "this is my job", UserId.UserType.USER_TYPE_COACH);
+		
+		// 2/ normal search - as a COACH
+		result = account.searchUsers(coachSearch.id, "TEST_U FirstName", "TEST_U Name", 100 /* sizeRange */, 0 /* startRange*/);
+		assertEquals(6, result.totalCount);
+		assertEquals(6, result.entries.size());
+		// EXCLUDING COACH - checkOneSearchResult(result, 1, "u2", "TEST_U NameB", "TEST_U FirstNameB", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 1, "u3", "TEST_U NameC", "TEST_U FirstNameC", "", UserId.UserType.USER_TYPE_SEEKER);
+
+		// 3/ Range search
+		// From 0 to 9
+		result = account.searchUsers(seekerSearch.id, "TEST_U RangeFirstName", "TEST_U RangeName", 10 /* sizeRange */, 0 /* startRange*/);
+		assertEquals(TOTAL_RANGE_SIZE, result.totalCount);
+		assertEquals(10, result.entries.size());
+		checkOneSearchResult(result, 0, "urange00000", "TEST_U RangeName00000", "TEST_U RangeFirstName00000", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 1, "urange00001", "TEST_U RangeName00001", "TEST_U RangeFirstName00001", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 9, "urange00009", "TEST_U RangeName00009", "TEST_U RangeFirstName00009", "", UserId.UserType.USER_TYPE_SEEKER);
+
+		// From 10 to 19
+		result = account.searchUsers(seekerSearch.id, "TEST_U RangeFirstName", "TEST_U RangeName", 10 /* sizeRange */, 10 /* startRange*/);
+		assertEquals(TOTAL_RANGE_SIZE, result.totalCount);
+		assertEquals(10, result.entries.size());
+		checkOneSearchResult(result, 0, "urange00010", "TEST_U RangeName00010", "TEST_U RangeFirstName00010", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 1, "urange00011", "TEST_U RangeName00011", "TEST_U RangeFirstName00011", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 9, "urange00019", "TEST_U RangeName00019", "TEST_U RangeFirstName00019", "", UserId.UserType.USER_TYPE_SEEKER);
+		
+		// From 95 to 99
+		result = account.searchUsers(seekerSearch.id, "TEST_U RangeFirstName", "TEST_U RangeName", 10 /* sizeRange */, 95 /* startRange*/);
+		assertEquals(TOTAL_RANGE_SIZE, result.totalCount);
+		assertEquals(5, result.entries.size());
+		checkOneSearchResult(result, 0, "urange00095", "TEST_U RangeName00095", "TEST_U RangeFirstName00095", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 1, "urange00096", "TEST_U RangeName00096", "TEST_U RangeFirstName00096", "", UserId.UserType.USER_TYPE_SEEKER);
+		checkOneSearchResult(result, 4, "urange00099", "TEST_U RangeName00099", "TEST_U RangeFirstName00099", "", UserId.UserType.USER_TYPE_SEEKER);
+	}
+
 }
