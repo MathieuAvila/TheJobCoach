@@ -232,6 +232,8 @@ public class TestUserDocumentManager {
 	@Test
 	public void testDeleteUser() throws CassandraException
 	{
+		manager.setUserDocument(id, ud1);
+		manager.setUserDocument(id, ud2);
 		manager.setUserDocumentContent(id, ud1_id, "f1", c1);
 		manager.setUserDocumentContent(id, ud2_id, "f2", c2);
 		manager.deleteUser(id);
