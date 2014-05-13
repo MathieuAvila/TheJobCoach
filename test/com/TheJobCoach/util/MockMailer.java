@@ -32,4 +32,12 @@ public class MockMailer implements MailerInterface {
 		return false;
 	}
 
+	public void reset()
+	{
+		lastDst = null;
+		lastSubject = null;
+		lastBody = null;
+		lastSrc = null;
+		lastParts = null;
+	}
 }
