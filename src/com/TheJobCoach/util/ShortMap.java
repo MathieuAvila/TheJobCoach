@@ -44,10 +44,7 @@ public class ShortMap {
 	
 	public ShortMap add(String k, boolean v)
 	{
-		if (v) 
-			map.put(k, "1");
-		else 
-			map.put(k, "0");
+		map.put(k, Convertor.toString(v));
 		return this;
 	}
 	

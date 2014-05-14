@@ -72,6 +72,11 @@ public final class Convertor {
 		return "1".equals(v);
 	}
 
+	static public String toString(boolean b)
+	{
+		return (b ? "1":"0");
+	}
+	
 	static public boolean toBoolean(String v, boolean defaultValue)
 	{
 		if (v == null) return defaultValue;
