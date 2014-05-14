@@ -97,5 +97,54 @@ public class Lang
 	{
 		return getLangProp(lang).getProperty("testuserlastname");
 	}
+
+	static String requestConnectionSubject(String lang)
+	{
+		return getLangProp(lang).getProperty("requestconnectionsubject");
+	}
+
+	static String connectionGrantedSubject(String lang)
+	{
+		return getLangProp(lang).getProperty("connectiongrantedsubject");
+	}
+
+	static String jobMailSubject(String lang)
+	{
+		return getLangProp(lang).getProperty("jobmailsubject");
+	}
+	
+	static String requestConnection(String lang, String fromFirstName, String fromLastName, String userName, String toFirstName, String toLastName)
+	{
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_connection_request_" + lang +".html");
+		body = body.replaceAll("_FIRSTNAME_", toFirstName);
+		body = body.replaceAll("_NAME_", toLastName);
+		body = body.replaceAll("_FIRSTNAMEFROM_", fromFirstName);
+		body = body.replaceAll("_NAMEFROM_", fromLastName);
+		body = body.replaceAll("_USERNAME_", userName);
+		return body;
+	}
+
+	static String connectionGranted(String lang, String fromFirstName, String fromLastName, String userName, String toFirstName, String toLastName)
+	{
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_connection_granted_" + lang +".html");
+		body = body.replaceAll("_FIRSTNAME_", fromFirstName);
+		body = body.replaceAll("_NAME_", fromLastName);
+		body = body.replaceAll("_FIRSTNAMETO_", toFirstName);
+		body = body.replaceAll("_NAMETO_", toLastName);
+		body = body.replaceAll("_USERNAME_", userName);
+		return body;
+	}
+
+	static String jobMail(String lang, String fromFirstName, String fromLastName, String userName, String toFirstName, String toLastName, String message)
+	{
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_contact_" + lang +".html");
+		body = body.replaceAll("_FIRSTNAME_", fromFirstName);
+		body = body.replaceAll("_NAME_", fromLastName);
+		body = body.replaceAll("_FIRSTNAMETO_", toFirstName);
+		body = body.replaceAll("_NAMETO_", toLastName);
+		body = body.replaceAll("_USERNAME_", userName);
+		body = body.replaceAll("_MESSAGE_", message);
+		return body;
+	}
 	
 }
