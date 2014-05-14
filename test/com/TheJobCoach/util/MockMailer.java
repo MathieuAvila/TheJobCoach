@@ -29,7 +29,7 @@ public class MockMailer implements MailerInterface {
 		lastBody = _body;
 		lastSrc = _src;
 		lastParts = parts;
-		return false;
+		return true;
 	}
 
 	public void reset()
