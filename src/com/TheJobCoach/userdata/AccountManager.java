@@ -106,12 +106,13 @@ public class AccountManager implements AccountInterface {
 
 	public boolean getUserInformation(UserId id, UserInformation info) throws CassandraException
 	{
-		Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);	
+		Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
+		if (accountTable == null) return false;
 		info.name = accountTable.get("name");
 		info.email = accountTable.get("email");
 		info.password = accountTable.get("password"); // may be null
 		info.firstName = accountTable.get("firstname");
-		return true;
+		return (info.name) != null;
 	}
 
 	public String getUsernameFromEmail(String mail)
@@ -145,6 +146,10 @@ public class AccountManager implements AccountInterface {
 		result = updateUserInformation(id, info, version);
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
 		UserDataCentralManager.createUserDefaults(id, langStr);
+		UserValues values = new UserValues();
+		try	{
+			values.setValue(id, UserValuesConstantsAccount.ACCOUNT_LANGUAGE, langStr, false);
+		} catch (SystemException e) {} // Ignore this, system cannot be faulty.
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 
@@ -466,5 +471,16 @@ public class AccountManager implements AccountInterface {
 		}
 		return new UserSearchResult(result, map.size());
 	}
-
+	
+	public String getUserLanguage(UserId user) throws CassandraException
+	{
+		// send mail in correspondants' language
+		String lang = null;
+		try { 
+			Map<String, String> langMap = userValues.getValues(user, UserValuesConstantsAccount.ACCOUNT_LANGUAGE); 
+			lang = langMap.get(UserValuesConstantsAccount.ACCOUNT_LANGUAGE);
+		}
+		catch (SystemException e) {} // this cannot happen
+		return lang;
+	}
 }
