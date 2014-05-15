@@ -304,7 +304,7 @@ public class TestUserLogManager
 		assertEquals(0, result.size());
 	}
 
-	class TestTodoList implements ITodoList
+	static class TestTodoList implements ITodoList
 	{
 		class ListSet {
 			UserId id;
@@ -317,7 +317,6 @@ public class TestUserLogManager
 		public void setTodoEvent(UserId id, TodoEvent result)
 				throws CassandraException
 		{
-			logger.info("setTodoEvent ID:" + result.ID);
 			setEvents.add(new ListSet(id, result));
 		}
 
