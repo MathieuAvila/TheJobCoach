@@ -88,4 +88,16 @@ public class TestConvertor
 		Convertor.getStringDateUnique("");
 		new Convertor();
 	}
+	
+	@Test
+	public void convertStringToAsciiTest()
+	{
+		assertEquals("papa noel echappe a Jean-noel", Convertor.convertStringToAscii("papa noël échappe à Jean-noel"));		
+	}
+	
+	@Test
+	public void stringToSearchableTest()
+	{
+		assertEquals("papanoelechappeajean-noel", Convertor.stringToSearchable("papa noël échappe à Jean-noel"));		
+	}
 }

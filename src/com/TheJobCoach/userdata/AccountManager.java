@@ -399,7 +399,10 @@ public class AccountManager implements AccountInterface {
 	{
 		// build a map of ordered users with required characteristics
 		TreeMap<String, UserSearchEntry> map = new TreeMap<String, UserSearchEntry>();
-
+		
+		firstName = Convertor.stringToSearchable(firstName);
+		lastName = Convertor.stringToSearchable(lastName);
+		
 		Set<String> resultRows = new HashSet<String>();
 		String last = "";
 		do
@@ -423,7 +426,7 @@ public class AccountManager implements AccountInterface {
 							&& firstNameResult != null)
 					{
 						UserId foundId = new UserId(userName, accountTable.get("token"), type);
-						if (nameResult.contains(lastName) && firstNameResult.contains(firstName))
+						if (Convertor.stringToSearchable(nameResult).contains(lastName) && Convertor.stringToSearchable(firstNameResult).contains(firstName))
 						{
 							boolean allowed = true;
 							String rootKey = null;
