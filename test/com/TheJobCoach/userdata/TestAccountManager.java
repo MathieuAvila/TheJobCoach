@@ -493,7 +493,7 @@ public class TestAccountManager
 		// From 0 to 9
 		result = account.searchUsers(seekerSearch.id, "TEST_U RangeFirstName", "TEST_U RangeName", 
 				10, // sizeRange
-				0 // startRange);
+				0); // startRange
 				assertEquals(TOTAL_RANGE_SIZE, result.totalCount);
 		assertEquals(10, result.entries.size());
 		checkOneSearchResult(result, 0, "urange00000", "TEST_U RangeName00000", "TEST_U RangeFirstName00000", "", UserId.UserType.USER_TYPE_SEEKER);
