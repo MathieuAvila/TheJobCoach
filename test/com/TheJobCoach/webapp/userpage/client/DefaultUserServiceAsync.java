@@ -6,6 +6,9 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.TheJobCoach.webapp.adminpage.shared.UserSearchResult;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
@@ -15,6 +18,8 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -174,5 +179,32 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 			AsyncCallback<UserOpportunity> callback)
 	{
 		logger.info("fetchUserOpportunity " + id.userName + " ref:" + ref + " site:" + site);
+	}
+	@Override
+	public void searchUsers(UserId id, String firstName, String lastName,
+			int sizeRange, int startRange,
+			AsyncCallback<UserSearchResult> callback)
+	{
+		logger.info("searchUsers " + id.userName + " firstName " + firstName + " lastName " + lastName + " sizeRange " + sizeRange + " startRange " + startRange);
+	}
+	@Override
+	public void updateContactRequest(UserId userContact,
+			AsyncCallback<ContactStatus> callback)
+	{
+		logger.info("updateContactRequest " + userContact.userName);
+	}
+	@Override
+	public void getContactList(
+			AsyncCallback<Vector<ContactInformation>> callback)
+			throws CassandraException
+	{
+		logger.info("getContactList");
+	}
+	@Override
+	public void sendJobMail(UserId userContact, String message,
+			AsyncCallback<Boolean> callback) throws CassandraException,
+			SystemException
+	{
+		logger.info("sendJobMail " + userContact.userName + " message:" + message);
 	}
 };
