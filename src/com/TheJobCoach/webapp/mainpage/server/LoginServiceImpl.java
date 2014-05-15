@@ -50,6 +50,8 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		HttpSession session = request.getSession();
 		if (result.getLoginStatus() == MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK)
 			CoachSecurityCheck.loginUser(result.id, session);
+		session.setAttribute("accountmanager", account);
+		session.setAttribute("userid", result.id);
 		return result;
 	}
 
@@ -83,6 +85,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		CoachSecurityCheck.disconnectUser(session);
+		session.invalidate();
 		return "";
 	}
 

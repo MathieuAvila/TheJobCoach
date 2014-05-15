@@ -3,6 +3,8 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.Date;
 import java.util.Vector;
 
+import com.TheJobCoach.webapp.adminpage.shared.UserSearchResult;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
@@ -61,4 +63,10 @@ public interface UserService extends RemoteService
 	public GoalReportInformation getUserGoalReport(UserId id, Date start, Date end) throws CassandraException, CoachSecurityException;
 
 	public String setPassword(UserId id, String newPassword) throws CassandraException, CoachSecurityException;
+	
+	public UserSearchResult searchUsers(UserId id, String firstName, String lastName, int sizeRange, int startRange) throws CassandraException, SystemException, CoachSecurityException;	
+	
+	public ContactInformation.ContactStatus updateContactRequest(UserId userContact) throws SystemException, CassandraException;
+	public Vector<ContactInformation> getContactList() throws CassandraException, SystemException;
+	Boolean sendJobMail(UserId userContact, String message) throws CassandraException, SystemException;
 }

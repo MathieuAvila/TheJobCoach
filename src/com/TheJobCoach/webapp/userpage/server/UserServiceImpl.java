@@ -4,12 +4,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.admindata.News;
 import com.TheJobCoach.userdata.AccountManager;
 import com.TheJobCoach.userdata.AccountInterface;
+import com.TheJobCoach.userdata.ContactManager;
 import com.TheJobCoach.userdata.TodoList;
 import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.userdata.UserExternalContactManager;
@@ -19,7 +23,10 @@ import com.TheJobCoach.userdata.UserOpportunityManager;
 import com.TheJobCoach.userdata.UserValues;
 import com.TheJobCoach.userdata.fetch.JobBoard;
 import com.TheJobCoach.userdata.report.GoalReport;
+import com.TheJobCoach.webapp.adminpage.shared.UserSearchResult;
 import com.TheJobCoach.webapp.userpage.client.UserService;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
@@ -280,5 +287,58 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		account.setPassword(id, newPassword);
 		return "";
 	}
+	
+	@Override
+	public UserSearchResult searchUsers(UserId id, String firstName, String lastName, int sizeRange, int startRange) throws CassandraException, SystemException, CoachSecurityException
+	{
+		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+		return account.searchUsers(id, firstName, lastName, sizeRange, startRange);
+	}
 
+	UserId getUserId() throws SystemException
+	{
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		
+		UserId result = (UserId)session.getAttribute("userid");
+		if (result == null) throw new SystemException();
+		return result;
+	}
+	
+	ContactManager getContactManager() throws SystemException
+	{
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		
+		ContactManager result = (ContactManager)session.getAttribute("contactmanager");
+		if (result != null) return result;
+		result = new ContactManager(getUserId());
+		session.setAttribute("contactmanager", result);
+		return result;
+		
+	}
+	
+	@Override
+	public ContactStatus updateContactRequest(UserId userContact) throws SystemException, CassandraException
+	{
+		ContactManager contact = getContactManager();
+		return contact.updateContactRequest(userContact);
+	}
+
+	@Override
+	public Vector<ContactInformation> getContactList() throws SystemException, CassandraException
+	{
+		ContactManager contact = getContactManager();
+		return contact.getContactList();
+	}
+
+	@Override
+	public Boolean sendJobMail(UserId userContact, String message) throws SystemException, CassandraException
+	{
+		ContactManager contact = getContactManager();
+		return contact.sendJobMail(userContact, message);
+	}
+
+	
+	
 }
