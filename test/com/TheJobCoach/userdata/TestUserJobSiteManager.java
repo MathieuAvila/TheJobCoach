@@ -46,7 +46,7 @@ public class TestUserJobSiteManager {
 	
 	static UserJobSite ujs21 = new UserJobSite(site12, "site21", "URL1", "description1", "login1", "password1");
 	static UserJobSite ujs22 = new UserJobSite(site22, "site22", "URL2", "description2", "login2", "password2");
-	static UserJobSite ujs23 = new UserJobSite(site32, "site23", "URL3", "description3", "login3", "password3");
+    static UserJobSite ujs23 = new UserJobSite(site32, "site23", "URL3", "description3", "login3", "password3");
 	
 	class TestTodoList implements ITodoList
 	{
@@ -76,6 +76,11 @@ public class TestUserJobSiteManager {
 	public void testSetUserSite() throws CassandraException 
 	{
 		manager.deleteUser(id);
+		manager.deleteUser(id2);
+		
+		manager.setUserSite(id2, ujs21);
+		manager.setUserSite(id2, ujs22);
+		manager.setUserSite(id2, ujs23);
 		
 		TestTodoList todoInterface = new TestTodoList();
 		
