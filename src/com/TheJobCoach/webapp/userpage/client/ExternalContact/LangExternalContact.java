@@ -19,9 +19,6 @@ public interface LangExternalContact extends Constants {
 	@Key("organization")
 	String _Text_Organization();
 
-	@Key("personalnote")
-	String _Text_PersonalNote();
-	
 	@Key("deletetitle")
 	String _TextDeleteTitle();	
 

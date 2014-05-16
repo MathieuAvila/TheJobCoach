@@ -45,7 +45,7 @@ public class EditExternalContact implements EntryPoint, IChanged, IEditDialogMod
 	TextBox textBoxOrganization = new TextBox();
 	Label lblOrganization = new Label(langExternalContact._Text_Organization());
 	RichTextArea textAreaPersonalNote = new RichTextArea();
-	Label lblPersonalNote = new Label(langExternalContact._Text_PersonalNote());
+	Label lblPersonalNote = new Label(lang._TextPersonalNote());
 
 	Panel rootPanel;
 	IChooseResult<ExternalContact> result;
