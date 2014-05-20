@@ -38,6 +38,9 @@ public class MessageBox implements EntryPoint {
 	Button buttonOk;
 	Button buttonCancel;
 	
+	String okMsg = null;
+	String cancelMsg = null;
+	
 	public MessageBox(Panel rootPanel, boolean ok, boolean cancel, TYPE type, String title, String message, ICallback callback)
 	{
 		this.rootPanel = rootPanel;
@@ -47,6 +50,20 @@ public class MessageBox implements EntryPoint {
 		this.title = title;
 		this.message = message;
 		this.callback = callback;
+	}
+
+	public MessageBox(Panel rootPanel, boolean ok, boolean cancel, TYPE type, String title, String message, ICallback callback,
+			String okMsg, String cancelMsg)
+	{
+		this.rootPanel = rootPanel;
+		this.ok = ok;
+		this.cancel = cancel;
+		this.type = type;
+		this.title = title;
+		this.message = message;
+		this.callback = callback;
+		this.okMsg = okMsg;
+		this.cancelMsg = cancelMsg;
 	}
 
 	static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
@@ -144,7 +161,7 @@ public class MessageBox implements EntryPoint {
 		horizontalPanel.add(innerPanel);
 		flexTable.setWidget(2, 2, horizontalPanel);
 
-		buttonOk = new ButtonImageText(ButtonImageText.Type.OK, lang._TextOk());
+		buttonOk = new ButtonImageText(ButtonImageText.Type.OK, okMsg == null ? lang._TextOk(): okMsg);
 		if (ok) innerPanel.add(buttonOk);
 		buttonOk.addClickHandler(new ClickHandler() 
 		{
@@ -158,7 +175,7 @@ public class MessageBox implements EntryPoint {
 		HorizontalPanel horizontalPanelSpace = new HorizontalPanel();
 		horizontalPanelSpace.setWidth("10px");
 
-		buttonCancel = new ButtonImageText(ButtonImageText.Type.CANCEL, lang._TextCancel());
+		buttonCancel = new ButtonImageText(ButtonImageText.Type.CANCEL,  cancelMsg == null ? lang._TextCancel(): cancelMsg);
 		if (cancel) 
 		{
 			innerPanel.add(horizontalPanelSpace);
