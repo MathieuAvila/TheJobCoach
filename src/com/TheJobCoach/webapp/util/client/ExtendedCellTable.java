@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.TheJobCoach.webapp.util.client.ClientImageBundle;
+import com.TheJobCoach.webapp.util.client.IconsCell.IGetIcons;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -42,7 +43,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		interface TableStyle extends CellTable.Style {}
 		}
 	
-	HashMap<Column<DocType, String>, Comparator<DocType>> compareMethodColumn = new HashMap<Column<DocType, String>, Comparator<DocType>>();
+	HashMap<Column<DocType, ?>, Comparator<DocType>> compareMethodColumn = new HashMap<Column<DocType, ?>, Comparator<DocType>>();
 
 	// Create a data provider.
 	AsyncDataProvider<DocType> dataProvider = new AsyncDataProvider<DocType>() {
@@ -99,7 +100,33 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 				return 0;
 			}}, title);
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	public void addClickableIconsColumn(
+			final IGetIcons<DocType> getIcons, 
+			FieldUpdater<DocType, DocType> updater, 
+			String title, String width,
+			Comparator<DocType> comparator)
+	{
+		// Create column.
+		IconsCell<DocType> iconsCells = new IconsCell<DocType>(getIcons);
+		Column<DocType, DocType> column = specialAddColumn(iconsCells, 
+				new GetValue<DocType, DocType>(){
+					@Override
+					public DocType getValue(DocType element)
+					{
+						return element;
+					}},
+					updater);
+		addColumn(column, title);
+		setColumnWidth(column, width);
+		if (comparator != null)
+		{
+			compareMethodColumn.put((Column<DocType, String>) column, comparator);
+			column.setSortable(true);
+		}
+	}
+	
 	public Column<DocType, String> specialAddColumnSortableDate(final GetValue<Date, DocType> getter, String title)
 	{
 		return specialAddColumnSortableWithComparator(new GetValue<String, DocType>(){
