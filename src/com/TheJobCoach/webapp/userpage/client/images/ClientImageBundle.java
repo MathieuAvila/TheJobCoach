@@ -108,4 +108,24 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("bulle.png")
 	ImageResource bulle();
 
+
+	@Source("content-addressbook-32.png")
+	ImageResource userConnectionContent();
+	
+
+	@Source("user-awaiting-24.png")
+	ImageResource userConnectionAwaiting();
+
+	@Source("user-connected-24.png")
+	ImageResource userConnectionOk();
+	
+	@Source("user-requested-24.png")
+	ImageResource userConnectionRequested();
+	
+	@Source("void-24.png")
+	ImageResource userConnectionNone();
+
+	@Source("user-send-mail-24.png")
+	ImageResource userSendMail();
+
 }
