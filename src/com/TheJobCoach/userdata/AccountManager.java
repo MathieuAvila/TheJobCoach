@@ -214,15 +214,28 @@ public class AccountManager implements AccountInterface {
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
 		}
 		if (accountTable == null)
+		{
+			logger.warn("Login refused: Unknown user: " + userName);
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
+		}
 		String token = accountTable.get("token");
 		if (token == null)
+		{
+			logger.warn("Login refused: No token for user: " + userName);
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
+		}
 		String validatedStr = accountTable.get("validated");
 		if (validatedStr == null)
+		{
+			logger.warn("Login refused: user is not validated (no validatation string): " + userName);
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
+		}
 		boolean validated = Convertor.toBoolean(validatedStr);
-		if (!validated) return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
+		if (!validated) 
+		{
+			logger.warn("Login refused: user is not validated: " + userName);
+			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_NOT_VALIDATED);
+		}
 
 		String typeStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "type");
 		UserId id = new UserId(userName, token, UserId.stringToUserType(typeStr));
@@ -233,9 +246,15 @@ public class AccountManager implements AccountInterface {
 		{		
 			String passwordStr = accountTable.get("password");
 			if (passwordStr == null)
+			{
+				logger.warn("Login refused: no password: " + userName);
 				return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
-			if (!passwordStr.equals(password)) 	
+			}
+			if (!passwordStr.equals(password))
+			{
+				logger.warn("Login refused: bad password: " + userName);
 				return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+			}
 			// force upgrade to hashed password (at least version 1)
 			UserInformation info = new UserInformation();
 			getUserInformation(id, info);
@@ -246,7 +265,10 @@ public class AccountManager implements AccountInterface {
 			String h = accountTable.get("hashedpassword");
 			String s = accountTable.get("salt");
 			if (!UtilSecurity.compareHashedSaltedPassword(password, s, h))
+			{
+				logger.warn("Login refused: bad password with salt: " + userName);
 				return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
+			}
 		}
 		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, id);
 	}
