@@ -14,8 +14,6 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -63,8 +61,8 @@ public interface UserServiceAsync {
 	
 	public void searchUsers(UserId id, String firstName, String lastName, int sizeRange, int startRange, AsyncCallback<UserSearchResult> callback);	
 
-	public void updateContactRequest(UserId userContact, AsyncCallback<ContactInformation.ContactStatus> callback);
-	public void getContactList(AsyncCallback<Vector<ContactInformation>> callback) throws CassandraException;
-	public void sendJobMail(UserId userContact, String message, AsyncCallback<Boolean> callback) throws CassandraException, SystemException;
+	public void updateContactRequest(UserId userContact, boolean ok, AsyncCallback<ContactInformation.ContactStatus> callback);
+	public void getContactList(AsyncCallback<Vector<ContactInformation>> callback);
+	public void sendJobMail(UserId userContact, String message, AsyncCallback<Boolean> callback);
 
 }

@@ -18,8 +18,6 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
-import com.TheJobCoach.webapp.util.shared.CassandraException;
-import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -188,22 +186,20 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 		logger.info("searchUsers " + id.userName + " firstName " + firstName + " lastName " + lastName + " sizeRange " + sizeRange + " startRange " + startRange);
 	}
 	@Override
-	public void updateContactRequest(UserId userContact,
+	public void updateContactRequest(UserId userContact, boolean ok,
 			AsyncCallback<ContactStatus> callback)
 	{
-		logger.info("updateContactRequest " + userContact.userName);
+		logger.info("updateContactRequest " + userContact.userName + " OK:" + ok);
 	}
 	@Override
 	public void getContactList(
 			AsyncCallback<Vector<ContactInformation>> callback)
-			throws CassandraException
 	{
 		logger.info("getContactList");
 	}
 	@Override
 	public void sendJobMail(UserId userContact, String message,
-			AsyncCallback<Boolean> callback) throws CassandraException,
-			SystemException
+			AsyncCallback<Boolean> callback)
 	{
 		logger.info("sendJobMail " + userContact.userName + " message:" + message);
 	}

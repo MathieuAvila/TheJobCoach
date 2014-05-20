@@ -299,7 +299,6 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	{
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
-		
 		UserId result = (UserId)session.getAttribute("userid");
 		if (result == null) throw new SystemException();
 		return result;
@@ -309,7 +308,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	{
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
-		
+
 		ContactManager result = (ContactManager)session.getAttribute("contactmanager");
 		if (result != null) return result;
 		result = new ContactManager(getUserId());
@@ -319,17 +318,18 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 	
 	@Override
-	public ContactStatus updateContactRequest(UserId userContact) throws SystemException, CassandraException
+	public ContactStatus updateContactRequest(UserId userContact, boolean ok) throws SystemException, CassandraException
 	{
 		ContactManager contact = getContactManager();
-		return contact.updateContactRequest(userContact);
+		return contact.updateContactRequest(userContact, ok);
 	}
 
 	@Override
 	public Vector<ContactInformation> getContactList() throws SystemException, CassandraException
 	{
 		ContactManager contact = getContactManager();
-		return contact.getContactList();
+		Vector<ContactInformation> result = contact.getContactList();
+		return result;
 	}
 
 	@Override
