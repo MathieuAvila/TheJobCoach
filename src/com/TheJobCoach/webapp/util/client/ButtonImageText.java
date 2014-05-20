@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.Image;
 
 public class ButtonImageText extends Button
 {	
-	public enum Type { NEW, FEED, OK, CANCEL, BACK, NEXT, MAIL, ADD_16, LOCK };
+	public enum Type { NEW, FEED, OK, CANCEL, BACK, NEXT, MAIL, ADD_16, LOCK, USER_ACCEPT, USER_REFUSE };
 
 	Type type;
 
@@ -22,6 +22,8 @@ public class ButtonImageText extends Button
 	static ImageResource nextIcon = wpImageBundle.nextIcon();
 	static ImageResource mailIcon = wpImageBundle.emailIcon();
 	static ImageResource lockIcon = wpImageBundle.lockIcon();
+	static ImageResource userAcceptIcon = wpImageBundle.user_accept_24();
+	static ImageResource userRefuseIcon = wpImageBundle.user_refuse_24();
 
 	public ButtonImageText(Type type, String text)
 	{
@@ -39,6 +41,8 @@ public class ButtonImageText extends Button
 		case NEXT: setResource(nextIcon); break;
 		case MAIL: setResource(mailIcon); break;
 		case LOCK: setResource(lockIcon); break;
+		case USER_ACCEPT: setResource(userAcceptIcon); break;
+		case USER_REFUSE: setResource(userRefuseIcon); break;
 		}
 	}
 

@@ -87,4 +87,12 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("images/lock_24.png")
 	ImageResource lockIcon();	
+	
+
+	
+	@Source("images/user_accept_24.png")
+	ImageResource user_accept_24();
+
+	@Source("images/user_refuse_24.png")
+	ImageResource user_refuse_24();	
 }
