@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.cell.client.ClickableTextCell;
 
-public class IconCellSingle extends IconCellDecorator<String> 
+public class IconCellSingle extends IconCellDecorator<String>
 {
 	static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
 	
@@ -21,10 +21,11 @@ public class IconCellSingle extends IconCellDecorator<String>
 	static ImageResource rightIcon = wpImageBundle.nextIcon();
 	static ImageResource urlIcon = wpImageBundle.urlLink();
 	static ImageResource addIcon = wpImageBundle.buttonAdd24();
+	static ImageResource messageIcon = wpImageBundle.emailIcon();
 	
 	IconType type;
 	
-	public enum IconType { DELETE, UPDATE, RIGHT, URL, ADD };
+	public enum IconType { DELETE, UPDATE, RIGHT, URL, ADD, MESSAGE };
 	
 	public IconCellSingle(IconType type)
 	{			
@@ -42,7 +43,7 @@ public class IconCellSingle extends IconCellDecorator<String>
 	}
 
 	protected SafeHtml getIconHtml(String value) 
-	{		
+	{
 		SafeHtml html = SafeHtmlUtils.fromSafeConstant("");
 		ImageResource ic = deleteIcon;
 		switch (type)
@@ -52,6 +53,7 @@ public class IconCellSingle extends IconCellDecorator<String>
 		case RIGHT:  ic = rightIcon; break;
 		case URL:    ic = urlIcon; break;
 		case ADD:    ic = addIcon; break;
+		case MESSAGE:    ic = messageIcon; break;
 		}
 		html = SafeHtmlUtils.fromTrustedString(AbstractImagePrototype.create(ic).getHTML());
 
