@@ -44,7 +44,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public MainPageReturnLogin connect(String userName, String userPassword) throws CassandraException 
 	{
-		logger.info("Connection from: '" + userName);
+		logger.info("Connection from: " + userName);
 		MainPageReturnLogin result = account.loginAccount(userName, userPassword);
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
@@ -52,6 +52,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 			CoachSecurityCheck.loginUser(result.id, session);
 		session.setAttribute("accountmanager", account);
 		session.setAttribute("userid", result.id);
+		logger.info("Logged in with: " + result.id);
 		return result;
 	}
 
