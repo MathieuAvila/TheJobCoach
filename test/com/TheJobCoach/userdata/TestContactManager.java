@@ -75,7 +75,7 @@ public class TestContactManager
 		assertEquals(0, contactList.size());
 		
 		// Send request to contact_id_1
-		ContactInformation.ContactStatus newStatus = contactManager.updateContactRequest(contact_id_1);
+		ContactInformation.ContactStatus newStatus = contactManager.updateContactRequest(contact_id_1, true);
 		assertEquals(ContactInformation.ContactStatus.CONTACT_REQUESTED, newStatus);
 		
 		// Now list contains 1 contact : contact_id_1
@@ -104,7 +104,7 @@ public class TestContactManager
 		
 		// resend request. This must be ignored.
 		mockMail.reset();
-		newStatus = contactManager.updateContactRequest(contact_id_1);
+		newStatus = contactManager.updateContactRequest(contact_id_1, true);
 		assertEquals(ContactInformation.ContactStatus.CONTACT_NONE, newStatus);
 		// Check same as before
 		contactList = contactManager.getContactList();
@@ -117,7 +117,7 @@ public class TestContactManager
 		assertNull(mockMail.lastBody);
 		
 		// Now accept connection on the other-side
-		newStatus = contactManager1.updateContactRequest(id);
+		newStatus = contactManager1.updateContactRequest(id, true);
 		assertEquals(ContactInformation.ContactStatus.CONTACT_OK, newStatus);
 		// Check both are connected
 		contactList = contactManager.getContactList();
@@ -139,7 +139,7 @@ public class TestContactManager
 
 		// 2nd user request
 		// Send request to contact_id_2
-		newStatus = contactManager.updateContactRequest(contact_id_2);
+		newStatus = contactManager.updateContactRequest(contact_id_2, true);
 		assertEquals(ContactInformation.ContactStatus.CONTACT_REQUESTED, newStatus);
 
 		// Now list contains 2 contact : contact_id_1, contact_id_2
@@ -164,9 +164,9 @@ public class TestContactManager
 	{
 		setTest();
 		// connect 2 users
-		ContactInformation.ContactStatus newStatus = contactManager.updateContactRequest(contact_id_1);
+		ContactInformation.ContactStatus newStatus = contactManager.updateContactRequest(contact_id_1, true);
 		assertEquals(ContactInformation.ContactStatus.CONTACT_REQUESTED, newStatus);
-		newStatus = contactManager1.updateContactRequest(id);
+		newStatus = contactManager1.updateContactRequest(id, true);
 		assertEquals(ContactInformation.ContactStatus.CONTACT_OK, newStatus);
 		
 		// now user talks to user1
@@ -185,5 +185,38 @@ public class TestContactManager
 		assertEquals(1, mockMail.lastParts.size()); // image header
 		assertEquals("user1@toto.com", mockMail.lastDst);
 		assertTrue(subject.contains("You have received an email from your connection"));
+	}
+
+	@Test
+	public void testConnectionRefused() throws CassandraException, SystemException
+	{
+		setTest();
+
+		// Starting with a void list of contacts
+		Vector<ContactInformation> contactList = contactManager.getContactList();
+		assertEquals(0, contactList.size());
+
+		// Send request to contact_id_1
+		ContactInformation.ContactStatus newStatus = contactManager.updateContactRequest(contact_id_1, true);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_REQUESTED, newStatus);
+		
+		// Now refuse connection on the other-side
+		newStatus = contactManager1.updateContactRequest(id, false);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_NONE, newStatus);
+		// Check both are disconnected
+		contactList = contactManager.getContactList();
+		assertEquals(0, contactList.size());
+		Vector<ContactInformation> contactList1 = contactManager1.getContactList();
+		assertEquals(0, contactList1.size());
+		// check original user has received a notification through mail
+		String mail = mockMail.lastBody;
+		String subject = mockMail.lastSubject;
+		System.out.println(mail);
+		System.out.println(subject);
+		assertTrue(mail.contains("Hello firstNameuser lastNameuser"));
+		assertTrue(mail.contains("Your connection request to firstNameuser1 lastNameuser1 (user1) has been refused."));
+		assertEquals(1, mockMail.lastParts.size()); // image header
+		assertEquals("user@toto.com", mockMail.lastDst);
+		assertTrue(subject.contains("Connection status"));
 	}
 }

@@ -108,6 +108,11 @@ public class Lang
 		return getLangProp(lang).getProperty("connectiongrantedsubject");
 	}
 
+	static String connectionRefusedSubject(String lang)
+	{
+		return getLangProp(lang).getProperty("connectionrefusedsubject");
+	}
+
 	static String jobMailSubject(String lang)
 	{
 		return getLangProp(lang).getProperty("jobmailsubject");
@@ -115,7 +120,7 @@ public class Lang
 	
 	static String requestConnection(String lang, String fromFirstName, String fromLastName, String userName, String toFirstName, String toLastName)
 	{
-		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_connection_request_" + lang +".html");
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_connection_request_" + getLang(lang) +".html");
 		body = body.replaceAll("_FIRSTNAME_", toFirstName);
 		body = body.replaceAll("_NAME_", toLastName);
 		body = body.replaceAll("_FIRSTNAMEFROM_", fromFirstName);
@@ -126,7 +131,18 @@ public class Lang
 
 	static String connectionGranted(String lang, String fromFirstName, String fromLastName, String userName, String toFirstName, String toLastName)
 	{
-		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_connection_granted_" + lang +".html");
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_connection_granted_" + getLang(lang) +".html");
+		body = body.replaceAll("_FIRSTNAME_", fromFirstName);
+		body = body.replaceAll("_NAME_", fromLastName);
+		body = body.replaceAll("_FIRSTNAMETO_", toFirstName);
+		body = body.replaceAll("_NAMETO_", toLastName);
+		body = body.replaceAll("_USERNAME_", userName);
+		return body;
+	}
+
+	static String connectionRefused(String lang, String fromFirstName, String fromLastName, String userName, String toFirstName, String toLastName)
+	{
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_connection_refused_" + getLang(lang) +".html");
 		body = body.replaceAll("_FIRSTNAME_", fromFirstName);
 		body = body.replaceAll("_NAME_", fromLastName);
 		body = body.replaceAll("_FIRSTNAMETO_", toFirstName);
@@ -137,7 +153,7 @@ public class Lang
 
 	static String jobMail(String lang, String fromFirstName, String fromLastName, String userName, String toFirstName, String toLastName, String message)
 	{
-		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_contact_" + lang +".html");
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_contact_" + getLang(lang) +".html");
 		body = body.replaceAll("_FIRSTNAME_", fromFirstName);
 		body = body.replaceAll("_NAME_", fromLastName);
 		body = body.replaceAll("_FIRSTNAMETO_", toFirstName);

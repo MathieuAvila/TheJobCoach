@@ -120,13 +120,23 @@ public class ContactManager implements IUserDataManager
 		mapNameUpdate.put("l#" + info.userName, info.lastName);
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_CONTACTNAME, currentUser, mapNameUpdate);
 	}
+
+	void deleteOneContactStatusOnOneSide(String currentUser, String otherUser) throws CassandraException
+	{
+		logger.info("Delete connection for user: " + currentUser + " about user: " + otherUser);
+		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_CONTACTLIST, currentUser, otherUser);
+		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_CONTACTNAME, currentUser, "f#" + otherUser);
+		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_CONTACTNAME, currentUser, "l#" + otherUser);
+	}
+	
 	
 	/** Requesting a contact to a user OR accept contact request. Adds to the list of contacts. Sends a request mail if necessary
 	 * @param userContact User to request contact to.
+	 * @param ok In case we are in CONTACT_REQUESTED, true means accept, false means refuse
 	 * @return The request status.
 	 * @throws CassandraException 
 	 */
-	public ContactInformation.ContactStatus updateContactRequest(UserId userContact) throws CassandraException
+	public ContactInformation.ContactStatus updateContactRequest(UserId userContact, boolean ok) throws CassandraException
 	{
 		// Check whether we have requested such contact.
 		String connectInfoStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName, userContact.userName);
@@ -167,6 +177,8 @@ public class ContactManager implements IUserDataManager
 	
 		case CONTACT_REQUESTED: // received a connection request, accept.
 		{
+			if (ok)
+			{
 			logger.info(user.userName + " is accepting connection request from: " + userContact.userName);
 			
 			contactInfo.status = ContactStatus.CONTACT_OK;
@@ -186,6 +198,21 @@ public class ContactManager implements IUserDataManager
 			MailerFactory.getMailer().sendEmail(contactUserInfo.email, Lang.connectionGrantedSubject(lang), body, "noreply@www.thejobcoach.fr", parts);
 			
 			return ContactInformation.ContactStatus.CONTACT_OK;
+			}
+			else
+			{
+				logger.info(user.userName + " is refusing connection request from: " + userContact.userName);
+				
+				// remove both request and result
+				deleteOneContactStatusOnOneSide(userContact.userName, user.userName);
+				deleteOneContactStatusOnOneSide(user.userName, userContact.userName);
+				
+				// send him an email about rejection
+				String body = Lang.connectionRefused(lang, contactUserInfo.firstName, contactUserInfo.name, user.userName, myInfo.firstName, myInfo.name);
+				MailerFactory.getMailer().sendEmail(contactUserInfo.email, Lang.connectionRefusedSubject(lang), body, "noreply@www.thejobcoach.fr", parts);
+
+				return ContactInformation.ContactStatus.CONTACT_NONE;				
+			}
 		}
 		case CONTACT_NONE: // send request
 		{
@@ -257,7 +284,7 @@ public class ContactManager implements IUserDataManager
 		if (contactInfo.status != ContactInformation.ContactStatus.CONTACT_OK)
 			throw new SystemException();
 		
-		// using recipent's language
+		// using recipient's language
 		String lang = accountManager.getUserLanguage(userContact);
 
 		// get information about both participants
