@@ -25,6 +25,14 @@ public class CoachSecurityCheck
 			logger.warn("unknown user: " + id.userName);
 			throw new CoachSecurityException();
 			}
+		
+		if (!loggedin.token.equals(id.token))
+			logger.warn("bad token - : " + loggedin.token + " versus " + id.token);
+		if (!loggedin.userName.equals(id.userName))
+				logger.warn("bad id - : " + loggedin.userName + " versus " + id.userName);
+		if (!loggedin.type.equals(id.type))
+			logger.warn("bad type - : " + loggedin.type + " versus " + id.type);
+
 		if (!loggedin.equals(id))
 			{
 			logger.warn("bad user - SECURITY WARNING - : " + id.userName + " " + loggedin.userName);
