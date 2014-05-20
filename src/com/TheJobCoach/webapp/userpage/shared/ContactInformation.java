@@ -6,16 +6,22 @@ public class ContactInformation implements Serializable {
 
 	public static enum ContactStatus implements Serializable
 	{
-		CONTACT_OK /** contact is accepted on both sides */,
-		CONTACT_REQUESTED /** contact is requested to the other, and he/she has not yet accepted */,
-		CONTACT_AWAITING /** contact has requested me as a contact and is waiting my answer */,
-		CONTACT_NONE /** no request nor requestor. Happens if not set yet */;
+		 /** contact is accepted on both sides */
+		CONTACT_OK,
+		/** contact is requested to the other, and he/she has not yet accepted */
+		CONTACT_REQUESTED,
+		/** contact has requested me as a contact and is waiting my answer */
+		CONTACT_AWAITING,
+		/** no request nor requestor. Happens if not set yet */
+		CONTACT_NONE ;
 
 		private static final long serialVersionUID = 1115555324512443730L;
 	}
 
-	public static class Visibility
+	public static class Visibility implements Serializable
 	{
+		private static final long serialVersionUID = -8351118351873552581L;
+
 		public Visibility(boolean document, boolean contact,
 				boolean opportunity, boolean log)
 		{
