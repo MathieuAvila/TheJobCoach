@@ -30,6 +30,7 @@
 	<entry-point class='com.TheJobCoach.webapp.userpage.client.TestEditLogEntry'/>
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.Document.UiTestDocument" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserSite" />
+	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentConnection" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentUserReport" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestUserPage" />
 	<entry-point class="com.TheJobCoach.webapp.userpage.client.TestContentMyReports" />
