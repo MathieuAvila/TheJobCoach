@@ -95,7 +95,6 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 	void checkTime(UpdateResponse response)
 	{
 		int totalTime = response.totalDayTime;
-		System.out.println("total time: " + totalTime);
 		Date currentTime = new Date();
 		if (firstTime) // send hello message, or reconnect message
 		{
