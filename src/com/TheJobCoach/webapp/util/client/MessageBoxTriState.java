@@ -29,8 +29,6 @@ public class MessageBoxTriState implements EntryPoint {
 		public void complete(int choice);
 	}
 
-	boolean ok = true;
-	boolean cancel = true;
 	TYPE type = TYPE.QUESTION;
 	String title;
 	String message;
@@ -67,14 +65,14 @@ public class MessageBoxTriState implements EntryPoint {
 	/* For UT purposes only. 
 	 * This is used to redirect errors to a specific handler. 
 	 * It shouldn't be used in production code. */
-	public interface ErrorCatcher
+	public interface Catcher
 	{
-		public void errorEvent(MessageBoxTriState error, TYPE type, String title, String message);
+		public void event(MessageBoxTriState error, TYPE type, String title, String message);
 	}	
-	static private ErrorCatcher currentErrorCatcher = null;
-	static public void registerErrorCatcher(ErrorCatcher catcher)	
+	static private Catcher currentCatcher = null;
+	static public void registerErrorCatcher(Catcher catcher)	
 	{
-		currentErrorCatcher = catcher;
+		currentCatcher = catcher;
 	}
 
 	/**
@@ -82,9 +80,9 @@ public class MessageBoxTriState implements EntryPoint {
 	 */
 	public void onModuleLoad()
 	{
-		if (currentErrorCatcher != null)
+		if (currentCatcher != null)
 		{
-			currentErrorCatcher.errorEvent(this, type, title, message);
+			currentCatcher.event(this, type, title, message);
 		}
 		
 		dBox.setText(title);
