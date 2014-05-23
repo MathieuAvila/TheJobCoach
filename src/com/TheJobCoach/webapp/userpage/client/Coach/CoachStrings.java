@@ -37,6 +37,7 @@ public class CoachStrings implements ICoachStrings
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NONE            , DEFAULT_MAN.COACH_OPP_NONE            ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NO_LOG          , DEFAULT_MAN.COACH_OPP_NO_LOG          ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NO_APPLICATION  , DEFAULT_MAN.COACH_OPP_NO_APPLICATION  ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NO_CONTACT      , DEFAULT_MAN.COACH_OPP_NO_CONTACT      ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_LOG_RECALL          , DEFAULT_MAN.COACH_LOG_RECALL          ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_LOG_INTERVIEW       , DEFAULT_MAN.COACH_LOG_INTERVIEW       ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_LOG_FAILURE         , DEFAULT_MAN.COACH_LOG_FAILURE         ());
@@ -60,6 +61,7 @@ public class CoachStrings implements ICoachStrings
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NONE            , DEFAULT_WOMAN.COACH_OPP_NONE            ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NO_LOG          , DEFAULT_WOMAN.COACH_OPP_NO_LOG          ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NO_APPLICATION  , DEFAULT_WOMAN.COACH_OPP_NO_APPLICATION  ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NO_CONTACT      , DEFAULT_WOMAN.COACH_OPP_NO_CONTACT      ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_LOG_RECALL          , DEFAULT_WOMAN.COACH_LOG_RECALL          ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_LOG_INTERVIEW       , DEFAULT_WOMAN.COACH_LOG_INTERVIEW       ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_LOG_FAILURE         , DEFAULT_WOMAN.COACH_LOG_FAILURE         ());
@@ -73,7 +75,7 @@ public class CoachStrings implements ICoachStrings
 		HashMap<String, String[]> avatarMessages = messages.get(coach);
 		if (avatarMessages == null) return "No such avatar";
 		String[] messagesTable = avatarMessages.get(key);
-		if (messagesTable == null) return "No such message";
+		if (messagesTable == null) return "No such message: " + key;
 		int i = Random.nextInt(messagesTable.length);
 		return messagesTable[i];
 	}

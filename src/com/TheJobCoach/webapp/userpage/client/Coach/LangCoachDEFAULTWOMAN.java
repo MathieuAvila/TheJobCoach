@@ -34,6 +34,8 @@ public interface LangCoachDEFAULTWOMAN extends Constants
 	public String[] COACH_OPP_NO_LOG();
 	@Key("COACH_OPP_NO_APPLICATION")	
 	public String[] COACH_OPP_NO_APPLICATION();
+	@Key("COACH_OPP_NO_CONTACT")	
+	public String[] COACH_OPP_NO_CONTACT();
 	@Key("COACH_LOG_RECALL")	
 	public String[] COACH_LOG_RECALL ();
 	@Key("COACH_LOG_INTERVIEW")	
