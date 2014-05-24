@@ -2,6 +2,7 @@ eclipse.preferences.version=1
 encoding//src/com/TheJobCoach/userdata/Lang.java=UTF-8
 encoding//src/com/TheJobCoach/userdata/Lang_en.properties=UTF-8
 encoding//src/com/TheJobCoach/userdata/Lang_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/userdata/data/mail_connection_request_fr.html=UTF-8
 encoding//src/com/TheJobCoach/userdata/report/LangReportAction_en.properties=UTF-8
 encoding//src/com/TheJobCoach/userdata/report/LangReportAction_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/mainpage/client/Lang.properties=UTF-8
@@ -18,6 +19,8 @@ encoding//src/com/TheJobCoach/webapp/userpage/client/Coach/LangCoachDEFAULTWOMAN
 encoding//src/com/TheJobCoach/webapp/userpage/client/CoachSettings/LangCoachSettings.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/CoachSettings/LangCoachSettings_en.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/CoachSettings/LangCoachSettings_fr.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/Connection/LangConnection.properties=UTF-8
+encoding//src/com/TheJobCoach/webapp/userpage/client/Connection/LangConnection_fr.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Document/LangDocument.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Document/LangDocument_en.properties=UTF-8
 encoding//src/com/TheJobCoach/webapp/userpage/client/Document/LangDocument_fr.properties=UTF-8
