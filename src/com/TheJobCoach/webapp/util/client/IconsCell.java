@@ -34,8 +34,7 @@ public class IconsCell<T> extends AbstractSafeHtmlCell<T>
 		public Vector<ImageResource> getShare(T element);
 	}
 
-	@SuppressWarnings("unused")
-	private IGetIcons<T> getIcons;
+	public IGetIcons<T> getIcons;
 
 	private static Template template;
 
