@@ -16,10 +16,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
-public class SendMessage extends DialogBox {
+
+public class SendMessage extends DialogBox  implements ISendMessage  {
 
 	Panel rootPanel;
 	final Lang lang = GWT.create(Lang.class);
@@ -36,13 +34,36 @@ public class SendMessage extends DialogBox {
 	String firstName;
 	String lastName;
 	
-	public SendMessage(Panel panel, UserId contact, String firstName, String lastName)
+	public SendMessage()
+	{
+	}
+
+	@Override
+	public void sendMessage(Panel panel, UserId contact, String firstName, String lastName)
 	{
 		rootPanel = panel;
 		this.contact = contact;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		onModuleLoad();
+		this.setStylePrimaryName("common-form-dialog");
+		this.setText(langConnection.sendMessage());
+		this.setGlassEnabled(true);
+		this.setAnimationEnabled(true);
+		
+		VerticalPanel vp = new VerticalPanel();
+		this.setWidget(vp);
+
+		vp.add(new VerticalSpacer("1em"));
+		vp.add(new Label(langConnection.sendMessageTo().replace("%f", firstName).replace("%l", lastName)));
+		vp.add(new VerticalSpacer("1em"));
+		vp.add(textAreaMessage);
+
+		btnSendMessage = okCancel.getOk();
+		btnSendMessage.addClickHandler(new SendMessageHandler(this));
+
+		vp.add(okCancel);
+
+		this.center();	
 	}
 
 	// Create a handler for the send message button
@@ -64,29 +85,6 @@ public class SendMessage extends DialogBox {
 		{
 			this.dBox = dBox;
 		}
-	}
-
-	void onModuleLoad()
-	{
-		this.setStylePrimaryName("common-form-dialog");
-		this.setText(langConnection.sendMessage());
-		this.setGlassEnabled(true);
-		this.setAnimationEnabled(true);
-		
-		VerticalPanel vp = new VerticalPanel();
-		this.setWidget(vp);
-
-		vp.add(new VerticalSpacer("1em"));
-		vp.add(new Label(langConnection.sendMessageTo().replace("%f", firstName).replace("%l", lastName)));
-		vp.add(new VerticalSpacer("1em"));
-		vp.add(textAreaMessage);
-
-		btnSendMessage = okCancel.getOk();
-		btnSendMessage.addClickHandler(new SendMessageHandler(this));
-
-		vp.add(okCancel);
-
-		this.center();	
 	}
 
 }

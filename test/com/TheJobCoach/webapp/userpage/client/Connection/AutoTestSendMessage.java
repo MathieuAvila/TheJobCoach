@@ -93,10 +93,8 @@ public class AutoTestSendMessage extends GwtTest {
 	public void testValid() throws InterruptedException
 	{
 		userService.calls = 0;
-		cud = new SendMessage(
-				p, ule, "FN", "LN"
-				);
-		cud.onModuleLoad();	
+		cud = new SendMessage();
+		cud.sendMessage(p, ule, "FN", "LN");
 		
 		//cud..getOk().click();
 		assertEquals(0, userService.calls);
@@ -107,10 +105,9 @@ public class AutoTestSendMessage extends GwtTest {
 	public void testCancel() throws InterruptedException
 	{
 		userService.calls = 0;
-		cud = new SendMessage(
-				p, ule, "FN", "LN"
-				);
-		cud.onModuleLoad();	
+		cud = new SendMessage();
+		cud.sendMessage(p, ule, "FN", "LN");
+		
 		//cud.okCancel.getCancel().click();
 		assertEquals(0, userService.calls);
 		// (0, result.calls);
