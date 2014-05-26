@@ -78,16 +78,18 @@ public class ContentConnection extends VerticalPanel {
 	static ImageResource contactAwaiting = wpImageBundle.userConnectionAwaiting();
 
 	Panel rootPanel;
-
+	ISendMessage sendMessage;
+	
 	void init(UserId _user)
 	{
 		user = _user;
 		rootPanel = RootPanel.get();
 	}
 
-	public ContentConnection(UserId _user)
+	public ContentConnection(UserId _user, ISendMessage sendMessage)
 	{
 		init(_user);
+		this.sendMessage = sendMessage;
 		onModuleLoad();
 	}
 
@@ -130,7 +132,7 @@ public class ContentConnection extends VerticalPanel {
 
 	private void message(ContactInformation object)
 	{
-		new SendMessage(rootPanel, new UserId(object.userName, "", UserId.UserType.USER_TYPE_SEEKER),
+		sendMessage.sendMessage(rootPanel, new UserId(object.userName, "", UserId.UserType.USER_TYPE_SEEKER),
 				object.firstName, object.lastName);
 	}
 
@@ -241,6 +243,7 @@ public class ContentConnection extends VerticalPanel {
 			{
 				result.add(messageIcon);
 			}
+			System.out.println("get message " + element.status + " " + ContactStatus.CONTACT_OK);
 			return result;
 		}
 	}
@@ -303,6 +306,7 @@ public class ContentConnection extends VerticalPanel {
 				"", "3em",
 				new ComparatorContactInformationStatus());
 
+		// Create message column.
 		cellTable.addClickableIconsColumn(
 				new GetIconsMessage(), 
 				new FieldUpdaterSendMessage(), 
@@ -344,7 +348,7 @@ public class ContentConnection extends VerticalPanel {
 		cellTableSearchResult.setVisible(false);
 		cellTableSearchResult.setSize("100%", "");
 
-		// Create column.
+		// name column.
 		cellTableSearchResult.specialAddColumnSortableString(new GetValue<String, UserSearchEntry>() {
 			@Override
 			public String getValue(UserSearchEntry contact)

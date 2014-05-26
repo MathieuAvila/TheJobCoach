@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.userpage.client.Connection.ContentConnection;
+import com.TheJobCoach.webapp.userpage.client.Connection.SendMessage;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.TestSecurity;
@@ -27,7 +28,7 @@ public class TestContentConnection implements EntryPoint {
 					{
 						root.setStyleName("mainpage-content");
 						root.setSize("100%", "100%");
-						ContentConnection cud = new ContentConnection(TestSecurity.defaultUser);
+						ContentConnection cud = new ContentConnection(TestSecurity.defaultUser, new SendMessage());
 						root.add(cud);
 					}
 				});
