@@ -19,12 +19,12 @@ public class CatcherMessageBoxTriState implements MessageBoxTriState.Catcher
 		this.message = message;
 	}
 	
-	public boolean hasError()
+	public boolean isTriggered()
 	{
 		return currentBox != null;	
 	}
 	
-	public void clearError()
+	public void closeBox()
 	{
 		if (currentBox != null) currentBox.close();
 		currentBox = null;
