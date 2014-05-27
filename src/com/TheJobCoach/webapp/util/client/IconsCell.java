@@ -31,7 +31,8 @@ public class IconsCell<T> extends AbstractSafeHtmlCell<T>
 
 	public interface IGetIcons<T>
 	{
-		public Vector<ImageResource> getShare(T element);
+		public Vector<ImageResource> getIcons(T element);
+		public boolean isClickable(T element);
 	}
 
 	public IGetIcons<T> getIcons;
@@ -65,16 +66,17 @@ public class IconsCell<T> extends AbstractSafeHtmlCell<T>
 			@Override
 			public SafeHtml render(T object)
 			{
-				Vector<ImageResource> imgs = getIcons.getShare(object);
+				Vector<ImageResource> imgs = getIcons.getIcons(object);
+				boolean clickable = getIcons.isClickable(object);
 				SafeHtmlBuilder sb = new SafeHtmlBuilder();
-				sb.appendHtmlConstant("<div class=\"clickableText\"><a style=\"clickableText\"><table border=0><tr>");
+				sb.appendHtmlConstant((clickable ? "<div class=\"clickableText\"><a style=\"clickableText\">":"<div>") + "<table border=0><tr>");
 				for (ImageResource img: imgs)
 				{
 					sb.appendHtmlConstant("<td>");
 					sb.append(getImageHtml(img));
 					sb.appendHtmlConstant("</td>");
 				}
-				sb.appendHtmlConstant("</td></tr></table></a></div>");
+				sb.appendHtmlConstant("</td></tr></table>"+ (clickable ? "</a>":"")+ "</div>");
 				return sb.toSafeHtml();
 			}
 

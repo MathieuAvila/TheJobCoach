@@ -210,7 +210,7 @@ public class ContentConnection extends VerticalPanel {
 	class IGetIconsStatus implements IGetIcons<ContactInformation>
 	{
 		@Override
-		public Vector<ImageResource> getShare(ContactInformation element)
+		public Vector<ImageResource> getIcons(ContactInformation element)
 		{
 			Vector<ImageResource> result = new Vector<ImageResource>();
 			switch (element.status)
@@ -221,6 +221,12 @@ public class ContentConnection extends VerticalPanel {
 			case CONTACT_REQUESTED: result.add(contactRequested);break;
 			}
 			return result;
+		}
+
+		@Override
+		public boolean isClickable(ContactInformation element)
+		{
+			return element.status != ContactStatus.CONTACT_OK;
 		}
 	}
 
@@ -236,7 +242,7 @@ public class ContentConnection extends VerticalPanel {
 	class GetIconsMessage implements IGetIcons<ContactInformation>
 	{
 		@Override
-		public Vector<ImageResource> getShare(ContactInformation element)
+		public Vector<ImageResource> getIcons(ContactInformation element)
 		{
 			Vector<ImageResource> result = new Vector<ImageResource>();
 			if (element.status == ContactStatus.CONTACT_OK)
@@ -245,6 +251,12 @@ public class ContentConnection extends VerticalPanel {
 			}
 			System.out.println("get message " + element.status + " " + ContactStatus.CONTACT_OK);
 			return result;
+		}
+
+		@Override
+		public boolean isClickable(ContactInformation element)
+		{
+			return element.status == ContactStatus.CONTACT_OK;
 		}
 	}
 
@@ -282,12 +294,18 @@ public class ContentConnection extends VerticalPanel {
 	class GetIconsAdd implements IGetIcons<UserSearchEntry>
 	{
 		@Override
-		public Vector<ImageResource> getShare(UserSearchEntry element)
+		public Vector<ImageResource> getIcons(UserSearchEntry element)
 		{
 			Vector<ImageResource> result = new Vector<ImageResource>();
 			if (!excludeUserNameList.contains(element.userName))
 				result.add(addIcon);
 			return result;
+		}
+
+		@Override
+		public boolean isClickable(UserSearchEntry element)
+		{
+			return !excludeUserNameList.contains(element.userName);
 		}
 	}
 
