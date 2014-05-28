@@ -51,9 +51,9 @@ public class AutoTestContentConnection extends GwtTest {
 	
 	ContactInformation ci1 = new ContactInformation(ContactStatus.CONTACT_OK, 
 			"u1", "firstName1", "lastName1", new Visibility(), new Visibility());
-	ContactInformation ci2 = new ContactInformation(ContactStatus.CONTACT_AWAITING, 
+	ContactInformation ci2 = new ContactInformation(ContactStatus.CONTACT_REQUESTED, 
 			"u2", "firstName2", "lastName2", new Visibility(), new Visibility());
-	ContactInformation ci3 = new ContactInformation(ContactStatus.CONTACT_REQUESTED, 
+	ContactInformation ci3 = new ContactInformation(ContactStatus.CONTACT_AWAITING, 
 			"u3", "firstName3", "lastName3", new Visibility(), new Visibility());
 
 	// added after request
@@ -181,6 +181,9 @@ public class AutoTestContentConnection extends GwtTest {
 		
 		SendMessageTest sendMessage = new SendMessageTest();
 		
+		// create click event for further use.
+		Event event = EventBuilder.create(Event.ONCLICK).build();
+		
 		ContentConnection cud = new ContentConnection(userId, sendMessage);
 		assertEquals(1, userService.callsGet);
 		assertEquals(3, cud.cellTable.getRowCount());
@@ -203,14 +206,53 @@ public class AutoTestContentConnection extends GwtTest {
 		Vector<ImageResource> v0 = c0.getIcons.getIcons(ci1);
 		assertEquals(1, v0.size());
 		assertEquals(ContentConnection.contactOk, v0.get(0));
+		// Check clicking is useless
+		assertFalse(c0.getIcons.isClickable(ci1));
 		
 		v0 = c0.getIcons.getIcons(ci2);
 		assertEquals(1, v0.size());
-		assertEquals(ContentConnection.contactAwaiting, v0.get(0));
+		assertEquals(ContentConnection.contactRequested, v0.get(0));
+		// Check clicking triggers a message box tri state
+		assertTrue(c0.getIcons.isClickable(ci2));
+		assertNull(mbTriStateCatcher.currentBox);
+		cud.cellTable.getColumn(COLUMN_STATUS).onBrowserEvent(new Cell.Context(1, COLUMN_STATUS, ci2), cud.cellTable.getElement(), ci2, EventBuilder.create(Event.ONCLICK).build());
+		assertNotNull(mbTriStateCatcher.currentBox);
+		System.out.println(" TITLE " + mbTriStateCatcher.message);
+		assertTrue(mbTriStateCatcher.message.contains(ci2.firstName));
+		assertTrue(mbTriStateCatcher.message.contains(ci2.lastName));
+		// 2 possibilities: either accept...
+		userService.reset();
+		cud.cellTable.getColumn(COLUMN_STATUS).onBrowserEvent(new Cell.Context(1, COLUMN_STATUS, ci2), cud.cellTable.getElement(), ci2, EventBuilder.create(Event.ONCLICK).build());
+		assertNotNull(mbTriStateCatcher.currentBox);
+		mbTriStateCatcher.currentBox.clickChoice(0); // accept
+		assertEquals(1, userService.callsUpdate);
+		assertEquals(ci2.userName, userService.userContact.userName);
+		assertEquals(1, userService.callsGet); // updated with result
+		assertEquals(true, userService.ok);
+		// .. or refuse.
+		userService.reset();
+		mbTriStateCatcher.closeBox();
+		cud.cellTable.getColumn(COLUMN_STATUS).onBrowserEvent(new Cell.Context(1, COLUMN_STATUS, ci2), cud.cellTable.getElement(), ci2, EventBuilder.create(Event.ONCLICK).build());
+		assertNotNull(mbTriStateCatcher.currentBox);
+		mbTriStateCatcher.currentBox.clickChoice(1); // refuse
+		assertEquals(1, userService.callsUpdate);
+		assertEquals(ci2.userName, userService.userContact.userName);
+		assertEquals(1, userService.callsGet); // updated with result
+		assertEquals(false, userService.ok);
+		// or nothing
+		userService.reset();
+		mbTriStateCatcher.closeBox();
+		cud.cellTable.getColumn(COLUMN_STATUS).onBrowserEvent(new Cell.Context(1, COLUMN_STATUS, ci2), cud.cellTable.getElement(), ci2, event);
+		assertNotNull(mbTriStateCatcher.currentBox);
+		mbTriStateCatcher.currentBox.clickChoice(-1); // cancel
+		assertEquals(0, userService.callsUpdate);
+		assertEquals(0, userService.callsGet); // updated with result
 		
 		v0 = c0.getIcons.getIcons(ci3);
 		assertEquals(1, v0.size());
-		assertEquals(ContentConnection.contactRequested, v0.get(0));
+		assertEquals(ContentConnection.contactAwaiting, v0.get(0));
+		// Check clicking triggers a message box info
+		assertTrue(c0.getIcons.isClickable(ci3));
 		
 		ContentConnection.FieldUpdaterContactInformation fuCI = (ContentConnection.FieldUpdaterContactInformation)cud.cellTable.getColumn(0).getFieldUpdater();
 		fuCI.update(0, ci2, ci2);
@@ -230,7 +272,6 @@ public class AutoTestContentConnection extends GwtTest {
 		assertEquals(0, v1.size());
 
 		// Send message to ci2/ci3 => impossible
-		Event event = EventBuilder.create(Event.ONCLICK).build();		
 		cud.cellTable.getColumn(COLUMN_MESSAGE).onBrowserEvent(new Cell.Context(1, COLUMN_MESSAGE, ci2), cud.cellTable.getElement(), ci2, event);
 		assertEquals(0, sendMessage.counter);
 		cud.cellTable.getColumn(COLUMN_MESSAGE).onBrowserEvent(new Cell.Context(1, COLUMN_MESSAGE, ci3), cud.cellTable.getElement(), ci3, event);
