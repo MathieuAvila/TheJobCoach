@@ -145,6 +145,7 @@ public class ContentConnection extends VerticalPanel {
 
 	private void updateContactStatus(final ContactInformation object)
 	{
+		System.out.println("updateContactStatus " + object.userName);
 		switch (object.status)
 		{
 		case CONTACT_OK: 
@@ -160,7 +161,7 @@ public class ContentConnection extends VerticalPanel {
 					messageReplace(langConnection.messageStatusNone(), object));
 			break;
 		case CONTACT_REQUESTED: 
-			MessageBoxTriState msg = new MessageBoxTriState(rootPanel, MessageBoxTriState.TYPE.QUESTION, "", messageReplace(langConnection.messageStatusRequested(), object),
+			new MessageBoxTriState(rootPanel, MessageBoxTriState.TYPE.QUESTION, "", messageReplace(langConnection.messageStatusRequested(), object),
 					new ButtonImageText(ButtonImageText.Type.USER_ACCEPT, langConnection.acceptConnection()), 
 					new ButtonImageText(ButtonImageText.Type.USER_REFUSE, langConnection.refuseConnection()), 
 					new MessageBoxTriState.ICallback() {
@@ -177,7 +178,6 @@ public class ContentConnection extends VerticalPanel {
 						userService.updateContactRequest(new UserId(object.userName,  "", UserId.UserType.USER_TYPE_COACH), 
 								ok == 0, callback);
 				}});
-			msg.onModuleLoad();
 			break;
 		}
 	}

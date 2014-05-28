@@ -38,19 +38,16 @@ public class TestMessageBoxTriState extends GwtTest {
 						accept = accepted;
 					}
 				});
-		mb.onModuleLoad();		
 		assertTrue(mb.dBox.isShowing() == true);
 
 		b2.click();
 		assertTrue(1 == accept);
 		assertTrue(mb.dBox.isShowing() == false);
 		
-		mb.onModuleLoad();	
 		mb.buttonCancel.click();
 		assertTrue(-1 == accept);
 		assertTrue(mb.dBox.isShowing() == false);
 		
-		mb.onModuleLoad();	
 		b1.click();
 		assertTrue(0 == accept);
 		assertTrue(mb.dBox.isShowing() == false);

@@ -1,6 +1,5 @@
 package com.TheJobCoach.webapp.util.client;
 
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -17,7 +16,7 @@ import com.google.gwt.user.client.ui.Button;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class MessageBoxTriState implements EntryPoint {
+public class MessageBoxTriState {
 
 	Panel rootPanel;
 	
@@ -46,6 +45,7 @@ public class MessageBoxTriState implements EntryPoint {
 		this.title = title;
 		this.message = message;
 		this.callback = callback;
+		init();
 	}
 
 	static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
@@ -75,10 +75,7 @@ public class MessageBoxTriState implements EntryPoint {
 		currentCatcher = catcher;
 	}
 
-	/**
-	 * This is the entry point method.
-	 */
-	public void onModuleLoad()
+	void init()
 	{
 		if (currentCatcher != null)
 		{
@@ -170,5 +167,15 @@ public class MessageBoxTriState implements EntryPoint {
 		});
 		dBox.getElement().getStyle().setProperty("zIndex", "10" );
 		dBox.center();
+	}
+
+	// for UT purposes
+	public void clickChoice(int num)
+	{
+		switch(num)
+		{
+		case 0: button1.click();break;
+		case 1: button2.click();break;
+		}
 	}
 }
