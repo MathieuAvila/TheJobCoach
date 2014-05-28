@@ -8,14 +8,21 @@ import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.webapp.CatcherMessageBoxTriState;
+import com.TheJobCoach.webapp.ErrorCatcherMessageBox;
+import com.TheJobCoach.webapp.adminpage.shared.UserSearchEntry;
+import com.TheJobCoach.webapp.adminpage.shared.UserSearchResult;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.util.client.IconsCell;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserId.UserType;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Event;
@@ -48,19 +55,32 @@ public class AutoTestContentConnection extends GwtTest {
 			"u2", "firstName2", "lastName2", new Visibility(), new Visibility());
 	ContactInformation ci3 = new ContactInformation(ContactStatus.CONTACT_REQUESTED, 
 			"u3", "firstName3", "lastName3", new Visibility(), new Visibility());
+
+	// added after request
+	ContactInformation ci_new = new ContactInformation(ContactStatus.CONTACT_REQUESTED, 
+			"new_user", "firstName_new", "lastName_new", new Visibility(), new Visibility());
 	
 	Vector<ContactInformation> contactList =  new Vector<ContactInformation>(Arrays.asList(ci1, ci2, ci3));
 	
+	UserSearchEntry s_userId = new UserSearchEntry(userId.userName, "firstName", "lastName", "job", UserType.USER_TYPE_SEEKER);
+	UserSearchEntry s_ci1 = new UserSearchEntry(ci1.userName, "firstName1", "lastName1", "job1", UserType.USER_TYPE_SEEKER);
+	UserSearchEntry s_new = new UserSearchEntry("new_user", "firstName_new", "lastName_new", "job_new", UserType.USER_TYPE_SEEKER);
+	
+	Vector<UserSearchEntry> searchResultEntries = new Vector<UserSearchEntry>(Arrays.asList(s_userId, s_ci1, s_new));
+	UserSearchResult searchResult = new UserSearchResult(searchResultEntries, 15);
+
 	class SpecialUserServiceAsync extends DefaultUserServiceAsync
 	{
-		public int callsGet, callsMessage, callsUpdate;
+		public int callsGet, callsMessage, callsUpdate, callsSearch;
 		public UserId userContact;
 		public boolean ok;
 		public String message;
 		
+		Logger logger = LoggerFactory.getLogger(SpecialUserServiceAsync.class);
+	   	
 		public void reset()
 		{
-			callsGet = callsMessage = callsUpdate = 0;
+			callsGet = callsMessage = callsUpdate = callsSearch = 0;
 			ok = false;
 			userContact = null;
 			message = null;
@@ -80,7 +100,8 @@ public class AutoTestContentConnection extends GwtTest {
 		public void getContactList(
 				AsyncCallback<Vector<ContactInformation>> callback)
 		{
-			callsGet++;
+			callsGet++;	
+			logger.info("getContactList");
 			callback.onSuccess(contactList);
 		}
 		@Override
@@ -91,6 +112,20 @@ public class AutoTestContentConnection extends GwtTest {
 			this.message = message;
 			callsMessage++;
 			callback.onSuccess(true);
+		}
+		
+		@Override
+		public void searchUsers(UserId id, String firstName, String lastName,
+				int sizeRange, int startRange,
+				AsyncCallback<UserSearchResult> callback)
+		{
+			logger.info("searchUsers " + id.userName + " firstName " + firstName + " lastName " + lastName + " sizeRange " + sizeRange + " startRange " + startRange);
+			callsSearch++;
+			assertEquals("first", firstName);
+			assertEquals("last", lastName);
+			assertEquals(10, sizeRange);
+			assertEquals(0, startRange);
+			callback.onSuccess(searchResult);
 		}
 	}
 
@@ -134,10 +169,15 @@ public class AutoTestContentConnection extends GwtTest {
 		}
 	}
 	
+	static int COLUMN_SEARCH_NAME = 0;
+	static int COLUMN_SEARCH_JOB = 1;
+	static int COLUMN_SEARCH_ADD = 2;
+	
 	@Test
 	public void testAll() throws InterruptedException
 	{
 		CatcherMessageBoxTriState mbTriStateCatcher = new CatcherMessageBoxTriState();
+		ErrorCatcherMessageBox mbCatcher = new ErrorCatcherMessageBox();
 		
 		SendMessageTest sendMessage = new SendMessageTest();
 		
@@ -171,7 +211,7 @@ public class AutoTestContentConnection extends GwtTest {
 		v0 = c0.getIcons.getIcons(ci3);
 		assertEquals(1, v0.size());
 		assertEquals(ContentConnection.contactRequested, v0.get(0));
-
+		
 		ContentConnection.FieldUpdaterContactInformation fuCI = (ContentConnection.FieldUpdaterContactInformation)cud.cellTable.getColumn(0).getFieldUpdater();
 		fuCI.update(0, ci2, ci2);
 		
@@ -198,9 +238,57 @@ public class AutoTestContentConnection extends GwtTest {
 		// send message to ci1
 		cud.cellTable.getColumn(COLUMN_MESSAGE).onBrowserEvent(new Cell.Context(1, COLUMN_MESSAGE, ci1), cud.cellTable.getElement(), ci1, event);
 		assertEquals(1, sendMessage.counter);
-		mbTriStateCatcher.closeBox();
 		
 		// Search engine
+		// not visible
+		assertFalse(cud.cellTableSearchResult.isVisible());
+		cud.textBoxFirstName.setValue("first");
+		cud.textBoxLastName.setValue("last");
+
+		userService.reset();
+		cud.buttonRunSearch.click();
+		// service called, search result visible and with appropriate results: 
+		// text + add button is present and clickable only for username not already listed, NOR myself 
+		assertEquals(1, userService.callsSearch);
+		assertTrue(cud.cellTableSearchResult.isVisible());
 		
-	}	
+		assertEquals(searchResultEntries.size(), cud.cellTableSearchResult.getColumnCount());
+		for (int i=0; i != searchResultEntries.size(); i++)
+		{
+			assertEquals(searchResultEntries.get(i), cud.cellTableSearchResult.getVisibleItem(i));
+			UserSearchEntry sr = searchResultEntries.get(i);
+			assertEquals(sr.firstName + " " + sr.lastName + "(" + sr.userName + ")", cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_NAME).getValue(searchResultEntries.get(i)));
+			assertEquals(sr.job, cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_JOB).getValue(searchResultEntries.get(i)));
+		}
+		// check the "add" column
+		@SuppressWarnings("unchecked")
+		IconsCell<UserSearchEntry> c_add = (IconsCell<UserSearchEntry>)cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_ADD).getCell();
+		// I cannot add myself
+		Vector<ImageResource> v_search_add = c_add.getIcons.getIcons(s_userId);
+		assertEquals(0, v_search_add.size());
+		assertEquals(false, c_add.getIcons.isClickable(s_userId));
+		// I cannot add a user already added
+		v_search_add = c_add.getIcons.getIcons(s_ci1);
+		assertEquals(0, v_search_add.size());
+		assertEquals(false, c_add.getIcons.isClickable(s_ci1));
+		// I can add another user
+		v_search_add = c_add.getIcons.getIcons(s_new);
+		assertEquals(1, v_search_add.size());
+		assertEquals(ContentConnection.addIcon, v_search_add.get(0));
+		assertEquals(true, c_add.getIcons.isClickable(s_new));
+		
+		// Add new user. Please do. I will have a message box, service is called and refreshed with new user, and search results are hidden.
+		userService.reset();
+		contactList.add(ci_new);
+		cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_ADD).onBrowserEvent(new Cell.Context(1, COLUMN_SEARCH_ADD, s_new), cud.cellTableSearchResult.getElement(), s_new, event);
+		assertEquals(1, userService.callsUpdate);
+		assertEquals(1, userService.callsGet);
+		assertFalse(cud.cellTableSearchResult.isVisible());
+		assertNotNull(mbCatcher.currentBox);
+		assertTrue(mbCatcher.message.contains(s_new.firstName));
+		assertTrue(mbCatcher.message.contains(s_new.lastName));
+		assertEquals(MessageBox.TYPE.INFO, mbCatcher.type);
+		mbCatcher.currentBox.close();
+		assertEquals(4, cud.cellTable.getRowCount()); // one more !
+	}
 }

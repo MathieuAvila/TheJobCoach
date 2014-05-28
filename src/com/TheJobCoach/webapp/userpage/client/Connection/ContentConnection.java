@@ -249,7 +249,6 @@ public class ContentConnection extends VerticalPanel {
 			{
 				result.add(messageIcon);
 			}
-			System.out.println("get message " + element.status + " " + ContactStatus.CONTACT_OK);
 			return result;
 		}
 
