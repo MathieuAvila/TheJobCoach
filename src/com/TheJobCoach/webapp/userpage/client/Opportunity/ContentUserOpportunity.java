@@ -7,6 +7,7 @@ import java.util.Vector;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Coach.GoalSignal;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
@@ -71,7 +72,8 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 				panelDescriptionContent.setHTML(currentOpportunity.description);
 				labelPubDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.pubDate));
 				labelStartDate.setText(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(currentOpportunity.startDate));
-				cellTable.redraw();				
+				cellTable.redraw();
+				GoalSignal.getInstance().newEvent();
 			}
 		};
 		userService.getUserOpportunity(user, opp.ID, callback);	
@@ -128,6 +130,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 								public void onSuccess(String result)
 								{
 									getAllContent();
+									// Do not signal coach: in case we move away from the goal, don't talk.
 								}
 							});
 						}
@@ -145,6 +148,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 					public void onSuccess(String result)
 					{
 						getAllContent();
+						GoalSignal.getInstance().newEvent();
 					}
 				});
 			}
@@ -170,6 +174,7 @@ public class ContentUserOpportunity implements EntryPoint, IContentUserOpportuni
 					public void onSuccess(String result)
 					{
 						getAllContent();
+						GoalSignal.getInstance().newEvent();
 					}
 				});
 			}

@@ -14,6 +14,7 @@ import org.junit.Test;
 import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.ErrorCatcherMessageBox;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Coach.GoalSignal;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IEditDialogModel;
@@ -212,9 +213,12 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 		
 		ErrorCatcherMessageBox mbCatcher = new ErrorCatcherMessageBox();
 		userService.callsGet = 0;
+		int goalSignalCounter = GoalSignal.getInstance().getCounter();
+
 		cuo = new ContentUserOpportunity(
 				p, userId, new TestEditDialog(), new TestContentUserLog());
 		cuo.onModuleLoad();
+		
 		assertEquals(1, userService.callsGet);
 		assertEquals(0, userService.callsGetSingle);
 		
@@ -277,8 +281,12 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 		// If edition is validated, ... it triggers an update, otherwise nothing.
 		editDialog.result.setResult(null); // try nothing
 		assertEquals(0, userService.callsGet);
+		goalSignalCounter = GoalSignal.getInstance().getCounter();
 		editDialog.result.setResult(opportunity2); // try something now
 		assertEquals(1, userService.callsGet);
+		// trigger a coach update
+		assertEquals(goalSignalCounter +1, GoalSignal.getInstance().getCounter());
+		goalSignalCounter = GoalSignal.getInstance().getCounter();
 
 		// Click on new
 		creationStack.clear();
@@ -293,9 +301,14 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 		// If edition is validated, ... it triggers an update, otherwise nothing.
 		editDialog.result.setResult(null); // try nothing
 		assertEquals(0, userService.callsGet);
+		// NOT trigger a coach update
+		assertEquals(goalSignalCounter, GoalSignal.getInstance().getCounter());
 		editDialog.result.setResult(opportunity2); // try something now
 		assertEquals(1, userService.callsGet);
-		
+		// trigger a coach update
+		assertEquals(goalSignalCounter +1, GoalSignal.getInstance().getCounter());
+		goalSignalCounter = GoalSignal.getInstance().getCounter();
+
 		// Click on edit logs
 		userService.reset();
 		mbCatcher.clearError();
@@ -306,7 +319,7 @@ public class AutoTestContentUserOpportunity extends GwtTest {
 		assertEquals(1, userLog.loaded);
 		assertNotNull(userLog.edition);
 		assertEquals(opportunity2.ID, userLog.edition.ID);
-		
+
 		// TODO check what is loaded/freed
 		
 		// TODO check URL column

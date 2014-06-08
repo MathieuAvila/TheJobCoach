@@ -15,6 +15,8 @@ import org.junit.Test;
 import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.ErrorCatcherMessageBox;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Coach.GoalSignal;
+import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod;
 import com.TheJobCoach.webapp.userpage.shared.UpdatePeriod.PeriodType;
@@ -25,10 +27,10 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.client.DefaultUtilServiceAsync;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.shared.UserId;
-
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Event;
@@ -138,8 +140,10 @@ public class AutoTestContentUserLog extends GwtTest {
 	}
 
 	SpecialUserServiceAsync userService = new SpecialUserServiceAsync();
+	DefaultUtilServiceAsync utilService = new DefaultUtilServiceAsync();
 	
 	HorizontalPanel p;
+	MessagePipe msg;
 	
 	@Before
 	public void beforeContentUserOpportunity()
@@ -152,10 +156,15 @@ public class AutoTestContentUserLog extends GwtTest {
 				{
 					return userService;
 				}
+				if (arg0.getCanonicalName().equals("com.TheJobCoach.webapp.util.client.UtilService"))
+				{
+					return utilService;
+				}
 				return null;
 			}}
 		);
-		p = new HorizontalPanel();		
+		p = new HorizontalPanel();
+		msg = MessagePipe.getMessagePipe(userId, null);	
 	}
 	
 	static final int COLUMN_DELETE       = 0;
@@ -238,7 +247,8 @@ public class AutoTestContentUserLog extends GwtTest {
 	public void testGetAll() throws InterruptedException
 	{
 		ContentUserLog cul;
-		
+		int goalSignalCounter = GoalSignal.getInstance().getCounter();
+
 		ErrorCatcherMessageBox mbCatcher = new ErrorCatcherMessageBox();
 		userService.callsGet = 0;
 		cul = new ContentUserLog(
@@ -314,7 +324,11 @@ public class AutoTestContentUserLog extends GwtTest {
 		// If edition is validated, ... it triggers an update, otherwise nothing.
 		editDialog.result.setResult(null); // try nothing
 		assertEquals(0, userService.callsGet);
+		
+		goalSignalCounter = GoalSignal.getInstance().getCounter();		
 		editDialog.result.setResult(userLog2); // try something now
+		// check it signals the coach that something may have changed.
+		assertEquals(goalSignalCounter +1, GoalSignal.getInstance().getCounter());
 		assertEquals(1, userService.callsGet);
 
 		// Click on back to opportunity

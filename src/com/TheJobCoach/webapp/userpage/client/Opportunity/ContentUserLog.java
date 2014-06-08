@@ -9,6 +9,7 @@ import java.util.Vector;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Coach.GoalSignal;
 import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
@@ -179,7 +180,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 					// Only if it's different than current status
 					if (!changeOpportunityStatus.get(log.type).equals(editedOpportunity.status))
 					{
-
+						// TODO
 					}
 				}
 			}
@@ -222,6 +223,7 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 							{
 								checkOpportunityChange(result);
 								getAllContent();
+								GoalSignal.getInstance().newEvent();
 							}
 						}
 							});
