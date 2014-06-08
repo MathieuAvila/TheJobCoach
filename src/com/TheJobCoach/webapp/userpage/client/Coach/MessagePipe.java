@@ -80,6 +80,18 @@ public class MessagePipe implements ReturnValue
 		}
 	}
 
+	// Directly add a parameterized message to the queue list, without checking for min/max in user values.
+	public void addDirectParameterizedMessage(String messageKey, Vector<String> params)
+	{
+		String msg = strings.getMessage(messageKey, coachIs);
+		for (int i = 0; i != params.size(); i++)
+		{
+			msg = msg.replace("%" + String.valueOf(i + 1), params.get(i));
+		}
+		System.out.println("Append message key " + messageKey + " with params " + params);
+		appendQueue.add(msg);
+	}
+	
 	public void addMessage(String messageKey)
 	{
 		if (messageSet.contains(messageKey))

@@ -2,6 +2,9 @@ package com.TheJobCoach.webapp.userpage.client.Coach;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.Vector;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,10 +55,13 @@ public class TestMessagePipe  extends GwtTest {
 		MessagePipe mp = MessagePipe.getMessagePipe(userId, null);
 		MessagePipe.strings = new ICoachStrings()
 		{
-
 			@Override
 			public String getMessage(String key, String coach)
 			{
+				if (key.equals("PARAMS_1"))
+					return "PARAMS1 %1 %2 %3";
+				if (key.equals("PARAMS_2"))
+					return "PARAMS2 %1 %2 %3";
 				return key;
 			}
 		};
@@ -85,6 +91,13 @@ public class TestMessagePipe  extends GwtTest {
 		assertEquals("COACH_LATE_ARRIVAL",mp.getMessage());
 		assertEquals("COACH_LATE_DEPARTURE",mp.getMessage());
 		assertEquals(null,mp.getMessage());
+		
+		// Check parameterized messages
+		mp.addDirectParameterizedMessage("PARAMS_1", new Vector<String>(Arrays.asList("1", "2", "3", "4")));
+		mp.addDirectParameterizedMessage("PARAMS_2", new Vector<String>(Arrays.asList("1", "2", "3", "4")));
+		assertEquals("PARAMS1 1 2 3",mp.getMessage());
+		assertEquals("PARAMS2 1 2 3",mp.getMessage());
+		
 	}
 	
 }
