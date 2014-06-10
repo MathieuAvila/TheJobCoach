@@ -41,7 +41,6 @@ public class MessagePipe implements ReturnValue
 				@Override
 				public void notifyValue(boolean set, String key, String value)
 				{
-					System.out.println("loaded " + key);
 					loaded = true;
 					checkQueue();
 				}
