@@ -38,7 +38,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	static Logger logger = LoggerFactory.getLogger(AutoTestPanelUpdate.class);
 
-	class SpecialUserServiceAsync extends DefaultUserServiceAsync
+	static class SpecialUserServiceAsync extends DefaultUserServiceAsync
 	{
 		public int callsGet, callsSet, callsDelete;
 
@@ -61,9 +61,9 @@ public class AutoTestPanelUpdate extends GwtTest {
 		
 	}
 
-	SpecialUserServiceAsync userService = new SpecialUserServiceAsync();
+	static SpecialUserServiceAsync userService = new SpecialUserServiceAsync();
 
-	class SpecialUtilServiceAsync extends DefaultUtilServiceAsync
+	static class SpecialUtilServiceAsync extends DefaultUtilServiceAsync
 	{
 		public int callsGet, callsSet, callsDelete;
 
@@ -81,14 +81,14 @@ public class AutoTestPanelUpdate extends GwtTest {
 		public void sendUpdateList(UserId user, UpdateRequest request,
 				AsyncCallback<UpdateResponse> callback)
 		{
-			logger.info("sendUpdateList");
+			logger.info("sendUpdateList " + time);
 			UpdateResponse response = new UpdateResponse(updatedValues);
 			response.totalDayTime = time;
 			callback.onSuccess(response);
 		}
 	}
 
-	SpecialUtilServiceAsync utilService = new SpecialUtilServiceAsync();
+	static SpecialUtilServiceAsync utilService = new SpecialUtilServiceAsync();
 
 	MessagePipe msg;
 	
@@ -122,7 +122,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 	
 	@Test
 	public void testUpdate() throws InterruptedException
-	{
+	{		
 		PanelUpdate cul;
 		HorizontalPanel p = new HorizontalPanel();
 		Label connectionTime = new Label();
