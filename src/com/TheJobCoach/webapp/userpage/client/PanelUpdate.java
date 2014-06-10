@@ -76,7 +76,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		}
 		public void check(UserId userId, int totalTime)
 		{
-			if ((!checked)&&(totalTime > time))
+			if ((!checked)&&(totalTime > time + previousTime))
 			{
 				// Not checked for the moment (during the day)
 				if ("0".equals(values.getValueFromCache(checkedKey)))
@@ -207,7 +207,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 			else if ((departureTimeMore30minutes != null && (currentTime.after(departureTimeMore30minutes))) && (timePhase == 2))
 			{
 				timePhase = 3;
-				message.addMessage(UserValuesConstantsCoachMessages.COACH_DEPARTURE_WARNING);
+				message.addMessage(UserValuesConstantsCoachMessages.COACH_VERY_LATE_DEPARTURE);
 			}
 		}
 		
