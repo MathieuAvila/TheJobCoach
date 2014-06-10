@@ -59,7 +59,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 	static final int GOAL_NOT_SET = -1000;
 	
 	// Start checking results after this time is elapsed. Doing so lowers the calls to server during the first seconds after logged in.
-	static final int START_CHECK_GOAL_RESULT = 20;
+	static final int START_CHECK_GOAL_RESULT = 120;
 	
 	// Simple check list
 	class SimpleCheckList
@@ -218,7 +218,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		}
 		
 		// Check something happened to goals
-		//if (connectSec > START_CHECK_GOAL_RESULT)
+		if (connectSec > START_CHECK_GOAL_RESULT)
 		{
 			checkGoals();
 		}
