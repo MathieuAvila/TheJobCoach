@@ -17,8 +17,8 @@ public class GoalReportInformation implements Serializable
 	public int succeedStartDay;
 	public int succeedEndDay;
 	
-	public Date start;
-	public Date end;
+	public Date start = new Date();
+	public Date end = new Date();
 	
 	public GoalReportInformation()
 	{
@@ -34,4 +34,20 @@ public class GoalReportInformation implements Serializable
 			log.put(type,  new Integer(0));
 		}
 	}
+
+	@SuppressWarnings("deprecation")
+	public GoalReportInformation(GoalReportInformation c)
+	{
+		start = new Date();
+		start.setDate(c.start.getDate());
+		end = new Date();
+		end.setDate(c.end.getDate());
+		log = new HashMap<UserLogEntry.LogEntryType, Integer>(c.log);
+		newOpportunities = c.newOpportunities;
+		connectedDays = c.connectedDays;
+		succeedStartDay = c.succeedStartDay;
+		succeedEndDay = c.succeedEndDay;
+		
+	}
+
 }
