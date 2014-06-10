@@ -123,6 +123,7 @@ public class UserValues implements IUserDataManager {
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_VERY_LATE_DEPARTURE, MAX_OPTION_LENGTH_INT, true, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_DEPARTURE_WARNING, MAX_OPTION_LENGTH_INT, true, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_DEPARTURE_TIME, MAX_OPTION_LENGTH_INT, true, "0"));
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_GOAL_NOT_SET, MAX_OPTION_LENGTH_INT, true, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_GOAL_END_PERIOD, MAX_OPTION_LENGTH_INT, true, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_GOAL_SEND_EMAIL, MAX_OPTION_LENGTH_INT, true, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_OPP_NONE, MAX_OPTION_LENGTH_INT, true, "0"));

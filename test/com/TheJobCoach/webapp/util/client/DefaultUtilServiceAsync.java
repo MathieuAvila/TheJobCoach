@@ -111,6 +111,8 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_POST_IT_JOB_SITE, "0");
 		addValue(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, "0");
 
+		addValue(UserValuesConstantsCoachMessages.COACH_GOAL_NOT_SET, "0");
+
 	}
 	
 	public static void addValue(String key, String value)

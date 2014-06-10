@@ -6,6 +6,7 @@ import java.util.Vector;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
 import com.TheJobCoach.webapp.userpage.client.Document.ComponentDocumentList;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ComponentExternalContactList;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
@@ -18,6 +19,7 @@ import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.SiteUUID;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -217,6 +219,10 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 		}
 		
 		dBox.center();
+
+		// Inform user about personal note
+		MessagePipe.getMessagePipe(user, rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
+
 	}
 
 	@Override

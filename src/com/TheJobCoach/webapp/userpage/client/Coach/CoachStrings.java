@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Random;
 
@@ -45,6 +46,19 @@ public class CoachStrings implements ICoachStrings
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE       , DEFAULT_MAN.COACH_PERSONAL_NOTE       ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING    , DEFAULT_MAN.COACH_PASSWORD_WARNING    ());
 
+		// those are not stored on the server. They are used when user has progressed toward the goal.
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY    , DEFAULT_MAN.PERFORMANCE_CREATEOPPORTUNITY    ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY , DEFAULT_MAN.PERFORMANCE_CANDIDATEOPPORTUNITY ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW            , DEFAULT_MAN.PERFORMANCE_INTERVIEW            ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL            , DEFAULT_MAN.PERFORMANCE_PHONECALL            ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL             , DEFAULT_MAN.PERFORMANCE_PROPOSAL             ());
+		// Those are used when the goal is reached.
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY + "_REACHED"    , DEFAULT_MAN.PERFORMANCE_CREATEOPPORTUNITY_REACHED    ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY + "_REACHED" , DEFAULT_MAN.PERFORMANCE_CANDIDATEOPPORTUNITY_REACHED ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW + "_REACHED"            , DEFAULT_MAN.PERFORMANCE_INTERVIEW_REACHED            ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL + "_REACHED"            , DEFAULT_MAN.PERFORMANCE_PHONECALL_REACHED            ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL + "_REACHED"             , DEFAULT_MAN.PERFORMANCE_PROPOSAL_REACHED             ());
+
 
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_WELCOME             , DEFAULT_WOMAN.COACH_WELCOME             ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_PRESENTING          , DEFAULT_WOMAN.COACH_PRESENTING          ());
@@ -68,7 +82,20 @@ public class CoachStrings implements ICoachStrings
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_LOG_SUCCESS         , DEFAULT_WOMAN.COACH_LOG_SUCCESS         ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE       , DEFAULT_WOMAN.COACH_PERSONAL_NOTE       ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_PASSWORD_WARNING    , DEFAULT_WOMAN.COACH_PASSWORD_WARNING    ());
-	}
+
+		// those are not stored on the server. They are used when user has progressed toward the goal.
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY    , DEFAULT_WOMAN.PERFORMANCE_CREATEOPPORTUNITY    ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY , DEFAULT_WOMAN.PERFORMANCE_CANDIDATEOPPORTUNITY ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW            , DEFAULT_WOMAN.PERFORMANCE_INTERVIEW            ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL            , DEFAULT_WOMAN.PERFORMANCE_PHONECALL            ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL             , DEFAULT_WOMAN.PERFORMANCE_PROPOSAL             ());
+		// Those are used when the goal is reached.
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY + "_REACHED"    , DEFAULT_WOMAN.PERFORMANCE_CREATEOPPORTUNITY_REACHED    ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY + "_REACHED" , DEFAULT_WOMAN.PERFORMANCE_CANDIDATEOPPORTUNITY_REACHED ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW + "_REACHED"            , DEFAULT_WOMAN.PERFORMANCE_INTERVIEW_REACHED            ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL + "_REACHED"            , DEFAULT_WOMAN.PERFORMANCE_PHONECALL_REACHED            ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL + "_REACHED"             , DEFAULT_WOMAN.PERFORMANCE_PROPOSAL_REACHED             ());
+		}
 	
 	public String getMessage(String key, String coach)
 	{

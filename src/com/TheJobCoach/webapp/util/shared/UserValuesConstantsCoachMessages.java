@@ -15,6 +15,7 @@ public class UserValuesConstantsCoachMessages
 	public final static String COACH_VERY_LATE_DEPARTURE      = "COACH_VERY_LATE_DEPARTURE";
 	public final static String COACH_DEPARTURE_WARNING        = "COACH_DEPARTURE_WARNING";
 	public final static String COACH_DEPARTURE_TIME           = "COACH_DEPARTURE_TIME";
+	public final static String COACH_GOAL_NOT_SET             = "COACH_GOAL_NOT_SET";
 	public final static String COACH_GOAL_END_PERIOD          = "COACH_GOAL_END_PERIOD";
 	public final static String COACH_GOAL_SEND_EMAIL          = "COACH_GOAL_SEND_EMAIL";
 	public final static String COACH_OPP_NONE                 = "COACH_OPP_NONE";
@@ -73,6 +74,7 @@ public class UserValuesConstantsCoachMessages
 		minMaxKeyMap.put(COACH_PERSONAL_NOTE,           new messageMinMax(0, 3));
 		minMaxKeyMap.put(COACH_PASSWORD_WARNING,        new messageMinMax(0, 3));
 		minMaxKeyMap.put(COACH_LOG_RECALL,              new messageMinMax(0, 3));
+		minMaxKeyMap.put(COACH_GOAL_NOT_SET,            new messageMinMax(0, 5)); // this is important enough for bothering the user.
 		//minMaxKeyMap.put(COACH_LOG_INTERVIEW,           new messageMinMax(0, 0));
 		//minMaxKeyMap.put(COACH_LOG_FAILURE,             new messageMinMax(0, 0));
 		//minMaxKeyMap.put(COACH_LOG_SUCCESS,             new messageMinMax(0, 0));

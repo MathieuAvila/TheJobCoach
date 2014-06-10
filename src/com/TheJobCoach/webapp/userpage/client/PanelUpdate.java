@@ -1,14 +1,23 @@
 package com.TheJobCoach.webapp.userpage.client;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Vector;
 
+import com.TheJobCoach.webapp.userpage.client.Coach.GoalSignal;
 import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
+import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
+import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.UtilService;
 import com.TheJobCoach.webapp.util.client.UtilServiceAsync;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.FormatUtil.PERIOD_TYPE;
 import com.TheJobCoach.webapp.util.shared.UpdateRequest;
 import com.TheJobCoach.webapp.util.shared.UpdateResponse;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -44,7 +53,14 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 	int timePhase = 0;
 	
 	static UtilServiceAsync utilService =  GWT.create(UtilService.class);
+	static UserServiceAsync userService =  GWT.create(UserService.class);
 
+	// Set to this value if no gola was set or goal string is invalid.
+	static final int GOAL_NOT_SET = -1000;
+	
+	// Start checking results after this time is elapsed. Doing so lowers the calls to server during the first seconds after logged in.
+	static final int START_CHECK_GOAL_RESULT = 20;
+	
 	// Simple check list
 	class SimpleCheckList
 	{
@@ -92,6 +108,53 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 					UserValuesConstantsCoachMessages.COACH_USER_ACTION_TYPE_LOG_APPLICATION)
 	};
 	
+	void checkGoals()
+	{
+		Map<String, Integer> result = getGoalResult();
+		if ((result != null)&&(previousResult != null))
+		{
+			// Look for different result
+			for (String key: result.keySet())
+			{
+				Integer c = result.get(key);
+				Integer p = previousResult.get(key);
+				int goal = getIntFromValue(values.getValueFromCache(key));
+				// value changed somehow, only check when it's in progress, and goal is set.
+				System.out.println(c + " " + p + " " + key + " " + goal + " " + result + " " + previousResult);
+				if ((c.compareTo(p) > 0) && (goal != GOAL_NOT_SET))
+				{
+					// message depends on key and goal
+					if (goal == c) // we have reached the goal.
+						message.addDirectParameterizedMessage(key + "_REACHED", new Vector<String>(Arrays.asList(
+								String.valueOf(c))));
+					else if (goal > c)// goal not reached, encourage.
+						message.addDirectParameterizedMessage(key, new Vector<String>(Arrays.asList(
+								String.valueOf(c),
+								String.valueOf(goal-c))));
+				}
+			}
+			previousResult = null; // treated.
+		}
+		// when no goal is set, invite user to set goals in My Goals
+		if (result != null)
+		{
+			boolean set = false;
+			for (String key: result.keySet())
+			{
+				Integer c = getIntFromValue(values.getValueFromCache(key));
+				if (c != GOAL_NOT_SET)
+				{
+					set = true;
+					break;
+				}
+			}
+			if (!set)
+			{
+				message.addMessage(UserValuesConstantsCoachMessages.COACH_GOAL_NOT_SET);
+			}
+		}
+	}
+
 	void checkTime(UpdateResponse response)
 	{
 		int totalTime = response.totalDayTime;
@@ -154,6 +217,12 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 			checker.check(userId, totalTime);
 		}
 		
+		// Check something happened to goals
+		//if (connectSec > START_CHECK_GOAL_RESULT)
+		{
+			checkGoals();
+		}
+		
 		// Store response. Send appropriate callbacks.	
 		values.callbackServerSetValues(response.updatedValues);
 	}
@@ -199,10 +268,57 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		message = MessagePipe.getMessagePipe(userId, rootPanel);
 		// Get time goals.
 		values = new ClientUserValuesUtils(rootPanel, userId);
-		values.preloadValueList(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, this);
-		values.preloadValueList(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, this);
+		values.preloadValueList("PERFORMANCE", this);
 	}
 
+	int lastGoalSignal = 0;
+	Map<String, Integer> previousResult = null;
+	Map<String, Integer> currentResult = null;
+	boolean receivedPerformanceKeys = false;
+	
+	private Map<String, Integer> getGoalResult()
+	{
+		// only if we have already received all keys. We should receive the full list of keys or nothing.
+		if (!receivedPerformanceKeys)
+		{
+			return null;
+		}
+		
+		ServerCallHelper<GoalReportInformation> callback = new ServerCallHelper<GoalReportInformation>(rootPanel) {
+			@Override
+			public void onSuccess(GoalReportInformation result)
+			{
+				previousResult = currentResult;
+				currentResult = new HashMap<String, Integer>();
+				currentResult.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, result.newOpportunities);
+				currentResult.put(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY, result.log.get(LogEntryType.APPLICATION));
+				currentResult.put(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW, result.log.get(LogEntryType.INTERVIEW));
+				currentResult.put(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL, result.log.get(LogEntryType.RECALL));
+				currentResult.put(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL, result.log.get(LogEntryType.PROPOSAL));
+			}
+		};
+		
+		// Check if Results are accurate, and they did not changed.
+		if ((currentResult != null)&&(lastGoalSignal == GoalSignal.getInstance().getCounter()))
+			return currentResult;
+		lastGoalSignal = GoalSignal.getInstance().getCounter();
+		// From now on, currentResult is NULL (not inited) OR there was a change in the results => an action may have changed the results.
+		
+		// no result for the moment. Request them before doing anything. Next call will succeed.
+		String periodString = values.getValueFromCache(UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD);
+		PERIOD_TYPE period = UserValuesConstantsMyGoals.mapStringPeriod.get(periodString);
+		if (period == null) period = PERIOD_TYPE.PERIOD_TYPE_WEEK;
+		// Set times in previousDate and nextDate with goal values.	
+		Date nextDateValue = new Date();
+		Date previousDateValue = new Date();
+		FormatUtil.getPeriod(period, 0, new Date(), previousDateValue, nextDateValue);
+		previousDateValue = new Date(FormatUtil.startOfTheDay(previousDateValue).getTime());
+		nextDateValue = new Date(FormatUtil.startOfTheDay(nextDateValue).getTime());
+		userService.getUserGoalReport(userId, previousDateValue, nextDateValue, callback);
+
+		return null;
+	}
+	
 	@Override
 	public void onModuleLoad() {
 		connectSec = 0;
@@ -210,6 +326,25 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		setSize("0","0");
 	}
 
+	Integer getIntFromValue(String value)
+	{
+		if (value == null) return GOAL_NOT_SET;
+		if ("".equals(value)) return GOAL_NOT_SET;
+		int result;
+		try {
+			result = Integer.decode(value);
+		} catch (Exception e) { return GOAL_NOT_SET;}
+		return result;
+	}
+
+	static final HashSet<String> performanceKeys = new HashSet<String>(Arrays.asList(
+			UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY,
+			UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY,
+			UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW,
+			UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL,
+			UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL));
+
+			
 	@Override
 	public void notifyValue(boolean set, String key, String value)
 	{
@@ -217,10 +352,11 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		if (key.equals(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR))
 		{
 			System.out.println("arrivalTime is: " + value);
-			if (!"".equals(value))
+			Integer v = FormatUtil.getIntegerFromString(value);
+			if (v != null)
 			{
-				arrivalTime = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value));
-				arrivalTimeMore30minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value) + 30*60*1000);
+				arrivalTime = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + v);
+				arrivalTimeMore30minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + v + 30*60*1000);
 				System.out.println("arrivalTime is: " + arrivalTime + " late is " + arrivalTimeMore30minutes);
 				//if (currentTime.after(arrivalTime)) timePhase = 1;
 				//if (currentTime.after(arrivalTimeMore30minutes)) timePhase = 2;
@@ -230,14 +366,25 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		else if (key.equals(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR))
 		{
 			System.out.println("departureTime time is: " + value);
-			if (!"".equals(value))
+			Integer v = FormatUtil.getIntegerFromString(value);
+			if (v != null)
 			{
-				departureTimeLess15minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value) - 15*60*1000);
-				departureTimeMore30minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + Integer.parseInt(value) + 30*60*1000);
+				departureTimeLess15minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + v - 15*60*1000);
+				departureTimeMore30minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + v + 30*60*1000);
 				if (currentTime.after(departureTimeLess15minutes)) timePhase = 2;
 				if (currentTime.after(departureTimeMore30minutes)) timePhase = 3;
 			}
 		}
+		// If results are already received and we have a change, then user has changed his preferences, so that they are invalid now.
+		// => flush all results, now and previous. Next call will trigger a server call to retrieve new performance results.
+		if ((currentResult != null) && (receivedPerformanceKeys) && performanceKeys.contains(key))
+		{
+			currentResult = null;
+			previousResult = null;
+		}
+		// normally received in 1 chunk. If 1 key arrives, the others will follow
+		if (performanceKeys.contains(key))
+			receivedPerformanceKeys = true;
 	}
 
 }

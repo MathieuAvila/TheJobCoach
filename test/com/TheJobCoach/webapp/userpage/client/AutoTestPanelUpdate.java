@@ -12,13 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Coach.GoalSignal;
 import com.TheJobCoach.webapp.userpage.client.Coach.ICoachStrings;
 import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
+import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
+import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
+import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.DefaultUtilServiceAsync;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.UpdateRequest;
 import com.TheJobCoach.webapp.util.shared.UpdateResponse;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -37,7 +42,17 @@ public class AutoTestPanelUpdate extends GwtTest {
 	{
 		public int callsGet, callsSet, callsDelete;
 
+		public GoalReportInformation currentReport = new GoalReportInformation(new Date(), new Date());
+		
 		String lastId;
+		
+		@Override
+		public void getUserGoalReport(UserId id, Date start, Date end,
+				AsyncCallback<GoalReportInformation> callback)
+		{
+			logger.info("getUserGoalReport " + id.userName);
+			callback.onSuccess(new GoalReportInformation(currentReport));
+		}
 		
 		public void reset()
 		{
@@ -196,5 +211,109 @@ public class AutoTestPanelUpdate extends GwtTest {
 		assertEquals(msg.getMessage(), null);
 
 		// Other simple keys behave the same way => no test.
-	}	
+	}
+	
+	@Test
+	public void testGoals() throws InterruptedException
+	{
+		PanelUpdate cul;
+		HorizontalPanel p = new HorizontalPanel();
+		ClientUserValuesUtils values = new ClientUserValuesUtils(p, userId);
+		reset();
+		MessagePipe.strings = new ICoachStrings()
+		{
+			@Override
+			public String getMessage(String key, String coach)
+			{
+				if (key.contains("_REACHED"))
+					return key + " %1";
+				if (key.contains("PERFORMANCE_"))
+					return key + " %1 %2";
+				return key;
+			}
+		};
+		
+		cul = new PanelUpdate(p, userId, new Label());
+		
+		// this will trigger a call to UserValues.
+		cul.onModuleLoad();
+		
+		cul.checkGoals();
+		// nothing yet.
+		assertEquals(msg.getMessage(), null);
+		
+		// send update about goals NOT SET. First shot is not valid because result are not yet retrieved.
+		GoalSignal.getInstance().newEvent();
+		cul.checkGoals();
+		assertEquals(null, msg.getMessage());
+		cul.checkGoals();
+		assertEquals(UserValuesConstantsCoachMessages.COACH_GOAL_NOT_SET, msg.getMessage());
+		
+		// ****************** CREATE OPPORTUNITY RESULT *********************
+
+		// send update about goals CHANGED: createOpportunity goal is increased.
+		values.setValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, "3");
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		
+		// Now a new opportunity is created. Check Coach encourages.
+		userService.currentReport.newOpportunities = 1;
+		GoalSignal.getInstance().newEvent();
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		cul.checkGoals();
+		assertEquals(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY + " 1 2", msg.getMessage()); // 2 = how many left to do ?
+		
+		// New opportunity is deleted (result lowers). Check Coach says nothing.
+		userService.currentReport.newOpportunities = 0;
+		GoalSignal.getInstance().newEvent();
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+
+		// New opportunity counter is reached (result is OK). Check Coach says goal is reached.
+		userService.currentReport.newOpportunities = 3;
+		GoalSignal.getInstance().newEvent();
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		cul.checkGoals();
+		assertEquals(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY + "_REACHED 3", msg.getMessage());
+
+		// ****************** NOW THE SAME WITH A LOG TYPE RESULT *********************
+
+		// send update about goals CHANGED: createOpportunity goal is increased.
+		values.setValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY, "3");
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		
+		// Now a new opportunity is created. Check Coach encourages.
+		userService.currentReport.log.put(UserLogEntry.LogEntryType.APPLICATION, new Integer(1));
+		GoalSignal.getInstance().newEvent();
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		cul.checkGoals();
+		assertEquals(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY + " 1 2", msg.getMessage()); // 2 = how many left to do ?
+		
+		// New opportunity is deleted (result lowers). Check Coach says nothing.
+		userService.currentReport.log.put(UserLogEntry.LogEntryType.APPLICATION, new Integer(0));
+		GoalSignal.getInstance().newEvent();
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+
+		// New opportunity counter is reached (result is OK). Check Coach says goal is reached.
+		userService.currentReport.log.put(UserLogEntry.LogEntryType.APPLICATION, new Integer(3));
+		GoalSignal.getInstance().newEvent();
+		cul.checkGoals();
+		assertEquals(msg.getMessage(), null);
+		cul.checkGoals();
+		assertEquals(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY + "_REACHED 3", msg.getMessage());
+	}
+	
 }

@@ -414,9 +414,6 @@ public class ContentUserLog implements EntryPoint, IContentUserLog {
 				buttonNewLogEntry.addClickHandler(newHandler);
 
 				getAllContent();
-
-				// Inform user about personal note
-				MessagePipe.getMessagePipe(user, rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
 			}
 
 			@Override
