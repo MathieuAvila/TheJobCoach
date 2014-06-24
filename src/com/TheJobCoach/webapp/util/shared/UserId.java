@@ -8,6 +8,9 @@ public class UserId implements Serializable {
 	public String userName;
 	public String token;
 
+	/** set to true if this is a test account. This limits some functionalities, like connecting people. */
+	public boolean testAccount = false;
+	
 	public enum UserType
 	{
 		USER_TYPE_SEEKER,
@@ -45,6 +48,15 @@ public class UserId implements Serializable {
 		token = _token;
 		type = _type;
 	}
+	
+	public UserId(String _userName, String _token, UserId.UserType _type, boolean testAccount)
+	{
+		userName = _userName;
+		token = _token;
+		type = _type;
+		this.testAccount = testAccount;
+	}
+	
 	public UserId() {}
 	
 	public static String getRegexp()
