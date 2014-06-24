@@ -44,6 +44,10 @@ public class ContactManager implements IUserDataManager
 		accountManager = new AccountManager();
 	}
 
+	public ContactManager()
+	{
+	}
+
 	char contactStatusToChar(ContactInformation.ContactStatus status)
 	{
 		switch(status)
@@ -216,6 +220,14 @@ public class ContactManager implements IUserDataManager
 		}
 		case CONTACT_NONE: // send request
 		{
+			if (user.testAccount)
+			{
+				// Refuse. This is server security, the client part is less violent.
+				// If we arrive here, it is a hand-crafted request.
+				logger.error("SECURITY: Forbid test account: " + user.userName + " is requesting connection request to: " + userContact.userName);
+				return ContactStatus.CONTACT_NONE;
+			}
+			
 			logger.info(user.userName + " is requesting connection request to: " + userContact.userName);
 			
 			// me

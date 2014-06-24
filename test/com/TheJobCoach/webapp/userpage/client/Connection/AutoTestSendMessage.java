@@ -15,6 +15,7 @@ import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
@@ -25,9 +26,20 @@ public class AutoTestSendMessage extends GwtTest {
 	
 	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	
+	final static String MESSAGE_TEXT = "mytext";
+	
 	class SpecialUserServiceAsync extends DefaultUserServiceAsync
 	{
 		public int calls;
+		
+		@Override
+		public void sendJobMail(UserId userContact, String message,
+				AsyncCallback<Boolean> callback)
+		{
+			calls++;
+			assertEquals(userContact.userName, ule.userName);
+			assertEquals(MESSAGE_TEXT, message);
+		}
 		
 	}
 	
@@ -96,9 +108,9 @@ public class AutoTestSendMessage extends GwtTest {
 		cud = new SendMessage();
 		cud.sendMessage(p, ule, "FN", "LN");
 		
-		//cud..getOk().click();
-		assertEquals(0, userService.calls);
-		//assertEquals(1, result.calls);
+		cud.textAreaMessage.setText(MESSAGE_TEXT);
+		cud.okCancel.getOk().click();
+		assertEquals(1, userService.calls);
 	}
 
 	@Test
@@ -108,9 +120,8 @@ public class AutoTestSendMessage extends GwtTest {
 		cud = new SendMessage();
 		cud.sendMessage(p, ule, "FN", "LN");
 		
-		//cud.okCancel.getCancel().click();
+		cud.okCancel.getCancel().click();
 		assertEquals(0, userService.calls);
-		// (0, result.calls);
 	}
 
 	
