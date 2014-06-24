@@ -15,10 +15,10 @@ import com.google.gwt.user.client.ui.RootPanel;
  */
 public class TestSecurity implements EntryPoint {
 
-	//public static UserId defaultUser = new UserId("user2", "token2", UserId.UserType.USER_TYPE_SEEKER);
-	//public static UserId defaultUser = new UserId("user1", "token1", UserId.UserType.USER_TYPE_SEEKER);
-	public static UserId defaultUser = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
-	
+	public static UserId defaultUser = new UserId("user2", "mytoken2", UserId.UserType.USER_TYPE_SEEKER);
+	//public static UserId defaultUser = new UserId("user1", "mytoken1", UserId.UserType.USER_TYPE_SEEKER);
+	//public static UserId defaultUser = new UserId("test_user", "test_token", UserId.UserType.USER_TYPE_SEEKER, true);
+
 	/**
 	 * This is the entry point method.
 	 */
@@ -28,9 +28,7 @@ public class TestSecurity implements EntryPoint {
 		final RootPanel root = RootPanel.get("security");
 	    LoginServiceAsync loginService = GWT.create(LoginService.class);
 	    
-	    //loginService.connect("user2", "", new ServerCallHelper<MainPageReturnLogin>(root) {
-		//loginService.connect("user1", "", new ServerCallHelper<MainPageReturnLogin>(root) {
-		loginService.connect("user", "", new ServerCallHelper<MainPageReturnLogin>(root) {
+	    loginService.connect(defaultUser.userName, "password", new ServerCallHelper<MainPageReturnLogin>(root) {
 					public void onSuccess(final MainPageReturnLogin result)
 			{
 			System.out.println("succesfullly logged in for tests");
