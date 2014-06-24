@@ -23,7 +23,7 @@ public class SendMessage extends DialogBox  implements ISendMessage  {
 	final Lang lang = GWT.create(Lang.class);
 	final LangConnection langConnection = GWT.create(LangConnection.class);
 
-	private final DialogBlockOkCancel okCancel = new DialogBlockOkCancel(langConnection.sendMessage(), this);
+	final DialogBlockOkCancel okCancel = new DialogBlockOkCancel(langConnection.sendMessage(), this);
 	
 	private final static UserServiceAsync userService = GWT.create(UserService.class);
 	
@@ -72,7 +72,7 @@ public class SendMessage extends DialogBox  implements ISendMessage  {
 		public void onClick(ClickEvent event) 
 		{
 			okCancel.setEnabled(false);
-			userService.sendJobMail(contact, "", 
+			userService.sendJobMail(contact, textAreaMessage.getHTML(), 
 					new ServerCallHelper<Boolean>(rootPanel) {
 		
 						public void onSuccess(Boolean result) 
