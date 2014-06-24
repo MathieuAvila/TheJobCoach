@@ -18,6 +18,8 @@ public class AutoTestComponentDocumentList extends GwtTest {
 
 	
 	private ComponentDocumentList cdl;
+	
+	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 
 	@Test
 	public void nothing()
@@ -44,7 +46,7 @@ public class AutoTestComponentDocumentList extends GwtTest {
 		cdl = new ComponentDocumentList(
 				docList,
 				p, 
-				new UserId(),
+				userId,
 				new ComponentChooseDocument()
 				);
 		cdl.onModuleLoad();		
