@@ -18,8 +18,9 @@ public class ContentReport implements EntryPoint {
 
 	UserId user;
 	private VerticalPanel simplePanelCenter = new VerticalPanel();
-	private TextArea textArea = new TextArea();
-	private Lang lang = GWT.create(Lang.class);
+	TextArea textArea = new TextArea();
+	final ButtonImageText buttonSendReport = new ButtonImageText(ButtonImageText.Type.MAIL, lang._TextSendComment());
+	static private final Lang lang = GWT.create(Lang.class);
 
 	private final UserServiceAsync userService = GWT.create(UserService.class);
 
@@ -72,15 +73,22 @@ public class ContentReport implements EntryPoint {
 		simplePanelCenter.add(textArea);
 		textArea.setSize("100%", "200px");
 
-		final ButtonImageText buttonSendReport = new ButtonImageText(ButtonImageText.Type.MAIL, lang._TextSendComment());
 		buttonSendReport.addClickHandler(new ClickHandler()
 		{
 			@Override
 			public void onClick(ClickEvent event) {
 				buttonSendReport.setEnabled(false);
+				
 				sendComment();
 			}
 		});
 		simplePanelCenter.add(buttonSendReport);
+		
+		if (user.testAccount)
+		{
+			buttonSendReport.setEnabled(false);
+			textArea.setEnabled(false);
+			textArea.setText(lang.forbidTestAccountComment());
+		}
 	}
 }

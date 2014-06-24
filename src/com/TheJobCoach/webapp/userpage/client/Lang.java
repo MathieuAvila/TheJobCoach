@@ -274,4 +274,7 @@ public interface Lang extends Constants {
 	@Key("coachsettings")
 	String _TextCoachSettings();
 
+	@Key("forbidTestAccountComment")
+	String forbidTestAccountComment();
+
 }
