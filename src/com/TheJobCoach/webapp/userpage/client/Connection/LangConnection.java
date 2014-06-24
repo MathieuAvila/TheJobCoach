@@ -59,4 +59,7 @@ public interface LangConnection extends Constants {
 	@Key("sendMessageTo")
 	String sendMessageTo();
 
+	@Key("messageTestAccountDenied")
+	String messageTestAccountDenied();
+
 }

@@ -48,6 +48,7 @@ public class AutoTestContentConnection extends GwtTest {
 	}
 	
 	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
+	UserId userIdTest = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER, true);
 	
 	ContactInformation ci1 = new ContactInformation(ContactStatus.CONTACT_OK, 
 			"u1", "firstName1", "lastName1", new Visibility(), new Visibility());
@@ -173,12 +174,15 @@ public class AutoTestContentConnection extends GwtTest {
 	static int COLUMN_SEARCH_JOB = 1;
 	static int COLUMN_SEARCH_ADD = 2;
 	
+	CatcherMessageBoxTriState mbTriStateCatcher = new CatcherMessageBoxTriState();
+	ErrorCatcherMessageBox mbCatcher = new ErrorCatcherMessageBox();
+
 	@Test
 	public void testAll() throws InterruptedException
 	{
-		CatcherMessageBoxTriState mbTriStateCatcher = new CatcherMessageBoxTriState();
-		ErrorCatcherMessageBox mbCatcher = new ErrorCatcherMessageBox();
-		
+		if (mbCatcher.currentBox != null) mbCatcher.currentBox.close();
+		if (mbTriStateCatcher.currentBox != null) mbTriStateCatcher.currentBox.close();
+
 		SendMessageTest sendMessage = new SendMessageTest();
 		
 		// create click event for further use.
@@ -331,5 +335,37 @@ public class AutoTestContentConnection extends GwtTest {
 		assertEquals(MessageBox.TYPE.INFO, mbCatcher.type);
 		mbCatcher.currentBox.close();
 		assertEquals(4, cud.cellTable.getRowCount()); // one more !
+	}
+	
+	@Test
+	public void testTestAccount() throws InterruptedException
+	{
+		if (mbCatcher.currentBox != null) mbCatcher.currentBox.close();
+		if (mbTriStateCatcher.currentBox != null) mbTriStateCatcher.currentBox.close();
+
+		SendMessageTest sendMessage = new SendMessageTest();
+		
+		// create click event for further use.
+		Event event = EventBuilder.create(Event.ONCLICK).build();
+		
+		ContentConnection cud = new ContentConnection(userIdTest, sendMessage);
+
+		// make a search, click on first result.
+		// Search engine
+		// not visible
+		cud.textBoxFirstName.setValue("first");
+		cud.textBoxLastName.setValue("last");
+		userService.reset();
+		cud.buttonRunSearch.click();
+		@SuppressWarnings("unchecked")
+		IconsCell<UserSearchEntry> c_add = (IconsCell<UserSearchEntry>)cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_ADD).getCell();
+		assertEquals(true, c_add.getIcons.isClickable(s_new));
+		cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_ADD).onBrowserEvent(new Cell.Context(1, COLUMN_SEARCH_ADD, s_new), cud.cellTableSearchResult.getElement(), s_new, event);
+		
+		// Error message
+		assertTrue(mbCatcher.hasError());
+		assertEquals(MessageBox.TYPE.ERROR, mbCatcher.type);
+		assertEquals("Vous ne pouvez pas envoyer de demannde de connection dans un compte de test.", mbCatcher.message);
+		mbCatcher.clearError();
 	}
 }

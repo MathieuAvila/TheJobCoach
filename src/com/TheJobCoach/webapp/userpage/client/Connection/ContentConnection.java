@@ -193,6 +193,13 @@ public class ContentConnection extends VerticalPanel {
 				getAllContent();
 			}
 		};
+		
+		if (user.testAccount)
+		{
+			MessageBox.messageBox(rootPanel, MessageBox.TYPE.ERROR, langConnection.messageTestAccountDenied());
+			return;
+		}
+		
 		if (excludeUserNameList.contains(newUser.userName))
 			return;
 		cellTableSearchResult.setVisible(false);
