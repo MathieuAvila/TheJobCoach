@@ -32,6 +32,8 @@ public class CoachSecurityCheck
 				logger.warn("bad id - : " + loggedin.userName + " versus " + id.userName);
 		if (!loggedin.type.equals(id.type))
 			logger.warn("bad type - : " + loggedin.type + " versus " + id.type);
+		if (loggedin.testAccount != id.testAccount)
+			logger.warn("bad test account type - : " + loggedin.testAccount + " versus " + id.testAccount);
 
 		if (!loggedin.equals(id))
 			{
