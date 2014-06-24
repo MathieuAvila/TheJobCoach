@@ -24,6 +24,8 @@ public interface LangCoachDEFAULTMAN extends Constants
 	public String[] COACH_DEPARTURE_WARNING();
 	@Key("COACH_DEPARTURE_TIME")	
 	public String[] COACH_DEPARTURE_TIME();
+	@Key("COACH_GOAL_NOT_SET")
+	public String[] COACH_GOAL_NOT_SET();
 	@Key("COACH_GOAL_END_PERIOD")	
 	public String[] COACH_GOAL_END_PERIOD();
 	@Key("COACH_GOAL_SEND_EMAIL")	

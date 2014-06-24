@@ -33,6 +33,7 @@ public class CoachStrings implements ICoachStrings
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_VERY_LATE_DEPARTURE , DEFAULT_MAN.COACH_VERY_LATE_DEPARTURE ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_DEPARTURE_WARNING   , DEFAULT_MAN.COACH_DEPARTURE_WARNING   ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_DEPARTURE_TIME      , DEFAULT_MAN.COACH_DEPARTURE_TIME      ());
+		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_GOAL_NOT_SET        , DEFAULT_MAN.COACH_GOAL_NOT_SET        ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_GOAL_END_PERIOD     , DEFAULT_MAN.COACH_GOAL_END_PERIOD     ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_GOAL_SEND_EMAIL     , DEFAULT_MAN.COACH_GOAL_SEND_EMAIL     ());
 		messages_DEFAULT_MAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NONE            , DEFAULT_MAN.COACH_OPP_NONE            ());
@@ -70,6 +71,7 @@ public class CoachStrings implements ICoachStrings
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_VERY_LATE_DEPARTURE , DEFAULT_WOMAN.COACH_VERY_LATE_DEPARTURE ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_DEPARTURE_WARNING   , DEFAULT_WOMAN.COACH_DEPARTURE_WARNING   ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_DEPARTURE_TIME      , DEFAULT_WOMAN.COACH_DEPARTURE_TIME      ());
+		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_GOAL_NOT_SET        , DEFAULT_WOMAN.COACH_GOAL_NOT_SET        ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_GOAL_END_PERIOD     , DEFAULT_WOMAN.COACH_GOAL_END_PERIOD     ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_GOAL_SEND_EMAIL     , DEFAULT_WOMAN.COACH_GOAL_SEND_EMAIL     ());
 		messages_DEFAULT_WOMAN.put(UserValuesConstantsCoachMessages.COACH_OPP_NONE            , DEFAULT_WOMAN.COACH_OPP_NONE            ());
