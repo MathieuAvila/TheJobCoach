@@ -87,7 +87,7 @@ public class EvaluationAccountManager
 				(new ShortMap())
 				.add(time, userName)
 				.get());
-		UserId result = new UserId(userName, userName, userType);
+		UserId result = new UserId(userName, userName, userType, true); // only place where we create a test account.
 		UserInformation info = new UserInformation(
 				Lang.getTestName(langStr), 
 				userName + "@recherche.com", 
@@ -95,6 +95,7 @@ public class EvaluationAccountManager
 				Lang.getTestLastName(langStr));
 		accountManager.createAccountWithTokenNoMail(result, info, langStr);
 		accountManager.validateAccount(userName, userName);
+		accountManager.markTestAccount(userName);
 		UserDataCentralManager.createTestUser(result, langStr);
 		return result;
 	}
