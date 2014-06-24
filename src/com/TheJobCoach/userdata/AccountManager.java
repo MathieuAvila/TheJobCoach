@@ -373,6 +373,11 @@ public class AccountManager implements AccountInterface {
 	@Override
 	public void sendComment(UserId id, String comment) throws CassandraException
 	{
+		if (id.testAccount)
+		{
+			logger.error("SECURITY: trying to send comment in test account");
+			return;
+		}
 		UserReport report = getUserReport(id);
 		MailerFactory.getMailer().sendEmail("mathieu.avila@laposte.net", 
 				"Comment on TheJobCoach from '" + report.mail + "' user '" + report.userName + "'", 
@@ -443,7 +448,8 @@ public class AccountManager implements AccountInterface {
 					String firstNameResult = accountTable.get("firstname");
 					UserId.UserType type = UserId.stringToUserType(accountTable.get("type"));
 
-					if (Convertor.toBoolean(accountTable.get("validated"), false) 
+					if ((accountTable.get("testaccount") == null) 
+							&& Convertor.toBoolean(accountTable.get("validated"), false) 
 							&& nameResult != null 
 							&& firstNameResult != null)
 					{
@@ -507,5 +513,13 @@ public class AccountManager implements AccountInterface {
 		}
 		catch (SystemException e) {} // this cannot happen
 		return lang;
+	}
+
+	public void markTestAccount(String userName) throws CassandraException
+	{
+		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, 
+				(new ShortMap())
+				.add("testaccount", true)
+				.get());
 	}
 }
