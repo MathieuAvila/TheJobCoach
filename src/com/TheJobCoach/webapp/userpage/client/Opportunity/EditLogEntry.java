@@ -1,6 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client.Opportunity;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
@@ -22,6 +25,8 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -58,6 +63,9 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 	ComponentDocumentList cdl;
 	ComponentExternalContactList ecl;
 	DialogBlockOkCancel okCancel;
+	
+	HorizontalPanel eventInfoPanel = new HorizontalPanel();
+	HorizontalPanel eventDonePanel = new HorizontalPanel();
 
 	String id;
 
@@ -111,6 +119,18 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 		});
 	};
 
+	// this is the list of event types that can have a "done" field.
+	final static Set<LogEntryType> validEventType 
+	= new HashSet<LogEntryType>(Arrays.asList(
+			LogEntryType.INTERVIEW, 
+			LogEntryType.RECALL
+			));
+
+	void updateDoneField()
+	{
+		eventInfoPanel.setVisible(validEventType.contains(UserLogEntry.entryTypeToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex()))));
+	}
+	
 	/**
 	 * This is the entry point method.
 	 * @wbp.parser.entryPoint
@@ -150,7 +170,7 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 				comboBoxStatus.setSelectedIndex(comboBoxStatus.getItemCount()-1);
 			}
 		}
-
+		
 		Label lblDescription = new Label("Description");
 		grid.setWidget(2, 0, lblDescription);		
 		grid.setWidget(2, 1, richTextAreaDescription);
@@ -162,16 +182,31 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 		Label lblEndDate = new Label(langLogEntry._TextCreated());
 
 		grid.setWidget(3, 0, lblEndDate);
-		HorizontalPanel eventDonePanel = new HorizontalPanel();
 		eventDonePanel.add(dateBoxEvent);
 		Label doneText = new Label(langLogEntry._TextDone());
+
 		eventDonePanel.add(doneText);
-		eventDonePanel.add(doneBox);
+		eventDonePanel.add(eventInfoPanel);
+		eventInfoPanel.add(doneText);
+		eventInfoPanel.add(doneBox);
+		
+		comboBoxStatus.addChangeHandler(new ChangeHandler(){
+			@Override
+			public void onChange(ChangeEvent event)
+			{
+				updateDoneField();
+			}
+		});
+		
 		grid.setWidget(3, 1, eventDonePanel);
-		eventDonePanel.setCellVerticalAlignment(dateBoxEvent, HasVerticalAlignment.ALIGN_MIDDLE);
-		eventDonePanel.setCellVerticalAlignment(doneBox, HasVerticalAlignment.ALIGN_MIDDLE);
+		eventDonePanel.setCellVerticalAlignment(eventInfoPanel, HasVerticalAlignment.ALIGN_MIDDLE);
 		eventDonePanel.setCellVerticalAlignment(doneText, HasVerticalAlignment.ALIGN_MIDDLE);
 		eventDonePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		
+		eventInfoPanel.setCellVerticalAlignment(dateBoxEvent, HasVerticalAlignment.ALIGN_MIDDLE);
+		eventInfoPanel.setCellVerticalAlignment(doneBox, HasVerticalAlignment.ALIGN_MIDDLE);
+		eventInfoPanel.setCellVerticalAlignment(doneText, HasVerticalAlignment.ALIGN_MIDDLE);
+		eventInfoPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		grid.setWidget(4, 0, new Label(lang._TextPersonalNote()));
 		grid.setWidget(4, 1, richTextAreaNote);
@@ -222,7 +257,8 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 
 		// Inform user about personal note
 		MessagePipe.getMessagePipe(user, rootPanel).addMessage(UserValuesConstantsCoachMessages.COACH_PERSONAL_NOTE);
-
+		
+		updateDoneField();
 	}
 
 	@Override
