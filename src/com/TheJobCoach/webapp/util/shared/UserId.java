@@ -59,6 +59,14 @@ public class UserId implements Serializable {
 	
 	public UserId() {}
 	
+	public UserId(String userName)
+	{
+		this.userName = userName;
+		token = "";
+		type = UserType.USER_TYPE_SEEKER;
+		testAccount = false;
+	}
+
 	public static String getRegexp()
 	{
 		return "[a-zA-Z0-9_.-]+";
