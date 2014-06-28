@@ -103,13 +103,15 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("content-library-24.png")
 	ImageResource siteLibraryContent_menu();
 	
-	
+	@Source("content-connection-24.png")
+	ImageResource userConnectionContent_menu();
+
 
 	@Source("bulle.png")
 	ImageResource bulle();
 
 
-	@Source("content-addressbook-32.png")
+	@Source("content-connection-32.png")
 	ImageResource userConnectionContent();
 	
 

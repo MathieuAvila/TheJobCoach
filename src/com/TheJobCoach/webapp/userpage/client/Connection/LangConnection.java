@@ -13,9 +13,6 @@ public interface LangConnection extends Constants {
 	@Key("newConnection")
 	String newConnection();
 
-	@Key("connectionTitle")
-	String connectionTitle();
-
 	@Key("connectionsSubtitle")
 	String connectionsSubtitle();
 

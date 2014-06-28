@@ -319,7 +319,7 @@ public class ContentConnection extends VerticalPanel {
 	{
 		setSize("100%", "100%");
 
-		ContentHelper.insertTitlePanel(this, langConnection.connectionTitle(), ClientImageBundle.INSTANCE.userConnectionContent());
+		ContentHelper.insertTitlePanel(this, lang.connectionTitle(), ClientImageBundle.INSTANCE.userConnectionContent());
 
 		ContentHelper.insertSubTitlePanel(this, langConnection.connectionsSubtitle());
 

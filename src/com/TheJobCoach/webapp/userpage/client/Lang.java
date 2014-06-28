@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.Map;
 
 import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.i18n.client.LocalizableResource.Key;
 
 public interface Lang extends Constants {
 
@@ -102,7 +103,10 @@ public interface Lang extends Constants {
 	
 	@Key("sitelibrary")
 	String _TextSiteLibrary();
-	
+
+	@Key("connectionTitle")
+	String connectionTitle();
+
 	// Footer
 	
 	@Key("about")

@@ -7,6 +7,8 @@ import com.TheJobCoach.webapp.mainpage.client.LoginServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.userpage.client.Coach.PanelCoach;
 import com.TheJobCoach.webapp.userpage.client.CoachSettings.ContentCoachSettings;
+import com.TheJobCoach.webapp.userpage.client.Connection.ContentConnection;
+import com.TheJobCoach.webapp.userpage.client.Connection.SendMessage;
 import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
 import com.TheJobCoach.webapp.userpage.client.Library.ContentSiteLibrary;
@@ -200,6 +202,17 @@ public class UserPage implements EntryPoint {
 				}	
 			});
 		}
+		if (menu.equals("connection"))
+		{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
+				@Override
+				public void Open()
+				{
+					simplePanelContent.clear();
+					simplePanelContent.add(new ContentConnection(userId, new SendMessage()));
+				}	
+			});
+		}
 	}
 
 	private void setLabelMenu(final Label label, final String menu)
@@ -388,6 +401,7 @@ public class UserPage implements EntryPoint {
 		addLabelMenuWithImage(contentStats, lang._TextMyGoals(), "goals", ClientImageBundle.INSTANCE.userVirtualCoachGoalsContent_menu());
 
 		Panel contentShares = addRoundedPanelWithTitle(verticalPanel_2, lang._TextCommunity());
+		addLabelMenuWithImage(contentShares, lang.connectionTitle(), "connection", ClientImageBundle.INSTANCE.userConnectionContent_menu());
 		addLabelMenuWithImage(contentShares, lang._TextReport(), "report", ClientImageBundle.INSTANCE.sendCommentContent_menu());
 		addLabelMenuWithImage(contentShares, lang._TextNews(), "news", ClientImageBundle.INSTANCE.newsContent_menu());
 		addLabelMenuWithImage(contentShares, lang._TextSiteLibrary(), "sitelibrary", ClientImageBundle.INSTANCE.siteLibraryContent_menu());
