@@ -377,7 +377,7 @@ public class ContentConnection extends VerticalPanel {
 			@Override
 			public String getValue(UserSearchEntry contact)
 			{
-				return contact.firstName + " " + contact.lastName + "(" + contact.userName + ")";
+				return contact.firstName + " " + contact.lastName + " (" + contact.userName + ")";
 			}			
 		},  langConnection._TextFirstName());
 

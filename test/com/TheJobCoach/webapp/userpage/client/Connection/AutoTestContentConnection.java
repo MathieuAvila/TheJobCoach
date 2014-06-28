@@ -302,7 +302,7 @@ public class AutoTestContentConnection extends GwtTest {
 		{
 			assertEquals(searchResultEntries.get(i), cud.cellTableSearchResult.getVisibleItem(i));
 			UserSearchEntry sr = searchResultEntries.get(i);
-			assertEquals(sr.firstName + " " + sr.lastName + "(" + sr.userName + ")", cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_NAME).getValue(searchResultEntries.get(i)));
+			assertEquals(sr.firstName + " " + sr.lastName + " (" + sr.userName + ")", cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_NAME).getValue(searchResultEntries.get(i)));
 			assertEquals(sr.job, cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_JOB).getValue(searchResultEntries.get(i)));
 		}
 		// check the "add" column
@@ -365,7 +365,7 @@ public class AutoTestContentConnection extends GwtTest {
 		// Error message
 		assertTrue(mbCatcher.hasError());
 		assertEquals(MessageBox.TYPE.ERROR, mbCatcher.type);
-		assertEquals("Vous ne pouvez pas envoyer de demannde de connection dans un compte de test.", mbCatcher.message);
+		assertEquals("Vous ne pouvez pas envoyer de demande de connection dans un compte de test.", mbCatcher.message);
 		mbCatcher.clearError();
 	}
 }
