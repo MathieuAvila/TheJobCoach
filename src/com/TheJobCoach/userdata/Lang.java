@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Properties;
 
 import com.TheJobCoach.util.StringResourceCache;
@@ -162,5 +164,20 @@ public class Lang
 		body = body.replaceAll("_MESSAGE_", message);
 		return body;
 	}
+
+	public static String performanceReport(String lang)
+	{
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_performance_report_" + getLang(lang) + ".html");
+		return body;
+	}
+
+	public static String performanceReportSubject(String lang)
+	{
+		return "";
+	}
 	
+	public static DateFormat getDateFormat(String lang)
+	{
+		return DateFormat.getDateInstance(DateFormat.MEDIUM, getLang(lang).equals("fr") ? Locale.FRANCE : Locale.ENGLISH);
+	}
 }
