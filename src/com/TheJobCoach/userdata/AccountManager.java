@@ -433,15 +433,11 @@ public class AccountManager implements AccountInterface {
 		firstName = Convertor.stringToSearchable(firstName);
 		lastName = Convertor.stringToSearchable(lastName);
 		
-		Set<String> resultRows = new HashSet<String>();
+		Vector<String> resultRows = new Vector<String>();
 		String last = "";
 		do
 		{
-			resultRows = new HashSet<String>();
-			Vector<String> lastRow = new Vector<String>();
-			CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 10, resultRows, lastRow);
-			if (lastRow.size() != 0)
-				last = lastRow.get(0);
+			last = getUserRange(last, 100, resultRows);
 			for (String userName: resultRows)
 			{
 				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);
@@ -493,7 +489,7 @@ public class AccountManager implements AccountInterface {
 				}
 			}
 		}
-		while (resultRows.size() > 1);
+		while (resultRows.size() != 0);
 
 		// extract result list from map
 		Vector<UserSearchEntry> result = new Vector<UserSearchEntry>();
