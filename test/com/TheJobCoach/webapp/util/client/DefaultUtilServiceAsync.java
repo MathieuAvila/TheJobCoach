@@ -8,6 +8,7 @@ import java.util.Map;
 import com.TheJobCoach.webapp.util.shared.UpdateRequest;
 import com.TheJobCoach.webapp.util.shared.UpdateResponse;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstants;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
@@ -24,7 +25,7 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 
 	static public int calls = 0;
 	
-	{
+	static {
 		addValue(UserValuesConstantsAccount.ACCOUNT_TYPE, "Freemium");
 		addValue(UserValuesConstantsAccount.ACCOUNT_MODEL,  UserValuesConstantsAccount.ACCOUNT_MODEL_LIST.get(0));
 		addValue(UserValuesConstantsAccount.ACCOUNT_TITLE);
@@ -41,6 +42,7 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO);
 		
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD);
+		addValue(UserValuesConstantsMyGoals.PERFORMANCE_RECEIVE_EMAIL, UserValuesConstants.NO);
 
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY);
 		addValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY);
