@@ -1,9 +1,20 @@
 package com.TheJobCoach;
+import static org.junit.Assert.assertEquals;
+
 import java.util.Date;
+
+import com.TheJobCoach.userdata.AccountManager;
+import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.UserId;
 
 
 public class CoachTestUtils
 {
+	static AccountManager account = new AccountManager();
+	
 	@SuppressWarnings("deprecation")
 	public static Date getDate(int year, int month, int day)
 	{
@@ -24,6 +35,20 @@ public class CoachTestUtils
 		return (d1.getDate() == d2.getDate())
 				&& (d1.getMonth() == d2.getMonth()) 
 				&& (d1.getYear() == d2.getYear());
+	}
+
+	public static void createOneAccount(UserId user) throws CassandraException
+	{
+		UserInformation info = new UserInformation(
+				"lastName" + user.userName, 
+				user.userName + "@toto.com", 
+				"",
+				"firstName" + user.userName);
+		account.deleteAccount(user.userName);
+		CreateAccountStatus status = account.createAccountWithToken(user, info, "en");
+		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
+		ValidateAccountStatus validated = account.validateAccount(user.userName, user.token);
+		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, validated);
 	}
 	
 }
