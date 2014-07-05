@@ -45,7 +45,7 @@ public class CoachTestUtils
 				"",
 				"firstName" + user.userName);
 		account.deleteAccount(user.userName);
-		CreateAccountStatus status = account.createAccountWithToken(user, info, "en");
+		CreateAccountStatus status = account.createAccountWithTokenNoMail(user, info, "en");
 		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 		ValidateAccountStatus validated = account.validateAccount(user.userName, user.token);
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, validated);
