@@ -153,7 +153,7 @@ public class AccountManager implements AccountInterface {
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 
-	CreateAccountStatus createAccountWithTokenNoMail(UserId id, UserInformation info, String langStr) throws CassandraException
+	public CreateAccountStatus createAccountWithTokenNoMail(UserId id, UserInformation info, String langStr) throws CassandraException
 	{
 		return createAccountWithTokenNoMail(id, info, langStr, LAST_VERSION);
 	}
@@ -191,7 +191,10 @@ public class AccountManager implements AccountInterface {
 	{		
 		String tokenDB = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName, "token");
 		if ((userName == null) || (token == null) || (tokenDB == null) || (!tokenDB.equals(token)))
+		{
+			logger.error("validate account " + userName + " " + token + " " + tokenDB);
 			return ValidateAccountStatus.VALIDATE_STATUS_UNKNOWN;
+		}
 		boolean result = 
 				CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, userName,
 						(new ShortMap())
@@ -221,7 +224,7 @@ public class AccountManager implements AccountInterface {
 		String token = accountTable.get("token");
 		if (token == null)
 		{
-			logger.warn("Login refused: No token for user: " + userName);
+			logger.warn("Login refused: No token for user: " + userName + " . Account deleted ?");
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_UNKNOWN_USER);
 		}
 		String validatedStr = accountTable.get("validated");
@@ -335,7 +338,7 @@ public class AccountManager implements AccountInterface {
 		{
 			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_NOT_VALIDATED, id.userName);
 			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_EMAIL, user.mail);
-			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);			
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
 		}
 		else
 		{
@@ -522,4 +525,11 @@ public class AccountManager implements AccountInterface {
 				.add("testaccount", true)
 				.get());
 	}
+	
+	public String getUserRange(String start, int count, Vector<String> rows)
+	{
+		String last = CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, start, count, rows, "token");
+		return last;
+	}
+
 }

@@ -3,12 +3,14 @@ package com.TheJobCoach.userdata;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
 
 import org.junit.Test;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MockMailer;
@@ -523,4 +525,37 @@ public class TestAccountManager
 		checkOneSearchResult(result, 4, "urange00099", "TEST_U RangeName00099", "TEST_U RangeFirstName00099", "", UserId.UserType.USER_TYPE_SEEKER);
 	}
 
+	@Test
+	public void test_getUserRange() throws CassandraException, SystemException
+	{
+		// clean-up
+		Vector<String> range = new Vector<String>();
+		String last = "";
+		do
+		{
+			 last = account.getUserRange(last, 100, range);
+			 for (String userName: range) account.deleteAccount(userName);			 
+		} 
+		while (range.size()!=0);
+		
+		// create a few accounts
+		for (int i= 0; i != 50; i++)
+		{
+			CoachTestUtils.createOneAccount(new UserId("test_range_" + i));
+		}
+		
+		// try to get all through different requests.
+		Vector<String> fullRange = new Vector<String>();
+		last = "";
+		do
+		{
+			 last = account.getUserRange(last, 12, range);
+			 for (String userName: range) 
+				 fullRange.add(userName);
+		} 
+		while (range.size()!=0);
+
+		assertEquals(50, fullRange.size());
+	}
+	
 }
