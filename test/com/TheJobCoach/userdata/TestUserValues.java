@@ -87,6 +87,17 @@ public class TestUserValues {
 		assertEquals("DEFAULT", val.get("test3.testsystem"));
 	}
 
+	@Test
+	public void test_getUserValue() throws CassandraException, SystemException
+	{
+		Map<String,String> toSet = new HashMap<String, String>();
+		toSet.put("test1.test1", "DEFAULT_GET_SINGLE");
+		values.setValues(id, toSet, true);
+
+		String val = values.getValue(id, "test1.test1");
+		assertEquals("DEFAULT_GET_SINGLE", val);
+	}
+
 	
 	@Test(expected=SystemException.class)
 	public void testSetUserValuesNotExist() throws CassandraException, SystemException

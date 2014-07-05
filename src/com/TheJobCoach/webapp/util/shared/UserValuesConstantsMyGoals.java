@@ -7,6 +7,13 @@ import java.util.Map;
 
 public class UserValuesConstantsMyGoals 
 {	
+	public static final String PERFORMANCE_RECEIVE_EMAIL            = "PERFORMANCE_RECEIVE_EMAIL";
+	// Server-side only.
+	public static final String PERFORMANCE_LAST_EMAIL               = "PERFORMANCE_LAST_EMAIL";
+
+	// noot a key, only an helper for all performance keys.
+	public final static String PERFORMANCE                          = "PERFORMANCE_";
+
 	public final static String PERFORMANCE_EVALUATION_PERIOD        = "PERFORMANCE_EVALUATION_PERIOD";
 	public final static String PERFORMANCE_EVALUATION_PERIOD__WEEK  = "WEEK";
 	public final static String PERFORMANCE_EVALUATION_PERIOD__2WEEK = "2WEEKS";
@@ -34,5 +41,4 @@ public class UserValuesConstantsMyGoals
 	public final static String PERFORMANCE_CONNECT_BEFORE_HOUR               = "PERFORMANCE_CONNECT_BEFORE_HOUR";
 	public final static String PERFORMANCE_CONNECT_NOT_AFTER_HOUR            = "PERFORMANCE_CONNECT_NOT_AFTER_HOUR";
 	public final static String PERFORMANCE_CONNECT_RATIO                     = "PERFORMANCE_CONNECT_RATIO";
-
 }

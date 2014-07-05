@@ -15,6 +15,7 @@ import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstants;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
@@ -89,13 +90,15 @@ public class UserValues implements IUserDataManager {
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_LANGUAGE));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, MAX_OPTION_LENGTH, true, UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__DEFAULT_MAN));
 
-		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_SEEKER, YES_NO_LENGTH, true, "YES"));
-		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_COACH, YES_NO_LENGTH, true, "YES"));
-		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_RECRUITER, YES_NO_LENGTH, true, "YES"));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_SEEKER, YES_NO_LENGTH, true, UserValuesConstants.YES));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_COACH, YES_NO_LENGTH, true, UserValuesConstants.YES));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_RECRUITER, YES_NO_LENGTH, true, UserValuesConstants.YES));
 
 		addField(new FieldDefinition(UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST, MAX_OPTION_LENGTH, false, "0"));
 
-		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_LAST_EMAIL, MAX_OPTION_LENGTH, false, ""));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_RECEIVE_EMAIL, YES_NO_LENGTH, true, UserValuesConstants.NO));
+		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD, MAX_OPTION_LENGTH, true, UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD__MONTH));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR));
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO));
@@ -153,7 +156,13 @@ public class UserValues implements IUserDataManager {
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
 		cfDefListUpdated = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST_UPDATED, cfDefListUpdated);
 	}
-
+	
+	public String getValue(UserId id, String rootKey) throws CassandraException, SystemException 
+	{
+		Map<String, String> values = getValues(id, rootKey);
+		if (values.containsKey(rootKey)) return values.get(rootKey);
+		return "";
+	}
 	public Map<String, String> getValues(UserId id, String rootKey) throws CassandraException, SystemException 
 	{
 		String start = "";

@@ -4,9 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UserValuesConstantsAccount 
-{
-	public final static List<String> YES_NO_LIST  = Arrays.asList("YES", "NO");
-	
+{	
 	public final static String ACCOUNT_TYPE        = "ACCOUNT_TYPE";
 	public final static String ACCOUNT_MODEL       = "ACCOUNT_MODEL";
 	public final static List<String> ACCOUNT_MODEL_LIST  = Arrays.asList("FREEMIUM");
@@ -15,6 +13,8 @@ public class UserValuesConstantsAccount
 	public final static String ACCOUNT_STATUS       = "ACCOUNT_STATUS";
 
 	public final static String ACCOUNT_LANGUAGE     = "ACCOUNT_LANGUAGE";
+	public final static String ACCOUNT_LANGUAGE__FR     = "fr";
+	public final static String ACCOUNT_LANGUAGE__EN     = "en";
 	
 	public final static String ACCOUNT_STATUS_LIST__ACTIVE_SEARCH = "ACTIVE_SEARCH";
 	public final static List<String> ACCOUNT_STATUS_LIST  = Arrays.asList(ACCOUNT_STATUS_LIST__ACTIVE_SEARCH, "WORK_ACTIVE", "LISTENING");
