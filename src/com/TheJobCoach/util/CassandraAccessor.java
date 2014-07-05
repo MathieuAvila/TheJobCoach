@@ -4,6 +4,7 @@ package com.TheJobCoach.util;
 import static me.prettyprint.hector.api.factory.HFactory.createMultigetSliceQuery;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,9 +56,9 @@ public class CassandraAccessor {
 	private static final BytesArraySerializer bse = new BytesArraySerializer();
 
 	private static String location = "localhost:9160";	
-	
+
 	private static Logger logger = LoggerFactory.getLogger(CassandraAccessor.class);
-	
+
 	static public void setLocation(String _location)
 	{
 		location = _location;
@@ -131,7 +132,7 @@ public class CassandraAccessor {
 			//PrintStream stream = new PrintStream();
 			//e.printStackTrace(stream);
 			e.printStackTrace();
-			
+
 			throw new CassandraException();
 		}
 		return true;
@@ -162,7 +163,7 @@ public class CassandraAccessor {
 		if (c == null) return null;
 		return  c.getValue();
 	}
-	
+
 	static public Map<String, String> getRow(String CF, String key) throws CassandraException
 	{
 		SliceQuery<String, String, String> cQ = HFactory.createSliceQuery(getKeyspace(), se, se, se);
@@ -266,6 +267,47 @@ public class CassandraAccessor {
 		if (lastRow != null) last.add(lastRow.getKey());
 
 		return true;
+	}
+
+	static public String getKeyRange(String CFName, String start, int count, Vector<String> result, String columnCheck)
+	{
+		if (count < 2) count = 2;
+		
+		OrderedRows<String, String, String> orderedRows = null;
+		result.clear();
+		
+		Set<String> seen = new HashSet<String>();
+
+		do
+		{
+			RangeSlicesQuery<String, String, String> rangeSlicesQuery =
+					HFactory.createRangeSlicesQuery(CassandraAccessor.getKeyspace(), se, se, se);
+			rangeSlicesQuery.setColumnFamily(CFName);
+			rangeSlicesQuery.setKeys(start, "");
+			rangeSlicesQuery.setRowCount(count);
+			rangeSlicesQuery.setColumnNames(columnCheck);
+
+			QueryResult<OrderedRows<String, String, String>> resultQuery = rangeSlicesQuery.execute();
+			orderedRows = resultQuery.get();
+			seen.add(start);
+		
+			Row<String,String,String> lastRow = orderedRows.peekLast();
+			start = lastRow.getKey();
+			
+			for (Row<String, String, String> r : orderedRows)
+			{
+				//System.out.println("found " + start + " " + r.getColumnSlice().getColumnByName(columnCheck) +  " " +  orderedRows.getCount());
+
+				if (!seen.contains(r.getKey())) // "last" key must not be inserted.
+				{
+					if (r.getColumnSlice().getColumnByName(columnCheck) != null)
+						result.add(r.getKey());
+					seen.add(r.getKey());
+				}
+			}
+		} 
+		while ((result.size() < count) && (orderedRows.getCount() == count));
+		return start;
 	}
 
 	public static ColumnFamilyDefinition checkColumnFamilyAscii(String CFName, ColumnFamilyDefinition cfDefList)

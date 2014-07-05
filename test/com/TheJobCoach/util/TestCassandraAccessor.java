@@ -3,6 +3,7 @@ package com.TheJobCoach.util;
 import static org.junit.Assert.*;
 
 import java.util.Map;
+import java.util.Vector;
 
 import me.prettyprint.hector.api.Cluster;
 import me.prettyprint.hector.api.Keyspace;
@@ -149,4 +150,44 @@ public class TestCassandraAccessor {
 		checkByteArray(resultReq22, toto22);				
 	}
 	
+	@Test
+	public void test_getKeyRange() throws CassandraException
+	{
+		String start = "";
+		ColumnFamilyDefinition cfDef = null;
+		String COLUMN_FAMILY_NAME = "testkeyrange";
+		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME, cfDef);
+		Vector<String> result = new Vector<String>();
+		
+		// create 30 strings
+		for (int i = 0 ; i != 30; i++)
+			CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME, "myobject" + i, 
+					(new ShortMap())
+					.add("checker", "myobject" + i)
+					.add("checker2", "myobject" + i).get());	
+
+		// delete 1 row, 1 cheker column and 1 invalid column
+		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME, "myobject3", "checker");
+		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME, "myobject4", "checker2");
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME, "myobject5");
+		
+		// get all, by increasing number of ranges
+		for (int count = 2 ; count != 30; count++)
+		{
+			start = "";
+			Vector<String> fullRange = new Vector<String>();
+			do {
+				start = CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME, start, count, result, "checker");
+				fullRange.addAll(result);
+			} while (result.size() != 0);
+			// now check counts
+			assertEquals(30 - 2, fullRange.size());
+			assertTrue(fullRange.contains("myobject0"));
+			assertTrue(fullRange.contains("myobject1"));
+			assertTrue(fullRange.contains("myobject4"));
+			assertTrue(fullRange.contains("myobject6"));
+			assertFalse(fullRange.contains("myobject3"));
+			assertFalse(fullRange.contains("myobject5"));
+		}
+	}
 }
