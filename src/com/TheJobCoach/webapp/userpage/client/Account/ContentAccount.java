@@ -19,6 +19,7 @@ import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IExtendedField;
 import com.TheJobCoach.webapp.util.client.LangUtil;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstants;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -72,15 +73,15 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 	CheckedLabel clKeywords = new CheckedLabel(langAccount.Text_Skills(), false, tfKeywords);
 
 	CheckedExtendedDropListField tfPublishSeeker = new CheckedExtendedDropListField(
-			UserValuesConstantsAccount.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
+			UserValuesConstants.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
 	CheckedLabel clPublishSeeker = new CheckedLabel(langAccount.Text_VisibleProfileSeeker(), false, tfPublishSeeker);
 
 	CheckedExtendedDropListField tfPublishCoach = new CheckedExtendedDropListField(
-			UserValuesConstantsAccount.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
+			UserValuesConstants.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
 	CheckedLabel clPublishCoach = new CheckedLabel(langAccount.Text_VisibleProfileCoach(), false, tfPublishCoach);
 
 	CheckedExtendedDropListField tfPublishRecruiter = new CheckedExtendedDropListField(
-			UserValuesConstantsAccount.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
+			UserValuesConstants.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
 	CheckedLabel clPublishRecruiter = new CheckedLabel(langAccount.Text_VisibleProfileRecruiter(), false, tfPublishRecruiter);
 	
 	void getValues()
