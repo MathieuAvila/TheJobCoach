@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.Vector;
@@ -279,15 +277,11 @@ public class AccountManager implements AccountInterface {
 	public Vector<UserId> listUser() throws CassandraException
 	{	
 		Vector<UserId> result = new Vector<UserId>();	
-		Set<String> resultRows = new HashSet<String>();
+		Vector<String> resultRows = new Vector<String>();
 		String last = "";
 		do
 		{
-			resultRows = new HashSet<String>();
-			Vector<String> lastRow = new Vector<String>();
-			CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 100, resultRows, lastRow);
-			if (lastRow.size() != 0)
-				last = lastRow.get(0);
+			last = CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 100, resultRows, "token");
 			for (String userName: resultRows)
 			{
 				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);			
@@ -298,7 +292,7 @@ public class AccountManager implements AccountInterface {
 				}
 			}
 		}
-		while (resultRows.size() > 1);
+		while (resultRows.size() != 0);
 		return result;
 	}
 
@@ -348,15 +342,11 @@ public class AccountManager implements AccountInterface {
 
 	public void purgeAccount() throws CassandraException
 	{
-		Set<String> resultRows = new HashSet<String>();
+		Vector<String> resultRows = new Vector<String>();
 		String last = "";
 		do
 		{
-			resultRows = new HashSet<String>();
-			Vector<String> lastRow = new Vector<String>();
-			CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 3, resultRows, lastRow);
-			if (lastRow.size() != 0)
-				last = lastRow.get(0);
+			last = CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 3, resultRows, "token");
 			for (String k: resultRows)
 			{
 				Map<String, String> userNameDB = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, k);
@@ -370,7 +360,7 @@ public class AccountManager implements AccountInterface {
 					}
 				}
 			}
-		} while (resultRows.size() > 1);
+		} while (resultRows.size() != 0);
 	}
 
 	@Override

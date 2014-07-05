@@ -246,29 +246,6 @@ public class CassandraAccessor {
 		}		
 	}
 
-	static public boolean getKeyRange(String CFName, String start, int count, Set<String> result, Vector<String> last)
-	{
-		RangeSlicesQuery<String, String, String> rangeSlicesQuery =
-				HFactory.createRangeSlicesQuery(CassandraAccessor.getKeyspace(), se, se, se);
-		rangeSlicesQuery.setColumnFamily(CFName);
-		rangeSlicesQuery.setKeys(start, "");
-		rangeSlicesQuery.setRange(start, "", false, count);        
-		rangeSlicesQuery.setRowCount(count);
-
-		QueryResult<OrderedRows<String, String, String>> resultQuery = rangeSlicesQuery.execute();
-		OrderedRows<String, String, String> orderedRows = resultQuery.get();
-
-		Row<String,String,String> lastRow = orderedRows.peekLast();
-
-		for (Row<String, String, String> r : orderedRows)
-		{
-			result.add(r.getKey());
-		}
-		if (lastRow != null) last.add(lastRow.getKey());
-
-		return true;
-	}
-
 	static public String getKeyRange(String CFName, String start, int count, Vector<String> result, String columnCheck)
 	{
 		if (count < 2) count = 2;
