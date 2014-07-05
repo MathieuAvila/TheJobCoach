@@ -1,5 +1,8 @@
 package com.TheJobCoach.util;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 public class MockMailer implements MailerInterface {
@@ -10,6 +13,13 @@ public class MockMailer implements MailerInterface {
 	public String lastSrc;
 	public Map<String, Attachment> lastParts;
 	
+	public void writeToFile(String path) throws FileNotFoundException, UnsupportedEncodingException
+	{
+		PrintWriter writer = new PrintWriter(path, "UTF-8");
+		writer.println(lastBody);
+		writer.close();
+	}
+
 	public boolean sendEmail(String _dstMail, String _subject, String _body, String _src)
 	{
 		lastDst = _dstMail;
