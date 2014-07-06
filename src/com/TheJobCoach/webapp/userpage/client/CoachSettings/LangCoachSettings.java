@@ -35,4 +35,7 @@ public interface LangCoachSettings extends Constants {
 
 	@Key("todoevent")
 	String Text_todoevent();
+
+	@Key("receivePerformanceMail")
+	String receivePerformanceMail();
 }

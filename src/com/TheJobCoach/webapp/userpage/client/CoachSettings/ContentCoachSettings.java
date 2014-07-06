@@ -19,8 +19,10 @@ import com.TheJobCoach.webapp.util.client.DynamicLabel;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IExtendedField;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstants;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
@@ -74,10 +76,15 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 			UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR_LIST, langCoachSettings.coachNameMap(), "coachNameMap_");
 	CheckedLabel clVirtualCoach = new CheckedLabel(langCoachSettings.Text_MyVirtualCoach(), false, tfVirtualCoach);
 	DynamicLabel dlVirtualCoach = new DynamicLabel(tfVirtualCoach, langCoachSettings.coachDescriptionMap(), "coachDescriptionMap_");
+
+	CheckedExtendedDropListField tfMailCoach = new CheckedExtendedDropListField(
+			UserValuesConstants.YES_NO_LIST, lang.yes_no_map(), "yes_no_map_");
+	CheckedLabel clMailCoach = new CheckedLabel(langCoachSettings.receivePerformanceMail(), false, tfMailCoach);
 	
 	void getValues()
 	{	
 		values.preloadValueList("ACCOUNT_COACH_AVATAR", this);
+		values.preloadValueList(UserValuesConstantsMyGoals.PERFORMANCE_RECEIVE_EMAIL, this);
 		values.preloadValueList("COACHSETTINGS", this);
 	}
 
@@ -100,7 +107,7 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 		
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, langCoachSettings.Text_TitleCoach());
 
-		Grid grid2 = new Grid(1, 4);
+		Grid grid2 = new Grid(2, 4);
 		simplePanelCenter.add(grid2);
 		
 		grid2.setWidget(0,0, clVirtualCoach);
@@ -116,9 +123,12 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 		dlVirtualCoach.setWidth("300px");
 		grid2.setCellSpacing(20);
 		
-		fields.put(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, tfVirtualCoach);
-
+		grid2.setWidget(1,0, clMailCoach);
+		grid2.setWidget(1,1, tfMailCoach.getItem());
 		
+		fields.put(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, tfVirtualCoach);
+		fields.put(UserValuesConstantsMyGoals.PERFORMANCE_RECEIVE_EMAIL, tfMailCoach);
+
 		ContentHelper.insertSubTitlePanel(simplePanelCenter, langCoachSettings.Text_titletodo());
 		
 		Grid grid0 = new Grid(5, 2);
