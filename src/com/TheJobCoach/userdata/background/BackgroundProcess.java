@@ -156,6 +156,7 @@ public class BackgroundProcess
 	void checkCoachMail(Date currentDate)
 	{
 		String last = "";
+		int ucount = 0;
 		Vector<String> result = new Vector<String>();
 		int count = 0;
 		try {
@@ -166,6 +167,7 @@ public class BackgroundProcess
 				{
 					//logger.info("Check user: " + userName);
 					last = userName;
+					ucount++;
 					if (checkCoachMailForUser(userName, currentDate)) count++;
 				}
 			}
@@ -175,7 +177,7 @@ public class BackgroundProcess
 		{
 			logger.error("received exception in backgroundProcess" + e.getMessage() + e.toString());
 		}
-		logger.info("End sending evaluation emails. Sent " + count + " mails.");
+		logger.info("End sending evaluation emails. Sent " + count + " mails, for a total of " + ucount + " user accounts.");
 	}
 
 	void run()
