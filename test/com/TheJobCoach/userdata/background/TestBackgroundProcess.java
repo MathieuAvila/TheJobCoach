@@ -27,7 +27,6 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
 
 public class TestBackgroundProcess
 {
-	
 	BackgroundProcess bp = new BackgroundProcess();
 	UserId user = new UserId("userbackground", "password", UserId.UserType.USER_TYPE_SEEKER);
 	AccountManager account = new AccountManager();
@@ -128,5 +127,17 @@ public class TestBackgroundProcess
 		assertEquals(mockMail.lastBody, 
 				"D   nostatuslogo E  garbage nostatuslogo ");
 
+	}	
+	
+	//@Test
+	public void test_sendRealReport() throws CassandraException, SystemException, FileNotFoundException, UnsupportedEncodingException
+	{
+		UserId user1 = new UserId("user1");
+		MailerFactory.reset();
+		
+		StringResourceCache.getInstance().clean();
+		values.setValue(user1, UserValuesConstantsMyGoals.PERFORMANCE_RECEIVE_EMAIL, UserValuesConstants.YES, false);
+		values.setValue(user1, UserValuesConstantsMyGoals.PERFORMANCE_LAST_EMAIL, "", false);
+		bp.checkCoachMailForUser(user1.userName, CoachTestUtils.getDate(2014, 1, 20));
 	}	
 }
