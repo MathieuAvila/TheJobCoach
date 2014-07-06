@@ -261,7 +261,7 @@ public class CassandraAccessor {
 					HFactory.createRangeSlicesQuery(CassandraAccessor.getKeyspace(), se, se, se);
 			rangeSlicesQuery.setColumnFamily(CFName);
 			rangeSlicesQuery.setKeys(start, "");
-			rangeSlicesQuery.setRowCount(count);
+			rangeSlicesQuery.setRowCount(count - result.size());
 			rangeSlicesQuery.setColumnNames(columnCheck);
 
 			QueryResult<OrderedRows<String, String, String>> resultQuery = rangeSlicesQuery.execute();
@@ -273,13 +273,13 @@ public class CassandraAccessor {
 			
 			for (Row<String, String, String> r : orderedRows)
 			{
-				//System.out.println("found " + start + " " + r.getColumnSlice().getColumnByName(columnCheck) +  " " +  orderedRows.getCount());
-
 				if (!seen.contains(r.getKey())) // "last" key must not be inserted.
 				{
 					if (r.getColumnSlice().getColumnByName(columnCheck) != null)
+					{
 						result.add(r.getKey());
-					seen.add(r.getKey());
+						seen.add(r.getKey());
+					}
 				}
 			}
 		} 
