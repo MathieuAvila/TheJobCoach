@@ -13,4 +13,9 @@ public class MailerFactory {
 	{
 		myMailer = _mailer;
 	}
+	
+	public static void reset()
+	{
+		myMailer = new Mailer();
+	}
 }
