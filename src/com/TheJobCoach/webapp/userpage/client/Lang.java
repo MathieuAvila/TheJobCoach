@@ -281,4 +281,7 @@ public interface Lang extends Constants {
 	@Key("forbidTestAccountComment")
 	String forbidTestAccountComment();
 
+	@Key("yes_no_map")
+	Map<String, String> yes_no_map();
+
 }
