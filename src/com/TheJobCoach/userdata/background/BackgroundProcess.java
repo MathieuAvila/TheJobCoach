@@ -59,7 +59,7 @@ public class BackgroundProcess
 	}
 	
 	void sendReportMail(UserId user, Date periodStart, Date periodEnd, Map<String, String> vals, GoalReportInformation reportInformation)
-	{
+	{		
 		try
 		{
 			// retrieve email & lang.
@@ -67,6 +67,9 @@ public class BackgroundProcess
 			account.getUserInformation(user, info);
 			String lang = account.getUserLanguage(user);
 			String coach = values.getValue(user, UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR);
+
+			logger.info("====== Send email to user " + user.userName + " for period starting at:" + periodStart + " to: " + periodEnd 
+					+ " email: " + info.email + " coach: " + coach + " lang: " + lang);
 
 			Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
 			parts.put("thejobcoachlogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon-300x64.png", "image/png", "img_logo.png"));
@@ -113,20 +116,17 @@ public class BackgroundProcess
 		
 	}
 
-	void checkCoachMailForUser(String userName, Date currentDate) throws CassandraException, SystemException
+	boolean checkCoachMailForUser(String userName, Date currentDate) throws CassandraException, SystemException
 	{
-		logger.info("Check user: " + userName);
+		//logger.info("Check user: " + userName);
 		UserId user = new UserId(userName);
 		Map<String, String> vals;
 		vals = values.getValues(user, UserValuesConstantsMyGoals.PERFORMANCE);
 		String receive = vals.get(UserValuesConstantsMyGoals.PERFORMANCE_RECEIVE_EMAIL);
 
-		
-		logger.info("======" + receive + "======" + UserValuesConstants.YES_NO_MAP.get(false) + receive.equals(UserValuesConstants.YES_NO_MAP.get(false)));
-		
 		// Does user want to receive email ?
 		if (receive.equals(UserValuesConstants.YES_NO_MAP.get(false)))
-			return;
+			return false;
 
 		// now check period
 		String periodString = vals.get(UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD);
@@ -139,34 +139,34 @@ public class BackgroundProcess
 		String periodLastMailStr = vals.get(UserValuesConstantsMyGoals.PERFORMANCE_LAST_EMAIL);
 		Date periodLastMail = FormatUtil.getStringDate(periodLastMailStr);
 		
-		logger.info("======" + periodStart + "======" + periodLastMailStr+ "======" + periodLastMail + periodLastMail.before(periodStart));
-		
 		if (periodLastMail.after(periodStart))
-			return;
+			return false;
 
 		// Now get Evaluation
 		GoalReportInformation reportInformation = report.getReport(user, periodStart, periodEnd);
 		// Now build mail report from results.
-		logger.info("======" + periodStart + "======" + periodLastMailStr+ "======" + periodLastMail);
 		sendReportMail(user, periodStart, periodEnd, vals, reportInformation);
 		
 		// Set last period
 		values.setValue(user, UserValuesConstantsMyGoals.PERFORMANCE_LAST_EMAIL, FormatUtil.getDateString(currentDate), false);
+		
+		return true;
 	}
 	
 	void checkCoachMail(Date currentDate)
 	{
 		String last = "";
 		Vector<String> result = new Vector<String>();
+		int count = 0;
 		try {
 			do
 			{
 				last = account.getUserRange(last, 100, result);
 				for (String userName: result)
 				{
-					logger.info("Check user: " + userName);
+					//logger.info("Check user: " + userName);
 					last = userName;
-					checkCoachMailForUser(userName, currentDate);
+					if (checkCoachMailForUser(userName, currentDate)) count++;
 				}
 			}
 			while (result.size() > 0);
@@ -175,6 +175,7 @@ public class BackgroundProcess
 		{
 			logger.error("received exception in backgroundProcess" + e.getMessage() + e.toString());
 		}
+		logger.info("End sending evaluation emails. Sent " + count + " mails.");
 	}
 
 	void run()
