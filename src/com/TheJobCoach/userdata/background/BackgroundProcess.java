@@ -133,13 +133,15 @@ public class BackgroundProcess
 		FormatUtil.PERIOD_TYPE period = UserValuesConstantsMyGoals.mapStringPeriod.get(periodString);
 		Date periodStart = new Date(); 
 		Date periodEnd = new Date();
-		FormatUtil.getPeriod(period, 0, currentDate, periodStart, periodEnd);
+		FormatUtil.getPeriod(period, -1, currentDate, periodStart, periodEnd);
 
 		// Is periodEnd farer than last email.
 		String periodLastMailStr = vals.get(UserValuesConstantsMyGoals.PERFORMANCE_LAST_EMAIL);
 		Date periodLastMail = FormatUtil.getStringDate(periodLastMailStr);
 		
-		if (periodLastMail.after(periodStart))
+		logger.info(" " + periodLastMail + " " + periodEnd + " " + periodLastMail.compareTo(periodEnd));
+		
+		if (periodLastMail.compareTo(periodEnd) >= 0)
 			return false;
 
 		// Now get Evaluation

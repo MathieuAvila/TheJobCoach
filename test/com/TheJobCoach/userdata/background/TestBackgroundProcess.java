@@ -52,8 +52,8 @@ public class TestBackgroundProcess
 		assertNotNull(mockMail.lastDst);
 		mockMail.writeToFile("/tmp/file.html");
 		// check dates (english)
-		assertTrue(mockMail.lastBody.contains("Jan 1, 2014 "));
-		assertTrue(mockMail.lastBody.contains("Jan 31, 2014."));
+		assertTrue(mockMail.lastBody.contains("Dec 1, 2013 "));
+		assertTrue(mockMail.lastBody.contains("Dec 31, 2013."));
 
 		// already received for period
 		mockMail.reset();
@@ -73,8 +73,8 @@ public class TestBackgroundProcess
 		bp.checkCoachMailForUser(user.userName, CoachTestUtils.getDate(2014, 3, 20));
 		assertNotNull(mockMail.lastDst);
 		mockMail.writeToFile("/tmp/file.html");
-		assertTrue(mockMail.lastBody.contains("17 mars 2014 "));
-		assertTrue(mockMail.lastBody.contains("23 mars 2014."));
+		assertTrue(mockMail.lastBody.contains("10 mars 2014 "));
+		assertTrue(mockMail.lastBody.contains("16 mars 2014."));
 
 		// check reported values, depending on goals & performance
 		Map<String, String> vals = new HashMap<String, String>();
