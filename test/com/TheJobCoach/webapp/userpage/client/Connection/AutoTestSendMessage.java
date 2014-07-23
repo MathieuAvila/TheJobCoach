@@ -43,7 +43,7 @@ public class AutoTestSendMessage extends GwtTest {
 		
 	}
 	
-	SpecialUserServiceAsync userService = new SpecialUserServiceAsync();
+	static SpecialUserServiceAsync userService = null;
 	
 	HorizontalPanel p;
     
@@ -85,8 +85,10 @@ public class AutoTestSendMessage extends GwtTest {
 	private SendMessage cud;
 
 	@Before
-	public void beforeEditExternalContact()
+	public void beforeAutoTestSendMessage()
 	{
+		if (userService == null) 
+			userService = new SpecialUserServiceAsync();
 		addGwtCreateHandler(new GwtCreateHandler () {
 
 			@Override
@@ -106,10 +108,10 @@ public class AutoTestSendMessage extends GwtTest {
 	{
 		userService.calls = 0;
 		cud = new SendMessage();
-		cud.sendMessage(p, ule, "FN", "LN");
+		SendMessage sm = (SendMessage) cud.sendMessage(p, ule, "FN", "LN");
 		
-		cud.textAreaMessage.setText(MESSAGE_TEXT);
-		cud.okCancel.getOk().click();
+		sm.textAreaMessage.setText(MESSAGE_TEXT);
+		sm.okCancel.getOk().click();
 		assertEquals(1, userService.calls);
 	}
 
