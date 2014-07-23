@@ -36,12 +36,12 @@ public class SendMessage extends DialogBox  implements ISendMessage  {
 	
 	public SendMessage()
 	{
-	}
+		super();
+	}			
 
-	@Override
-	public void sendMessage(Panel panel, UserId contact, String firstName, String lastName)
+	SendMessage(Panel rootPanel, UserId contact, String firstName, String lastName)
 	{
-		rootPanel = panel;
+		this.rootPanel = rootPanel;
 		this.contact = contact;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -63,7 +63,13 @@ public class SendMessage extends DialogBox  implements ISendMessage  {
 
 		vp.add(okCancel);
 
-		this.center();	
+		this.center();
+	}
+	
+	@Override
+	public void sendMessage(Panel panel, UserId contact, String firstName, String lastName)
+	{
+		new SendMessage(panel, contact, firstName, lastName);
 	}
 
 	// Create a handler for the send message button
