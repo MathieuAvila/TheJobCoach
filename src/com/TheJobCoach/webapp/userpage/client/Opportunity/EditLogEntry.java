@@ -128,7 +128,10 @@ public class EditLogEntry implements EntryPoint, IEditLogEntry {
 
 	void updateDoneField()
 	{
-		eventInfoPanel.setVisible(validEventType.contains(UserLogEntry.entryTypeToString(comboBoxStatus.getValue(comboBoxStatus.getSelectedIndex()))));
+		int index = comboBoxStatus.getSelectedIndex();
+		String valueStr = "";
+		try { valueStr = comboBoxStatus.getValue(index); } catch (Exception e) {};
+		eventInfoPanel.setVisible(validEventType.contains(UserLogEntry.entryTypeToString(valueStr)));
 	}
 	
 	/**
