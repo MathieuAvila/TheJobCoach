@@ -166,7 +166,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		// now set-up incoming hour and check what happens when we connect 1/2 hour after it.
 		reset();
 		utilService.time = 0;
-		DefaultUtilServiceAsync.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
+		utilService.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
 				String.valueOf(currentTimeSec - 60*31*1000));
 		cul = new PanelUpdate(p, userId, connectionTime);
 		cul.onModuleLoad();
@@ -178,7 +178,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		// now set-up incoming hour and check what happens when we connect 10 sec after it.
 		reset();
 		utilService.time = 0;
-		DefaultUtilServiceAsync.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
+		utilService.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
 				String.valueOf(currentTimeSec - 10*1000));
 		cul = new PanelUpdate(p, userId, connectionTime);
 		cul.onModuleLoad();
@@ -190,7 +190,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		// now set-up incoming hour and check what happens when we connect before it.
 		reset();
 		utilService.time = 0;
-		DefaultUtilServiceAsync.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
+		utilService.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
 				String.valueOf(currentTimeSec + 10*1000));
 		cul = new PanelUpdate(p, userId, connectionTime);
 		cul.onModuleLoad();
@@ -199,7 +199,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		assertEquals(msg.getMessage(), null);
 		
 		// set time back to "".
-		DefaultUtilServiceAsync.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, "");
+		utilService.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, "");
 		
 		// Before COACH_OPP_NONE
 		cul.checkTime(new UpdateResponse(15*60 - 1));

@@ -19,13 +19,13 @@ import org.slf4j.Logger;
 
 public class DefaultUtilServiceAsync implements UtilServiceAsync
 {
-	static public Map<String, String> values = new HashMap<String, String>();
+	public Map<String, String> values = new HashMap<String, String>();
 	
 	static Logger logger = LoggerFactory.getLogger(DefaultUtilServiceAsync.class);
 
-	static public int calls = 0;
+	public int calls = 0;
 	
-	static {
+	 {
 		addValue(UserValuesConstantsAccount.ACCOUNT_TYPE, "Freemium");
 		addValue(UserValuesConstantsAccount.ACCOUNT_MODEL,  UserValuesConstantsAccount.ACCOUNT_MODEL_LIST.get(0));
 		addValue(UserValuesConstantsAccount.ACCOUNT_TITLE);
@@ -117,11 +117,11 @@ public class DefaultUtilServiceAsync implements UtilServiceAsync
 
 	}
 	
-	public static void addValue(String key, String value)
+	public void addValue(String key, String value)
 	{
 		values.put(key, value);
 	}
-	public static void addValue(String key)
+	public void addValue(String key)
 	{
 		values.put(key, "");
 	}

@@ -157,14 +157,14 @@ public class AutoTestContentMyGoals extends GwtTest {
 	@Test
 	public void testNoValue()
 	{
-		SpecialUtilServiceAsync.calls = 0;		
+		utilService.calls = 0;		
 		userService.reset();		
 
 		cud = new ContentMyGoals(
 				p, userId);
 		cud.onModuleLoad();		
-		assertEquals(1, SpecialUtilServiceAsync.calls);		
-		assertEquals(2, SpecialUserServiceAsync.calls);		
+		assertEquals(1, utilService.calls);		
+		assertEquals(3, SpecialUserServiceAsync.calls);		
 		checkFields(cud, "",
 				"12:00", "",
 				"23:59", "",
@@ -191,29 +191,29 @@ public class AutoTestContentMyGoals extends GwtTest {
 	@Test
 	public void testAllValue()
 	{
-		SpecialUtilServiceAsync.calls = 0;		
+		utilService.calls = 0;		
 		userService.reset();		
 
-		SpecialUtilServiceAsync.addValue(
+		utilService.addValue(
 				UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD, 
 				UserValuesConstantsMyGoals.PERFORMANCE_EVALUATION_PERIOD__2WEEK);
-		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, new Long(9*60*60*1000).toString());
-		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, new Long(18*60*60*1000).toString());
-		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, "1");
+		utilService.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, new Long(9*60*60*1000).toString());
+		utilService.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR, new Long(18*60*60*1000).toString());
+		utilService.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO, "1");
 
-		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, "2");
-		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY, "3");
-		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW, "4");
-		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL, "5");		
-		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL, "6");
-		SpecialUtilServiceAsync.addValue(UserValuesConstantsMyGoals.PERFORMANCE_RECALL_GOAL_MIDDLE, "7");
+		utilService.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY, "2");
+		utilService.addValue(UserValuesConstantsMyGoals.PERFORMANCE_CANDIDATEOPPORTUNITY, "3");
+		utilService.addValue(UserValuesConstantsMyGoals.PERFORMANCE_INTERVIEW, "4");
+		utilService.addValue(UserValuesConstantsMyGoals.PERFORMANCE_PROPOSAL, "5");		
+		utilService.addValue(UserValuesConstantsMyGoals.PERFORMANCE_PHONECALL, "6");
+		utilService.addValue(UserValuesConstantsMyGoals.PERFORMANCE_RECALL_GOAL_MIDDLE, "7");
 
 		cud = new ContentMyGoals(
 				p, userId);
 		cud.onModuleLoad();		
-		assertEquals(1, SpecialUtilServiceAsync.calls);		
-		assertEquals(5, SpecialUserServiceAsync.calls);
-		SpecialUtilServiceAsync.calls = 0;		
+		assertEquals(1, utilService.calls);		
+		assertEquals(6, SpecialUserServiceAsync.calls);
+		utilService.calls = 0;		
 		SpecialUserServiceAsync.calls = 0;	
 
 		checkFields(cud, "1",
@@ -247,7 +247,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 
 
 		cud.prevButton.click();
-		assertEquals(0, SpecialUtilServiceAsync.calls);		
+		assertEquals(0, utilService.calls);		
 		assertEquals(1, SpecialUserServiceAsync.calls);		
 
 		assertTrue(cud.nextButton.isEnabled());
