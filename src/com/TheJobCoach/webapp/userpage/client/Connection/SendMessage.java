@@ -67,9 +67,9 @@ public class SendMessage extends DialogBox  implements ISendMessage  {
 	}
 	
 	@Override
-	public void sendMessage(Panel panel, UserId contact, String firstName, String lastName)
+	public ISendMessage sendMessage(Panel panel, UserId contact, String firstName, String lastName)
 	{
-		new SendMessage(panel, contact, firstName, lastName);
+		return new SendMessage(panel, contact, firstName, lastName);
 	}
 
 	// Create a handler for the send message button

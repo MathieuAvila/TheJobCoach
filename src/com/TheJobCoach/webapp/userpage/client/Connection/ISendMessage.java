@@ -5,5 +5,5 @@ import com.google.gwt.user.client.ui.Panel;
 
 public interface ISendMessage  {
 
-	public void sendMessage(Panel panel, UserId contact, String firstName, String lastName);
+	public ISendMessage sendMessage(Panel panel, UserId contact, String firstName, String lastName);
 }
