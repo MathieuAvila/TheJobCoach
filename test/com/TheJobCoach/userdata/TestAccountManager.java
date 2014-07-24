@@ -92,10 +92,10 @@ public class TestAccountManager
 	{
 		account.deleteAccount(id);
 		fakeManager.reset();
-
+		UserId userId = new UserId(id, "mytoken", UserId.UserType.USER_TYPE_SEEKER);
 		MailerFactory.setMailer(mockMail);
 		CreateAccountStatus status = account.createAccountWithToken(
-				new UserId(id, "mytoken", UserId.UserType.USER_TYPE_SEEKER),
+				userId,
 				new UserInformation("nom", email, "password","prenom"), 
 				"FR");
 		assertEquals( CreateAccountStatus.CREATE_STATUS_OK, status);
@@ -113,6 +113,11 @@ public class TestAccountManager
 		assertEquals("mytoken", token);
 		// Check data manager is called.
 		assertEquals(1, fakeManager.createDefaultCount);
+		
+		// get language
+		String lang = account.getUserLanguage(userId);
+		assertEquals("FR", lang);
+		
 	}
 
 	@Test

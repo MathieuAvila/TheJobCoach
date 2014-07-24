@@ -497,8 +497,7 @@ public class AccountManager implements AccountInterface {
 		// send mail in correspondants' language
 		String lang = null;
 		try { 
-			Map<String, String> langMap = userValues.getValues(user, UserValuesConstantsAccount.ACCOUNT_LANGUAGE); 
-			lang = langMap.get(UserValuesConstantsAccount.ACCOUNT_LANGUAGE);
+			lang = userValues.getValue(user, UserValuesConstantsAccount.ACCOUNT_LANGUAGE); 
 		}
 		catch (SystemException e) {} // this cannot happen
 		return lang;
