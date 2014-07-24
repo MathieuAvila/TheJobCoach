@@ -18,6 +18,7 @@ import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 
 
 public class TestContactManager
@@ -36,6 +37,7 @@ public class TestContactManager
 	MockMailer mockMail = new MockMailer();
 	
 	AccountManager account = new AccountManager();
+	UserValues userValues = new UserValues();
 	
 	void createOneAccount(UserId user) throws CassandraException
 	{
@@ -185,6 +187,30 @@ public class TestContactManager
 		assertEquals(1, mockMail.lastParts.size()); // image header
 		assertEquals("user1@toto.com", mockMail.lastDst);
 		assertTrue(subject.contains("You have received an email from your connection"));
+		
+		// now in french, or so.
+		userValues.setValue(contact_id_1, UserValuesConstantsAccount.ACCOUNT_LANGUAGE, "fr", true);
+		mockMail.reset();
+		sent = contactManager.sendJobMail(contact_id_1, "petit papa noël, quand tu descendras du ciel");
+		assertTrue(sent);
+		mail = mockMail.lastBody;
+		subject = mockMail.lastSubject;
+		System.out.println("========" + mail);
+		System.out.println("========" + subject);
+		assertTrue(subject.contains("Vous avez reçu"));
+		
+		// now in WTF, or so.
+		userValues.setValue(contact_id_1, UserValuesConstantsAccount.ACCOUNT_LANGUAGE, "", true);
+		mockMail.reset();
+		sent = contactManager.sendJobMail(contact_id_1, "petit papa noël, quand tu descendras du ciel");
+		assertTrue(sent);
+		mail = mockMail.lastBody;
+		subject = mockMail.lastSubject;
+		System.out.println("========" + mail);
+		System.out.println("========" + subject);
+		assertTrue(subject.contains("Vous avez reçu"));
+		
+		
 	}
 
 	@Test
