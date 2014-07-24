@@ -52,6 +52,7 @@ public class TestMessagePipe  extends GwtTest {
 	@Test
 	public void test_getMessage()
 	{
+		MessagePipe.instance = null;
 		MessagePipe mp = MessagePipe.getMessagePipe(userId, null);
 		MessagePipe.strings = new ICoachStrings()
 		{
