@@ -124,10 +124,40 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("user-requested-24.png")
 	ImageResource userConnectionRequested();
 	
-	@Source("void-24.png")
+	@Source("void_24.png")
 	ImageResource userConnectionNone();
 
 	@Source("user-send-mail-24.png")
 	ImageResource userSendMail();
 
+	// For shares
+
+	@Source("content-documents-thawed-24.png")
+	ImageResource userDocumentContent_thawed();
+
+	@Source("content-opportunity-thawed-24.png")
+	ImageResource opportunityContent_thawed();
+
+	@Source("content-addressbook-thawed-24.png")
+	ImageResource userExternalContactContent_thawed();
+
+	@Source("content-log-thawed-24.png")
+	ImageResource userLogContent_thawed();
+	
+	@Source("void_24.png")
+	ImageResource void_24();
+
+
+
+	@Source("content-documents-disabled-24.png")
+	ImageResource userDocumentContent_disabled();
+
+	@Source("content-opportunity-disabled-24.png")
+	ImageResource opportunityContent_disabled();
+
+	@Source("content-addressbook-disabled-24.png")
+	ImageResource userExternalContactContent_disabled();
+
+	@Source("content-log-disabled-24.png")
+	ImageResource userLogContent_disabled();
 }
