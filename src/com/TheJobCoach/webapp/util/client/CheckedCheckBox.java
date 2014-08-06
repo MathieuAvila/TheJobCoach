@@ -16,13 +16,10 @@ public class CheckedCheckBox implements IExtendedField {
 	
 	Boolean defaultValue = new Boolean(false);
 	
-	final static Boolean trueBool = new Boolean(true);
-	final static Boolean falseBool = new Boolean(false);
-	
 	@Override
 	public String getValue()
 	{
-		if (checkBox.getValue().equals(trueBool)) 
+		if (checkBox.getValue().equals(Boolean.TRUE)) 
 			return FormatUtil.trueString; 
 		else 
 			return FormatUtil.falseString;
@@ -32,7 +29,7 @@ public class CheckedCheckBox implements IExtendedField {
 	public boolean getIsDefault()
 	{
 		if (defaultValue == null) return true;
-		return defaultValue.equals(getValue());
+		return defaultValue.equals(checkBox.getValue());
 	}
 	
 	@Override
@@ -49,8 +46,14 @@ public class CheckedCheckBox implements IExtendedField {
 	
 	public void setValue(String value)
 	{
-		Boolean sValue = new Boolean("1".equals(value));
+		Boolean sValue = new Boolean(FormatUtil.trueString.equals(value));
 		checkBox.setValue(sValue);		
+		checkUserValue(true);
+	}
+
+	public void setValue(Boolean value)
+	{
+		checkBox.setValue(value);		
 		checkUserValue(true);
 	}
 	
@@ -84,8 +87,8 @@ public class CheckedCheckBox implements IExtendedField {
 	{
 		super();
 		setDefault(init);
-		init();
 		setValue(init);
+		init();
 	}
 
 	public CheckBox getItem()
@@ -110,8 +113,13 @@ public class CheckedCheckBox implements IExtendedField {
 	@Override
 	public void setDefault(String value)
 	{
-		if (value == null) defaultValue = falseBool;
-		if (value.equals("1")) defaultValue = trueBool;
-		else defaultValue = falseBool;
+		if (value == null) defaultValue = Boolean.FALSE;
+		if (value.equals(FormatUtil.trueString)) defaultValue = Boolean.TRUE;
+		else defaultValue = Boolean.FALSE;
+	}
+	
+	public void setDefault(Boolean value)
+	{
+		defaultValue = value;
 	}
 }
