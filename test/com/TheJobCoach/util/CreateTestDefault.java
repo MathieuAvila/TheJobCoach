@@ -1,8 +1,11 @@
 package com.TheJobCoach.util;
 
+import static org.junit.Assert.assertEquals;
+
 import com.TheJobCoach.userdata.AccountManager;
 import com.TheJobCoach.userdata.ContactManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
@@ -25,31 +28,46 @@ public class CreateTestDefault {
 	}
 	
 	@Test
-	public void testCreateAccount() throws CassandraException
+	public void testCreateAccount() throws CassandraException, InterruptedException
 	{
 		MockMailer mockMail = new MockMailer();
 		MailerFactory.setMailer(mockMail);
+		
+		UserId user1 = new UserId("user1","mytoken1", UserId.UserType.USER_TYPE_SEEKER);
+		UserId user2 = new UserId("user2","mytoken2", UserId.UserType.USER_TYPE_SEEKER);
 		
 		{
 			UserInformation userInfo = new UserInformation("Nuser1", "mathieu.avila@laposte.net", "password", "Nprenomuser1");
 			deleteAccountNoException("user1", userInfo.email);
 			logger.info("create account " + account.createAccountWithToken(
-					new UserId("user1","mytoken1", UserId.UserType.USER_TYPE_SEEKER),
+					user1,
 					userInfo, "en"));
-			account.validateAccount("user1", "mytoken1");
+			account.validateAccount(user1.userName, user1.token);
 			logger.info("logging in user1: " + account.loginAccount("user1", "password").getLoginStatus());
 		}
 		logger.info("");
+		Thread.sleep(1000);
 		{
 			UserInformation userInfo = new UserInformation("Nuser2", "mathieu.avila@free.fr", "password", "Nprenomuser2");
 			deleteAccountNoException("user2", userInfo.email);
 			logger.info("create account " + account.createAccountWithToken(
-					new UserId("user2","mytoken2", UserId.UserType.USER_TYPE_SEEKER),
+					user2,
 					userInfo, "en"));
-			account.validateAccount("user2", "mytoken2");
-			account.loginAccount("user2", "password");
+			account.validateAccount(user2.userName, user2.token);
+			account.loginAccount(user2.userName, "password");
 			logger.info("logging in user2: " + account.loginAccount("user2", "password").getLoginStatus());
 		}
+		Thread.sleep(1000);
+		{
+			ContactManager contactManager1 = new ContactManager(user1);
+			ContactManager contactManager2 = new ContactManager(user2);
+			// connect user1 and user2
+			ContactInformation.ContactStatus newStatus = contactManager1.updateContactRequest(user2, true);
+			assertEquals(ContactInformation.ContactStatus.CONTACT_REQUESTED, newStatus);
+			newStatus = contactManager2.updateContactRequest(user1, true);
+			assertEquals(ContactInformation.ContactStatus.CONTACT_OK, newStatus);
+		}
+		Thread.sleep(1000);
 		{
 			UserInformation userInfo = new UserInformation("nom", "testtoto@toto.com", "password", "prenom");
 			deleteAccountNoException("test_user", userInfo.email);
@@ -61,6 +79,7 @@ public class CreateTestDefault {
 			account.loginAccount("test_user", "password");
 			logger.info("logging in test_user: " + account.loginAccount("test_user", "password").getLoginStatus());
 		}
+		Thread.sleep(1000);
 		{
 			UserInformation userInfo = new UserInformation("nom", "admintoto@toto.com", "password", "admintoto@toto.com");
 			deleteAccountNoException("admin", userInfo.email);
@@ -71,6 +90,7 @@ public class CreateTestDefault {
 			account.loginAccount("admin", "password");
 			logger.info("logging in admin: " + account.loginAccount("admin", "password").getLoginStatus());
 		}
+		Thread.sleep(1000);
 		{
 			UserInformation userInfo = new UserInformation("nom", "coachtoto@toto.com", "password", "coachtoto@toto.com");
 			deleteAccountNoException("coach", userInfo.email);
