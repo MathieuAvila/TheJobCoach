@@ -18,11 +18,9 @@ import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserId.UserType;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
-import com.googlecode.gwt.test.utils.events.EventBuilder;
 
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestEditShares extends GwtTest {
@@ -53,9 +51,6 @@ public class AutoTestEditShares extends GwtTest {
 	@Test
 	public void testAll() throws InterruptedException
 	{
-		// create click event for further use.
-		Event event = EventBuilder.create(Event.ONCLICK).build();
-
 		List<Boolean> bArray = Arrays.asList(true, false);
 		for (boolean mo : bArray)
 		{
