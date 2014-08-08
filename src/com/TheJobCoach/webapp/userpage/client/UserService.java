@@ -66,6 +66,7 @@ public interface UserService extends RemoteService
 	
 	public UserSearchResult searchUsers(UserId id, String firstName, String lastName, int sizeRange, int startRange) throws CassandraException, SystemException, CoachSecurityException;	
 	
+	public void updateShares(UserId userContact, ContactInformation.Visibility contact) throws SystemException, CassandraException;
 	public ContactInformation.ContactStatus updateContactRequest(UserId userContact, boolean ok) throws SystemException, CassandraException;
 	public Vector<ContactInformation> getContactList() throws CassandraException, SystemException;
 	Boolean sendJobMail(UserId userContact, String message) throws CassandraException, SystemException;

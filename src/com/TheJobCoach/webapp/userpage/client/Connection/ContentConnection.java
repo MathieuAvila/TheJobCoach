@@ -17,6 +17,8 @@ import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
+import com.TheJobCoach.webapp.util.client.IEditDialogModel;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IconsCell.IGetIcons;
 import com.TheJobCoach.webapp.util.client.MessageBox;
@@ -67,8 +69,22 @@ public class ContentConnection extends VerticalPanel {
 	static ImageResource opportunityIcon = wpImageBundle.opportunityContent_menu();
 	static ImageResource addressIcon = wpImageBundle.userExternalContactContent_menu();
 	static ImageResource logIcon = wpImageBundle.userLogContent_menu();
+	
+	static ImageResource voidIcon = wpImageBundle.void_24();
+
+	static ImageResource documentIconThawed = wpImageBundle.userDocumentContent_thawed();
+	static ImageResource opportunityIconThawed = wpImageBundle.opportunityContent_thawed();
+	static ImageResource addressIconThawed = wpImageBundle.userExternalContactContent_thawed();
+	static ImageResource logIconThawed = wpImageBundle.userLogContent_thawed();
+
+	static ImageResource documentIconDisabled = wpImageBundle.userDocumentContent_disabled();
+	static ImageResource opportunityIconDisabled = wpImageBundle.opportunityContent_disabled();
+	static ImageResource addressIconDisabled = wpImageBundle.userExternalContactContent_disabled();
+	static ImageResource logIconDisabled = wpImageBundle.userLogContent_disabled();
 
 	static ImageResource messageIcon = wpImageBundle.userSendMail();
+	
+	static ImageResource rightIcon = wpUtilImageBundle.nextIcon();
 	
 	static ImageResource addIcon = wpUtilImageBundle.buttonAdd16();
 
@@ -79,6 +95,10 @@ public class ContentConnection extends VerticalPanel {
 
 	Panel rootPanel;
 	ISendMessage sendMessage;
+	IConnectionToDetail connectionToDetail;
+	IEditDialogModel<ContactInformation> editShares = null;
+	
+	HorizontalPanel detailContainer = new HorizontalPanel();
 	
 	void init(UserId _user)
 	{
@@ -86,10 +106,12 @@ public class ContentConnection extends VerticalPanel {
 		rootPanel = RootPanel.get();
 	}
 
-	public ContentConnection(UserId _user, ISendMessage sendMessage)
+	public ContentConnection(UserId _user, ISendMessage sendMessage, IConnectionToDetail connectionToDetail, IEditDialogModel<ContactInformation> editShares)
 	{
 		init(_user);
 		this.sendMessage = sendMessage;
+		this.connectionToDetail = connectionToDetail;
+		this.editShares = editShares;
 		onModuleLoad();
 	}
 
@@ -268,7 +290,6 @@ public class ContentConnection extends VerticalPanel {
 
 	class FieldUpdaterSendMessage implements FieldUpdater<ContactInformation, ContactInformation>
 	{
-
 		@Override
 		public void update(int index, ContactInformation object, ContactInformation value)
 		{
@@ -297,6 +318,26 @@ public class ContentConnection extends VerticalPanel {
 		}
 	};
 
+	class FieldUpdaterUpdateShares implements FieldUpdater<ContactInformation, ContactInformation> 
+	{
+		@Override
+		public void update(int index, ContactInformation newUser, ContactInformation value) 
+		{
+			if (newUser.status == ContactStatus.CONTACT_OK)
+			{
+				IEditDialogModel<ContactInformation> myEditShares = editShares.clone(null, null, value, new IChooseResult<ContactInformation>()	{
+					@Override
+					public void setResult(ContactInformation result)
+					{
+						AsyncCallback<Void> callback = new ServerCallHelper<Void>(rootPanel);
+						userService.updateShares(user, result.myVisibility, callback);
+						cellTable.redraw();
+					}});
+				myEditShares.onModuleLoad();
+			}
+		}
+	};
+
 	class GetIconsAdd implements IGetIcons<UserSearchEntry>
 	{
 		@Override
@@ -312,6 +353,58 @@ public class ContentConnection extends VerticalPanel {
 		public boolean isClickable(UserSearchEntry element)
 		{
 			return !excludeUserNameList.contains(element.userName);
+		}
+	}
+	
+	class GetShares implements IGetIcons<ContactInformation>
+	{
+		@Override
+		public Vector<ImageResource> getIcons(ContactInformation element)
+		{
+			Vector<ImageResource> result = new Vector<ImageResource>();
+			if (element.status != ContactStatus.CONTACT_OK)
+			{
+				for (int i=0; i != 8; i++) result.add(voidIcon);
+			}
+			else 
+			{
+				result.add(element.myVisibility.opportunity ? opportunityIcon : opportunityIconDisabled);
+				result.add(element.myVisibility.log ? logIcon : logIconDisabled);
+				result.add(element.myVisibility.contact ? addressIcon : addressIconDisabled);
+				result.add(element.myVisibility.document ? documentIcon : documentIconDisabled);
+
+				result.add(element.hisVisibility.opportunity ? opportunityIconThawed : opportunityIconDisabled);
+				result.add(element.hisVisibility.log ? logIconThawed : logIconDisabled);
+				result.add(element.hisVisibility.contact ? addressIconThawed : addressIconDisabled);
+				result.add(element.hisVisibility.document ? documentIconThawed : documentIconDisabled);
+			}
+			return result;
+		}
+
+		@Override
+		public boolean isClickable(ContactInformation element)
+		{
+			return (element.status == ContactStatus.CONTACT_OK);
+		}
+	}
+	
+	class GetIconsToDetail implements IGetIcons<ContactInformation>
+	{
+		@Override
+		public Vector<ImageResource> getIcons(ContactInformation element)
+		{
+			Vector<ImageResource> result = new Vector<ImageResource>();
+			if (element.status == ContactStatus.CONTACT_OK)
+			{
+				result.add(rightIcon);
+			}
+			return result;
+		}
+
+		@Override
+		public boolean isClickable(ContactInformation element)
+		{
+			return element.status == ContactStatus.CONTACT_OK;
 		}
 	}
 
@@ -337,14 +430,29 @@ public class ContentConnection extends VerticalPanel {
 				"", "3em", 
 				null);
 
-		// Create first name column.
+		// shares ?
+		cellTable.addClickableIconsColumn(
+				new GetShares(), 
+				new FieldUpdaterUpdateShares(), 
+				langConnection.shares(), "3em", 
+				null);
+	
 		cellTable.specialAddColumnSortableString(new GetValue<String, ContactInformation>() {
 			@Override
 			public String getValue(ContactInformation contact)
 			{
 				return contact.lastName + " " + contact.firstName;
 			}			
-		},  langConnection._TextLastName() + " " + langConnection._TextFirstName());
+		}, langConnection._TextLastName() + " " + langConnection._TextFirstName());
+
+		cellTable.addClickableIconsColumn(
+				new GetIconsToDetail(), 
+				new FieldUpdater<ContactInformation, ContactInformation>() {
+			@Override
+			public void update(int index, ContactInformation object, ContactInformation value) {
+				if (object.status == ContactStatus.CONTACT_OK)
+					connectionToDetail.toDetail(object);
+			}},"", "3em", null);
 
 		this.add(cellTable);
 		cellTable.setSize("100%", "");		
@@ -396,7 +504,12 @@ public class ContentConnection extends VerticalPanel {
 				new FieldUpdaterAddConnection(), 
 				"", "3em",
 				null);
-
+		
+		this.add(detailContainer);
+		detailContainer.setSize("100%", "100%");
+		detailContainer.setVisible(false);
+		
+		
 		getAllContent();		
 	}
 }

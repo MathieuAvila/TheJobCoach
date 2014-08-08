@@ -27,6 +27,7 @@ import com.TheJobCoach.webapp.adminpage.shared.UserSearchResult;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
@@ -104,7 +105,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public Vector<UserDocument> getUserDocumentList(UserId id)
 			throws CassandraException, CoachSecurityException {
-		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+		//ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		logger.info("Get document list");
 		return userDocumentManager.getUserDocumentList(id);
 	}
@@ -137,7 +138,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	@Override
 	public Vector<UserOpportunity> getUserOpportunityList(UserId id,
 			String list) throws CassandraException, CoachSecurityException {
-		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+		//ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		return userOpportunityManager.getOpportunitiesList(id, list);
 	}
 
@@ -251,7 +252,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	public Vector<ExternalContact> getExternalContactList(UserId id)
 			throws CassandraException, CoachSecurityException
 	{
-		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+		//ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
 		return userExternalContactManager.getExternalContactList(id);
 	}
 
@@ -337,6 +338,14 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	{
 		ContactManager contact = getContactManager();
 		return contact.sendJobMail(userContact, message);
+	}
+
+	@Override
+	public void updateShares(UserId userContact, Visibility contactVisibility)
+			throws SystemException, CassandraException
+	{
+		ContactManager contact = getContactManager();
+		// TODO
 	}
 
 	

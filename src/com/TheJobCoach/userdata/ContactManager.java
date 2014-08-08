@@ -16,6 +16,7 @@ import com.TheJobCoach.util.MailerInterface;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -327,6 +328,20 @@ public class ContactManager implements IUserDataManager
 		return sent;
 	}
 
+	public ContactInformation getUserClearance(UserId userContact) throws CassandraException, SystemException
+	{
+		if (userContact.userName.equals(user.userName))
+		{
+			// allow full clearance to myself.
+			return new ContactInformation(ContactStatus.CONTACT_OK , user.userName, "","",
+					new Visibility(true, true, true, true), new Visibility(true, true, true, true));
+		}
+		String connectInfoStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName, userContact.userName);
+		ContactInformation contactInfo = deserializeContactInformation(connectInfoStr);
+		contactInfo.userName = userContact.userName;
+		return contactInfo;
+	}
+	
 	@Override
 	public void deleteUser(UserId user) throws CassandraException
 	{

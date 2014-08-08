@@ -160,6 +160,50 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		return column;
 	}
 
+	public Column<DocType, String> specialAddClickableColumnSortableWithComparator(
+			final GetValue<String, DocType> getter, 
+			FieldUpdater<DocType, String> fieldUpdater, 
+			String title) 
+	{
+		ClickableTextCell iconCell = new ClickableTextCell()
+		{
+			@Override
+			protected void render(Context context, SafeHtml value, SafeHtmlBuilder sb) {
+				if (value != null) {
+					sb.appendHtmlConstant(
+							"<div class=\"clickableText\">FFFF" + 
+							"<a style=\"clickableText\">");
+					sb.append(value);
+					sb.appendHtmlConstant("</a></div>");
+				}
+			}
+		};
+		Column<DocType, String> column = specialAddColumn(
+				iconCell,
+				new GetValue<String, DocType>() {
+					public String getValue(DocType contact) {
+						return getter.getValue(contact);
+					}
+				},
+				fieldUpdater);		
+
+		addColumn(column, title);
+		compareMethodColumn.put(column, new Comparator<DocType>() {
+
+			@Override
+			public int compare(DocType o1, DocType o2)
+			{
+				String v1 = getter.getValue(o1);
+				String v2 = getter.getValue(o1);
+				if (v1 != null && v2 != null)
+					return getter.getValue(o1).compareTo(getter.getValue(o2));
+				return 0;
+			}});
+		column.setSortable(true);
+		column.setFieldUpdater(fieldUpdater);
+		return column;
+	}
+
 
 	private <C> Column<DocType, C> specialAddColumn(Cell<C> cell, final GetValue<C, DocType> getter, FieldUpdater<DocType, C> fieldUpdater) 
 	{

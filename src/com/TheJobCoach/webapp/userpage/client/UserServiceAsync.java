@@ -62,6 +62,7 @@ public interface UserServiceAsync {
 	public void searchUsers(UserId id, String firstName, String lastName, int sizeRange, int startRange, AsyncCallback<UserSearchResult> callback);	
 
 	public void updateContactRequest(UserId userContact, boolean ok, AsyncCallback<ContactInformation.ContactStatus> callback);
+	public void updateShares(UserId userContact, ContactInformation.Visibility contact, AsyncCallback<Void> callback);
 	public void getContactList(AsyncCallback<Vector<ContactInformation>> callback);
 	public void sendJobMail(UserId userContact, String message, AsyncCallback<Boolean> callback);
 

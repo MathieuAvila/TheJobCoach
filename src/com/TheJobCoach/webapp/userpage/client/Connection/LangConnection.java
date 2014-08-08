@@ -25,12 +25,6 @@ public interface LangConnection extends Constants {
 	@Key("sendMessage")
 	String sendMessage();
 
-	@Key("myShares")
-	String myShares();
-
-	@Key("hisShares")
-	String hisShares();
-
 	@Key("jobTitle")
 	String jobTitle();
 
@@ -58,5 +52,33 @@ public interface LangConnection extends Constants {
 
 	@Key("messageTestAccountDenied")
 	String messageTestAccountDenied();
+
+	// In shares dialog box
+
+	@Key("shares")
+	String shares();
+
+	@Key("myShares")
+	String myShares();
+
+	@Key("hisHerShares")
+	String hisHerShares();
+
+	@Key("documents")
+	String documents();
+
+	@Key("logs")
+	String logs();
+
+	@Key("contacts")
+	String contacts();
+
+	@Key("opportunities")
+	String opportunities();
+
+	// connection detail
+	
+	@Key("backToConnections")
+	String backToConnections();
 
 }

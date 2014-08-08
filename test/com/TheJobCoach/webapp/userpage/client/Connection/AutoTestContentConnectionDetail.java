@@ -40,7 +40,7 @@ import com.googlecode.gwt.test.GwtTest;
 import com.googlecode.gwt.test.utils.events.EventBuilder;
 
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
-public class AutoTestContentConnection extends GwtTest {
+public class AutoTestContentConnectionDetail extends GwtTest {
 
 	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	UserId userIdTest = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER, true);

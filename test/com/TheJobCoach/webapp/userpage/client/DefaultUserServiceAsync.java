@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.TheJobCoach.webapp.adminpage.shared.UserSearchResult;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.userpage.shared.ExternalContact;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.NewsInformation;
@@ -202,5 +203,11 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 			AsyncCallback<Boolean> callback)
 	{
 		logger.info("sendJobMail " + userContact.userName + " message:" + message);
+	}
+	@Override
+	public void updateShares(UserId userContact, Visibility contact,
+			AsyncCallback<Void> callback)
+	{
+		logger.info("updateShares " + userContact.userName);
 	}
 };

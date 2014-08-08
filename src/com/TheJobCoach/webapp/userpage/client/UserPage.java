@@ -7,8 +7,7 @@ import com.TheJobCoach.webapp.mainpage.client.LoginServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.userpage.client.Coach.PanelCoach;
 import com.TheJobCoach.webapp.userpage.client.CoachSettings.ContentCoachSettings;
-import com.TheJobCoach.webapp.userpage.client.Connection.ContentConnection;
-import com.TheJobCoach.webapp.userpage.client.Connection.SendMessage;
+import com.TheJobCoach.webapp.userpage.client.Connection.ConnectionToDetail;
 import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
 import com.TheJobCoach.webapp.userpage.client.Library.ContentSiteLibrary;
@@ -209,7 +208,7 @@ public class UserPage implements EntryPoint {
 				public void Open()
 				{
 					simplePanelContent.clear();
-					simplePanelContent.add(new ContentConnection(userId, new SendMessage()));
+					simplePanelContent.add(new ConnectionToDetail(userId));
 				}	
 			});
 		}
