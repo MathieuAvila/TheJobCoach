@@ -321,7 +321,7 @@ public class ContentConnection extends VerticalPanel {
 	class FieldUpdaterUpdateShares implements FieldUpdater<ContactInformation, ContactInformation> 
 	{
 		@Override
-		public void update(int index, ContactInformation newUser, ContactInformation value) 
+		public void update(int index, final ContactInformation newUser, ContactInformation value) 
 		{
 			if (newUser.status == ContactStatus.CONTACT_OK)
 			{
@@ -330,7 +330,7 @@ public class ContentConnection extends VerticalPanel {
 					public void setResult(ContactInformation result)
 					{
 						AsyncCallback<Void> callback = new ServerCallHelper<Void>(rootPanel);
-						userService.updateShares(user, result.myVisibility, callback);
+						userService.updateShares(newUser.userName, result.myVisibility, callback);
 						cellTable.redraw();
 					}});
 				myEditShares.onModuleLoad();
