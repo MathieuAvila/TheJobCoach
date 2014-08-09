@@ -59,19 +59,19 @@ public class ContentConnectionDetail extends VerticalPanel {
 		dpUser = new DetailUser(user, connectionUser);
 		tp.add(dpUser, new Image(ClientImageBundle.INSTANCE.userConnectionContent_menu()));
 
-		//if (connectionUser.hisVisibility.opportunity)
+		if (connectionUser.hisVisibility.opportunity)
 		{
 			dpOpportunity = new DetailOpportunity(user, connectionUser);
 			tp.add(dpOpportunity, new Image(ClientImageBundle.INSTANCE.opportunityContent_menu()));
 		}
 		
-		//if (connectionUser.hisVisibility.document)
+		if (connectionUser.hisVisibility.document)
 		{
 			dpDocument = new DetailDocument(user, connectionUser);
 			tp.add(dpDocument, new Image(ClientImageBundle.INSTANCE.userDocumentContent_menu()));
 		}
 		
-		//if (connectionUser.hisVisibility.contact)
+		if (connectionUser.hisVisibility.contact)
 		{
 			dpContact = new DetailContact(user, connectionUser);
 			tp.add(dpContact, new Image(ClientImageBundle.INSTANCE.userExternalContactContent_menu()));
@@ -81,7 +81,8 @@ public class ContentConnectionDetail extends VerticalPanel {
 		
 	
 		this.setSize("100%", "100%");
-		
+		this.getElement().setAttribute("width", "100%");
+		this.getElement().setAttribute("height", "100%");
 		//this.selectTab(0);
 		dpUser.showPanelDetail();
 		
@@ -92,7 +93,6 @@ public class ContentConnectionDetail extends VerticalPanel {
 			{
 				DetailPanel dp = (DetailPanel)(tp.getWidget(event.getSelectedItem()) );
 				dp.showPanelDetail();
-				System.out.println("ggggg");
 			}});
 	}
 }
