@@ -1,18 +1,17 @@
 package com.TheJobCoach.userdata;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
 import java.util.Vector;
 
 import org.junit.Test;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
-
 
 public class TestUserOpportunitiesManager {
 
@@ -21,34 +20,24 @@ public class TestUserOpportunitiesManager {
 	static UserId id = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
 	static UserId id2 = new UserId("user2", "token2", UserId.UserType.USER_TYPE_SEEKER);
 
-	@SuppressWarnings("deprecation")
-	static Date getDate(int year, int month, int day)
-	{
-		Date result = new Date();
-		result.setDate(day);
-		result.setMonth(month);
-		result.setYear(year - 1900);
-		return result;
-	}
-
-	static UserOpportunity opportunity1 = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 2, 1),
+	static UserOpportunity opportunity1 = new UserOpportunity("opp1", CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 2, 1),
 			"title1", "description1", "companyId1",
 			"contractType1",  "1",  
-			getDate(2000, 1, 1), getDate(2000, 1, 1),
+			CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "note1");
 
-	static UserOpportunity opportunity2 = new UserOpportunity("opp2", getDate(2000, 1, 2), getDate(2000, 2, 2),
+	static UserOpportunity opportunity2 = new UserOpportunity("opp2", CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  "2",  
-			getDate(2000, 1, 2), getDate(2000, 1, 2),
+			CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.NEW, "note2");
 
-	static UserOpportunity opportunity3 = new UserOpportunity("opp3", getDate(2000, 1, 2), getDate(2000, 2, 2),
+	static UserOpportunity opportunity3 = new UserOpportunity("opp3", CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  "2",  
-			getDate(2000, 1, 2), getDate(2000, 1, 2),
+			CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.CLOSED, "note3");
 
