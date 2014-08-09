@@ -1,6 +1,8 @@
 package com.TheJobCoach.userdata;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Vector;
 
@@ -10,16 +12,16 @@ import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MockMailer;
-import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
+import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
-
 
 public class TestContactManager
 {
@@ -209,8 +211,6 @@ public class TestContactManager
 		System.out.println("========" + mail);
 		System.out.println("========" + subject);
 		assertTrue(subject.contains("Vous avez reçu"));
-		
-		
 	}
 
 	@Test
@@ -244,5 +244,75 @@ public class TestContactManager
 		assertEquals(1, mockMail.lastParts.size()); // image header
 		assertEquals("user@toto.com", mockMail.lastDst);
 		assertTrue(subject.contains("Connection status"));
+	}
+	
+	void checkClearance(Visibility v1, Visibility v2)
+	{
+		assertEquals(v1.contact, v2.contact);
+		assertEquals(v1.document, v2.document);
+		assertEquals(v1.log, v2.log);
+		assertEquals(v1.opportunity, v2.opportunity);
+	}
+
+	@Test
+	public void testSerialization()
+	{
+		for (int i=0; i != 8 ; i++)
+		{
+			ContactInformation ci = new ContactInformation(
+					ContactStatus.CONTACT_OK
+					, "",
+					"", "", 
+					new Visibility(i==0, i==1, i==2, i==3),
+					new Visibility(i==4, i==5, i==6, i==7));
+			ContactInformation ci2 = ContactManager.deserializeContactInformation(ContactManager.serializeContactInformation(ci));
+			checkClearance(ci.hisVisibility, ci2.hisVisibility);
+			checkClearance(ci2.hisVisibility, ci.hisVisibility);
+		}
+	}
+
+	@Test
+	public void testClearanceManagement() throws CassandraException, SystemException
+	{
+		setTest();
+		boolean exception = false;
+		Visibility v_olCD = new Visibility(true,true,false,false);
+		Visibility v_OLcd = new Visibility(false,false,true,true);
+		
+		// SECURITY: try to get/set clearance on unconnected user.
+		try {
+			contactManager.setUserClearance(contact_id_1.userName, v_OLcd);
+		} catch (SystemException se) {exception = true;} 
+		assertTrue(exception);
+
+		// SECURITY: try to  get/set clearance on user's that didn't not yet accepted invitation.
+		ContactInformation.ContactStatus newStatus = contactManager.updateContactRequest(contact_id_1, true);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_REQUESTED, newStatus);
+		exception = false;
+		// SECURITY: try to get/set clearance on unconnected user.
+		try {
+			contactManager.setUserClearance(contact_id_1.userName, v_OLcd);
+		} catch (SystemException se) {exception = true;} 
+		assertTrue(exception);
+		
+		// Accept connection.
+		newStatus = contactManager1.updateContactRequest(id, true);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_OK, newStatus);
+		
+		// Change clearance.
+		contactManager.setUserClearance(contact_id_1.userName, v_OLcd);
+		// Check both sides have correct clearance.
+		ContactInformation u_u1 = contactManager.getUserClearance(contact_id_1);
+		checkClearance(u_u1.myVisibility, v_OLcd);
+		ContactInformation u1_u = contactManager1.getUserClearance(id);
+		checkClearance(u1_u.hisVisibility, v_OLcd);
+
+		// now change contact_id_1 clearance
+		contactManager1.setUserClearance(id.userName, v_olCD);
+		// Check both sides have correct clearance.
+		u_u1 = contactManager.getUserClearance(contact_id_1);
+		checkClearance(u_u1.hisVisibility, v_olCD);
+		u1_u = contactManager1.getUserClearance(id);
+		checkClearance(u1_u.myVisibility, v_olCD);
 	}
 }

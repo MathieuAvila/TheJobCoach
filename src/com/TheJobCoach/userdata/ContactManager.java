@@ -49,7 +49,7 @@ public class ContactManager implements IUserDataManager
 	{
 	}
 
-	char contactStatusToChar(ContactInformation.ContactStatus status)
+	static char contactStatusToChar(ContactInformation.ContactStatus status)
 	{
 		switch(status)
 		{
@@ -65,7 +65,7 @@ public class ContactManager implements IUserDataManager
 	}
 
 	/** Returns the rights "user" has granted to the other user */
-	ContactInformation.ContactStatus charToContactStatus(char status)
+	static ContactInformation.ContactStatus charToContactStatus(char status)
 	{
 		if (status == ' ') return ContactInformation.ContactStatus.CONTACT_NONE;
 		if (status == 'A') return ContactInformation.ContactStatus.CONTACT_AWAITING;
@@ -75,7 +75,7 @@ public class ContactManager implements IUserDataManager
 	}
 	
 	/** Serialize the rights "user" has granted to the other user */
-	String serializeContactInformation(ContactInformation contact)
+	static String serializeContactInformation(ContactInformation contact)
 	{
 		return 
 				contactStatusToChar(contact.status) + 
@@ -90,7 +90,7 @@ public class ContactManager implements IUserDataManager
 	}
 	
 	/** deserialize the rights as "user" has granted them to the other user */
-	ContactInformation deserializeContactInformation(String contact)
+	static ContactInformation deserializeContactInformation(String contact)
 	{
 		if (contact == null)
 			return new ContactInformation();
@@ -113,12 +113,18 @@ public class ContactManager implements IUserDataManager
 		return result;
 	}
 	
-	void updateOneContactStatusOnOneSide(String currentUser, ContactInformation info) throws CassandraException
+	void updateOneContactClearance(String currentUser, ContactInformation info) throws CassandraException
 	{
-		logger.info("Update connection status for user: " + currentUser + " about user: " + info.userName + " to status " + info.status);
+		logger.info("Update connection clearance for user: " + currentUser + " about user: " + info.userName + " to status " + info.status);
 		Map<String, String> mapUpdate = new HashMap<String, String>();
 		mapUpdate.put(info.userName, serializeContactInformation(info));
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_CONTACTLIST, currentUser, mapUpdate);
+	}
+
+	void updateOneContactStatusOnOneSide(String currentUser, ContactInformation info) throws CassandraException
+	{
+		logger.info("Update connection status for user: " + currentUser + " about user: " + info.userName + " to status " + info.status);
+		updateOneContactClearance(currentUser, info);
 
 		Map<String, String> mapNameUpdate = new HashMap<String, String>();
 		mapNameUpdate.put("f#" + info.userName, info.firstName);
@@ -193,9 +199,9 @@ public class ContactManager implements IUserDataManager
 			ContactInformation hisContactInfo = new ContactInformation(
 					ContactStatus.CONTACT_OK,
 					user.userName, myInfo.firstName, myInfo.name,
-					// by default, share everything with my contacts
-					new ContactInformation.Visibility(true, true, true, true),
-					new ContactInformation.Visibility(true, true, true, true));
+					// by default, share nothing with my contacts
+					new ContactInformation.Visibility(false, false, false, false),
+					new ContactInformation.Visibility(false, false, false, false));
 			updateOneContactStatusOnOneSide(userContact.userName, hisContactInfo);
 
 			// send him an email about our new partnership
@@ -333,13 +339,55 @@ public class ContactManager implements IUserDataManager
 		if (userContact.userName.equals(user.userName))
 		{
 			// allow full clearance to myself.
-			return new ContactInformation(ContactStatus.CONTACT_OK , user.userName, "","",
+			return new ContactInformation(ContactStatus.CONTACT_OK , userContact.userName, "","",
 					new Visibility(true, true, true, true), new Visibility(true, true, true, true));
 		}
 		String connectInfoStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName, userContact.userName);
+		if (connectInfoStr == null)
+			// WTF ? Security alert.
+		{
+			logger.warn("Security alert. User " + user.userName + " trying to access invalid register to " + userContact.userName);
+			return new ContactInformation(ContactStatus.CONTACT_NONE , userContact.userName, "","",
+					new Visibility(false, false, false, false), new Visibility(false, false, false, false));
+		}
 		ContactInformation contactInfo = deserializeContactInformation(connectInfoStr);
+		if (contactInfo.status != ContactStatus.CONTACT_OK)
+			// WTF ? Security alert.
+		{
+			logger.warn("Security alert. User " + user.userName + " trying to access clearance register to " + userContact.userName + " although not yet connected");
+			return new ContactInformation(ContactStatus.CONTACT_NONE , userContact.userName, "","",
+					new Visibility(false, false, false, false), new Visibility(false, false, false, false));
+		}
 		contactInfo.userName = userContact.userName;
 		return contactInfo;
+	}
+
+	public void setUserClearance(String contactName, Visibility visibility) throws CassandraException, SystemException
+	{
+		if (contactName.equals(user.userName))
+			return;
+		// Can't trust source information for other user. Need to retrieve it.
+		ContactInformation sourceClearance = getUserClearance(new UserId(contactName));
+		// Can't trust status other than the one set by the system. Check this.
+		if (sourceClearance.status != ContactStatus.CONTACT_OK)
+		{
+			logger.warn("Security alert. User " + user.userName + " trying to access clearance register to " + contactName + " although not yet connected");
+			throw new SystemException();
+		}
+		// me
+		ContactInformation information = new ContactInformation(
+				ContactStatus.CONTACT_OK,
+				contactName, "","",
+				visibility,
+				sourceClearance.hisVisibility);
+		updateOneContactClearance(user.userName, information);
+		// him
+		ContactInformation hisContactInfo = new ContactInformation(
+							ContactStatus.CONTACT_OK,
+							user.userName, "","",
+							sourceClearance.hisVisibility,
+							information.myVisibility);
+		updateOneContactClearance(information.userName, hisContactInfo);
 	}
 	
 	@Override
