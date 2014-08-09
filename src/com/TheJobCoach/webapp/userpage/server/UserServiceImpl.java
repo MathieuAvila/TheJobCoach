@@ -341,11 +341,12 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 
 	@Override
-	public void updateShares(UserId userContact, Visibility contactVisibility)
+	public void updateShares(String userName, Visibility contactVisibility)
 			throws SystemException, CassandraException
 	{
 		ContactManager contact = getContactManager();
 		// TODO
+		contact.setUserClearance(userName, contactVisibility);
 	}
 
 	

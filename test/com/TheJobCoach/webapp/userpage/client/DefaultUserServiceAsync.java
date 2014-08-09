@@ -205,9 +205,9 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 		logger.info("sendJobMail " + userContact.userName + " message:" + message);
 	}
 	@Override
-	public void updateShares(UserId userContact, Visibility contact,
+	public void updateShares(String userName, Visibility contact,
 			AsyncCallback<Void> callback)
 	{
-		logger.info("updateShares " + userContact.userName);
+		logger.info("updateShares " + userName);
 	}
 };

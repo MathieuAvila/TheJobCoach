@@ -124,10 +124,10 @@ public class AutoTestContentConnection extends GwtTest {
 			callback.onSuccess(searchResult);
 		}
 		@Override
-		public void updateShares(UserId userContact, Visibility contact,
+		public void updateShares(String userContact, Visibility contact,
 				AsyncCallback<Void> callback)
 		{
-			logger.info("updateShares " + userContact.userName);
+			logger.info("updateShares " + userContact);
 			callsUpdateShares++;
 			callback.onSuccess(null);
 		}
