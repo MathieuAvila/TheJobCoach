@@ -1,6 +1,8 @@
 package com.TheJobCoach.webapp.userpage.client.MyGoals;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
@@ -84,8 +86,8 @@ public class AutoTestContentMyGoals extends GwtTest {
 
 	}
 
-	static SpecialUserServiceAsync userService;
-	static SpecialUtilServiceAsync utilService;
+	static SpecialUserServiceAsync userService = null;
+	static SpecialUtilServiceAsync utilService = null;
 
 	HorizontalPanel p;
 

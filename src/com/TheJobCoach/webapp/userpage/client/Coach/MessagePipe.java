@@ -20,7 +20,7 @@ public class MessagePipe implements ReturnValue
 	boolean loaded = false;
 	String coachIs = null;
 
-	public static ICoachStrings strings = new CoachStrings();
+	public ICoachStrings strings = new CoachStrings();
 
 	public Set<String> messageSet = new HashSet<String>();
 
@@ -28,7 +28,10 @@ public class MessagePipe implements ReturnValue
 
 	public static MessagePipe getMessagePipe(UserId user, Panel root)
 	{
-		if (instance == null) instance = new MessagePipe(user, root);
+		if (instance == null)
+		{
+			instance = new MessagePipe(user, root);
+		}
 		return instance;
 	}
 	

@@ -92,6 +92,8 @@ public class AutoTestPanelUpdate extends GwtTest {
 
 	MessagePipe msg;
 	
+	HorizontalPanel p;
+
 	@Before
 	public void before()
 	{
@@ -110,24 +112,14 @@ public class AutoTestPanelUpdate extends GwtTest {
 				return null;
 			}}
 		);
-		msg = MessagePipe.getMessagePipe(userId, null);
-	}
-
-	void reset()
-	{
-		MessagePipe.instance = null;
-		msg = MessagePipe.getMessagePipe(userId, null);
-		userService.callsGet = 0;
 	}
 	
-	@Test
-	public void testUpdate() throws InterruptedException
-	{		
-		PanelUpdate cul;
-		HorizontalPanel p = new HorizontalPanel();
-		Label connectionTime = new Label();
-		reset();
-		MessagePipe.strings = new ICoachStrings()
+	void reset()
+	{ 
+		p = new HorizontalPanel();
+		userService.callsGet = 0;
+		MessagePipe.instance = null;
+		MessagePipe.getMessagePipe(userId, p).strings = new ICoachStrings()
 		{
 			@Override
 			public String getMessage(String key, String coach)
@@ -135,6 +127,14 @@ public class AutoTestPanelUpdate extends GwtTest {
 				return key;
 			}
 		};
+		msg = MessagePipe.getMessagePipe(userId, p);
+	}
+	
+	@Test
+	public void testUpdate() throws InterruptedException
+	{		
+		PanelUpdate cul;
+		Label connectionTime = new Label();
 
 		// first update must trigger a few updates and message WELCOME.
 		reset();
@@ -220,7 +220,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		HorizontalPanel p = new HorizontalPanel();
 		ClientUserValuesUtils values = new ClientUserValuesUtils(p, userId);
 		reset();
-		MessagePipe.strings = new ICoachStrings()
+		MessagePipe.getMessagePipe(userId, p).strings = new ICoachStrings()
 		{
 			@Override
 			public String getMessage(String key, String coach)

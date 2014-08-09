@@ -49,12 +49,11 @@ public class TestMessagePipe  extends GwtTest {
 		MessagePipe.instance = null;
 	}
 	
-	@Test
-	public void test_getMessage()
+	MessagePipe resetSimple()
 	{
 		MessagePipe.instance = null;
 		MessagePipe mp = MessagePipe.getMessagePipe(userId, null);
-		MessagePipe.strings = new ICoachStrings()
+		mp.strings = new ICoachStrings()
 		{
 			@Override
 			public String getMessage(String key, String coach)
@@ -66,6 +65,14 @@ public class TestMessagePipe  extends GwtTest {
 				return key;
 			}
 		};
+		return mp;
+	}
+	
+	@Test
+	public void test_getMessage()
+	
+	{
+		MessagePipe mp = resetSimple();
 		// Welcome only once.
 		mp.addMessage(UserValuesConstantsCoachMessages.COACH_WELCOME);
 		assertEquals("COACH_WELCOME",mp.getMessage());
@@ -75,12 +82,10 @@ public class TestMessagePipe  extends GwtTest {
 		// Hello after 1st time.
 		mp.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO);
 		assertEquals(null,mp.getMessage());
-		MessagePipe.instance = null;
-		mp = MessagePipe.getMessagePipe(userId, null);
+		mp = resetSimple();
 		mp.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO);
 		assertEquals("COACH_HELLO",mp.getMessage());
-		MessagePipe.instance = null;
-		mp = MessagePipe.getMessagePipe(userId, null);
+		mp = resetSimple();
 		mp.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO);
 		assertEquals("COACH_HELLO",mp.getMessage());
 		
