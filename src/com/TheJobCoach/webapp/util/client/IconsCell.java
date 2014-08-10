@@ -106,7 +106,6 @@ public class IconsCell<T> extends AbstractSafeHtmlCell<T>
 	public void onBrowserEvent(Context context, Element parent, T value,
 			NativeEvent event, ValueUpdater<T> valueUpdater) 
 	{
-		System.out.println("WTF ?");
 		super.onBrowserEvent(context, parent, value, event, valueUpdater);
 		if (CLICK.equals(event.getType())) 
 		{
