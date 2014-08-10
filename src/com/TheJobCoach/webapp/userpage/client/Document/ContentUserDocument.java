@@ -146,7 +146,15 @@ public class ContentUserDocument implements EntryPoint, IEditResult<UserDocument
 						if (object.revisions.size() != 0)
 						{
 							String id = object.revisions.get(object.revisions.size() - 1).ID;
-							String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encodeQueryString(id) + "&userid=" + URL.encodeQueryString(user.userName)+ "&token=" + URL.encodeQueryString(user.token);
+							String copyURL = GWT.getModuleBaseURL() 
+									+ "DownloadServlet?docid=" 
+									+ URL.encodeQueryString(id) 
+									+ "&userid=" 
+									+ URL.encodeQueryString(user.userName)
+									+ "&fromuserid="
+									+ URL.encodeQueryString(user.userName)
+									+ "&token=" 
+									+ URL.encodeQueryString(user.token);
 							DownloadIFrame iframe = new DownloadIFrame(copyURL);
 							simplePanelCenter.add(iframe);
 						}

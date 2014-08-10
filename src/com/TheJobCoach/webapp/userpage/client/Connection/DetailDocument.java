@@ -26,7 +26,7 @@ public class DetailDocument extends DetailPanel {
 	
 	final static LangDocument langDocument = GWT.create(LangDocument.class);
 
-	public DetailDocument(final UserId user, ContactInformation connectionUser)
+	public DetailDocument(final UserId user, final ContactInformation connectionUser)
 	{
 		super(user, connectionUser);
 		add(cellTable);// file name + link
@@ -37,7 +37,15 @@ public class DetailDocument extends DetailPanel {
 						if (object.revisions.size() != 0)
 						{
 							String id = object.revisions.get(object.revisions.size() - 1).ID;
-							String copyURL = GWT.getModuleBaseURL() + "DownloadServlet?docid=" + URL.encodeQueryString(id) + "&userid=" + URL.encodeQueryString(contactId.userName)+ "&token=" + URL.encodeQueryString(contactId.token);
+							String copyURL = GWT.getModuleBaseURL() 
+									+ "DownloadServlet?docid=" 
+									+ URL.encodeQueryString(id) 
+									+ "&userid=" 
+									+ URL.encodeQueryString(connectionUser.userName)
+									+ "&fromuserid="
+									+ URL.encodeQueryString(user.userName)
+									+ "&token=" 
+									+ URL.encodeQueryString(user.token);
 							DownloadIFrame iframe = new DownloadIFrame(copyURL);
 							RootPanel.get().add(iframe);
 						}

@@ -33,16 +33,17 @@ public class DownloadFileServlet extends HttpServlet {
 		UserDocumentManager cm = UserDocumentManager.getInstance();
 		String docId = request.getParameter("docid");
 		String userId = request.getParameter("userid");
+		String fromUserId = request.getParameter("fromuserid");
 		String token = request.getParameter("token");
 		try
 		{
-			ServletSecurityCheck.check(request, new UserId(userId, token, UserId.UserType.USER_TYPE_SEEKER));
+			ServletSecurityCheck.check(request, new UserId(fromUserId, token, UserId.UserType.USER_TYPE_SEEKER));
 		}
 		catch (CoachSecurityException e2)
 		{
 			return;
 		}
-		logger.info("Requesting doc: " + docId + " for user: " + userId + " with token: " + token);
+		logger.info("Requesting doc: " + docId + " of user: " + userId + " from user: " + fromUserId + " with token: " + token);
 		UserDocument userDoc;
 		ServletOutputStream out = response.getOutputStream();
 		UserId user =new UserId(userId, token, UserId.UserType.USER_TYPE_SEEKER);
