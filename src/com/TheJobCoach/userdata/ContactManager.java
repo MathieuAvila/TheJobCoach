@@ -275,8 +275,6 @@ public class ContactManager implements IUserDataManager
 		Vector<ContactInformation> result = new Vector<ContactInformation>();
 		Map<String, String> contactTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName);
 		Map<String, String> contactNameTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTNAME, user.userName);
-		//System.out.println(contactTable);
-		//System.out.println(contactNameTable);
 		if ((contactTable == null) || (contactNameTable == null)) return result;
 		for (String contactUsername: contactTable.keySet())
 		{
