@@ -47,8 +47,7 @@ public class Mailer implements MailerInterface {
 	    private InputStream inputStream;
 
 	    public InputStreamDataSource(InputStream inputStream) {
-	    	System.out.println("IS = " + inputStream);
-	        this.inputStream = inputStream;
+	    	this.inputStream = inputStream;
 	    }
 
 	    @Override
