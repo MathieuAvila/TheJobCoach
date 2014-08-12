@@ -137,8 +137,20 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
 	@Override
 	public Vector<UserOpportunity> getUserOpportunityList(UserId id,
-			String list) throws CassandraException, CoachSecurityException {
-		//ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+			String list) throws CassandraException, CoachSecurityException, SystemException {
+		UserId currentId = getUserId();
+		if (!id.userName.equals(currentId.userName))
+		{
+			// check credentials
+			ContactManager cm = getContactManager();
+			ContactInformation ci = cm.getUserClearance(id);
+			if (!ci.hisVisibility.opportunity)
+			{
+				// security error.
+				logger.warn("user " + currentId.userName + " trying to illegally access: " + id.userName);
+				throw new CoachSecurityException();
+			}
+		}		
 		return userOpportunityManager.getOpportunitiesList(id, list);
 	}
 
@@ -178,9 +190,21 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 
 	@Override
-	public Vector<UserLogEntry> getUserLogEntryList(UserId id, String oppId)
-			throws CassandraException, CoachSecurityException {
-		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+	public Vector<UserLogEntry> getUserLogEntryList(UserId id, String oppId) throws CassandraException, CoachSecurityException, SystemException 
+	{
+		UserId currentId = getUserId();
+		if (!id.userName.equals(currentId.userName))
+		{
+			// check credentials
+			ContactManager cm = getContactManager();
+			ContactInformation ci = cm.getUserClearance(id);
+			if (!ci.hisVisibility.log)
+			{
+				// security error.
+				logger.warn("user " + currentId.userName + " trying to illegally access: " + id.userName);
+				throw new CoachSecurityException();
+			}
+		}
 		return userLogManager.getLogList(id, oppId);
 	}
 
@@ -296,16 +320,16 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		return account.searchUsers(id, firstName, lastName, sizeRange, startRange);
 	}
 
-	UserId getUserId() throws SystemException
+	UserId getUserId() throws CoachSecurityException
 	{
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		UserId result = (UserId)session.getAttribute("userid");
-		if (result == null) throw new SystemException();
+		if (result == null) throw new CoachSecurityException();
 		return result;
 	}
 	
-	ContactManager getContactManager() throws SystemException
+	ContactManager getContactManager() throws CoachSecurityException
 	{
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
@@ -319,14 +343,14 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 	
 	@Override
-	public ContactStatus updateContactRequest(UserId userContact, boolean ok) throws SystemException, CassandraException
+	public ContactStatus updateContactRequest(UserId userContact, boolean ok) throws CassandraException, CoachSecurityException
 	{
 		ContactManager contact = getContactManager();
 		return contact.updateContactRequest(userContact, ok);
 	}
 
 	@Override
-	public Vector<ContactInformation> getContactList() throws SystemException, CassandraException
+	public Vector<ContactInformation> getContactList() throws CassandraException, CoachSecurityException
 	{
 		ContactManager contact = getContactManager();
 		Vector<ContactInformation> result = contact.getContactList();
@@ -334,7 +358,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	}
 
 	@Override
-	public Boolean sendJobMail(UserId userContact, String message) throws SystemException, CassandraException
+	public Boolean sendJobMail(UserId userContact, String message) throws CassandraException, CoachSecurityException, SystemException
 	{
 		ContactManager contact = getContactManager();
 		return contact.sendJobMail(userContact, message);
@@ -342,10 +366,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
 	@Override
 	public void updateShares(String userName, Visibility contactVisibility)
-			throws SystemException, CassandraException
+			throws SystemException, CassandraException, CoachSecurityException
 	{
 		ContactManager contact = getContactManager();
-		// TODO
 		contact.setUserClearance(userName, contactVisibility);
 	}
 

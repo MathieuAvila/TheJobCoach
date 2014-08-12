@@ -8,11 +8,10 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.TheJobCoach.userdata.UserValues.FieldDefinition;
+import com.TheJobCoach.userdata.UserValuesCore.FieldDefinition;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
-
 
 public class TestUserValues {
 	

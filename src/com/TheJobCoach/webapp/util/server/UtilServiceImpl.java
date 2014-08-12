@@ -2,8 +2,18 @@ package com.TheJobCoach.webapp.util.server;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.TheJobCoach.userdata.ConnectionLog;
+import com.TheJobCoach.userdata.ContactManager;
 import com.TheJobCoach.userdata.UserValues;
+import com.TheJobCoach.webapp.userpage.server.UserServiceImpl;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.util.client.UtilService;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
@@ -21,11 +31,46 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 {
 	UserValues userValues = new UserValues();
 	ConnectionLog logManager = new ConnectionLog();
+
+	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	
+	UserId getUserId() throws CoachSecurityException
+	{
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		UserId result = (UserId)session.getAttribute("userid");
+		if (result == null) throw new CoachSecurityException();
+		return result;
+	}
+	
+	ContactManager getContactManager() throws CoachSecurityException
+	{
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+
+		ContactManager result = (ContactManager)session.getAttribute("contactmanager");
+		if (result != null) return result;
+		result = new ContactManager(getUserId());
+		session.setAttribute("contactmanager", result);
+		return result;
+	}
 	
 	@Override
 	public Map<String,String> getValues(UserId id, String rootValue) throws CassandraException, SystemException , CoachSecurityException
 	{
-		ServletSecurityCheck.check(this.getThreadLocalRequest(), id);
+		UserId currentId = getUserId();
+		if (!id.userName.equals(currentId.userName))
+		{
+			// check credentials
+			ContactManager cm = getContactManager();
+			ContactInformation ci = cm.getUserClearance(id);
+			if (ci.status != ContactStatus.CONTACT_OK)
+			{
+				// security error.
+				logger.warn("user " + currentId.userName + " trying to illegally access: " + id.userName);
+				throw new CoachSecurityException();
+			}
+		}
 		return userValues.getValues(id, rootValue);		
 	}
 	
