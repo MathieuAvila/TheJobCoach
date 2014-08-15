@@ -39,7 +39,7 @@ public interface UserService extends RemoteService
 
 	public Vector<NewsInformation> getNews(UserId id)  throws CassandraException, CoachSecurityException;
 	
-	public Vector<UserOpportunity> getUserOpportunityList(UserId id, String list) throws CassandraException, CoachSecurityException;
+	public Vector<UserOpportunity> getUserOpportunityList(UserId id, String list) throws CassandraException, CoachSecurityException, SystemException;
 	public UserOpportunity getUserOpportunity(UserId id, String oppId) throws CassandraException, CoachSecurityException;
 	public String setUserOpportunity(UserId id, String list, UserOpportunity opp) throws CassandraException, CoachSecurityException, SystemException;
 	public String deleteUserOpportunity(UserId id, String oppId) throws CassandraException, CoachSecurityException;
@@ -49,7 +49,7 @@ public interface UserService extends RemoteService
 	public String setExternalContact(UserId id, ExternalContact contact) throws CassandraException, CoachSecurityException, SystemException;
 	public String deleteExternalContact(UserId id, String contact) throws CassandraException, CoachSecurityException;
 
-	public Vector<UserLogEntry> getUserLogEntryList(UserId id, String oppId) throws CassandraException, CoachSecurityException;
+	public Vector<UserLogEntry> getUserLogEntryList(UserId id, String oppId) throws CassandraException, CoachSecurityException, SystemException;
 	public UserLogEntry getUserLogEntry(UserId id, String logId) throws CassandraException, CoachSecurityException;
 	public String setUserLogEntry(UserId id, UserLogEntry opp) throws CassandraException, CoachSecurityException, SystemException;
 	public String deleteUserLogEntry(UserId id, String logId) throws CassandraException, CoachSecurityException;
@@ -66,8 +66,8 @@ public interface UserService extends RemoteService
 	
 	public UserSearchResult searchUsers(UserId id, String firstName, String lastName, int sizeRange, int startRange) throws CassandraException, SystemException, CoachSecurityException;	
 	
-	public void updateShares(String userName, ContactInformation.Visibility contact) throws SystemException, CassandraException;
-	public ContactInformation.ContactStatus updateContactRequest(UserId userContact, boolean ok) throws SystemException, CassandraException;
-	public Vector<ContactInformation> getContactList() throws CassandraException, SystemException;
-	Boolean sendJobMail(UserId userContact, String message) throws CassandraException, SystemException;
+	public void updateShares(String userName, ContactInformation.Visibility contact) throws SystemException, CassandraException, CoachSecurityException;
+	public ContactInformation.ContactStatus updateContactRequest(UserId userContact, boolean ok) throws SystemException, CassandraException, CoachSecurityException;
+	public Vector<ContactInformation> getContactList() throws CassandraException, SystemException, CoachSecurityException;
+	Boolean sendJobMail(UserId userContact, String message) throws CassandraException, SystemException, CoachSecurityException;
 }
