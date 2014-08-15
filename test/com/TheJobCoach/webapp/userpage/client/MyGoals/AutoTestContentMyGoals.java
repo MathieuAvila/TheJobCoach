@@ -166,7 +166,7 @@ public class AutoTestContentMyGoals extends GwtTest {
 				p, userId);
 		cud.onModuleLoad();		
 		assertEquals(1, utilService.calls);		
-		assertEquals(3, SpecialUserServiceAsync.calls);		
+		assertEquals(4, SpecialUserServiceAsync.calls);		
 		checkFields(cud, "",
 				"12:00", "",
 				"23:59", "",
