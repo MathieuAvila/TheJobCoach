@@ -61,7 +61,7 @@ public class ContentMyGoals implements EntryPoint, IChanged, ReturnValue, IApply
 	{
 		rootPanel = panel;
 		user = _user;
-		values = new ClientUserValuesUtils(rootPanel, user);		
+		values = ClientUserValuesUtils.getInstance(user);		
 	}
 
 	Panel rootPanel = null;

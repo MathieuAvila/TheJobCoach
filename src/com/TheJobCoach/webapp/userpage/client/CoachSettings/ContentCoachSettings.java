@@ -66,7 +66,7 @@ public class ContentCoachSettings implements EntryPoint, IChanged, ReturnValue, 
 	{
 		rootPanel = panel;
 		user = _user;
-		values = new ClientUserValuesUtils(rootPanel, user);
+		values = ClientUserValuesUtils.getInstance(user);
 		message = MessagePipe.getMessagePipe(_user, panel);
 	}
 

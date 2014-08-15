@@ -132,7 +132,7 @@ public class ContentTodo implements EntryPoint, IContentTodo, ReturnValue {
 
 		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextTodo(), ClientImageBundle.INSTANCE.todoContent());
 		
-		values = new ClientUserValuesUtils(rootPanel, user);
+		values = ClientUserValuesUtils.getInstance(user);
 		
 		getAllContent();
 		values.preloadValueList("COACHSETTINGS", this);

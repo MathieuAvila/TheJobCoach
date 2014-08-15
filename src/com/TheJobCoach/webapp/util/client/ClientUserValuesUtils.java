@@ -6,30 +6,36 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
 
 public class ClientUserValuesUtils {
 
-	static HashMap<String, String> valuesCache = new HashMap<String, String>();
-	static UtilServiceAsync utilService =  GWT.create(UtilService.class);
+	HashMap<String, String> valuesCache = new HashMap<String, String>();
+	UtilServiceAsync utilService =  GWT.create(UtilService.class);
 
-	final Panel panel;
 	final UserId id;
 
-	public ClientUserValuesUtils(Panel rootPanel, UserId id)
+	private ClientUserValuesUtils(UserId id)
 	{
-		this.panel = rootPanel;
 		this.id = id;
 	}
+	
+	static public ClientUserValuesUtils instance = null;
+	
+	public static ClientUserValuesUtils getInstance(UserId id)
+	{
+		if (instance == null) instance = new ClientUserValuesUtils(id);
+		return instance;
+	}
 
-	public static interface ReturnValue
+	public interface ReturnValue
 	{
 		public void notifyValue(boolean set, String key, String value);
 	}
 	
-	static HashMap<String, Vector<ReturnValue>> notifyValuesChange = new HashMap<String, Vector<ReturnValue>>();
+	HashMap<String, Vector<ReturnValue>> notifyValuesChange = new HashMap<String, Vector<ReturnValue>>();
 	
-	static private void insertKeys(Map<String, String> values, boolean set)
+	private void insertKeys(Map<String, String> values, boolean set)
 	{
 		valuesCache.putAll(values);
 		for (String key: values.keySet())
@@ -57,7 +63,7 @@ public class ClientUserValuesUtils {
 	
 	public void preloadValueList(final String key, final ReturnValue result)
 	{
-		ServerCallHelper<Map<String,String>> callback = new ServerCallHelper<Map<String,String>>(panel) {
+		ServerCallHelper<Map<String,String>> callback = new ServerCallHelper<Map<String,String>>(RootPanel.get()) {
 			@Override
 			public void onSuccess(Map<String,String> resultMap) {
 				insertKeys(resultMap, false);
@@ -73,7 +79,7 @@ public class ClientUserValuesUtils {
 
 	public void setValues(final HashMap<String, String> map, final ReturnValue result)
 	{
-		ServerCallHelper<String> callback = new ServerCallHelper<String>(panel) {
+		ServerCallHelper<String> callback = new ServerCallHelper<String>(RootPanel.get()) {
 			@Override
 			public void onSuccess(String resultMap) {
 				if (result != null)

@@ -8,6 +8,7 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.util.client.DefaultUtilServiceAsync;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
@@ -45,8 +46,7 @@ public class TestMessagePipe  extends GwtTest {
 				return null;
 			}}
 		);
-		p = new HorizontalPanel();
-		MessagePipe.instance = null;
+		CoachTestUtils.resetClientState();
 	}
 	
 	MessagePipe resetSimple()

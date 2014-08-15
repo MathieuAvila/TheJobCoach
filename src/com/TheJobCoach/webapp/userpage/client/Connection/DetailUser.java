@@ -9,7 +9,6 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
 
 public class DetailUser extends DetailPanel implements ClientUserValuesUtils.ReturnValue {
 
@@ -30,7 +29,7 @@ public class DetailUser extends DetailPanel implements ClientUserValuesUtils.Ret
 	public DetailUser(UserId user, ContactInformation connectionUser)
 	{
 		super(user, connectionUser);
-		values = new ClientUserValuesUtils(RootPanel.get(), contactId);
+		values = ClientUserValuesUtils.getInstance(contactId);
 		showPanelDetail();
 	}
 	

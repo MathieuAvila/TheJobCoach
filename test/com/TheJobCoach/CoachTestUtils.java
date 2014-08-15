@@ -7,6 +7,8 @@ import com.TheJobCoach.userdata.AccountManager;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
+import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
+import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 
@@ -49,6 +51,12 @@ public class CoachTestUtils
 		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 		ValidateAccountStatus validated = account.validateAccount(user.userName, user.token);
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, validated);
+	}
+	
+	public static void resetClientState()
+	{
+		ClientUserValuesUtils.instance = null;
+		MessagePipe.instance = null;
 	}
 	
 }

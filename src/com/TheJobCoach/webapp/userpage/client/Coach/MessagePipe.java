@@ -30,16 +30,16 @@ public class MessagePipe implements ReturnValue
 	{
 		if (instance == null)
 		{
-			instance = new MessagePipe(user, root);
+			instance = new MessagePipe(user);
 		}
 		return instance;
 	}
 	
-	private MessagePipe(UserId user, Panel root)
+	private MessagePipe(UserId user)
 	{
 		if (userValues == null)
 		{
-			userValues = new ClientUserValuesUtils(root, user);
+			userValues = ClientUserValuesUtils.getInstance(user);
 			userValues.preloadValueList(UserValuesConstantsCoachMessages.COACH_ROOT, new ClientUserValuesUtils.ReturnValue() {
 				@Override
 				public void notifyValue(boolean set, String key, String value)

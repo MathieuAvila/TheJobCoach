@@ -14,16 +14,19 @@ public class ServerCallHelper<T> implements AsyncCallback<T>
 	{
 		this.rootPanel = rootPanel;
 	}
+
 	@Override
 	public void onFailure(Throwable caught)
 	{
 		/* In case we need degugging those stacks on the client side 
+		 */
 		   System.out.println("ServerCallHelper stack trace .. ");
            for (StackTraceElement element: caught.getStackTrace())
                {
                        System.out.println(".. " + element.toString());
                }
-		 */
+           System.out.println("ServerCallHelper caught : " + caught.toString());
+           
 		if (caught instanceof CassandraException)
 		{
 			MessageBox.messageBoxException(rootPanel, caught.toString());

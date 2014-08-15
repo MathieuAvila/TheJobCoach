@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
@@ -111,7 +112,8 @@ public class AutoTestContentMyGoals extends GwtTest {
 				return null;
 			}}
 				);
-		p = new HorizontalPanel();		
+		p = new HorizontalPanel();
+		CoachTestUtils.resetClientState();
 	}
 
 	private void printAndCheck(String name, String toCheck, String value)

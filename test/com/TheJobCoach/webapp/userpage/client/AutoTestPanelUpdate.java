@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.Coach.GoalSignal;
 import com.TheJobCoach.webapp.userpage.client.Coach.ICoachStrings;
@@ -112,6 +113,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 				return null;
 			}}
 		);
+		CoachTestUtils.resetClientState();
 	}
 	
 	void reset()
@@ -218,7 +220,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 	{
 		PanelUpdate cul;
 		HorizontalPanel p = new HorizontalPanel();
-		ClientUserValuesUtils values = new ClientUserValuesUtils(p, userId);
+		ClientUserValuesUtils values = ClientUserValuesUtils.getInstance(userId);
 		reset();
 		MessagePipe.getMessagePipe(userId, p).strings = new ICoachStrings()
 		{

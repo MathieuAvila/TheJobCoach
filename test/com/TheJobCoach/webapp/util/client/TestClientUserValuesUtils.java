@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.shared.UserId;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.googlecode.gwt.test.GwtCreateHandler;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
@@ -43,8 +42,8 @@ public class TestClientUserValuesUtils extends GwtTest
 				return null;
 			}}
 		);
-		VerticalPanel vp = new VerticalPanel();
-		values = new ClientUserValuesUtils(vp, new UserId("user", "", UserId.UserType.USER_TYPE_SEEKER));
+		ClientUserValuesUtils.instance = null;
+		values = ClientUserValuesUtils.getInstance(new UserId("user", "", UserId.UserType.USER_TYPE_SEEKER));
 	};
 	
 	@Test
