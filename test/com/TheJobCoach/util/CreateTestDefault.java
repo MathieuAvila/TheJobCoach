@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.Vector;
 
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +35,10 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 
 public class CreateTestDefault {
 
-	AccountManager account = new AccountManager();
+	static AccountManager account = new AccountManager();
 	private static Logger logger = LoggerFactory.getLogger(CreateTestDefault.class);
 
-	public void deleteAccountNoException(String userName, String email)
+	public static void deleteAccountNoException(String userName, String email)
 	{
 		String userMail = account.getUsernameFromEmail(email);
 		try { 
@@ -48,8 +47,7 @@ public class CreateTestDefault {
 		catch (Exception e) {};
 	}
 
-	@Test
-	public void testCreateAccount() throws CassandraException, InterruptedException, SystemException
+	public static void testCreateAccount() throws CassandraException, InterruptedException, SystemException
 	{
 		MockMailer mockMail = new MockMailer();
 		MailerFactory.setMailer(mockMail);
@@ -255,6 +253,29 @@ public class CreateTestDefault {
 			account.validateAccount("coach", "mytokencoach");
 			account.loginAccount("coach", "password");			
 			logger.info("logging in coach: " + account.loginAccount("coach", "password").getLoginStatus());
+		}
+	}
+	
+	public static void main(String arg[])
+	{
+		try
+		{
+			testCreateAccount();
+		}
+		catch (CassandraException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (SystemException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
