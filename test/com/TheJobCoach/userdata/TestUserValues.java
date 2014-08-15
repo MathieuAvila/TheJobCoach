@@ -34,6 +34,11 @@ public class TestUserValues {
 		UserValues.addField(new FieldDefinition("test3.testsystem", 10, false, "DEFAULT"));
 		UserValues.addField(new FieldDefinition("test5.testsystem", 10, false, "DEFAULT"));
 		UserValues.addField(new FieldDefinition("test5.notserver", 10, true, "DEFAULT"));
+		// test restricted access
+		UserValues.addField(new FieldDefinition("test6.testuser", 10, true, "DEFAULT1", true));
+		UserValues.addField(new FieldDefinition("test6.testuser2system", 10, false, "DEFAULT2", true));
+		UserValues.addField(new FieldDefinition("test6.testnotuser", 10, true, "DEFAULT3", false));
+		UserValues.addField(new FieldDefinition("test6.testnotuser2system", 10, false, "DEFAULT4", false));
 	}
 	
 	// Helper for other tests.
@@ -191,5 +196,21 @@ public class TestUserValues {
 		
 		update = values.getUpdatedValues(id);
 		assertEquals(0, update.size());
+	}
+	
+	@Test
+	public void test_restrictedAccess() throws CassandraException, SystemException
+	{
+		Map<String, String> val = values.getValues(id, "test6", true);
+		assertEquals(val.size(), 4);
+		assertEquals("DEFAULT1", val.get("test6.testuser"));
+		assertEquals("DEFAULT2", val.get("test6.testuser2system"));
+		assertEquals("DEFAULT3", val.get("test6.testnotuser"));
+		assertEquals("DEFAULT4", val.get("test6.testnotuser2system"));
+		
+		val = values.getValues(id, "test6", false);
+		assertEquals(val.size(), 2);	
+		assertEquals("DEFAULT3", val.get("test6.testnotuser"));
+		assertEquals("DEFAULT4", val.get("test6.testnotuser2system"));
 	}
 }

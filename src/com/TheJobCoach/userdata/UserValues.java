@@ -29,20 +29,26 @@ public class UserValues  extends UserValuesCore implements IUserDataManager{
 		cfDefListUpdated = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST_UPDATED, cfDefListUpdated);
 	}
 	
-	public String getValue(UserId id, String rootKey) throws CassandraException, SystemException 
+	public String getValue(UserId id, String rootKey, boolean sameUser) throws CassandraException, SystemException 
 	{
-		Map<String, String> values = getValues(id, rootKey);
+		Map<String, String> values = getValues(id, rootKey, sameUser);
 		if (values.containsKey(rootKey)) return values.get(rootKey);
 		return "";
 	}
-	public Map<String, String> getValues(UserId id, String rootKey) throws CassandraException, SystemException 
+	
+	public String getValue(UserId id, String rootKey) throws CassandraException, SystemException 
+	{
+		return getValue(id, rootKey, true);
+	}
+	
+	public Map<String, String> getValues(UserId id, String rootKey, boolean sameUser) throws CassandraException, SystemException 
 	{
 		String start = "";
 		String end = "";
 		List<String> subSet = new ArrayList<String>();
 		for (String key: keysNameList)
 		{
-			if (key.matches(rootKey + ".*"))
+			if ((sameUser || !keysMap.get(key).getRestrictedUserAccess()) && key.matches(rootKey + ".*"))
 			{
 				subSet.add(key);
 				if (start.equals("") || (start.compareTo(key) > 0))
@@ -65,6 +71,11 @@ public class UserValues  extends UserValuesCore implements IUserDataManager{
 			if (result.get(key) == null) result.put(key, keysMap.get(key).defaultValue);
 		}
 		return result;
+	}
+	
+	public Map<String, String> getValues(UserId id, String rootKey) throws CassandraException, SystemException 
+	{
+		return getValues(id, rootKey, true);
 	}
 
 	public void setValues(UserId id, Map<String,String> values, boolean client) throws CassandraException, SystemException 
@@ -116,7 +127,7 @@ public class UserValues  extends UserValuesCore implements IUserDataManager{
 	public long getForcedWaitTimeMs(UserId id, int minMs)
 	{
 		Map<String, String> value = null;
-		try { value = getValues(id, UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST);}
+		try { value = getValues(id, UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST, true);}
 		 catch(Exception e) { return 0;} 
 		long time = 0;
 		long result = 0;

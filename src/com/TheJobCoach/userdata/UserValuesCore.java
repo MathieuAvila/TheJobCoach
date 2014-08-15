@@ -21,6 +21,7 @@ public class UserValuesCore {
 		public int length;
 		boolean clientSideFree;
 		String defaultValue;
+		boolean restrictedUserAccess;
 		
 		public String getName()
 		{
@@ -35,12 +36,26 @@ public class UserValuesCore {
 			return defaultValue;
 		}
 		
+		public boolean getRestrictedUserAccess()
+		{
+			return restrictedUserAccess;
+		}
+		
 		public FieldDefinition(String name) 
 		{ 
 			this.name = name;
 			this.length = MAX_OPTION_LENGTH;
 			this.clientSideFree = true;
 			this.defaultValue = "";
+			this.restrictedUserAccess = true;
+		};
+		public FieldDefinition(String name, boolean restrictedUserAccess) 
+		{ 
+			this.name = name;
+			this.length = MAX_OPTION_LENGTH;
+			this.clientSideFree = true;
+			this.defaultValue = "";
+			this.restrictedUserAccess = restrictedUserAccess;
 		};
 		public FieldDefinition(String name, int length, boolean clientSideFree, String defaultValue) 
 		{ 
@@ -48,7 +63,17 @@ public class UserValuesCore {
 			this.length = length;
 			this.clientSideFree = clientSideFree;
 			this.defaultValue = defaultValue;
+			this.restrictedUserAccess = true;
 		}
+		public FieldDefinition(String name, int length, boolean clientSideFree, String defaultValue, boolean restrictedUserAccess) 
+		{ 
+			this.name = name;
+			this.length = length;
+			this.clientSideFree = clientSideFree;
+			this.defaultValue = defaultValue;
+			this.restrictedUserAccess = restrictedUserAccess;
+		}
+		
 		public void check(String val, boolean client) throws SystemException 
 		{
 			if (val == null) throw new SystemException();
@@ -84,9 +109,9 @@ public class UserValuesCore {
 
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_TYPE, MAX_OPTION_LENGTH, false, "Freemium"));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_MODEL, MAX_OPTION_LENGTH, false, UserValuesConstantsAccount.ACCOUNT_MODEL_LIST.get(0)));
-		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_TITLE));
-		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_STATUS, MAX_OPTION_LENGTH, true, UserValuesConstantsAccount.ACCOUNT_STATUS_LIST__ACTIVE_SEARCH));
-		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_KEYWORDS));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_TITLE, false /* not restricted */));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_STATUS, MAX_OPTION_LENGTH, true, UserValuesConstantsAccount.ACCOUNT_STATUS_LIST__ACTIVE_SEARCH, false /* not restricted */));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_KEYWORDS, false /* not restricted */));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_LANGUAGE));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, MAX_OPTION_LENGTH, true, UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__DEFAULT_MAN));
 
