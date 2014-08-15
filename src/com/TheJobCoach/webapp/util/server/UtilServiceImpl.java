@@ -59,8 +59,10 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 	public Map<String,String> getValues(UserId id, String rootValue) throws CassandraException, SystemException , CoachSecurityException
 	{
 		UserId currentId = getUserId();
+		boolean same = true;
 		if (!id.userName.equals(currentId.userName))
 		{
+			same = false;
 			// check credentials
 			ContactManager cm = getContactManager();
 			ContactInformation ci = cm.getUserClearance(id);
@@ -71,7 +73,7 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 				throw new CoachSecurityException();
 			}
 		}
-		return userValues.getValues(id, rootValue);		
+		return userValues.getValues(id, rootValue, same);
 	}
 	
 	@Override
