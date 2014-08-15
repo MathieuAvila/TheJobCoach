@@ -83,7 +83,6 @@ public class ContentConnectionDetail extends VerticalPanel {
 		this.setSize("100%", "100%");
 		this.getElement().setAttribute("width", "100%");
 		this.getElement().setAttribute("height", "100%");
-		//this.selectTab(0);
 		dpUser.showPanelDetail();
 		
 		tp.addSelectionHandler(new SelectionHandler<Integer>(){
@@ -94,5 +93,7 @@ public class ContentConnectionDetail extends VerticalPanel {
 				DetailPanel dp = (DetailPanel)(tp.getWidget(event.getSelectedItem()) );
 				dp.showPanelDetail();
 			}});
+
+		tp.selectTab(0);
 	}
 }
