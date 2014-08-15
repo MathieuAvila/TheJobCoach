@@ -21,7 +21,7 @@ public class DetailPanel extends VerticalPanel {
 	protected static ClientImageBundle wpImageBundle = (ClientImageBundle) GWT.create(ClientImageBundle.class);
 	protected static com.TheJobCoach.webapp.util.client.ClientImageBundle wpUtilImageBundle = (com.TheJobCoach.webapp.util.client.ClientImageBundle) GWT.create(com.TheJobCoach.webapp.util.client.ClientImageBundle.class);
 	
-	public DetailPanel(final UserId user, final ContactInformation connectionUser)
+	public DetailPanel(UserId user, ContactInformation connectionUser)
 	{
 		this.user = user;
 		this.connectionUser = connectionUser;

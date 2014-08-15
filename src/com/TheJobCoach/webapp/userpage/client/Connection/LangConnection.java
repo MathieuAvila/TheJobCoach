@@ -81,4 +81,25 @@ public interface LangConnection extends Constants {
 	@Key("backToConnections")
 	String backToConnections();
 
+	// opp detail
+
+	@Key("opportunityList")
+	String opportunityList();
+
+	@Key("opportunityDetail")
+	String opportunityDetail();
+
+	@Key("logList")
+	String logList();
+
+	// user detail
+	
+	@Key("actualStatus")
+	String actualStatus();
+
+	@Key("skills")
+	String skills();
+	
+	@Key("jobTitleDetail")
+	String jobTitleDetail();
 }

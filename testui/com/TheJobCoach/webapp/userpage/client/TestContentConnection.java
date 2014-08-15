@@ -1,6 +1,9 @@
 package com.TheJobCoach.webapp.userpage.client;
 
 import com.TheJobCoach.webapp.userpage.client.Connection.ConnectionToDetail;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.TestSecurity;
@@ -32,7 +35,7 @@ public class TestContentConnection implements EntryPoint {
 				});
 			}
 		}
-		/*
+		
 		{
 			final RootPanel root = RootPanel.get("contentconnectiondetail");
 			if (root != null)
@@ -42,20 +45,21 @@ public class TestContentConnection implements EntryPoint {
 					public void Open()
 					{
 						root.setStyleName("mainpage-content");
-						//root.setSize("100%", "100%");
-						RootLayoutPanel lp = RootLayoutPanel.get();
-						ContentConnectionDetail cud = new ContentConnectionDetail(TestSecurity.defaultUser, 
-								new ContactInformation(ContactStatus.CONTACT_OK, TestSecurity.defaultUserConnection.userName,
-										"firstName", "lastName", 
-										new Visibility(true, true, true, true),
-										new Visibility(true, true, true, true)), null);
-						lp.add(cud);
-						
+						root.setSize("100%", "100%");
+						ConnectionToDetail c2d = new ConnectionToDetail(TestSecurity.defaultUser);
+						root.add(c2d);
+						c2d.toDetail(
+								new ContactInformation(
+										ContactStatus.CONTACT_OK, 
+										TestSecurity.defaultUserConnection.userName,
+										"", "", 
+										new Visibility(),
+										new Visibility(true,true,true,true))); // may be wrong.
 					}
 				});
 			}
 		}
-		*/
+		
 	}
 
 }
