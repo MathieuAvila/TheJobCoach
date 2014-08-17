@@ -300,7 +300,7 @@ public class ContactManager implements IUserDataManager
 		if ((contactTable == null) || (contactNameTable == null)) return result;
 		for (String contactUsername: contactTable.keySet())
 		{
-			String lastContact = contactNameTable.get("l#" + contactUsername);
+			String lastContact = contactNameTable.get("last#" + contactUsername);
 			String newContact = contactTable.get(contactUsername);
 			ContactInformation contact = deserializeContactInformation(newContact);
 			if (contact.status == ContactStatus.CONTACT_OK)
@@ -309,7 +309,7 @@ public class ContactManager implements IUserDataManager
 				{
 					// check something is MORE shared. Don't advert for loss of share, that would create him a nuclear psychologic attack.
 					// Always take care of your user. He needs being comforted, not frustrated. Really.
-					ContactInformation lastDataContact = deserializeContactInformation(lastContact);
+					ContactInformation lastDataContact = (lastContact == null) ? new ContactInformation() : deserializeContactInformation(lastContact);
 					if ( 
 							(!lastDataContact.hisVisibility.document && contact.hisVisibility.document) ||
 							(!lastDataContact.hisVisibility.opportunity && contact.hisVisibility.opportunity) ||
@@ -324,7 +324,7 @@ public class ContactManager implements IUserDataManager
 						// update to latest. theoretically we should update after sending the email, for coherence reasons.
 						logger.info("Update last connection clearance for user: " + user.userName + " about user: " + contact.userName);
 						Map<String, String> mapUpdate = new HashMap<String, String>();
-						mapUpdate.put("l#" + contactUsername, newContact);
+						mapUpdate.put("last#" + contactUsername, newContact);
 						CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_CONTACTNAME, user.userName, mapUpdate);
 					}
 				}

@@ -244,7 +244,11 @@ public class BackgroundProcess
 		}
 		catch (Exception e)
 		{
-			logger.error("received exception in backgroundProcess" + e.getMessage() + e.toString());
+			logger.error("received exception in backgroundProcess: " + e.getMessage() + e.toString());
+			for (StackTraceElement element: e.getStackTrace())
+            {
+                    System.out.println(".. " + element.toString());
+            }
 		}
 		logger.info("End sending evaluation emails. Sent " 
 				+ count 
