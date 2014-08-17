@@ -45,19 +45,7 @@ import com.googlecode.gwt.test.utils.events.EventBuilder;
 @GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class AutoTestContentUserLog extends GwtTest {
 
-
-	@SuppressWarnings("deprecation")
-	static Date getDate(int year, int month, int day)
-	{
-		Date result = new Date();
-		result.setDate(day);
-		result.setMonth(month);
-		result.setYear(year - 1900);
-		return result;
-	}
-	
 	UserId userId = new UserId("user", "token", UserId.UserType.USER_TYPE_SEEKER);
-
 
 	static String contact1 = "contact1";
 	static String contact2 = "contact2";
@@ -70,17 +58,17 @@ public class AutoTestContentUserLog extends GwtTest {
 	static Vector<ExternalContact> externalContactList = new Vector<ExternalContact>(Arrays.asList(external_contact1, external_contact2, external_contact3));
 	static Vector<ExternalContact> externalContactList_Filtered = new Vector<ExternalContact>(Arrays.asList(external_contact1, external_contact3));
 
-	static UserOpportunity opportunity1 = new UserOpportunity("opp1", getDate(2000, 1, 1), getDate(2000, 2, 1),
+	static UserOpportunity opportunity1 = new UserOpportunity("opp1", CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 2, 1),
 			"title1", "description1", "companyId1",
 			"contractType1",  "1",  
-			getDate(2000, 1, 1), getDate(2000, 1, 1),
+			CoachTestUtils.getDate(2000, 1, 1), CoachTestUtils.getDate(2000, 1, 1),
 			false, "source1", "url1", "location1",
 			UserOpportunity.ApplicationStatus.APPLIED, "note1");
 
-	static UserOpportunity opportunity2 = new UserOpportunity("opp2", getDate(2000, 1, 2), getDate(2000, 2, 2),
+	static UserOpportunity opportunity2 = new UserOpportunity("opp2", CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 2, 2),
 			"title2", "description2", "companyId2",
 			"contractType2",  "2",  
-			getDate(2000, 1, 2), getDate(2000, 1, 2),
+			CoachTestUtils.getDate(2000, 1, 2), CoachTestUtils.getDate(2000, 1, 2),
 			false, "source2", "url2", "location2",
 			UserOpportunity.ApplicationStatus.NEW, "note2");
 
@@ -96,19 +84,19 @@ public class AutoTestContentUserLog extends GwtTest {
 	static Vector<UserDocumentId> docIdList1 = new Vector<UserDocumentId>(Arrays.asList(docId1));
 	
 	static UserLogEntry userLog1 = new UserLogEntry("opp1", "log1", "title1", "description1", 
-			getDate(2000, 2, 1),
+			CoachTestUtils.getDate(2000, 2, 1),
 			LogEntryType.INTERVIEW, externalContactList, docIdList, "note1", false);
 	
 	static UserLogEntry userLog1_less = new UserLogEntry("opp1", "log1", "title1", "description1", 
-			getDate(2000, 2, 1),
+			CoachTestUtils.getDate(2000, 2, 1),
 			LogEntryType.INFO, externalContactList_Filtered, docIdList_less, "note1_less", false);
 	
 	static UserLogEntry userLog2 = new UserLogEntry("opp1", "log2", "title2", "description2", 
-			getDate(2000, 2, 1),
+			CoachTestUtils.getDate(2000, 2, 1),
 			LogEntryType.INFO, externalContactList0, docIdList0, "note2", false);
 		
 	static UserLogEntry userLog3 = new UserLogEntry("opp2", "log3", "title3", "description3", 
-			getDate(2000, 2, 1),
+			CoachTestUtils.getDate(2000, 2, 1),
 			LogEntryType.INFO, externalContactList1, docIdList1, "note3", true);
 
 	class SpecialUserServiceAsync extends DefaultUserServiceAsync
