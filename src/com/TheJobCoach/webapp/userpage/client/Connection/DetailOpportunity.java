@@ -211,7 +211,6 @@ public class DetailOpportunity extends DetailPanel {
 					@Override
 					public String getValue(UserLogEntry log)
 					{
-						System.out.println("log" + log.ID + " " + log.attachedDocumentId.toString());
 						String result = "";
 						String brk = "";
 						for (UserDocumentId doc : log.attachedDocumentId)
