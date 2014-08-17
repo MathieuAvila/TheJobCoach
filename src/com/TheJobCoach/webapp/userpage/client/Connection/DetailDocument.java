@@ -29,7 +29,19 @@ public class DetailDocument extends DetailPanel {
 	public DetailDocument(final UserId user, final ContactInformation connectionUser)
 	{
 		super(user, connectionUser);
-		add(cellTable);// file name + link
+		
+		add(cellTable);
+		
+		// Create name column.
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserDocument>() {
+
+			@Override
+			public String getValue(UserDocument document)
+			{
+				return document.name;
+			}}, lang._TextName());
+
+		// file name + link
 		cellTable.addColumnWithIconCellFile(
 				new FieldUpdater<UserDocument, String>() {
 					@Override
