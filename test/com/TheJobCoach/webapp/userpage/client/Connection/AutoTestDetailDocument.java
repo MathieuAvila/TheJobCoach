@@ -126,7 +126,7 @@ public class AutoTestDetailDocument extends GwtTest {
 		assertEquals(ud1.name,        cuo.cellTable.getColumn(COLUMN_NAME).getValue(ud1));
 		assertEquals(ud1.fileName,    cuo.cellTable.getColumn(COLUMN_FILENAME).getValue(ud1));
 		assertEquals("CV",            cuo.cellTable.getColumn(COLUMN_TYPE).getValue(ud1));
-		assertEquals("Nouveau",      cuo.cellTable.getColumn(COLUMN_STATUS).getValue(ud1));
+		assertEquals("Nouveau",       cuo.cellTable.getColumn(COLUMN_STATUS).getValue(ud1));
 	}
 
 }
