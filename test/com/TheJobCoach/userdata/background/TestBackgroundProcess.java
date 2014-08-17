@@ -7,16 +7,21 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import org.junit.Test;
 
 import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.userdata.AccountManager;
+import com.TheJobCoach.userdata.Lang;
 import com.TheJobCoach.userdata.UserValues;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MockMailer;
 import com.TheJobCoach.util.StringResourceCache;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
@@ -129,6 +134,7 @@ public class TestBackgroundProcess
 
 	}	
 	
+	// disconnected to avoid sending real mails.
 	//@Test
 	public void test_sendRealReport() throws CassandraException, SystemException, FileNotFoundException, UnsupportedEncodingException
 	{
@@ -139,5 +145,49 @@ public class TestBackgroundProcess
 		values.setValue(user1, UserValuesConstantsMyGoals.PERFORMANCE_RECEIVE_EMAIL, UserValuesConstants.YES, false);
 		values.setValue(user1, UserValuesConstantsMyGoals.PERFORMANCE_LAST_EMAIL, "", false);
 		bp.checkCoachMailForUser(user1.userName, CoachTestUtils.getDate(2014, 1, 20));
-	}	
+	}
+	
+	@Test
+	public void test_sendSharesMailForUser() throws CassandraException, SystemException, FileNotFoundException, UnsupportedEncodingException
+	{
+		MailerFactory.setMailer(mockMail);
+		account.deleteAccount(user.userName);
+		CoachTestUtils.createOneAccount(user);
+		
+		mockMail.reset();
+		
+		// set strings for test
+		StringResourceCache.getInstance().setStringResource(
+				"/com/TheJobCoach/userdata/data/mail_sharesChanged_en.html",
+				"A _FIRSTNAME_ _NAME_ B _SHARES_ ");
+		StringResourceCache.getInstance().setStringResource(
+				"/com/TheJobCoach/userdata/data/mail_localSharesChanged_en.html",
+				"A _FIRSTNAME_ _NAME_ B _DOCUMENT_ C _CONTACT_ D _OPPORTUNITY_ E _LOG_ ");
+		Lang.oneShareChange = "S1 _SHARE_ S2";
+		// try sending 2 updates.
+		Vector<ContactInformation> cl = new Vector<ContactInformation>();
+		cl.add(new ContactInformation(ContactStatus.CONTACT_OK, "userName1", "firstName1", "lastName1", 
+				new Visibility(true,true,true,true),
+				new Visibility(true,true,true,true)));
+		cl.add(new ContactInformation(ContactStatus.CONTACT_OK, "userName2", "firstName2", "lastName2", 
+				new Visibility(true,true,true,true),
+				new Visibility(true,true,false,false)));
+		bp.sendSharesMailForUser(user, CoachTestUtils.getDate(2014, 1, 20), cl);
+		
+		assertNotNull(mockMail.lastDst);
+		mockMail.writeToFile("/tmp/file.html");
+		System.out.println(mockMail.lastBody);
+		assertEquals( 
+				"A firstNameuserbackground lastNameuserbackground B "
+						+ "A firstName1 lastName1 B "
+						+ "S1 His/her documents S2 " 
+						+ "C S1 His/her contacts S2 "
+						+ "D S1 His/her opportunities S2 "
+						+ "E S1 His/her opportunities' logs S2 "
+						+ "A firstName2 lastName2 B "
+						+ "S1 His/her documents "
+						+ "S2 C S1 His/her contacts "
+						+ "S2 D  E   ",
+						mockMail.lastBody);
+	}
 }

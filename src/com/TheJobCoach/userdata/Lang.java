@@ -173,11 +173,51 @@ public class Lang
 
 	public static String performanceReportSubject(String lang)
 	{
-		return "";
+		return getLangProp(lang).getProperty("performanceReportSubject");
 	}
 	
 	public static DateFormat getDateFormat(String lang)
 	{
 		return DateFormat.getDateInstance(DateFormat.MEDIUM, getLang(lang).equals("fr") ? Locale.FRANCE : Locale.ENGLISH);
 	}
+
+	public static String sharesChanged(String lang)
+	{
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_sharesChanged_" + getLang(lang) + ".html");
+		return body;
+	}
+
+	public static String localSharesChanged(String lang)
+	{
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_localSharesChanged_" + getLang(lang) + ".html");
+		return body;
+	}
+	
+	public static String oneShareChange = "<tr><td align=\"left\"><img src=\"cid:successlogo\" style=\"border:none;\" >_SHARE_</td></tr>";
+
+	public static String sharesDocument(String lang)
+	{
+		return oneShareChange.replace("_SHARE_", getLangProp(lang).getProperty("sharesDocument"));
+	}
+
+	public static String sharesContact(String lang)
+	{
+		return oneShareChange.replace("_SHARE_", getLangProp(lang).getProperty("sharesContact"));
+	}
+
+	public static String sharesOpportunity(String lang)
+	{
+		return oneShareChange.replace("_SHARE_", getLangProp(lang).getProperty("sharesOpportunity"));
+	}
+
+	public static String sharesLog(String lang)
+	{
+		return oneShareChange.replace("_SHARE_", getLangProp(lang).getProperty("sharesLog"));
+	}
+
+	public static String sharesSubject(String lang)
+	{
+		return getLangProp(lang).getProperty("sharesSubject");
+	}
+
 }
