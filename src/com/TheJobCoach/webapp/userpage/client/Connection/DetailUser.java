@@ -18,6 +18,13 @@ public class DetailUser extends DetailPanel implements ClientUserValuesUtils.Ret
 	Label labelTitle = new Label();
 	Label labelStatus = new Label();
 	Label labelKeywords = new Label();
+	Grid grid = new Grid(10,3);
+	
+	public static final int ROW_FIRSTNAME = 0; 
+	public static final int ROW_LASTNAME = 1; 
+	public static final int ROW_TITLE = 2; 
+	public static final int ROW_STATUS = 3; 
+	public static final int ROW_KEYWORDS = 4; 
 	
 	Label createLabel(String t)
 	{
@@ -41,20 +48,19 @@ public class DetailUser extends DetailPanel implements ClientUserValuesUtils.Ret
 		if (loaded) return;
 		loaded = true;
 		values.preloadValueList("ACCOUNT", this);
-		Grid grid = new Grid(10,3);
-		grid.setWidget(0, 0, createLabel(langConnection._TextFirstName()));
-		grid.setWidget(1, 0, createLabel(langConnection._TextLastName()));
-		grid.setWidget(2, 0, createLabel(langConnection.jobTitle()));
-		grid.setWidget(3, 0, createLabel(langConnection.actualStatus()));
-		grid.setWidget(4, 0, createLabel(langConnection.skills()));
+		grid.setWidget(ROW_FIRSTNAME, 0, createLabel(langConnection._TextFirstName()));
+		grid.setWidget(ROW_LASTNAME, 0, createLabel(langConnection._TextLastName()));
+		grid.setWidget(ROW_TITLE, 0, createLabel(langConnection.jobTitle()));
+		grid.setWidget(ROW_STATUS, 0, createLabel(langConnection.actualStatus()));
+		grid.setWidget(ROW_KEYWORDS, 0, createLabel(langConnection.skills()));
 		
 		grid.setWidget(0, 1, new HorizontalSpacer("3em"));
 		
-		grid.setWidget(0, 2, new Label(connectionUser.firstName));
-		grid.setWidget(1, 2, new Label(connectionUser.lastName));
-		grid.setWidget(2, 2, labelTitle);
-		grid.setWidget(3, 2, labelStatus);
-		grid.setWidget(4, 2, labelKeywords);
+		grid.setWidget(ROW_FIRSTNAME, 2, new Label(connectionUser.firstName));
+		grid.setWidget(ROW_LASTNAME, 2, new Label(connectionUser.lastName));
+		grid.setWidget(ROW_TITLE, 2, labelTitle);
+		grid.setWidget(ROW_STATUS, 2, labelStatus);
+		grid.setWidget(ROW_KEYWORDS, 2, labelKeywords);
 		add(grid);
 	}
 
