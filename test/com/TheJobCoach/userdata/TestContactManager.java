@@ -272,7 +272,7 @@ public class TestContactManager
 	}
 
 	@Test
-	public void testClearanceManagement() throws CassandraException, SystemException
+	public void test_clearanceManagement() throws CassandraException, SystemException
 	{
 		setTest();
 		boolean exception = false;
@@ -314,5 +314,68 @@ public class TestContactManager
 		checkClearance(u_u1.hisVisibility, v_olCD);
 		u1_u = contactManager1.getUserClearance(id);
 		checkClearance(u1_u.myVisibility, v_olCD);
+	}
+	
+	@Test
+	public void test_getUpdatedContactList() throws CassandraException, SystemException
+	{
+		setTest();
+		
+		// predefined visibility statues
+		Visibility v_olCD = new Visibility(true,true,false,false);
+		Visibility v_olcD = new Visibility(true,false,false,false);
+		Visibility v_OLcd = new Visibility(false,false,true,true);
+
+		Vector<ContactInformation> ci = contactManager.getUpdatedContactList();
+		assertEquals(0, ci.size());
+		
+		// connect id and contact_id_1
+		ContactInformation.ContactStatus newStatus = contactManager.updateContactRequest(contact_id_1, true);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_REQUESTED, newStatus);
+		newStatus = contactManager1.updateContactRequest(id, true);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_OK, newStatus);
+
+		// connect id and contact_id_2
+		newStatus = contactManager.updateContactRequest(contact_id_2, true);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_REQUESTED, newStatus);
+		newStatus = contactManager2.updateContactRequest(id, true);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_OK, newStatus);
+		
+		// no changes for now
+		ci = contactManager.getUpdatedContactList();
+		assertEquals(0, ci.size());
+		
+		// change to more
+		contactManager1.setUserClearance(id.userName, v_OLcd);
+		ci = contactManager.getUpdatedContactList();
+		assertEquals(1, ci.size());
+		checkClearance(v_OLcd, ci.get(0).hisVisibility);
+		
+		// Call a 2nd time returns nothing.
+		ci = contactManager.getUpdatedContactList();
+		assertEquals(0, ci.size());
+		
+		// different clearance returns something
+		contactManager1.setUserClearance(id.userName, v_olCD);
+		ci = contactManager.getUpdatedContactList();
+		assertEquals(1, ci.size());
+		checkClearance(v_olCD, ci.get(0).hisVisibility);
+		
+		// less clearance returns nothing
+		contactManager1.setUserClearance(id.userName, v_olcD);
+		ci = contactManager.getUpdatedContactList();
+		assertEquals(0, ci.size());
+		
+		// 2 users change clearance
+		contactManager1.setUserClearance(id.userName, v_OLcd);
+		contactManager2.setUserClearance(id.userName, v_olCD);
+		ci = contactManager.getUpdatedContactList();
+		assertEquals(2, ci.size());
+		checkClearance(v_OLcd, ci.get(0).hisVisibility);
+		checkClearance(v_olCD, ci.get(1).hisVisibility);
+
+		// 2nd call => nothing
+		ci = contactManager.getUpdatedContactList();
+		assertEquals(0, ci.size());
 	}
 }

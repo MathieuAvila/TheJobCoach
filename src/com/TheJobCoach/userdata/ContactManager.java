@@ -35,7 +35,7 @@ public class ContactManager implements IUserDataManager
 	UserId user;
 	UserValues userValues;
 	AccountManager accountManager;
-	
+
 	public ContactManager(UserId user)
 	{
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_CONTACTLIST, cfDef);
@@ -73,7 +73,7 @@ public class ContactManager implements IUserDataManager
 		if (status == 'R') return ContactInformation.ContactStatus.CONTACT_REQUESTED;
 		return ContactInformation.ContactStatus.CONTACT_NONE;
 	}
-	
+
 	/** Serialize the rights "user" has granted to the other user */
 	static String serializeContactInformation(ContactInformation contact)
 	{
@@ -88,7 +88,7 @@ public class ContactManager implements IUserDataManager
 				Convertor.toString(contact.hisVisibility.opportunity) + 
 				Convertor.toString(contact.hisVisibility.log);
 	}
-	
+
 	/** deserialize the rights as "user" has granted them to the other user */
 	static ContactInformation deserializeContactInformation(String contact)
 	{
@@ -103,16 +103,16 @@ public class ContactManager implements IUserDataManager
 						Convertor.toBoolean(String.valueOf(contact.charAt(3))),
 						Convertor.toBoolean(String.valueOf(contact.charAt(4)))
 						),
-				new ContactInformation.Visibility(
-						Convertor.toBoolean(String.valueOf(contact.charAt(5))),
-						Convertor.toBoolean(String.valueOf(contact.charAt(6))),
-						Convertor.toBoolean(String.valueOf(contact.charAt(7))),
-						Convertor.toBoolean(String.valueOf(contact.charAt(8)))
-						)
+						new ContactInformation.Visibility(
+								Convertor.toBoolean(String.valueOf(contact.charAt(5))),
+								Convertor.toBoolean(String.valueOf(contact.charAt(6))),
+								Convertor.toBoolean(String.valueOf(contact.charAt(7))),
+								Convertor.toBoolean(String.valueOf(contact.charAt(8)))
+								)
 				);
 		return result;
 	}
-	
+
 	void updateOneContactClearance(String currentUser, ContactInformation info) throws CassandraException
 	{
 		logger.info("Update connection clearance for user: " + currentUser + " about user: " + info.userName + " to status " + info.status);
@@ -139,8 +139,8 @@ public class ContactManager implements IUserDataManager
 		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_CONTACTNAME, currentUser, "f#" + otherUser);
 		CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_CONTACTNAME, currentUser, "l#" + otherUser);
 	}
-	
-	
+
+
 	/** Requesting a contact to a user OR accept contact request. Adds to the list of contacts. Sends a request mail if necessary
 	 * @param userContact User to request contact to.
 	 * @param ok In case we are in CONTACT_REQUESTED, true means accept, false means refuse
@@ -153,7 +153,7 @@ public class ContactManager implements IUserDataManager
 		String connectInfoStr = CassandraAccessor.getColumn(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName, userContact.userName);
 		ContactInformation contactInfo = deserializeContactInformation(connectInfoStr);
 		contactInfo.userName = userContact.userName;
-		
+
 		UserInformation myInfo  = new UserInformation();
 		boolean hasUserInfo = accountManager.getUserInformation(user, myInfo);
 		if (!hasUserInfo)
@@ -185,39 +185,39 @@ public class ContactManager implements IUserDataManager
 		case CONTACT_OK: // already connected. No need to go further.
 			logger.info("" + user.userName + " is already connected to " + userContact.userName + ". Ignore request");
 			return ContactInformation.ContactStatus.CONTACT_OK;
-	
+
 		case CONTACT_REQUESTED: // received a connection request, accept.
 		{
 			if (ok)
 			{
-			logger.info(user.userName + " is accepting connection request from: " + userContact.userName);
-			
-			contactInfo.status = ContactStatus.CONTACT_OK;
-			// me
-			updateOneContactStatusOnOneSide(user.userName, contactInfo);
-			// him
-			ContactInformation hisContactInfo = new ContactInformation(
-					ContactStatus.CONTACT_OK,
-					user.userName, myInfo.firstName, myInfo.name,
-					// by default, share nothing with my contacts
-					new ContactInformation.Visibility(false, false, false, false),
-					new ContactInformation.Visibility(false, false, false, false));
-			updateOneContactStatusOnOneSide(userContact.userName, hisContactInfo);
+				logger.info(user.userName + " is accepting connection request from: " + userContact.userName);
 
-			// send him an email about our new partnership
-			String body = Lang.connectionGranted(lang, contactUserInfo.firstName, contactUserInfo.name, user.userName, myInfo.firstName, myInfo.name);
-			MailerFactory.getMailer().sendEmail(contactUserInfo.email, Lang.connectionGrantedSubject(lang), body, "noreply@www.thejobcoach.fr", parts);
-			
-			return ContactInformation.ContactStatus.CONTACT_OK;
+				contactInfo.status = ContactStatus.CONTACT_OK;
+				// me
+				updateOneContactStatusOnOneSide(user.userName, contactInfo);
+				// him
+				ContactInformation hisContactInfo = new ContactInformation(
+						ContactStatus.CONTACT_OK,
+						user.userName, myInfo.firstName, myInfo.name,
+						// by default, share nothing with my contacts
+						new ContactInformation.Visibility(false, false, false, false),
+						new ContactInformation.Visibility(false, false, false, false));
+				updateOneContactStatusOnOneSide(userContact.userName, hisContactInfo);
+
+				// send him an email about our new partnership
+				String body = Lang.connectionGranted(lang, contactUserInfo.firstName, contactUserInfo.name, user.userName, myInfo.firstName, myInfo.name);
+				MailerFactory.getMailer().sendEmail(contactUserInfo.email, Lang.connectionGrantedSubject(lang), body, "noreply@www.thejobcoach.fr", parts);
+
+				return ContactInformation.ContactStatus.CONTACT_OK;
 			}
 			else
 			{
 				logger.info(user.userName + " is refusing connection request from: " + userContact.userName);
-				
+
 				// remove both request and result
 				deleteOneContactStatusOnOneSide(userContact.userName, user.userName);
 				deleteOneContactStatusOnOneSide(user.userName, userContact.userName);
-				
+
 				// send him an email about rejection
 				String body = Lang.connectionRefused(lang, contactUserInfo.firstName, contactUserInfo.name, user.userName, myInfo.firstName, myInfo.name);
 				MailerFactory.getMailer().sendEmail(contactUserInfo.email, Lang.connectionRefusedSubject(lang), body, "noreply@www.thejobcoach.fr", parts);
@@ -234,9 +234,9 @@ public class ContactManager implements IUserDataManager
 				logger.error("SECURITY: Forbid test account: " + user.userName + " is requesting connection request to: " + userContact.userName);
 				return ContactStatus.CONTACT_NONE;
 			}
-			
+
 			logger.info(user.userName + " is requesting connection request to: " + userContact.userName);
-			
+
 			// me
 			contactInfo.status = ContactStatus.CONTACT_AWAITING;
 			logger.info(user.userName + " is requesting connection request to: " + contactInfo.userName);
@@ -254,7 +254,7 @@ public class ContactManager implements IUserDataManager
 			String body = Lang.requestConnection(lang, myInfo.firstName, myInfo.name, user.userName, contactUserInfo.firstName, contactUserInfo.name);
 			if (false == MailerFactory.getMailer().sendEmail(contactUserInfo.email, Lang.requestConnectionSubject(lang), body, "noreply@www.thejobcoach.fr", parts))
 				logger.error("Unexpected error in sending email: ");
-			
+
 			return ContactInformation.ContactStatus.CONTACT_REQUESTED;
 		}
 		case CONTACT_AWAITING: // already requested. What should we do ? Resend request ? We don't, this could cause spam.
@@ -264,7 +264,7 @@ public class ContactManager implements IUserDataManager
 		}
 		return ContactInformation.ContactStatus.CONTACT_NONE;
 	}
-	
+
 	/**
 	 * Get all the list of contacts and associated statuses
 	 * @return list of contacts
@@ -286,7 +286,53 @@ public class ContactManager implements IUserDataManager
 		}
 		return result;
 	}
-	
+
+	/**
+	 * Get all the list of contacts and associated statuses
+	 * @return list of contacts
+	 * @throws CassandraException 
+	 */
+	public Vector<ContactInformation> getUpdatedContactList() throws CassandraException
+	{
+		Vector<ContactInformation> result = new Vector<ContactInformation>();
+		Map<String, String> contactTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName);
+		Map<String, String> contactNameTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTNAME, user.userName);
+		if ((contactTable == null) || (contactNameTable == null)) return result;
+		for (String contactUsername: contactTable.keySet())
+		{
+			String lastContact = contactNameTable.get("l#" + contactUsername);
+			String newContact = contactTable.get(contactUsername);
+			ContactInformation contact = deserializeContactInformation(newContact);
+			if (contact.status == ContactStatus.CONTACT_OK)
+			{
+				if ((lastContact == null) || (!lastContact.equals(newContact)))
+				{
+					// check something is MORE shared. Don't advert for loss of share, that would create him a nuclear psychologic attack.
+					// Always take care of your user. He needs being comforted, not frustrated. Really.
+					ContactInformation lastDataContact = deserializeContactInformation(lastContact);
+					if ( 
+							(!lastDataContact.hisVisibility.document && contact.hisVisibility.document) ||
+							(!lastDataContact.hisVisibility.opportunity && contact.hisVisibility.opportunity) ||
+							(!lastDataContact.hisVisibility.log && contact.hisVisibility.log) ||
+							(!lastDataContact.hisVisibility.contact && contact.hisVisibility.contact)
+							)
+					{				
+						contact.userName = contactUsername;
+						contact.firstName = contactNameTable.get("f#" + contactUsername);
+						contact.lastName = contactNameTable.get("l#" + contactUsername);
+						result.add(contact);
+						// update to latest. theoretically we should update after sending the email, for coherence reasons.
+						logger.info("Update last connection clearance for user: " + user.userName + " about user: " + contact.userName);
+						Map<String, String> mapUpdate = new HashMap<String, String>();
+						mapUpdate.put("l#" + contactUsername, newContact);
+						CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_CONTACTNAME, user.userName, mapUpdate);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	/** Send a mail to another user
 	 * @param userContact User to request contact to.
 	 * @return TRUE if everything is fine
@@ -300,7 +346,7 @@ public class ContactManager implements IUserDataManager
 		ContactInformation contactInfo = deserializeContactInformation(connectInfoStr);
 		if (contactInfo.status != ContactInformation.ContactStatus.CONTACT_OK)
 			throw new SystemException();
-		
+
 		// using recipient's language
 		String lang = accountManager.getUserLanguage(userContact);
 
@@ -319,11 +365,11 @@ public class ContactManager implements IUserDataManager
 			logger.warn("Requested contact name " + userContact.userName + " has no user information.");
 			return false;
 		}
-		
+
 		// prepare mail
 		Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
 		parts.put("thejobcoachlogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
-		
+
 		// send email
 		String body = Lang.jobMail(lang, contactUserInfo.firstName, contactUserInfo.name, user.userName, myInfo.firstName, myInfo.name, message);
 		boolean sent = MailerFactory.getMailer().sendEmail(contactUserInfo.email, Lang.jobMailSubject(lang), body, "noreply@www.thejobcoach.fr", parts);
@@ -381,13 +427,13 @@ public class ContactManager implements IUserDataManager
 		updateOneContactClearance(user.userName, information);
 		// him
 		ContactInformation hisContactInfo = new ContactInformation(
-							ContactStatus.CONTACT_OK,
-							user.userName, "","",
-							sourceClearance.hisVisibility,
-							information.myVisibility);
+				ContactStatus.CONTACT_OK,
+				user.userName, "","",
+				sourceClearance.hisVisibility,
+				information.myVisibility);
 		updateOneContactClearance(information.userName, hisContactInfo);
 	}
-	
+
 	@Override
 	public void deleteUser(UserId user) throws CassandraException
 	{
