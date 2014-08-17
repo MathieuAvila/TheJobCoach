@@ -20,12 +20,14 @@ public class ClientUserValuesUtils {
 		this.id = id;
 	}
 	
-	static public ClientUserValuesUtils instance = null;
-	
+	static public Map<String, ClientUserValuesUtils> instance = null;
+
 	public static ClientUserValuesUtils getInstance(UserId id)
 	{
-		if (instance == null) instance = new ClientUserValuesUtils(id);
-		return instance;
+		if (instance == null) instance = new HashMap<String, ClientUserValuesUtils>();
+		if (!instance.containsKey(id.userName)) 
+			instance.put(id.userName, new ClientUserValuesUtils(id));
+		return instance.get(id.userName);
 	}
 
 	public interface ReturnValue
