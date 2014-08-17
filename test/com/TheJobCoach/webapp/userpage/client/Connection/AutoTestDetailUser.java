@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
@@ -59,6 +60,7 @@ public class AutoTestDetailUser extends GwtTest {
 	@Test
 	public void testGetAll() throws InterruptedException
 	{
+		CoachTestUtils.resetClientState();
 		DetailUser cuo;		
 		utilService.calls = 0;
 
