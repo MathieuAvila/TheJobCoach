@@ -131,7 +131,7 @@ public class TestBackgroundProcess
 		assertNotNull(mockMail.lastDst);
 		assertEquals(mockMail.lastBody, 
 				"D   nostatuslogo E  garbage nostatuslogo ");
-
+		assertEquals("[TheJobCoach] Votre rapport de performance.", mockMail.lastSubject);
 	}	
 	
 	// disconnected to avoid sending real mails.
@@ -189,5 +189,6 @@ public class TestBackgroundProcess
 						+ "S2 C S1 His/her contacts "
 						+ "S2 D  E   ",
 						mockMail.lastBody);
+		assertEquals("[TheJobCoach] Some of your contacts have shared elements with you.", mockMail.lastSubject);
 	}
 }
