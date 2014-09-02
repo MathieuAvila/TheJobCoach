@@ -63,10 +63,10 @@ public class Footer extends VerticalPanel implements EntryPoint {
 		add(horizontalPanel_9);
 		horizontalPanel_9.setHeight("");
 
-		Label labelConditions = new Label(lang._TextTermsOfUse());
-		labelConditions.setStyleName("mainpage-label-clickable");
-		horizontalPanel_9.add(labelConditions);
-		horizontalPanel_9.setCellHorizontalAlignment(labelConditions, HasHorizontalAlignment.ALIGN_CENTER);
+
+		Label lblConfidentialite = new Label(lang.whyRegister());
+		horizontalPanel_9.add(lblConfidentialite);
+		lblConfidentialite.setStyleName("mainpage-label-clickable");
 
 		Label label_3 = new Label("  -  ");
 		horizontalPanel_9.add(label_3);
@@ -81,20 +81,22 @@ public class Footer extends VerticalPanel implements EntryPoint {
 		horizontalPanel_9.add(label_4);
 		horizontalPanel_9.setCellHorizontalAlignment(label_4, HasHorizontalAlignment.ALIGN_CENTER);
 		label_4.setWidth("20px");
+		
+		Label labelConditions = new Label(lang._TextTermsOfUse());
+		labelConditions.setStyleName("mainpage-label-clickable");
+		horizontalPanel_9.add(labelConditions);
+		horizontalPanel_9.setCellHorizontalAlignment(labelConditions, HasHorizontalAlignment.ALIGN_CENTER);
 
-		Label lblConfidentialite = new Label(lang._TextConfidentiality());
-		horizontalPanel_9.add(lblConfidentialite);
-		lblConfidentialite.setStyleName("mainpage-label-clickable");
 		horizontalPanel_9.setCellVerticalAlignment(lblConfidentialite, HasVerticalAlignment.ALIGN_BOTTOM);
+
+		// Add a handler to Why register
+		lblConfidentialite.addClickHandler(new ClickMb(lang.whyRegister(), "why_register.html"));
 
 		// Add a handler to Who We Are
 		labelQuiSommesNous.addClickHandler(new ClickMb(lang._TextWhoWeAre(), "whoweare_fr.html"));
 		
-		// Add a handler to Confidentiality
-		lblConfidentialite.addClickHandler(new ClickMb(lang._TextConfidentiality(), "confidentiality_fr.html"));
-
 		// Add a handler to Conditions
-		labelConditions.addClickHandler(new ClickMb(lang._TextTermsOfUse(), "termsofuse_fr.html"));
+		labelConditions.addClickHandler(new ClickMb(lang._TextTermsOfUse(), "confidentiality_fr.html"));
 		
 		add(new VerticalSpacer("20px"));
 		
