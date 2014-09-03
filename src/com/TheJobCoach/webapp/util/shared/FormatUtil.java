@@ -116,12 +116,8 @@ public class FormatUtil
 		return r;
 	}
 
-	final static long MS_PER_WEEK = 1000 * 60 * 60 * 24 * 7;
-
-	public void copyDate()
-	{
-
-	}
+	final static long MS_PER_DAY = 1000 * 60 * 60 * 24;
+	final static long MS_PER_WEEK = MS_PER_DAY * 7;
 
 	@SuppressWarnings("deprecation")
 	public static void getPeriod(PERIOD_TYPE type, int count, Date current, Date periodStart, Date periodEnd)
@@ -171,5 +167,10 @@ public class FormatUtil
 			r = Integer.parseInt(v);
 		} catch (Exception e)	{}
 		return r;			
+	}
+	
+	static public Date dateAddDays(Date current, int days)
+	{
+		return new Date(current.getTime() + FormatUtil.MS_PER_DAY  * days);
 	}
 }

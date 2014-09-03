@@ -83,4 +83,14 @@ public class TestFormatUtil {
 		current = CoachTestUtils.getDate(2013, 11, 26);
 		checkExpectGetPeriod(PERIOD_TYPE.PERIOD_TYPE_WEEK, 0, current, CoachTestUtils.getDate(2013, 11, 25), CoachTestUtils.getDate(2013, 12, 1));
 	}
+	
+	@Test
+	public void test_dateAddDays()
+	{
+		Date current = CoachTestUtils.getDate(2013, 11, 6);
+		Date currentPlus3 = FormatUtil.dateAddDays(current, 6);
+		
+		assertTrue(CoachTestUtils.isDateEqualForDay(currentPlus3, CoachTestUtils.getDate(2013, 11, 12)));
+		
+	}
 }
