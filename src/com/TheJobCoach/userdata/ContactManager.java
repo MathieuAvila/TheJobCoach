@@ -439,6 +439,7 @@ public class ContactManager implements IUserDataManager
 	{
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName);
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONTACTNAME, user.userName);
+		// XXX: delete associated accounts.
 	}
 
 	@Override
