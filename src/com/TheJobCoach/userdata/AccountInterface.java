@@ -30,6 +30,8 @@ public interface AccountInterface
 	public void setPassword(UserId id, String newPassword) throws CassandraException;
 
 	public UserSearchResult searchUsers(UserId id, String firstName,
-			String lastName, int sizeRange, int startRange) throws CassandraException, SystemException
-;
+			String lastName, int sizeRange, int startRange) throws CassandraException, SystemException;
+	
+	public void toggleAccountDeletion(UserId userId, boolean delete) throws CassandraException, SystemException;
+	
 }

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
@@ -17,6 +18,7 @@ import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MailerInterface.Attachment;
 import com.TheJobCoach.util.MockMailer;
+import com.TheJobCoach.webapp.adminpage.shared.UserReport;
 import com.TheJobCoach.webapp.adminpage.shared.UserSearchResult;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
@@ -24,6 +26,7 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
@@ -564,5 +567,68 @@ public class TestAccountManager
 
 		assertEquals(50, fullRange.size());
 	}
-	
+
+	@Test
+	public void test_toggleAccountDeletion() throws CassandraException, SystemException
+	{
+		MailerFactory.setMailer(mockMail);
+		
+		UserId id = new UserId("toggledeletion", "tokentoggledeletion", UserId.UserType.USER_TYPE_SEEKER);
+		CoachTestUtils.createOneAccount(id);
+		UserReport user = account.getUserReport(id);
+		assertFalse(user.dead);
+		assertFalse(user.toggleDelete);
+		boolean deleted = account.checkDeletionAccount(id, new Date());
+		assertFalse(deleted);
+		
+		// toggle to delete
+		account.toggleAccountDeletion(id, true);
+		user = account.getUserReport(id);
+		assertFalse(user.dead);
+		assertTrue(user.toggleDelete);
+		Date deletionDate = FormatUtil.dateAddDays(new Date(), 15);
+		assertTrue(CoachTestUtils.isDateEqualForDay(deletionDate, user.deletionDate));
+		// won't delete now.
+		deleted = account.checkDeletionAccount(id, new Date());
+		assertFalse(deleted);
+		// check email
+		String mail = mockMail.lastBody;
+		assertTrue(mail.contains("You have requested to delete your account. This will be effective on " + Lang.getDateFormat("en").format(deletionDate)));
+		assertTrue(mail.contains("firstName"));
+		assertTrue(mail.contains("lastName"));
+		System.out.println(mail);
+		System.out.println(mockMail.lastSubject);
+		mockMail.reset();
+		
+		// toggle undelete
+		account.toggleAccountDeletion(id, false);
+		user = account.getUserReport(id);
+		assertFalse(user.dead);
+		assertFalse(user.toggleDelete);
+		assertTrue(CoachTestUtils.isDateEqualForDay(FormatUtil.dateAddDays(new Date(), 15), user.deletionDate));
+		// won't delete, even in 100 days.
+		deleted = account.checkDeletionAccount(id, FormatUtil.dateAddDays(new Date(), 100));
+		assertFalse(deleted);
+		user = account.getUserReport(id);
+		assertFalse(user.dead);
+		assertFalse(user.toggleDelete);
+		// no mail
+		assertNull(mockMail.lastBody);
+		
+		// I should still be able to log in.
+		MainPageReturnLogin loginCred = account.loginAccount(id.userName, "");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		
+		// going for real wipe-out. no way back.
+		account.toggleAccountDeletion(id, true);
+		deleted = account.checkDeletionAccount(id, FormatUtil.dateAddDays(new Date(), 16));
+		assertTrue(deleted);
+		// won't log in.
+		loginCred = account.loginAccount(id.userName, "");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_UNKNOWN_USER, loginCred.getLoginStatus());
+		user = account.getUserReport(id);
+		assertTrue(user.dead);
+		
+		
+	}
 }

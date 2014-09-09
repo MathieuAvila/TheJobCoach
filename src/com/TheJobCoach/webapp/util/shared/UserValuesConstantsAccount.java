@@ -38,5 +38,7 @@ public class UserValuesConstantsAccount
 	
 	/* Only server-side */
 	public final static String SECURITY_WAITING_TIME_REQUEST    = "SEC_WAIT_REQUEST";
+	public static final String ACCOUNT_DELETION = "ACCOUNT_DELETION";
+	public static final String ACCOUNT_DELETION_DATE = "ACCOUNT_DELETION_DATE";
 	
 }

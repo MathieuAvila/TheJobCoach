@@ -55,7 +55,7 @@ public class TestClientUserValuesUtils extends GwtTest
 			public void notifyValue(boolean set, String key, String value) {
 				result.put(key, value);
 			}});
-		assertEquals(10, result.size());
+		assertEquals(12, result.size());
 	}
 	
 	@Test

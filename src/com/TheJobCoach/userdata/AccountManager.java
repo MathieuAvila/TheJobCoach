@@ -30,8 +30,10 @@ import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin.LoginStatus;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstants;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 
 public class AccountManager implements AccountInterface {
@@ -300,6 +302,12 @@ public class AccountManager implements AccountInterface {
 	{		
 		Map<String, String> result = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
 		if (result == null) return null;
+		boolean deletion = false;
+		Date deleteDate = new Date();
+		try {
+			deletion = UserValuesConstants.YES.equals(userValues.getValue(id, UserValuesConstantsAccount.ACCOUNT_DELETION)); 
+			deleteDate = FormatUtil.getStringDate(userValues.getValue(id, UserValuesConstantsAccount.ACCOUNT_DELETION_DATE));
+		} catch (SystemException e) {}
 		return new UserReport(				
 				id.userName, 
 				result.get("password"),
@@ -308,7 +316,10 @@ public class AccountManager implements AccountInterface {
 				UserId.stringToUserType(result.get("type")),
 				Convertor.toDate(result.get("date")),
 				Convertor.toDate(result.get("date")), 
-				Convertor.toBoolean(result.get("validated"), true)
+				Convertor.toBoolean(result.get("validated"), true),
+				Convertor.toBoolean(result.get("dead"), false),
+				deletion,
+				deleteDate
 				);
 	}
 
@@ -408,6 +419,27 @@ public class AccountManager implements AccountInterface {
 		UserDataCentralManager.deleteUser(id);
 	}
 
+	// This one is really used when user requests deletion.
+	// All data is deleted, but account is marked blocked, and email is not usable anymore.
+	public void markUserAccountDeleted(UserId id) throws CassandraException
+	{
+		UserReport user = getUserReport(id);
+		if (user != null)
+		{
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_NOT_VALIDATED, id.userName);
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_EMAIL, user.mail);
+			CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "token");
+			CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName,
+					(new ShortMap()).add("dead", true).get());
+			UserDataCentralManager.deleteUser(id);
+		}
+		else
+		{
+			logger.info("COULD NOT DELETE ACCOUNT: " + id.userName + " NO SUCH ACCOUNT FOUND");
+		}
+		UserDataCentralManager.deleteUser(id);
+	}
+
 	@Override
 	public void setPassword(UserId id, String newPassword) throws CassandraException
 	{
@@ -419,10 +451,10 @@ public class AccountManager implements AccountInterface {
 	{
 		// build a map of ordered users with required characteristics
 		TreeMap<String, UserSearchEntry> map = new TreeMap<String, UserSearchEntry>();
-		
+
 		firstName = Convertor.stringToSearchable(firstName);
 		lastName = Convertor.stringToSearchable(lastName);
-		
+
 		Vector<String> resultRows = new Vector<String>();
 		String last = "";
 		do
@@ -491,7 +523,7 @@ public class AccountManager implements AccountInterface {
 		}
 		return new UserSearchResult(result, map.size());
 	}
-	
+
 	public String getUserLanguage(UserId user) throws CassandraException
 	{
 		// send mail in correspondants' language
@@ -510,11 +542,49 @@ public class AccountManager implements AccountInterface {
 				.add("testaccount", true)
 				.get());
 	}
-	
+
 	public String getUserRange(String start, int count, Vector<String> rows)
 	{
 		String last = CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, start, count, rows, "token");
 		return last;
 	}
 
+	protected void toggleAccountDeletion(UserId userId, boolean delete, Date deletionDate) throws CassandraException, SystemException
+	{
+		// toggle state
+		userValues.setValue(userId, UserValuesConstantsAccount.ACCOUNT_DELETION, delete ? UserValuesConstants.YES : UserValuesConstants.NO, false); 
+		userValues.setValue(userId, UserValuesConstantsAccount.ACCOUNT_DELETION_DATE, FormatUtil.getDateString(deletionDate), false); 
+
+		// Send information mail if deletion is requested.
+		if (delete)
+		{
+			UserInformation fullinfo = new UserInformation();
+			getUserInformation(userId, fullinfo);
+			String lang = getUserLanguage(userId);
+			String body = Lang.accountDeletion(lang, fullinfo.firstName, fullinfo.name, deletionDate);
+			Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
+			parts.put("thejobcoachlogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
+			MailerFactory.getMailer().sendEmail(fullinfo.email, Lang.accountDeletionSubject(lang), body, "noreply@www.thejobcoach.fr", parts);
+		}
+	}
+
+	public void toggleAccountDeletion(UserId userId, boolean delete) throws CassandraException, SystemException
+	{
+		Date deletionDate = FormatUtil.dateAddDays(new Date(), 15); // 15 days
+		toggleAccountDeletion(userId, delete, deletionDate);
+	}
+
+	public boolean checkDeletionAccount(UserId userId, Date d) throws CassandraException, SystemException
+	{
+		Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userId.userName);
+		if (accountTable == null) return false;
+		boolean deleted = Convertor.toBoolean(accountTable.get("dead"), false);
+		if (deleted) return false;
+		boolean deletion = UserValuesConstants.YES.equals(userValues.getValue(userId, UserValuesConstantsAccount.ACCOUNT_DELETION)); 
+		if (!deletion) return false;
+		Date deleteDate = FormatUtil.getStringDate(userValues.getValue(userId, UserValuesConstantsAccount.ACCOUNT_DELETION_DATE));
+		if (deleteDate.after(d)) return false;
+		markUserAccountDeleted(userId);
+		return true;
+	}
 }

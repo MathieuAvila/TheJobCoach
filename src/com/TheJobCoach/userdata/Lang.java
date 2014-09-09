@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Properties;
@@ -220,4 +221,18 @@ public class Lang
 		return getLangProp(lang).getProperty("sharesSubject");
 	}
 
+	public static String accountDeletionSubject(String lang)
+	{
+		return getLangProp(lang).getProperty("deletionSubject");
+	}
+
+	public static String accountDeletion(String lang, String firstName, String name, Date deletionDate)
+	{
+		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_deletion_" + getLang(lang) + ".html")
+				.replace("_NAME_", name)
+				.replace("_DATE_", getDateFormat(lang).format(deletionDate))
+				.replace("_FIRSTNAME_", firstName);
+		return body;
+	}
+	
 }

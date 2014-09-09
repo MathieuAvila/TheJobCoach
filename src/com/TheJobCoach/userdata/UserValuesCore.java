@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstants;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
@@ -114,6 +115,9 @@ public class UserValuesCore {
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_KEYWORDS, false /* not restricted */));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_LANGUAGE));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR, MAX_OPTION_LENGTH, true, UserValuesConstantsAccount.ACCOUNT_COACH_AVATAR__DEFAULT_MAN));
+		
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_DELETION, YES_NO_LENGTH, false, UserValuesConstants.NO));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_DELETION_DATE, MAX_OPTION_LENGTH, false, ""));
 
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_SEEKER, YES_NO_LENGTH, true, UserValuesConstants.YES));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_COACH, YES_NO_LENGTH, true, UserValuesConstants.YES));

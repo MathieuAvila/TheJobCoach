@@ -19,8 +19,14 @@ public class UserReport implements Serializable {
 	public Date lastLogin;
 	public boolean validated;
 	public String mail;
+	public boolean dead;
+	public boolean toggleDelete;
+	public Date deletionDate;
 	
-	public UserReport(String _userName, String _password, String _mail,  String _token, UserType _type, Date _creationDate, Date _lastLogin, boolean _validated)
+	public UserReport(String _userName, String _password, 
+			String _mail,  String _token, UserType _type, Date _creationDate, Date _lastLogin,
+			boolean _validated, 
+			boolean dead, boolean toggleDelete, Date deletionDate)
 	{
 		userName = _userName;
 		password = _password;
@@ -30,6 +36,9 @@ public class UserReport implements Serializable {
 		creationDate = _creationDate;
 		lastLogin = _lastLogin;
 		validated = _validated;
+		this.dead = dead;
+		this.toggleDelete = toggleDelete;
+		this.deletionDate = deletionDate;
 	}
 	public UserReport() {}
 };
