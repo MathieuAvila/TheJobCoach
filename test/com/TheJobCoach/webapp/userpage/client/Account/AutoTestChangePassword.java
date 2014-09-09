@@ -58,8 +58,7 @@ public class AutoTestChangePassword extends GwtTest {
 	public void testValid() 
 	{
 		userService.calls = 0;
-		EditPassword ep = new EditPassword(p, userId);
-		ep.onModuleLoad();
+		EditPassword ep = new EditPassword(userId);
 		assertEquals(0, userService.calls);
 		assertTrue(ep.dBox.isShowing());
 		
@@ -92,8 +91,7 @@ public class AutoTestChangePassword extends GwtTest {
 		
 		// Check if CANCEL
 		userService.calls = 0;
-		ep = new EditPassword(p, userId);
-		ep.onModuleLoad();
+		ep = new EditPassword(userId);
 		assertEquals(0, userService.calls);
 		assertTrue(ep.dBox.isShowing());
 		ep.okCancel.getCancel().click();

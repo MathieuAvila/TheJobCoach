@@ -12,15 +12,14 @@ import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.UserId;
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class EditPassword implements EntryPoint, IChanged {
+public class EditPassword implements IChanged {
 
 	private static final UserServiceAsync userService = GWT.create(UserService.class);
 	final DialogBox dBox = new DialogBox();
@@ -38,22 +37,14 @@ public class EditPassword implements EntryPoint, IChanged {
 	CheckedTextField textBoxRetypePassword = new CheckedTextField(PWD_REGEXP, "");
 	CheckedLabel lblRetypePassword = new CheckedLabel(langPassword._Text_retypepassword(), true, textBoxRetypePassword);
 	
-	Panel rootPanel;
 	DialogBlockOkCancel okCancel;
-	
-	public EditPassword(Panel panel, UserId _user)
-	{
-		user = _user;
-		rootPanel = panel;
-	}
-	
 
 	public void commit()
 	{
-		EasyAsync.serverCall(rootPanel, new EasyAsync.ServerCallRun() {
+		EasyAsync.serverCall(RootPanel.get(), new EasyAsync.ServerCallRun() {
 			public void Run() throws CassandraException
 			{
-				userService.setPassword(user, textBoxPassword.getValue(), new ServerCallHelper<String>(rootPanel) {
+				userService.setPassword(user, textBoxPassword.getValue(), new ServerCallHelper<String>(RootPanel.get()) {
 					@Override
 					public void onSuccess(String result)
 					{
@@ -64,17 +55,14 @@ public class EditPassword implements EntryPoint, IChanged {
 			}});		
 	}
 
-	/**
-	 * This is the entry point method.
-	 * @wbp.parser.entryPoint
-	 */
-	public void onModuleLoad()
-	{	
+	public EditPassword(UserId _user)
+	{
+		user = _user;
 		dBox.setText(langPassword.Text_changespassword());
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		GridHelper grid = new GridHelper(rootPanel, "70%", "30%");
+		GridHelper grid = new GridHelper(RootPanel.get(), "70%", "30%");
 
 		grid.addLine(1, lblTypePassword, textBoxPassword);		
 		grid.addLine(2, lblRetypePassword, textBoxRetypePassword);

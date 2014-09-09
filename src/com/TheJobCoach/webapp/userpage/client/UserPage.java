@@ -141,8 +141,8 @@ public class UserPage implements EntryPoint {
 				@Override
 				public void Open()
 				{
-					ContentAccount contentAccount = new ContentAccount(simplePanelContent, userId);
-					contentAccount.onModuleLoad();
+					simplePanelContent.clear();
+					simplePanelContent.add(new ContentAccount(userId));
 				}			
 			});
 		}

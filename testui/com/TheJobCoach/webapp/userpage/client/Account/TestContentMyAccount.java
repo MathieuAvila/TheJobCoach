@@ -30,8 +30,7 @@ public class TestContentMyAccount implements EntryPoint {
 					hp.setStyleName("mainpage-content");
 					root.add(hp);
 					hp.setSize("100%", "100%");
-					ContentAccount cud = new ContentAccount(hp, TestSecurity.defaultUser);
-					cud.onModuleLoad();
+					hp.add(new ContentAccount(TestSecurity.defaultUser));
 				}
 			});
 		}
@@ -48,8 +47,7 @@ public class TestContentMyAccount implements EntryPoint {
 					hp.setStyleName("mainpage-content");
 					rootPw.add(hp);
 					hp.setSize("100%", "100%");
-					EditPassword editPassword = new EditPassword(hp, TestSecurity.defaultUser);
-					editPassword.onModuleLoad();
+					new EditPassword(TestSecurity.defaultUser);
 				}
 			});
 		}
