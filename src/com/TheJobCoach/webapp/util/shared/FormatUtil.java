@@ -2,6 +2,10 @@ package com.TheJobCoach.webapp.util.shared;
 
 import java.util.Date;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.googlecode.gwt.test.GwtModule;
+
+@GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class FormatUtil 
 {
 
@@ -172,5 +176,10 @@ public class FormatUtil
 	static public Date dateAddDays(Date current, int days)
 	{
 		return new Date(current.getTime() + FormatUtil.MS_PER_DAY  * days);
+	}
+	
+	public static String getFormattedDate(Date current)
+	{
+		return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(current);
 	}
 }

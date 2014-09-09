@@ -8,8 +8,11 @@ import org.junit.Test;
 
 import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.webapp.util.shared.FormatUtil.PERIOD_TYPE;
+import com.googlecode.gwt.test.GwtModule;
+import com.googlecode.gwt.test.GwtTest;
 
-public class TestFormatUtil {
+@GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
+public class TestFormatUtil extends GwtTest {
 
 	@SuppressWarnings("deprecation")
 	static public Date getDate(int year, int month, int day, int hours, int minutes, int seconds)
@@ -91,6 +94,16 @@ public class TestFormatUtil {
 		Date currentPlus3 = FormatUtil.dateAddDays(current, 6);
 		
 		assertTrue(CoachTestUtils.isDateEqualForDay(currentPlus3, CoachTestUtils.getDate(2013, 11, 12)));
-		
 	}
+	
+	@Test
+	public void test_getFormattedDate()
+	{
+		Date current = CoachTestUtils.getDate(2013, 11, 6);
+		String formatted = FormatUtil.getFormattedDate(current);
+		
+		assertEquals("2013 Nov 6", formatted);
+	}
+	
+	
 }
