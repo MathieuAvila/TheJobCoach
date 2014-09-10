@@ -167,7 +167,6 @@ public class ContentConnection extends VerticalPanel {
 
 	private void updateContactStatus(final ContactInformation object)
 	{
-		System.out.println("updateContactStatus " + object.userName);
 		switch (object.status)
 		{
 		case CONTACT_OK: 

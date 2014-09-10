@@ -151,18 +151,7 @@ public class ContentSiteLibrary extends VerticalPanel {
 				updateContent();
 			}			
 		});
-		/*
-		comboBoxTarget.addChangeHandler(new ChangeHandler() {
-			@Override
-			public void onChange(ChangeEvent event)
-			{
-				int index = comboBoxTarget.getSelectedIndex();
-				String v = comboBoxTarget.getValue(index);
-				filter.peopleTarget = v;
-				updateContent();
-				System.out.println("target is " + v);
-			}			
-		});*/
+
 		comboBoxType.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event)

@@ -185,8 +185,6 @@ public class TodoEvent implements Serializable {
 		Vector<TodoEvent> resultNew = new Vector<TodoEvent>();
 		for (TodoEvent index: origin)
 		{
-			//System.out.println("event X: " + index.x);
-			//System.out.println("event Y: " + index.y);
 			if ((index.x == NO_PLACE)||(index.y == NO_PLACE)||(index.x < -100)||(index.y  < -100))
 				resultNew.add(index);
 			else

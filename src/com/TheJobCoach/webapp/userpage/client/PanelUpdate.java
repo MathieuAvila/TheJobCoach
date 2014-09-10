@@ -120,7 +120,6 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				Integer p = previousResult.get(key);
 				int goal = getIntFromValue(values.getValueFromCache(key));
 				// value changed somehow, only check when it's in progress, and goal is set.
-				System.out.println(c + " " + p + " " + key + " " + goal + " " + result + " " + previousResult);
 				if ((c.compareTo(p) > 0) && (goal != GOAL_NOT_SET))
 				{
 					// message depends on key and goal
@@ -166,14 +165,6 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				message.addMessage(UserValuesConstantsCoachMessages.COACH_WELCOME);
 				message.addMessage(UserValuesConstantsCoachMessages.COACH_HELLO);
 				// Check arrival time.
-				if (arrivalTime != null)
-				{
-				System.out.println(arrivalTime);
-				System.out.println(arrivalTimeMore30minutes);
-				System.out.println(currentTime.after(arrivalTime));
-				System.out.println(currentTime.after(arrivalTimeMore30minutes));
-				System.out.println(timePhase);
-				}
 				if ((arrivalTime != null) && (timePhase == 0))
 				{
 					if (currentTime.after(arrivalTimeMore30minutes))
@@ -351,13 +342,11 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		Date currentTime = new Date();
 		if (key.equals(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR))
 		{
-			System.out.println("arrivalTime is: " + value);
 			Integer v = FormatUtil.getIntegerFromString(value);
 			if (v != null)
 			{
 				arrivalTime = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + v);
 				arrivalTimeMore30minutes = new Date(FormatUtil.startOfTheDay(currentTime).getTime() + v + 30*60*1000);
-				System.out.println("arrivalTime is: " + arrivalTime + " late is " + arrivalTimeMore30minutes);
 				//if (currentTime.after(arrivalTime)) timePhase = 1;
 				//if (currentTime.after(arrivalTimeMore30minutes)) timePhase = 2;
 				timePhase = 0;
@@ -365,7 +354,6 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		}
 		else if (key.equals(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_NOT_AFTER_HOUR))
 		{
-			System.out.println("departureTime time is: " + value);
 			Integer v = FormatUtil.getIntegerFromString(value);
 			if (v != null)
 			{

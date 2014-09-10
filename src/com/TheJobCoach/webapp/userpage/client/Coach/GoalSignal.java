@@ -22,7 +22,6 @@ public class GoalSignal
 	
 	public void newEvent()
 	{
-		System.out.println("A new coach event was sent. Counter is " + counter);
 		lastEvent = new Date();
 		counter++;
 	}

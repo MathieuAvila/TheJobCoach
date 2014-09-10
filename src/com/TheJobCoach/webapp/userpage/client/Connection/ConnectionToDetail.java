@@ -11,7 +11,6 @@ public class ConnectionToDetail extends SimplePanel implements IConnectionToDeta
 	public void toDetail(ContactInformation connectionUser)
 	{
 		clear();
-		System.out.println("To detail");
 		add(new ContentConnectionDetail(user, connectionUser, this));
 	}
 	
