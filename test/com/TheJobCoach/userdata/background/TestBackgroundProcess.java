@@ -18,12 +18,14 @@ import com.TheJobCoach.userdata.UserValues;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MockMailer;
 import com.TheJobCoach.util.StringResourceCache;
+import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstants;
@@ -190,5 +192,37 @@ public class TestBackgroundProcess
 						+ "S2 D  E   ",
 						mockMail.lastBody);
 		assertEquals("[TheJobCoach] Some of your contacts have shared elements with you.", mockMail.lastSubject);
+	}
+	
+	@Test
+	public void test_checkDeletionForUser() throws CassandraException, SystemException, FileNotFoundException, UnsupportedEncodingException
+	{
+		account.deleteAccount(user.userName);
+		CoachTestUtils.createOneAccount(user);
+
+		Date notPastDate = FormatUtil.dateAddDays(new Date(), 13);
+		Date pastDate = FormatUtil.dateAddDays(new Date(), 50);
+		
+		// in normal state: don't delete
+		assertFalse(bp.checkDeletionForUser(user.userName, pastDate));
+		MainPageReturnLogin loginCred = account.loginAccount(user.userName, "");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		
+		// mark ready for deletion and abort: no deletion
+		account.toggleAccountDeletion(user, true);
+		account.toggleAccountDeletion(user, false);
+		assertFalse(bp.checkDeletionForUser(user.userName, pastDate));
+		loginCred = account.loginAccount(user.userName, "");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		
+		//mark ready for deletion. Don't delete before date, ...
+		account.toggleAccountDeletion(user, true);
+		assertFalse(bp.checkDeletionForUser(user.userName, notPastDate));
+		loginCred = account.loginAccount(user.userName, "");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		// ... and delete after
+		assertTrue(bp.checkDeletionForUser(user.userName, pastDate));
+		loginCred = account.loginAccount(user.userName, "");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_UNKNOWN_USER, loginCred.getLoginStatus());
 	}
 }

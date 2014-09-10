@@ -372,6 +372,14 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		contact.setUserClearance(userName, contactVisibility);
 	}
 
+	@Override
+	public Boolean toggleDeleteAccount(boolean delete)
+			throws CassandraException, CoachSecurityException, SystemException
+	{
+		account.toggleAccountDeletion(getUserId(), delete);
+		return delete;
+	}
+
 	
 	
 }

@@ -533,6 +533,12 @@ public class TestAccountManager
 		checkOneSearchResult(result, 0, "urange00095", "TEST_U RangeName00095", "TEST_U RangeFirstName00095", "", UserId.UserType.USER_TYPE_SEEKER);
 		checkOneSearchResult(result, 1, "urange00096", "TEST_U RangeName00096", "TEST_U RangeFirstName00096", "", UserId.UserType.USER_TYPE_SEEKER);
 		checkOneSearchResult(result, 4, "urange00099", "TEST_U RangeName00099", "TEST_U RangeFirstName00099", "", UserId.UserType.USER_TYPE_SEEKER);
+
+		// clean-up DB
+		for (UserDef user: users)
+		{
+			account.deleteAccount(user.id.userName);
+		}
 	}
 
 	@Test
@@ -564,8 +570,12 @@ public class TestAccountManager
 				 fullRange.add(userName);
 		} 
 		while (range.size()!=0);
-
-		assertEquals(50, fullRange.size());
+		
+		// clean up
+		for (int i= 0; i != 50; i++)
+		{
+			account.deleteAccount("test_range_" + i);
+		}
 	}
 
 	@Test

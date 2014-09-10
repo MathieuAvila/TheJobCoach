@@ -66,4 +66,24 @@ public interface LangAccount extends Constants {
 	@Key("retypepassword")
 	String _Text_retypepassword();
 
+	// deletion procedure
+	
+	@Key("dangerousSettings")
+	String dangerousSettings();
+	
+	@Key("deleteAccount")
+	String deleteAccount();
+	
+	@Key("deletionPlanned")
+	String deletionPlanned();
+	
+	@Key("cancelDeletion")	
+	String cancelDeletion();
+	
+	@Key("deleteConfirm")	
+	String deleteConfirm();
+	
+	@Key("cancelDeleteConfirm")
+	String cancelDeleteConfirm();
+		
 }

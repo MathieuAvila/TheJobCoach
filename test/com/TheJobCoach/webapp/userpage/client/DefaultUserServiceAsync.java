@@ -19,6 +19,9 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -209,5 +212,12 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 			AsyncCallback<Void> callback)
 	{
 		logger.info("updateShares " + userName);
+	}
+	@Override
+	public void toggleDeleteAccount(boolean delete,
+			AsyncCallback<Boolean> callback) throws CassandraException,
+			CoachSecurityException, SystemException
+	{
+		logger.info("toggleDeleteAccount " + delete);
 	}
 };

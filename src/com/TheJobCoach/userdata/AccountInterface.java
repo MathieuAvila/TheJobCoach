@@ -21,7 +21,7 @@ public interface AccountInterface
 	
 	public MainPageReturnLogin loginAccount(String userName, String password) throws CassandraException;
 	
-	public Vector<UserId> listUser() throws CassandraException;
+	public Vector<UserId> listUser(boolean onlyLive) throws CassandraException;
 
 	public void sendComment(UserId id, String comment) throws CassandraException;
 	

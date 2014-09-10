@@ -276,20 +276,22 @@ public class AccountManager implements AccountInterface {
 		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, id);
 	}
 
-	public Vector<UserId> listUser() throws CassandraException
+	public Vector<UserId> listUser(boolean onlyLive) throws CassandraException
 	{	
 		Vector<UserId> result = new Vector<UserId>();	
 		Vector<String> resultRows = new Vector<String>();
 		String last = "";
 		do
 		{
-			last = CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 100, resultRows, "token");
+			last = CassandraAccessor.getKeyRange(COLUMN_FAMILY_NAME_ACCOUNT, last, 100, resultRows, onlyLive ? "token":"email");
 			for (String userName: resultRows)
 			{
-				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);			
-				if (accountTable != null && accountTable.containsKey("token"))
+				Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);	
+				boolean hasToken = accountTable.containsKey("token");
+				boolean valid = (!onlyLive) || (hasToken) ;
+				if ((accountTable != null) && valid)
 				{
-					UserId newUserId = new UserId(userName, accountTable.get("token"), UserId.stringToUserType(accountTable.get("type")));
+					UserId newUserId = new UserId(userName, hasToken ? accountTable.get("token"):"", UserId.stringToUserType(accountTable.get("type")));
 					result.add(newUserId);
 				}
 			}
@@ -326,7 +328,7 @@ public class AccountManager implements AccountInterface {
 	public List<UserReport> getUserReportList() throws CassandraException
 	{
 		List<UserReport> report = new ArrayList<UserReport>();
-		Vector<UserId> userList = listUser();
+		Vector<UserId> userList = listUser(false);
 		for (UserId uId: userList)
 		{
 			report.add(getUserReport(uId));

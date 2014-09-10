@@ -220,6 +220,12 @@ public class BackgroundProcess
 		return false;
 	}
 
+	boolean checkDeletionForUser(String userName, Date currentDate) throws CassandraException, SystemException
+	{
+		UserId user = new UserId(userName);
+		return account.checkDeletionAccount(user, currentDate);
+	}
+
 	void checkCoachMail(Date currentDate)
 	{
 		String last = "";
@@ -227,6 +233,7 @@ public class BackgroundProcess
 		Vector<String> result = new Vector<String>();
 		int count = 0;
 		int countShares = 0;
+		int countDead = 0;
 		try {
 			do
 			{
@@ -238,6 +245,7 @@ public class BackgroundProcess
 					ucount++;
 					if (checkCoachMailForUser(userName, currentDate)) count++;
 					if (checkSharesMailForUser(userName, currentDate)) countShares++;
+					if (checkDeletionForUser(userName, currentDate)) countDead++;
 				}
 			}
 			while (result.size() > 0);
@@ -247,13 +255,13 @@ public class BackgroundProcess
 			logger.error("received exception in backgroundProcess: " + e.getMessage() + e.toString());
 			for (StackTraceElement element: e.getStackTrace())
             {
-                    System.out.println(".. " + element.toString());
+				logger.error(".. " + element.toString());
             }
 		}
 		logger.info("End sending evaluation emails. Sent " 
 				+ count 
 				+ " evaluation mails, " 
-				+ countShares + "shares mails, for a total of "
+				+ countShares + "shares mails, deleted "+ countDead + " accounts, for a total of "
 				+ ucount + " user accounts.");
 	}
 

@@ -14,6 +14,9 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -58,7 +61,8 @@ public interface UserServiceAsync {
 	public void getUserGoalReport(UserId id, Date start, Date end, AsyncCallback<GoalReportInformation> callback);
 	
 	public void setPassword(UserId id, String newPassword, AsyncCallback<String> callback);
-	
+	public void toggleDeleteAccount(boolean delete, AsyncCallback<Boolean> callback) throws CassandraException, CoachSecurityException, SystemException;
+
 	public void searchUsers(UserId id, String firstName, String lastName, int sizeRange, int startRange, AsyncCallback<UserSearchResult> callback);	
 
 	public void updateContactRequest(UserId userContact, boolean ok, AsyncCallback<ContactInformation.ContactStatus> callback);

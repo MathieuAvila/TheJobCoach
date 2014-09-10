@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.TheJobCoach.webapp.userpage.client.Lang;
+import com.TheJobCoach.webapp.userpage.client.UserService;
+import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.ButtonImageText;
 import com.TheJobCoach.webapp.util.client.CheckedExtendedDropListField;
@@ -11,37 +13,48 @@ import com.TheJobCoach.webapp.util.client.CheckedExtendedTextField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset;
 import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset.IApply;
+import com.TheJobCoach.webapp.util.client.MessageBox.ICallback;
+import com.TheJobCoach.webapp.util.client.MessageBox.TYPE;
 import com.TheJobCoach.webapp.util.client.IChanged;
 import com.TheJobCoach.webapp.util.client.IExtendedField;
 import com.TheJobCoach.webapp.util.client.LangUtil;
+import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
+import com.TheJobCoach.webapp.util.shared.FormatUtil;
+import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstants;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Grid;
+import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply {
+public class ContentAccount extends VerticalPanel implements IChanged, ReturnValue, IApply{
 
 	UserId user;
 
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangAccount langAccount = GWT.create(LangAccount.class);
 	final static LangUtil langUtil = GWT.create(LangUtil.class);
-	
+	private static final UserServiceAsync userService = GWT.create(UserService.class);
+
 	Label lblPassword = new Label(lang._TextPassword());
 	ButtonImageText btnChangePassword = new ButtonImageText(ButtonImageText.Type.LOCK, langAccount.Text_changespassword());
 	
@@ -49,15 +62,6 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 
 	DialogBlockApplyReset applyReset = null;
 
-	public ContentAccount(Panel panel, UserId _user)
-	{
-		rootPanel = panel;
-		user = _user;
-		values = ClientUserValuesUtils.getInstance(user);		
-	}
-
-	Panel rootPanel = null;
-	
 	CheckedExtendedDropListField tfModel = new CheckedExtendedDropListField(
 			UserValuesConstantsAccount.ACCOUNT_MODEL_LIST, langAccount.accountTypeMap(), "accountTypeMap_");
 	CheckedLabel clModel = new CheckedLabel(langAccount.Text_AccountType(), false, tfModel);
@@ -84,32 +88,42 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 			UserValuesConstants.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
 	CheckedLabel clPublishRecruiter = new CheckedLabel(langAccount.Text_VisibleProfileRecruiter(), false, tfPublishRecruiter);
 	
+	VerticalPanel dangerousSettings = new VerticalPanel();
+	ButtonImageText btnDeleteAccount = new ButtonImageText(ButtonImageText.Type.DESTROY, langAccount.deleteAccount());
+	ButtonImageText btnCancelDeleteAccount = new ButtonImageText(ButtonImageText.Type.DESTROY, langAccount.cancelDeleteConfirm());
+	Label deletionInformationDate = new Label();
+	SimplePanel destroyPanel = new SimplePanel();
+	SimplePanel restorePanel = new SimplePanel();
+	
 	void getValues()
 	{	
 		values.preloadValueList("ACCOUNT", this);
 	}
 
 	HashMap<String, IExtendedField> fields = new HashMap<String, IExtendedField>();
+	
+	private void toggleDeletion(final boolean delete)
+	{
+		EasyAsync.serverCall(RootPanel.get(), new EasyAsync.ServerCallRun() {
+		public void Run() throws CassandraException, CoachSecurityException, SystemException
+		{
+				userService.toggleDeleteAccount(delete, new ServerCallHelper<Boolean>(RootPanel.get()));
+		}});
+	}
+	
+	public ContentAccount(UserId _user)
+	{
+		user = _user;
+		values = ClientUserValuesUtils.getInstance(user);	
+			
+		setSize("100%", "100%");
 
-	/**
-	 * This is the entry point method.
-	 * @wbp.parser.entryPoint
-	 */
-	public void onModuleLoad()
-	{			
-		rootPanel.setSize("100%", "100%");
-		rootPanel.clear();
-
-		VerticalPanel simplePanelCenter = new VerticalPanel();
-		simplePanelCenter.setSize("100%", "");
-		rootPanel.add(simplePanelCenter);
-
-		ContentHelper.insertTitlePanel(simplePanelCenter, lang._TextMyAccount(), ClientImageBundle.INSTANCE.parametersContent());
+		ContentHelper.insertTitlePanel(this, lang._TextMyAccount(), ClientImageBundle.INSTANCE.parametersContent());
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitleAccount());
+		ContentHelper.insertSubTitlePanel(this, langAccount.Text_TitleAccount());
 
 		Grid grid0 = new Grid(2, 2);
-		simplePanelCenter.add(grid0);
+		this.add(grid0);
 
 		grid0.setWidget(0,0, clModel);
 		grid0.setWidget(0,1, tfModel.getItem());
@@ -122,15 +136,14 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				EditPassword ep = new EditPassword(rootPanel, user);
-				ep.onModuleLoad();
+				new EditPassword(user);
 			}	
 		});
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitlePersonalInformation());
+		ContentHelper.insertSubTitlePanel(this, langAccount.Text_TitlePersonalInformation());
 
 		Grid grid1 = new Grid(3, 2);
-		simplePanelCenter.add(grid1);
+		this.add(grid1);
 
 		grid1.setWidget(0,0, clTitle);
 		grid1.setWidget(0,1, tfTitle);
@@ -145,10 +158,10 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 		fields.put(UserValuesConstantsAccount.ACCOUNT_STATUS, tfStatus);
 		fields.put(UserValuesConstantsAccount.ACCOUNT_KEYWORDS, tfKeywords);
 		
-		ContentHelper.insertSubTitlePanel(simplePanelCenter, langAccount.Text_TitleVisibility());
+		ContentHelper.insertSubTitlePanel(this, langAccount.Text_TitleVisibility());
 
 		Grid grid3 = new Grid(3, 2);
-		simplePanelCenter.add(grid3);
+		this.add(grid3);
 		
 		grid3.setWidget(0,0, clPublishSeeker);
 		grid3.setWidget(0,1, tfPublishSeeker.getItem());
@@ -164,12 +177,81 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 		fields.put(UserValuesConstantsAccount.ACCOUNT_PUBLISH_RECRUITER, tfPublishRecruiter);
 		
 		applyReset = new DialogBlockApplyReset(new ArrayList<IExtendedField>(fields.values()), this);
+		
+		ContentHelper.insertSubTitlePanel(this, langAccount.dangerousSettings());
+		final ButtonImageText btnShowDangerousSettings = new ButtonImageText(ButtonImageText.Type.OK, langAccount.dangerousSettings());
+		this.add(btnShowDangerousSettings);
+		btnShowDangerousSettings.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				btnShowDangerousSettings.setVisible(false);
+				dangerousSettings.setVisible(true);
+			}			
+		});
+		
+		ButtonImageText btnDeleteAccount = new ButtonImageText(ButtonImageText.Type.DESTROY, langAccount.deleteAccount());
+		ButtonImageText btnCancelDeleteAccount = new ButtonImageText(ButtonImageText.Type.DESTROY, langAccount.cancelDeletion());
+
+		btnDeleteAccount.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				MessageBox mb = new MessageBox(RootPanel.get(), true, true, TYPE.WARNING, 
+						langAccount.deleteAccount(), 
+						langAccount.deleteConfirm(), new ICallback() {
+
+							@Override
+							public void complete(boolean ok)
+							{
+								if (ok) toggleDeletion(true);
+							}});
+				mb.onModuleLoad();
+				}		
+			
+		});
+		
+		btnCancelDeleteAccount.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				MessageBox mb = new MessageBox(RootPanel.get(), true, true, TYPE.WARNING, 
+						langAccount.cancelDeletion(), 
+						langAccount.cancelDeleteConfirm(), new ICallback() {
+
+							@Override
+							public void complete(boolean ok)
+							{
+								if (ok) toggleDeletion(false);
+							}});
+				mb.onModuleLoad();
+				}		
+			
+		});
+	
+		VerticalPanel restorePanelContent = new VerticalPanel();
+
+		dangerousSettings.setVisible(false);
+		dangerousSettings.add(destroyPanel);
+		dangerousSettings.add(restorePanel);
+		this.add(new VerticalSpacer("1em"));
+		this.add(dangerousSettings);
+		
+		restorePanel.add(restorePanelContent);
+		destroyPanel.add(btnDeleteAccount);
+		restorePanelContent.add(deletionInformationDate);
+		restorePanelContent.add(new VerticalSpacer("1em"));
+		restorePanelContent.add(btnCancelDeleteAccount);
+		destroyPanel.setVisible(false);
+		restorePanel.setVisible(false);
 
 		for (IExtendedField f: fields.values()) f.registerListener(this);
 		
-		simplePanelCenter.add(applyReset);
+		this.add(applyReset);
 
-		getValues();		
+		getValues();
+		values.addListener(UserValuesConstantsAccount.ACCOUNT_DELETION, this);	
+		values.addListener(UserValuesConstantsAccount.ACCOUNT_DELETION_DATE, this);	
 	}
 
 	@Override
@@ -188,6 +270,17 @@ public class ContentAccount implements EntryPoint, IChanged, ReturnValue, IApply
 				fields.get(testKey).setDefault(value);
 				fields.get(testKey).setValue(value);
 			}
+		}
+		if (key.equals(UserValuesConstantsAccount.ACCOUNT_DELETION))
+		{
+			boolean deletion = UserValuesConstants.YES.equals(value);
+			destroyPanel.setVisible(!deletion);
+			restorePanel.setVisible(deletion);
+		}
+		if (key.equals(UserValuesConstantsAccount.ACCOUNT_DELETION_DATE))
+		{
+			String deletionDate = FormatUtil.getFormattedDate(FormatUtil.getStringDate(value));
+			deletionInformationDate.setText(langAccount.deletionPlanned() + deletionDate);
 		}
 	}
 
