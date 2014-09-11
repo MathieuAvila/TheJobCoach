@@ -39,7 +39,7 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		UserId result = (UserId)session.getAttribute("userid");
-		if (result == null) throw new CoachSecurityException();
+		if (result == null) CoachSecurityCheck.throwSecurityException();;
 		return result;
 	}
 	
@@ -70,7 +70,7 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 			{
 				// security error.
 				logger.warn("user " + currentId.userName + " trying to illegally access: " + id.userName);
-				throw new CoachSecurityException();
+				CoachSecurityCheck.throwSecurityException();
 			}
 		}
 		return userValues.getValues(id, rootValue, same);

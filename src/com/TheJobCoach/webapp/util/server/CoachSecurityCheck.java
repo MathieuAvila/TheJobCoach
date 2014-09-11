@@ -1,5 +1,7 @@
 package com.TheJobCoach.webapp.util.server;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -17,13 +19,28 @@ public class CoachSecurityCheck
 	
 	static Logger logger = LoggerFactory.getLogger(CoachSecurityCheck.class);
 	
+	static void printStackTrace()
+	{
+		System.out.println("Security stack trace:");
+		for (StackTraceElement element: Thread.currentThread().getStackTrace())
+		{
+			System.out.println(".. " + element.toString());
+		}
+	}
+	
+	public static void throwSecurityException() throws CoachSecurityException
+	{
+		printStackTrace();
+		throw new CoachSecurityException();
+	}
+	
 	public static void checkUser(UserId id, HttpSession session) throws CoachSecurityException
 	{
 		UserId loggedin = (UserId)session.getAttribute(SESSION_VARIABLE);
 		if (loggedin == null) 
 			{
 			logger.warn("unknown user: " + id.userName);
-			throw new CoachSecurityException();
+			throwSecurityException();
 			}
 		
 		if (!loggedin.token.equals(id.token))
@@ -38,12 +55,20 @@ public class CoachSecurityCheck
 		if (!loggedin.equals(id))
 			{
 			logger.warn("bad user - SECURITY WARNING - : " + id.userName + " " + loggedin.userName);
-			throw new CoachSecurityException();
+			throwSecurityException();
 			}
 	}
 
+	static void invalidate(HttpSession session)
+	{
+		for (@SuppressWarnings("unchecked")
+		Enumeration<String> e = (Enumeration<String>)session.getAttributeNames(); e.hasMoreElements();)
+			session.setAttribute((String)e.nextElement(), null);
+	}
+	
 	public static void loginUser(UserId id, HttpSession session)
 	{
+		invalidate(session);
 		logger.info("log user: " + id.userName);
 		session.setAttribute(SESSION_VARIABLE, id);
 	}
@@ -51,6 +76,7 @@ public class CoachSecurityCheck
 	public static void disconnectUser(HttpSession session)
 	{
 		String user ="unknown";
+		invalidate(session);
 		UserId loggedin = (UserId)session.getAttribute(SESSION_VARIABLE);
 		if (loggedin != null) user = loggedin.userName;
 		logger.info("disconnect user: " + user);

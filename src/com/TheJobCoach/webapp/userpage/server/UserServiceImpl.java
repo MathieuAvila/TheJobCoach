@@ -37,6 +37,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserDocumentId;
 import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
+import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
 import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
@@ -148,7 +149,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 			{
 				// security error.
 				logger.warn("user " + currentId.userName + " trying to illegally access: " + id.userName);
-				throw new CoachSecurityException();
+				CoachSecurityCheck.throwSecurityException();
 			}
 		}		
 		return userOpportunityManager.getOpportunitiesList(id, list);
@@ -202,7 +203,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 			{
 				// security error.
 				logger.warn("user " + currentId.userName + " trying to illegally access: " + id.userName);
-				throw new CoachSecurityException();
+				CoachSecurityCheck.throwSecurityException();
 			}
 		}
 		return userLogManager.getLogList(id, oppId);
@@ -325,7 +326,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		UserId result = (UserId)session.getAttribute("userid");
-		if (result == null) throw new CoachSecurityException();
+		if (result == null) CoachSecurityCheck.throwSecurityException();;
 		return result;
 	}
 	
