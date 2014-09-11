@@ -3,9 +3,7 @@ package com.TheJobCoach.webapp.util.shared;
 import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.googlecode.gwt.test.GwtModule;
 
-@GwtModule("com.TheJobCoach.webapp.userpage.UserPage")
 public class FormatUtil 
 {
 
