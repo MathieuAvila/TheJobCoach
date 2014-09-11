@@ -3,6 +3,8 @@ package com.TheJobCoach.webapp.util.server;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Enumeration;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -35,7 +37,7 @@ public class TestCoachSecurityCheck {
 
 		@Override
 		public Enumeration<?> getAttributeNames() {
-			return null;
+			return new StringTokenizer("");
 		}
 
 		@Override
@@ -130,7 +132,7 @@ public class TestCoachSecurityCheck {
 	}
 	
 	@Test
-	public void testGetStringDate()
+	public void test_securityCheck()
 	{
 		HttpSessionTest session = new HttpSessionTest();
 		runCheck(session, id, false);
