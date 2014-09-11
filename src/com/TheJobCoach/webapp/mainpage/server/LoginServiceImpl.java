@@ -75,7 +75,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 		UserId testAccount = evaluationAccount.createTestAccount(lang, type);
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
+		CoachSecurityCheck.disconnectUser(session);
 		CoachSecurityCheck.loginUser(testAccount, session);
+		session.setAttribute("accountmanager", account);
+		session.setAttribute("userid", testAccount);
+		logger.info("Logged in with: " + testAccount);
 		return testAccount;
 	}
 
