@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
@@ -23,6 +24,25 @@ public class UserValues  extends UserValuesCore implements IUserDataManager{
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefListUpdated = null;
 
+	static public interface ValueCallback
+	{
+		void notify(String key, String value);
+	}
+	
+	static HashMap<String, Vector<ValueCallback>> callbacks = new HashMap<String, Vector<ValueCallback>>();
+	
+	static public void registerCallback(String key, ValueCallback callback)
+	{
+		Vector<ValueCallback> list = null;
+		if (callbacks.containsKey(key)) list = callbacks.get(key);
+		else
+		{
+			list = new Vector<ValueCallback>();
+			callbacks.put(key, list);
+		}
+		list.add(callback);
+	}
+	
 	public UserValues()
 	{
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);
@@ -95,6 +115,17 @@ public class UserValues  extends UserValuesCore implements IUserDataManager{
 		if (!client)
 		{
 			CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_LIST_UPDATED, id.userName, values);
+		}
+		for (String key: values.keySet())
+		{
+			if (callbacks.containsKey(key))
+			{
+				Vector<ValueCallback> list = callbacks.get(key);
+				for (ValueCallback callback: list)
+				{
+					callback.notify(key, values.get(key));
+				}
+			}
 		}
 	}
 	

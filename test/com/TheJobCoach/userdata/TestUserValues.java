@@ -213,4 +213,48 @@ public class TestUserValues {
 		assertEquals("DEFAULT3", val.get("test6.testnotuser"));
 		assertEquals("DEFAULT4", val.get("test6.testnotuser2system"));
 	}
+	
+	class TestCallbackClass implements UserValues.ValueCallback
+	{
+		public int count = 0;
+		public String value = null;
+		public String key = null;
+		
+		public void notify(String key, String value)
+		{
+			this.value = value;
+			this.key = key;
+			count++;
+		}
+		
+	}
+	
+	@Test
+	public void test_callback() throws CassandraException, SystemException
+	{
+		TestCallbackClass c1_1 = new TestCallbackClass();
+		TestCallbackClass c1_2 = new TestCallbackClass();
+		TestCallbackClass c2_1 = new TestCallbackClass();
+		UserValues.registerCallback("test1.test1", c1_1);
+		UserValues.registerCallback("test1.test1", c1_2);
+		UserValues.registerCallback("test1.test2", c2_1);
+		
+		values.setValue(id, "test1.test1", "v1", true);
+		values.setValue(id, "test1.test1", "v2", true);
+
+		values.setValue(id, "test1.test2", "v3", true);
+		values.setValue(id, "test1.test2", "v4", true);
+		
+		assertEquals(2, c2_1.count);		
+		assertEquals("v4", c2_1.value);	
+		assertEquals("test1.test2", c2_1.key);	
+		
+		assertEquals(2, c1_1.count);		
+		assertEquals("v2", c1_1.value);	
+		assertEquals("test1.test1", c1_1.key);	
+				
+		assertEquals(2, c1_2.count);		
+		assertEquals("v2", c1_2.value);
+		assertEquals("test1.test1", c1_2.key);	
+	}
 }
