@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Enumeration;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
