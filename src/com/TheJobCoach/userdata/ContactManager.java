@@ -13,6 +13,7 @@ import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MailerInterface;
+import com.TheJobCoach.util.ShortMap;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
@@ -22,7 +23,7 @@ import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 
-public class ContactManager implements IUserDataManager
+public class ContactManager implements IUserDataManager, UserValues.ValueCallback
 {	
 	private static Logger logger = LoggerFactory.getLogger(ContactManager.class);
 
@@ -43,6 +44,13 @@ public class ContactManager implements IUserDataManager
 		this.user = user;
 		userValues = new UserValues();
 		accountManager = new AccountManager();
+	}
+
+	static {
+		ContactManager voidCallback = new ContactManager();
+		UserValues.registerCallback(UserValuesConstantsAccount.ACCOUNT_EMAIL, voidCallback);
+		UserValues.registerCallback(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, voidCallback);
+		UserValues.registerCallback(UserValuesConstantsAccount.ACCOUNT_LASTNAME, voidCallback);
 	}
 
 	public ContactManager()
@@ -303,6 +311,7 @@ public class ContactManager implements IUserDataManager
 			String lastContact = contactNameTable.get("last#" + contactUsername);
 			String newContact = contactTable.get(contactUsername);
 			ContactInformation contact = deserializeContactInformation(newContact);
+			System.out.println("check user: " + user.userName + " with: " +contactUsername+ " " + contact.status);
 			if (contact.status == ContactStatus.CONTACT_OK)
 			{
 				if ((lastContact == null) || (!lastContact.equals(newContact)))
@@ -452,4 +461,44 @@ public class ContactManager implements IUserDataManager
 	{
 	}
 
+	@Override
+	public void notify(UserId id, String key, String value)
+	{
+		if ((key.equals(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME)) ||
+				(key.equals(UserValuesConstantsAccount.ACCOUNT_LASTNAME)))
+		{
+
+			String colkey = null;
+			if (key.equals(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME)) colkey = "f#" + id.userName;
+			if (key.equals(UserValuesConstantsAccount.ACCOUNT_LASTNAME)) colkey = "l#" + id.userName;
+
+			Map<String, String> contactTable;
+			try
+			{
+				contactTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTLIST, id.userName);
+			}
+			catch (CassandraException e)
+			{
+				logger.warn("Unexpected exception in notify for User " + id.userName);
+				return;
+			}
+			if (contactTable == null) return;
+			for (String contactUsername: contactTable.keySet())
+			{
+				try
+				{
+					CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_CONTACTNAME, contactUsername, 
+							(new ShortMap())
+							.add(colkey, value).get());
+				}
+				catch (CassandraException e)
+				{
+					logger.warn("Unexpected exception in notify for User " + id.userName + " when updating "+ contactUsername);
+					return;
+				}
+				logger.info("changed user key " + colkey + " to "  + value + " from user " + id.userName + " when updating "+ contactUsername);
+			}
+		}
+
+	}
 }

@@ -378,4 +378,34 @@ public class TestContactManager
 		ci = contactManager.getUpdatedContactList();
 		assertEquals(0, ci.size());
 	}
+	
+	@Test
+	public void test_updateNames() throws CassandraException, SystemException
+	{
+		Vector<ContactInformation> ci;
+		
+		setTest();
+
+		// connect id and contact_id_1
+		ContactInformation.ContactStatus newStatus = contactManager.updateContactRequest(contact_id_1, true);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_REQUESTED, newStatus);
+		newStatus = contactManager1.updateContactRequest(id, true);
+		assertEquals(ContactInformation.ContactStatus.CONTACT_OK, newStatus);
+	
+		// check firstName, lastName 
+		ci = contactManager1.getContactList();
+		assertEquals(1, ci.size());
+		assertEquals("firstNameuser", ci.get(0).firstName); 
+		assertEquals("lastNameuser", ci.get(0).lastName);
+		
+		// change name of id
+		userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, "new_first", true);
+		userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_LASTNAME, "new_last", true);
+
+		// check contact_id_1 has the correct new names.
+		ci = contactManager1.getContactList();
+		assertEquals(1, ci.size());
+		assertEquals("new_first", ci.get(0).firstName); 
+		assertEquals("new_last", ci.get(0).lastName);
+	}
 }
