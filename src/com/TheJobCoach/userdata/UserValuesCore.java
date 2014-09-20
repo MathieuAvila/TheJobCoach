@@ -122,7 +122,10 @@ public class UserValuesCore {
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_SEEKER, YES_NO_LENGTH, true, UserValuesConstants.YES));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_COACH, YES_NO_LENGTH, true, UserValuesConstants.YES));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_PUBLISH_RECRUITER, YES_NO_LENGTH, true, UserValuesConstants.YES));
-
+		
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_LASTNAME));
+		
 		addField(new FieldDefinition(UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST, MAX_OPTION_LENGTH, false, "0"));
 
 		addField(new FieldDefinition(UserValuesConstantsMyGoals.PERFORMANCE_LAST_EMAIL, MAX_OPTION_LENGTH, false, ""));

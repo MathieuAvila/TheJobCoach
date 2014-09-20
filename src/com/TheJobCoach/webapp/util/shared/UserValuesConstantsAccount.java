@@ -16,6 +16,10 @@ public class UserValuesConstantsAccount
 	public final static String ACCOUNT_LANGUAGE__FR     = "fr";
 	public final static String ACCOUNT_LANGUAGE__EN     = "en";
 	
+	public final static String ACCOUNT_FIRSTNAME     = "ACCOUNT_FIRSTNAME";
+	public final static String ACCOUNT_LASTNAME      = "ACCOUNT_LASTNAME";
+		
+	
 	public final static String ACCOUNT_STATUS_LIST__ACTIVE_SEARCH = "ACTIVE_SEARCH";
 	public final static List<String> ACCOUNT_STATUS_LIST  = Arrays.asList(ACCOUNT_STATUS_LIST__ACTIVE_SEARCH, "WORK_ACTIVE", "LISTENING");
 	

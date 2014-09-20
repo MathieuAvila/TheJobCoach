@@ -48,7 +48,7 @@ public class AccountManager implements AccountInterface {
 	final static String COLUMN_FAMILY_NAME_NOT_VALIDATED = "accountvalidation";
 	final static String COLUMN_FAMILY_TEST_LIST = "accounttestlist";
 
-	final static int LAST_VERSION = 1;
+	final static int LAST_VERSION = 2;
 
 	Logger logger = LoggerFactory.getLogger(AccountManager.class);
 
@@ -146,10 +146,7 @@ public class AccountManager implements AccountInterface {
 		result = updateUserInformation(id, info, version);
 		if (!result) return CreateAccountStatus.CREATE_STATUS_ERROR;
 		UserDataCentralManager.createUserDefaults(id, langStr);
-		UserValues values = new UserValues();
-		try	{
-			values.setValue(id, UserValuesConstantsAccount.ACCOUNT_LANGUAGE, langStr, false);
-		} catch (SystemException e) {} // Ignore this, system cannot be faulty.
+		userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_LANGUAGE, langStr, false);
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 
@@ -166,6 +163,11 @@ public class AccountManager implements AccountInterface {
 		Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
 		parts.put("thejobcoachlogo", new MailerInterface.Attachment("/com/TheJobCoach/webapp/mainpage/client/thejobcoach-icon.png", "image/png", "img_logo.png"));
 		MailerFactory.getMailer().sendEmail(info.email, Lang._TextActivateAccountSubject(langStr), body, "noreply@www.thejobcoach.fr", parts);
+		if (version >= 2)
+		{
+			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, info.firstName, false);
+			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_LASTNAME, info.name, false);
+		}
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
 
@@ -245,6 +247,7 @@ public class AccountManager implements AccountInterface {
 
 		// Get version, and adapt according to value
 		String v = accountTable.get("version");
+		System.out.println("version: " + v);
 		if (v == null)
 		{		
 			String passwordStr = accountTable.get("password");
@@ -261,17 +264,28 @@ public class AccountManager implements AccountInterface {
 			// force upgrade to hashed password (at least version 1)
 			UserInformation info = new UserInformation();
 			getUserInformation(id, info);
-			updateUserInformation(id, info, LAST_VERSION);
+			updateUserInformation(id, info, 1);
+			accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, userName);	
+			v = "1";
 		}
-		else // If there's a version, it MUST be "1"
+		if (v.equals("1"))
 		{
-			String h = accountTable.get("hashedpassword");
-			String s = accountTable.get("salt");
-			if (!UtilSecurity.compareHashedSaltedPassword(password, s, h))
-			{
-				logger.warn("Login refused: bad password with salt: " + userName);
-				return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
-			}
+			// update with name/firstname in uservalues.
+			UserInformation info = new UserInformation();
+			getUserInformation(id, info);
+			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, info.firstName, false);
+			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_LASTNAME, info.name, false);
+			CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
+					(new ShortMap())
+					.add("version", "2").get());
+			v = "2";
+		}
+		String h = accountTable.get("hashedpassword");
+		String s = accountTable.get("salt");
+		if (!UtilSecurity.compareHashedSaltedPassword(password, s, h))
+		{
+			logger.warn("Login refused: bad password with salt: " + userName);
+			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
 		}
 		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, id);
 	}

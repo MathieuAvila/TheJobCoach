@@ -34,23 +34,25 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 
 public class TestAccountManager
 {
+	AccountManager account = new AccountManager();
 
-	static AccountManager account = new AccountManager();
+	String id =  "toto" + UUID.randomUUID().hashCode();
+	String email =  id + "@toto.com";
+	MockMailer mockMail = new MockMailer();
+	String token;
 
-	static String id =  "toto" + UUID.randomUUID().hashCode();
-	static String email =  id + "@toto.com";
-	static MockMailer mockMail = new MockMailer();
-	static String token;
+	String idAdmin =  "admin" + UUID.randomUUID().hashCode();
+	String tokenAdmin = "tokenAdmin" + UUID.randomUUID().hashCode();
 
-	static String idAdmin =  "admin" + UUID.randomUUID().hashCode();
-	static String tokenAdmin = "tokenAdmin" + UUID.randomUUID().hashCode();
+	String idCoach =  "coach" + UUID.randomUUID().hashCode();
+	String tokenCoach = "tokenCoach" + UUID.randomUUID().hashCode();
 
-	static String idCoach =  "coach" + UUID.randomUUID().hashCode();
-	static String tokenCoach = "tokenCoach" + UUID.randomUUID().hashCode();
-
-	static String idSeeker =  "seeker" + UUID.randomUUID().hashCode();
-	static String tokenSeeker = "tokenSeeker" + UUID.randomUUID().hashCode();
-
+	String idSeeker =  "seeker" + UUID.randomUUID().hashCode();
+	String tokenSeeker = "tokenSeeker" + UUID.randomUUID().hashCode();
+	UserId userIdSeeker = new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER);
+	
+	UserValues userValues = new UserValues();
+	
 	static class FakeDataManager implements IUserDataManager
 	{
 		public int deleteCount = 0;
@@ -91,7 +93,7 @@ public class TestAccountManager
 	}
 
 	@Test
-	public void test00CreateAccount() throws CassandraException
+	public void test_basic() throws CassandraException
 	{
 		account.deleteAccount(id);
 		fakeManager.reset();
@@ -121,26 +123,16 @@ public class TestAccountManager
 		String lang = account.getUserLanguage(userId);
 		assertEquals("FR", lang);
 		
-	}
-
-	@Test
-	public void test01ExistsAccount() throws CassandraException
-	{	
+		// test01ExistsAccount() throws CassandraException	
 		assertEquals(false, account.existsAccount("fake one"));
-		test00CreateAccount();
+		//test00CreateAccount();
 		assertEquals(true, account.existsAccount(id));
-	}
-
-	@Test
-	public void test02GetUsernameFromEmail()
-	{	
+		
+		// test02GetUsernameFromEmail()	
 		assertEquals(id, account.getUsernameFromEmail(email));
 		assertNull(account.getUsernameFromEmail("nop@nop.com"));
-	}
-
-	@Test
-	public void test03ValidateAccount() throws CassandraException
-	{
+	
+		// test03ValidateAccount() throws CassandraException
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_NOT_VALIDATED, account.loginAccount(id, "password").getLoginStatus());
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(id, token));
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_UNKNOWN, account.validateAccount("nop", token));
@@ -180,7 +172,7 @@ public class TestAccountManager
 			account.deleteAccount(idSeeker);
 			MailerFactory.setMailer(mockMail);
 			CreateAccountStatus status = account.createAccountWithToken(
-					new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER),
+					userIdSeeker,
 					new UserInformation("nom", email + "seeker", "password", "prenom"), "en");
 			assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 			assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
@@ -236,7 +228,7 @@ public class TestAccountManager
 
 		{			
 			account.createAccountWithToken(
-					new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER),
+					userIdSeeker,
 					new UserInformation("nom", email + "seeker", "passwordXXX", "prenom"), "en");
 			account.validateAccount(idSeeker, tokenSeeker);
 		}
@@ -266,12 +258,12 @@ public class TestAccountManager
 	}
 
 	@Test
-	public void testUpgradePassword() throws CassandraException 
+	public void test_upgradePassword() throws CassandraException 
 	{
 		account.deleteAccount(idSeeker);
 		MailerFactory.setMailer(mockMail);
 		CreateAccountStatus status = account.createAccountWithToken(
-				new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER),
+				userIdSeeker,
 				new UserInformation("nom", email + "seeker", "password", "prenom"), "en", 0);
 		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
@@ -294,6 +286,61 @@ public class TestAccountManager
 		loginCred = account.loginAccount(idSeeker, "password");
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
 		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
+	}
+
+
+	@Test
+	public void test_upgradeName() throws CassandraException, SystemException 
+	{
+		account.deleteAccount(idSeeker);
+		MailerFactory.setMailer(mockMail);
+		CreateAccountStatus status = account.createAccountWithToken(
+				userIdSeeker,
+				new UserInformation("nom", email + "seeker", "password", "prenom"), "en", 1);
+		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
+		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
+
+		// check firstName columnn
+		String firstName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME);	
+		String lastName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_LASTNAME);	
+		System.out.println("was: "+firstName);
+		System.out.println("was: "+lastName);
+		assertEquals("", firstName);
+		assertEquals("", lastName);
+		
+		// Login successfully should trigger an upgrade
+		MainPageReturnLogin loginCred = account.loginAccount(idSeeker, "password");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
+
+		// Now check it's been upgraded
+		firstName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME);	
+		lastName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_LASTNAME);	
+		System.out.println("was: "+firstName);
+		System.out.println("was: "+lastName);
+		assertEquals("prenom", firstName);
+		assertEquals("nom", lastName);
+		
+		// Creating a new account should automatically set these.
+		account.deleteAccount(idSeeker);
+		MailerFactory.setMailer(mockMail);
+		status = account.createAccountWithToken(
+				userIdSeeker,
+				new UserInformation("nom", email + "seeker", "password", "prenom"), "en", AccountManager.LAST_VERSION);
+		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
+		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
+		// check firstName columnn
+		firstName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME);	
+		lastName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_LASTNAME);	
+		System.out.println("was: "+firstName);
+		System.out.println("was: "+lastName);
+		assertEquals("prenom", firstName);
+		assertEquals("nom", lastName);
+		/// and login will work either.
+		loginCred = account.loginAccount(idSeeker, "password");
+		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
+		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
+
 
 	}
 
@@ -303,7 +350,7 @@ public class TestAccountManager
 	{
 		account.deleteAccount(idSeeker);
 		MailerFactory.setMailer(mockMail);
-		UserId id = new UserId(idSeeker, tokenSeeker, UserId.UserType.USER_TYPE_SEEKER);
+		UserId id = userIdSeeker;
 		CreateAccountStatus status = account.createAccountWithToken(
 				id,
 				new UserInformation("nom", email + "seeker", "password", "prenom"), "en");
@@ -342,7 +389,6 @@ public class TestAccountManager
 	public void searchUsersTest() throws CassandraException, SystemException
 	{
 		final int TOTAL_RANGE_SIZE = 100;
-		UserValues userValues = new UserValues();
 		class UserDef {
 
 			public UserDef(UserId id, UserInformation info,
