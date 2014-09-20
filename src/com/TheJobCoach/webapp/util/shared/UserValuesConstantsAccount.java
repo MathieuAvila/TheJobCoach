@@ -18,6 +18,7 @@ public class UserValuesConstantsAccount
 	
 	public final static String ACCOUNT_FIRSTNAME     = "ACCOUNT_FIRSTNAME";
 	public final static String ACCOUNT_LASTNAME      = "ACCOUNT_LASTNAME";
+	public final static String ACCOUNT_EMAIL         = "ACCOUNT_EMAIL";
 		
 	
 	public final static String ACCOUNT_STATUS_LIST__ACTIVE_SEARCH = "ACTIVE_SEARCH";

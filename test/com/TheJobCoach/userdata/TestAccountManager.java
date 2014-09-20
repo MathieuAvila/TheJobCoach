@@ -294,20 +294,24 @@ public class TestAccountManager
 	{
 		account.deleteAccount(idSeeker);
 		MailerFactory.setMailer(mockMail);
+		String realEmail = email + "seeker";
 		CreateAccountStatus status = account.createAccountWithToken(
 				userIdSeeker,
-				new UserInformation("nom", email + "seeker", "password", "prenom"), "en", 1);
+				new UserInformation("nom", realEmail, "password", "prenom"), "en", 1);
 		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
 
 		// check firstName columnn
 		String firstName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME);	
 		String lastName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_LASTNAME);	
+		String email = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_EMAIL);	
 		System.out.println("was: "+firstName);
 		System.out.println("was: "+lastName);
+		System.out.println("was: "+email);
 		assertEquals("", firstName);
 		assertEquals("", lastName);
-		
+		assertEquals("", email);
+			
 		// Login successfully should trigger an upgrade
 		MainPageReturnLogin loginCred = account.loginAccount(idSeeker, "password");
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
@@ -316,32 +320,34 @@ public class TestAccountManager
 		// Now check it's been upgraded
 		firstName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME);	
 		lastName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_LASTNAME);	
+		email = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_EMAIL);	
 		System.out.println("was: "+firstName);
 		System.out.println("was: "+lastName);
 		assertEquals("prenom", firstName);
 		assertEquals("nom", lastName);
+		assertEquals(realEmail, email);
 		
 		// Creating a new account should automatically set these.
 		account.deleteAccount(idSeeker);
 		MailerFactory.setMailer(mockMail);
 		status = account.createAccountWithToken(
 				userIdSeeker,
-				new UserInformation("nom", email + "seeker", "password", "prenom"), "en", AccountManager.LAST_VERSION);
+				new UserInformation("nom", realEmail, "password", "prenom"), "en", AccountManager.LAST_VERSION);
 		assertEquals(CreateAccountStatus.CREATE_STATUS_OK, status);
 		assertEquals(ValidateAccountStatus.VALIDATE_STATUS_OK, account.validateAccount(idSeeker, tokenSeeker));
 		// check firstName columnn
 		firstName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME);	
 		lastName = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_LASTNAME);	
+		email = userValues.getValue(userIdSeeker, UserValuesConstantsAccount.ACCOUNT_EMAIL);	
 		System.out.println("was: "+firstName);
 		System.out.println("was: "+lastName);
 		assertEquals("prenom", firstName);
 		assertEquals("nom", lastName);
-		/// and login will work either.
+		assertEquals(realEmail, email);
+		// and login will work either.
 		loginCred = account.loginAccount(idSeeker, "password");
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_OK, loginCred.getLoginStatus());
 		assertEquals(UserId.UserType.USER_TYPE_SEEKER, loginCred.id.type);
-
-
 	}
 
 

@@ -125,6 +125,7 @@ public class UserValuesCore {
 		
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME));
 		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_LASTNAME));
+		addField(new FieldDefinition(UserValuesConstantsAccount.ACCOUNT_EMAIL));
 		
 		addField(new FieldDefinition(UserValuesConstantsAccount.SECURITY_WAITING_TIME_REQUEST, MAX_OPTION_LENGTH, false, "0"));
 

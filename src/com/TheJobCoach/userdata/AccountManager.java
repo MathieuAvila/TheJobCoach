@@ -167,6 +167,7 @@ public class AccountManager implements AccountInterface {
 		{
 			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, info.firstName, false);
 			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_LASTNAME, info.name, false);
+			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_EMAIL, info.email, false);
 		}
 		return CreateAccountStatus.CREATE_STATUS_OK;
 	}
@@ -275,6 +276,7 @@ public class AccountManager implements AccountInterface {
 			getUserInformation(id, info);
 			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, info.firstName, false);
 			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_LASTNAME, info.name, false);
+			userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_EMAIL, info.email, false);
 			CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
 					(new ShortMap())
 					.add("version", "2").get());
