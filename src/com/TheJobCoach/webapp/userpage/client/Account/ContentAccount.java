@@ -43,9 +43,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class ContentAccount extends VerticalPanel implements IChanged, ReturnValue, IApply{
 
 	UserId user;
@@ -88,12 +85,20 @@ public class ContentAccount extends VerticalPanel implements IChanged, ReturnVal
 			UserValuesConstants.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
 	CheckedLabel clPublishRecruiter = new CheckedLabel(langAccount.Text_VisibleProfileRecruiter(), false, tfPublishRecruiter);
 	
+	CheckedTextField tfFirstName = new CheckedTextField("...*");
+	CheckedLabel clFirstName = new CheckedLabel(langAccount.myFirstName(), false, tfFirstName);
+
+	CheckedTextField tfLastName = new CheckedTextField("...*");
+	CheckedLabel clLastName = new CheckedLabel(langAccount.myLastName(), false, tfLastName);
+
 	VerticalPanel dangerousSettings = new VerticalPanel();
 	ButtonImageText btnDeleteAccount = new ButtonImageText(ButtonImageText.Type.DESTROY, langAccount.deleteAccount());
 	ButtonImageText btnCancelDeleteAccount = new ButtonImageText(ButtonImageText.Type.DESTROY, langAccount.cancelDeleteConfirm());
 	Label deletionInformationDate = new Label();
 	SimplePanel destroyPanel = new SimplePanel();
 	SimplePanel restorePanel = new SimplePanel();
+	
+	ButtonImageText btnShowDangerousSettings = new ButtonImageText(ButtonImageText.Type.OK, langAccount.dangerousSettings());
 	
 	void getValues()
 	{	
@@ -175,11 +180,8 @@ public class ContentAccount extends VerticalPanel implements IChanged, ReturnVal
 		fields.put(UserValuesConstantsAccount.ACCOUNT_PUBLISH_SEEKER, tfPublishSeeker);
 		fields.put(UserValuesConstantsAccount.ACCOUNT_PUBLISH_COACH, tfPublishCoach);
 		fields.put(UserValuesConstantsAccount.ACCOUNT_PUBLISH_RECRUITER, tfPublishRecruiter);
-		
-		applyReset = new DialogBlockApplyReset(new ArrayList<IExtendedField>(fields.values()), this);
-		
+				
 		ContentHelper.insertSubTitlePanel(this, langAccount.dangerousSettings());
-		final ButtonImageText btnShowDangerousSettings = new ButtonImageText(ButtonImageText.Type.OK, langAccount.dangerousSettings());
 		this.add(btnShowDangerousSettings);
 		btnShowDangerousSettings.addClickHandler(new ClickHandler(){
 			@Override
@@ -232,6 +234,17 @@ public class ContentAccount extends VerticalPanel implements IChanged, ReturnVal
 		VerticalPanel restorePanelContent = new VerticalPanel();
 
 		dangerousSettings.setVisible(false);
+		
+		Grid grid4 = new Grid(2, 2);
+		this.add(grid4);
+		
+		grid4.setWidget(0,0, clFirstName);
+		grid4.setWidget(0,1, tfFirstName);
+
+		grid4.setWidget(1,0, clLastName);
+		grid4.setWidget(1,1, tfLastName);
+
+		dangerousSettings.add(grid4);
 		dangerousSettings.add(destroyPanel);
 		dangerousSettings.add(restorePanel);
 		this.add(new VerticalSpacer("1em"));
@@ -245,8 +258,13 @@ public class ContentAccount extends VerticalPanel implements IChanged, ReturnVal
 		destroyPanel.setVisible(false);
 		restorePanel.setVisible(false);
 
+		fields.put(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, tfFirstName);
+		fields.put(UserValuesConstantsAccount.ACCOUNT_LASTNAME, tfLastName);
+
 		for (IExtendedField f: fields.values()) f.registerListener(this);
 		
+		applyReset = new DialogBlockApplyReset(new ArrayList<IExtendedField>(fields.values()), this);
+
 		this.add(applyReset);
 
 		getValues();

@@ -70,4 +70,23 @@ public class DialogBlockApplyReset extends HorizontalPanel
 		btnApply.setEnabled(oneIsNotDefault && ok);
 		btnReset.setEnabled(oneIsNotDefault);
 	}
+	
+	/* for tests */
+	public boolean isApplyEnabled()
+	{
+		return btnApply.isEnabled();
+	}
+	public boolean isResetEnabled()
+	{
+		return btnReset.isEnabled();
+	}
+	public void testApply()
+	{
+		btnApply.click();
+	}
+	public void testReset()
+	{
+		btnReset.click();
+	}
+	
 }

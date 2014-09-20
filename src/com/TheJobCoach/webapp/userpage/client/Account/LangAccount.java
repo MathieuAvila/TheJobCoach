@@ -85,5 +85,14 @@ public interface LangAccount extends Constants {
 	
 	@Key("cancelDeleteConfirm")
 	String cancelDeleteConfirm();
-		
+	
+	// nom, prénom
+
+	@Key("myFirstName")	
+	String myFirstName();
+	
+	@Key("myLastName")
+	String myLastName();
+	
+	
 }
