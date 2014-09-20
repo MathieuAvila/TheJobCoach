@@ -690,7 +690,28 @@ public class TestAccountManager
 		assertEquals(MainPageReturnLogin.LoginStatus.CONNECT_STATUS_UNKNOWN_USER, loginCred.getLoginStatus());
 		user = account.getUserReport(id);
 		assertTrue(user.dead);
-		
-		
+	}
+	
+
+	@Test
+	public void test_updateNames() throws CassandraException, SystemException
+	{	
+		UserId id = new UserId("updatename", "tokenupdatename", UserId.UserType.USER_TYPE_SEEKER);
+		CoachTestUtils.createOneAccount(id);
+		UserInformation info = new UserInformation();
+		boolean res = account.getUserInformation(id, info);
+		assertTrue(res);
+		assertEquals("firstNameupdatename", info.firstName);
+		assertEquals("lastNameupdatename", info.name);
+
+		// change name of id
+		userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, "new_first", true);
+		userValues.setValueSafe(id, UserValuesConstantsAccount.ACCOUNT_LASTNAME, "new_last", true);
+
+		// check info has the correct new names.
+		res = account.getUserInformation(id, info);
+		assertTrue(res);
+		assertEquals("new_first", info.firstName);
+		assertEquals("new_last", info.name);
 	}
 }

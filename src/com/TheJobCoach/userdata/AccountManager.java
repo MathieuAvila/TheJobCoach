@@ -16,6 +16,7 @@ import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.TheJobCoach.userdata.UserValues.ValueCallback;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
 import com.TheJobCoach.util.MailerFactory;
@@ -36,7 +37,7 @@ import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstants;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 
-public class AccountManager implements AccountInterface {
+public class AccountManager implements AccountInterface, ValueCallback {
 
 	static ColumnFamilyDefinition cfDef = null;
 	static ColumnFamilyDefinition cfDefEmail = null;
@@ -54,12 +55,21 @@ public class AccountManager implements AccountInterface {
 
 	UserValues userValues = new UserValues();
 
+	static boolean inited = false;
+	
 	public AccountManager()
 	{
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_ACCOUNT, cfDef);
 		cfDefEmail = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_EMAIL, cfDefEmail);
 		cfDefValidation = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_NOT_VALIDATED, cfDefValidation);
 		cfDefTestList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_TEST_LIST, cfDefTestList);
+		
+		if (!inited)
+		{
+			inited = true;
+			UserValues.registerCallback(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, this);
+			UserValues.registerCallback(UserValuesConstantsAccount.ACCOUNT_LASTNAME, this);
+		}
 	}
 
 	public boolean existsAccount(String userName)
@@ -604,5 +614,28 @@ public class AccountManager implements AccountInterface {
 		if (deleteDate.after(d)) return false;
 		markUserAccountDeleted(userId);
 		return true;
+	}
+
+	@Override
+	public void notify(UserId id, String key, String value)
+	{
+		if ((key.equals(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME)) ||
+				(key.equals(UserValuesConstantsAccount.ACCOUNT_LASTNAME)))
+		{
+			String k = null;
+			if (key.equals(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME))
+				k = "firstname";
+			else
+				k = "name";
+			try
+			{
+				CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, 
+						new ShortMap().add(k, value).get());
+			}
+			catch (CassandraException e)
+			{
+				logger.warn("error while updating " + k + " of user: " + id.userName + " to: " + value);
+			}
+		}
 	}
 }
