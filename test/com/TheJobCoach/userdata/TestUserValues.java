@@ -220,13 +220,12 @@ public class TestUserValues {
 		public String value = null;
 		public String key = null;
 		
-		public void notify(String key, String value)
+		public void notify(UserId user, String key, String value)
 		{
 			this.value = value;
 			this.key = key;
 			count++;
 		}
-		
 	}
 	
 	@Test

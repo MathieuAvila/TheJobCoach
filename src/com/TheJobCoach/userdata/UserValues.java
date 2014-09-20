@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 
 import com.TheJobCoach.util.CassandraAccessor;
@@ -23,10 +26,12 @@ public class UserValues  extends UserValuesCore implements IUserDataManager{
 
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefListUpdated = null;
+	
+	Logger logger = LoggerFactory.getLogger(UserValues.class);
 
 	static public interface ValueCallback
 	{
-		void notify(String key, String value);
+		void notify(UserId id, String key, String value);
 	}
 	
 	static HashMap<String, Vector<ValueCallback>> callbacks = new HashMap<String, Vector<ValueCallback>>();
@@ -123,7 +128,7 @@ public class UserValues  extends UserValuesCore implements IUserDataManager{
 				Vector<ValueCallback> list = callbacks.get(key);
 				for (ValueCallback callback: list)
 				{
-					callback.notify(key, values.get(key));
+					callback.notify(id, key, values.get(key));
 				}
 			}
 		}
@@ -146,6 +151,22 @@ public class UserValues  extends UserValuesCore implements IUserDataManager{
 		Map<String,String> values = new HashMap<String,String>();
 		values.put(key, value);
 		setValues(id, values, client);
+	}
+
+	public void setValueSafe(UserId id, String key, String value, boolean client)
+	{
+		try
+		{
+			setValue(id, key, value, client);
+		}
+		catch (CassandraException e)
+		{
+			logger.warn(e.toString());
+		}
+		catch (SystemException e)
+		{
+			logger.warn(e.toString());
+		}
 	}
 
 	@Override
