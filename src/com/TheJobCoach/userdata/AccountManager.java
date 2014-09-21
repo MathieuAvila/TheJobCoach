@@ -258,7 +258,6 @@ public class AccountManager implements AccountInterface, ValueCallback {
 
 		// Get version, and adapt according to value
 		String v = accountTable.get("version");
-		System.out.println("version: " + v);
 		if (v == null)
 		{		
 			String passwordStr = accountTable.get("password");
@@ -364,6 +363,7 @@ public class AccountManager implements AccountInterface, ValueCallback {
 
 	public void deleteAccount(String userName) throws CassandraException
 	{
+		logger.info("Delete account " + userName);
 		UserId id = new UserId(userName, "", UserId.UserType.USER_TYPE_SEEKER);
 		UserDataCentralManager.deleteUser(id);
 		UserReport user = getUserReport(id);
