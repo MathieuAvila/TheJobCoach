@@ -40,10 +40,12 @@ public class CreateTestDefault {
 
 	public static void deleteAccountNoException(String userName, String email)
 	{
-		String userMail = account.getUsernameFromEmail(email);
 		try { 
 			account.deleteAccount(userName);
-			account.deleteAccount(userMail);} 
+			String userMail = account.getUsernameFromEmail(email);
+			if (userMail != null)
+				account.deleteAccount(userMail);
+			}
 		catch (Exception e) {};
 	}
 
