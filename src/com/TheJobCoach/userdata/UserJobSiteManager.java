@@ -41,7 +41,6 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 		if (!inited)
 		{
 			TodoList.registerTodoListSubscriber(this);
-			UserDataCentralManager.addManager(this);
 			inited = true;
 		}
 	}
@@ -55,6 +54,7 @@ public class UserJobSiteManager implements TodoListSubscriber, IUserDataManager 
 	public List<String> getUserSiteList(UserId id) throws CassandraException 
 	{	
 		Map<String,String> resultReq = null;
+		logger.info("getUserSiteList: id " + id.userName);
 		resultReq = CassandraAccessor.getRow(
 				COLUMN_FAMILY_NAME_LIST, 
 				id.userName);

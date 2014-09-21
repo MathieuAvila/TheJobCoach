@@ -27,12 +27,7 @@ public class ConnectionLog implements IUserDataManager {
 	}
 	
 	static ConnectionLog instance = new ConnectionLog();
-	
-	static 
-	{
-		UserDataCentralManager.addManager(instance);
-	}
-	
+
 	@Override
 	public void deleteUser(UserId user) throws CassandraException
 	{

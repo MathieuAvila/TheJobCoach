@@ -33,11 +33,6 @@ public class UserDocumentManager implements IUserDataManager {
 		return instance;
 	}
 
-	static 
-	{
-		UserDataCentralManager.addManager(instance);
-	}
-
 	UserDocumentManager()
 	{
 		cfDefList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_LIST, cfDefList);

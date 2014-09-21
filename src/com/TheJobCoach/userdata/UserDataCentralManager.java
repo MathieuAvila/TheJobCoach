@@ -21,7 +21,7 @@ public class UserDataCentralManager
 		UserDataCentralManager.addManager(new ContactManager());
 	}
 	
-	static public void addManager(IUserDataManager manager)
+	static protected void addManager(IUserDataManager manager)
 	{
 		managerList.add(manager);
 	}
