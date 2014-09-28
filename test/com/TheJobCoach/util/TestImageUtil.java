@@ -3,17 +3,9 @@ package com.TheJobCoach.util;
 import static org.junit.Assert.*;
 
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Vector;
-
 import org.junit.Test;
-
-import com.google.common.collect.ImmutableMap;
 
 public class TestImageUtil
 {
