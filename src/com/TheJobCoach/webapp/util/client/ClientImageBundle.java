@@ -98,5 +98,10 @@ public interface ClientImageBundle extends ClientBundle
 
 	
 	@Source("images/error_24.png")
-	ImageResource error_24();	
+	ImageResource error_24();
+
+	
+
+	@Source("images/user_image_24.png")
+	ImageResource user_image_24();	
 }
