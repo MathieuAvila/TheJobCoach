@@ -17,8 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.UserValues.ValueCallback;
+import com.TheJobCoach.util.ByteResourceCache;
 import com.TheJobCoach.util.CassandraAccessor;
 import com.TheJobCoach.util.Convertor;
+import com.TheJobCoach.util.ImageUtil;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MailerInterface;
 import com.TheJobCoach.util.ShortMap;
@@ -43,11 +45,13 @@ public class AccountManager implements AccountInterface, ValueCallback {
 	static ColumnFamilyDefinition cfDefEmail = null;
 	static ColumnFamilyDefinition cfDefValidation = null;
 	static ColumnFamilyDefinition cfDefTestList = null;
+	static ColumnFamilyDefinition cfDefFace = null;
 
 	final static String COLUMN_FAMILY_NAME_ACCOUNT = "account";
 	final static String COLUMN_FAMILY_NAME_EMAIL = "accountemail";
 	final static String COLUMN_FAMILY_NAME_NOT_VALIDATED = "accountvalidation";
 	final static String COLUMN_FAMILY_TEST_LIST = "accounttestlist";
+	final static String COLUMN_FAMILY_IMG = "accountface";
 
 	final static int LAST_VERSION = 2;
 
@@ -56,14 +60,15 @@ public class AccountManager implements AccountInterface, ValueCallback {
 	UserValues userValues = new UserValues();
 
 	static boolean inited = false;
-	
+
 	public AccountManager()
 	{
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_ACCOUNT, cfDef);
 		cfDefEmail = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_EMAIL, cfDefEmail);
 		cfDefValidation = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_NOT_VALIDATED, cfDefValidation);
 		cfDefTestList = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_TEST_LIST, cfDefTestList);
-		
+		cfDefFace = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_IMG, cfDefFace);
+
 		if (!inited)
 		{
 			inited = true;
@@ -372,6 +377,7 @@ public class AccountManager implements AccountInterface, ValueCallback {
 			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_NOT_VALIDATED, id.userName);
 			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_EMAIL, user.mail);
 			CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_IMG, id.userName);
 		}
 		else
 		{
@@ -459,6 +465,7 @@ public class AccountManager implements AccountInterface, ValueCallback {
 			CassandraAccessor.deleteColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName, "token");
 			CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_ACCOUNT, id.userName,
 					(new ShortMap()).add("dead", true).get());
+			CassandraAccessor.deleteKey(COLUMN_FAMILY_IMG, id.userName);
 			UserDataCentralManager.deleteUser(id);
 		}
 		else
@@ -637,5 +644,49 @@ public class AccountManager implements AccountInterface, ValueCallback {
 				logger.warn("error while updating " + k + " of user: " + id.userName + " to: " + value);
 			}
 		}
+	}
+
+	public void setUserImage(UserId id, byte[] image) throws CassandraException
+	{
+		logger.info("Convert image of " + id.userName + " to 256");
+		byte[] image256 = ImageUtil.resizeImage(id.userName, image, 256);
+		
+		logger.info("Convert image of " + id.userName + " to 48");
+		byte[] image48 = ImageUtil.resizeImage(id.userName, image, 48);
+		
+		logger.info("Convert image of " + id.userName + " to 32");
+		byte[] image32 = ImageUtil.resizeImage(id.userName, image, 32);
+	
+		if ( (image256 == null) || (image48 == null) || (image32 == null))
+		{
+			logger.warn("Convert image of " + id.userName + " failed and returned NULL. Abort.");
+			return;
+		}
+			
+		CassandraAccessor.updateColumnByte(
+				COLUMN_FAMILY_IMG, 
+				id.userName,
+				"256",
+				image256);
+		CassandraAccessor.updateColumnByte(
+				COLUMN_FAMILY_IMG, 
+				id.userName,
+				"48",
+				image48);
+		CassandraAccessor.updateColumnByte(
+				COLUMN_FAMILY_IMG, 
+				id.userName,
+				"32",
+				image32);
+	}
+
+	public byte[] getUserImage(UserId id, String s)
+	{
+		byte[] resultReq = CassandraAccessor.getColumnByte(COLUMN_FAMILY_IMG, id.userName, s);
+		if (resultReq == null)
+		{
+			return ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman.jpg");
+		}
+		return resultReq;
 	}
 }

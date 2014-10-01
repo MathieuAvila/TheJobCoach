@@ -14,7 +14,9 @@ import java.util.Vector;
 import org.junit.Test;
 
 import com.TheJobCoach.CoachTestUtils;
+import com.TheJobCoach.util.ByteResourceCache;
 import com.TheJobCoach.util.CassandraAccessor;
+import com.TheJobCoach.util.ImageUtil;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MailerInterface.Attachment;
 import com.TheJobCoach.util.MockMailer;
@@ -713,5 +715,42 @@ public class TestAccountManager
 		assertTrue(res);
 		assertEquals("new_first", info.firstName);
 		assertEquals("new_last", info.name);
+	}
+	
+	@Test
+	public void test_image() throws CassandraException, SystemException
+	{	
+		UserId id = new UserId("imagename", "tokenimagename", UserId.UserType.USER_TYPE_SEEKER);
+		CoachTestUtils.createOneAccount(id);
+		
+		byte[] none = ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman.jpg");
+
+		// check get std image on void account
+		assertEquals(none, account.getUserImage(id, "256"));
+		
+		// check set image in error + get return fake one.
+		account.setUserImage(id, null);
+		assertEquals(none, account.getUserImage(id, "256"));
+		
+		account.setUserImage(id, new byte[100]);
+		assertEquals(none, account.getUserImage(id, "256"));
+
+		// set final user image and check result
+		byte[] imgSrc = ByteResourceCache.getByteResource("/com/TheJobCoach/util/test/test1_97x140.png");
+		byte[] imgSrc256 = ImageUtil.resizeImage("testAccount", imgSrc, 256);
+		byte[] imgSrc48 = ImageUtil.resizeImage("testAccount", imgSrc, 48);
+		account.setUserImage(id, imgSrc);
+		assertTrue(Arrays.equals(account.getUserImage(id, "256"), imgSrc256));
+		assertTrue(Arrays.equals(account.getUserImage(id, "48"), imgSrc48));
+			
+		// delete account. Check there is no more account image.
+		account.markUserAccountDeleted(id);
+		assertEquals(none, account.getUserImage(id, "256"));
+
+		// complete deletion.
+		account.setUserImage(id, imgSrc);
+		assertTrue(Arrays.equals(account.getUserImage(id, "256"), imgSrc256));
+		account.deleteAccount(id.userName);
+		assertEquals(none, account.getUserImage(id, "256"));
 	}
 }
