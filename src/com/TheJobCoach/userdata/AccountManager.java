@@ -54,6 +54,7 @@ public class AccountManager implements AccountInterface, ValueCallback {
 	final static String COLUMN_FAMILY_IMG = "accountface";
 
 	final static int LAST_VERSION = 2;
+	public static final int MAX_SIZE_IMAGE = 200*1024; // 200 KB
 
 	Logger logger = LoggerFactory.getLogger(AccountManager.class);
 

@@ -19,6 +19,7 @@ import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable;
 import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IEditDialogModel;
+import com.TheJobCoach.webapp.util.client.UserImageHelper;
 import com.TheJobCoach.webapp.util.client.ExtendedCellTable.GetValue;
 import com.TheJobCoach.webapp.util.client.IconsCell.IGetIcons;
 import com.TheJobCoach.webapp.util.client.MessageBox;
@@ -414,6 +415,20 @@ public class ContentConnection extends VerticalPanel {
 		ContentHelper.insertTitlePanel(this, lang.connectionTitle(), ClientImageBundle.INSTANCE.userConnectionContent());
 
 		ContentHelper.insertSubTitlePanel(this, langConnection.connectionsSubtitle());
+		
+		// create image column
+		cellTable.addColumnHtml(new FieldUpdater<ContactInformation, String>(){
+
+			@Override
+			public void update(int index, ContactInformation object,
+					String value){}}, 
+				new GetValue<String, ContactInformation> (){
+			@Override
+			public String getValue(ContactInformation element)
+			{
+				return UserImageHelper.getImage(user, element.userName, 32, true).getHTML();
+			}}, 
+			"");
 
 		// Create status column.
 		cellTable.addClickableIconsColumn(
@@ -478,6 +493,20 @@ public class ContentConnection extends VerticalPanel {
 		this.add(cellTableSearchResult);
 		cellTableSearchResult.setVisible(false);
 		cellTableSearchResult.setSize("100%", "");
+
+		// create image column
+		cellTableSearchResult.addColumnHtml(new FieldUpdater<UserSearchEntry, String>(){
+			@Override
+			public void update(int index, UserSearchEntry object,
+					String value){}
+		}, 
+		new GetValue<String, UserSearchEntry> (){
+			@Override
+			public String getValue(UserSearchEntry element)
+			{
+				return UserImageHelper.getImage(user, element.userName, 32, true).getHTML();
+			}}, 
+			"");
 
 		// name column.
 		cellTableSearchResult.specialAddColumnSortableString(new GetValue<String, UserSearchEntry>() {

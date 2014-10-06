@@ -33,7 +33,8 @@
 	<classpathentry kind="lib" path="test/lib/fest-util-1.2.3.jar"/>
 	<classpathentry kind="lib" path="test/lib/javaparser-1.0.8.jar"/>
 	<classpathentry kind="lib" path="test/lib/paranamer-2.5.2.jar"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (2)"/>
 	<classpathentry kind="lib" path="test/lib/slf4j-simple-1.7.2.jar"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (3)"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

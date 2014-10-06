@@ -79,6 +79,28 @@
 		<url-pattern>/thejobcoach/DownloadReport</url-pattern>
 	</servlet-mapping>
 	
+
+	<servlet>
+		<servlet-name>downloadImage</servlet-name>
+		<servlet-class>com.TheJobCoach.webapp.userpage.server.DownloadImage</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>downloadImage</servlet-name>
+		<url-pattern>/thejobcoach/DownloadImage</url-pattern>
+	</servlet-mapping>
+		
+
+	<servlet>
+		<servlet-name>uploadImage</servlet-name>
+		<servlet-class>com.TheJobCoach.webapp.userpage.server.UploadImage</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>uploadImage</servlet-name>
+		<url-pattern>/thejobcoach/UploadImage</url-pattern>
+	</servlet-mapping>
+	
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>TheJobCoach.html</welcome-file>

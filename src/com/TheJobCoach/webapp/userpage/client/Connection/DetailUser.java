@@ -4,6 +4,7 @@ import com.TheJobCoach.webapp.userpage.client.Account.LangAccount;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
+import com.TheJobCoach.webapp.util.client.UserImageHelper;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.google.gwt.core.client.GWT;
@@ -61,6 +62,7 @@ public class DetailUser extends DetailPanel implements ClientUserValuesUtils.Ret
 		grid.setWidget(ROW_TITLE, 2, labelTitle);
 		grid.setWidget(ROW_STATUS, 2, labelStatus);
 		grid.setWidget(ROW_KEYWORDS, 2, labelKeywords);
+		add(UserImageHelper.getImage(user, contactId.userName, 256));
 		add(grid);
 	}
 

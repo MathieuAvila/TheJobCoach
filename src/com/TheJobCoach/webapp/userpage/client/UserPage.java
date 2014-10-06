@@ -36,6 +36,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -319,17 +320,24 @@ public class UserPage implements EntryPoint {
 		//panelConnectedAs.setCellVerticalAlignment(labelConnectedAs, HasVerticalAlignment.ALIGN_MIDDLE);
 		labelUserName.setStyleName("label-username");
 
-		HorizontalPanel panelConnectionTime = new HorizontalPanel();
+		VerticalPanel panelConnectionTime = new VerticalPanel();
 		//panelConnectionTime.add(new Label(lang._Text_ConnectionTimeToday()));
 		Label connectionTime = new Label();
 		panelConnectionTime.add(connectionTime);
-
+		
+		String imgURL = GWT.getModuleBaseURL() + "DownloadImage"
+				+ "?userid=" + userId.userName 
+				+ "&fromuserid=" + userId.userName 
+				+ "&token=" + userId.token 
+				+ "&type=portrait&format=32";
+		HTML image= new HTML("<img src=\"" + imgURL + "\" style=\"display: block; max-width:32px; max-height:32px; width: auto; height: auto;\"/>");
 		connectionTextPanel.add(panelConnectedAs);
 		connectionTextPanel.add(panelConnectionTime);
 
 		PanelUpdate panelUpdate = new PanelUpdate(panelConnectedAs, userId, connectionTime);
 		panelConnectedAs.add(panelUpdate);
 
+		panelConnectionInfo.add(image);
 		panelConnectionInfo.add(panelUpdate);
 		panelConnectionInfo.add(connectionTextPanel);
 

@@ -2,6 +2,7 @@ package com.TheJobCoach.webapp.userpage.client.Account;
 
 import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.TestSecurity;
 import com.google.gwt.core.client.EntryPoint;
@@ -48,6 +49,32 @@ public class TestContentMyAccount implements EntryPoint {
 					rootPw.add(hp);
 					hp.setSize("100%", "100%");
 					new EditPassword(TestSecurity.defaultUser);
+				}
+			});
+		}
+
+		final RootPanel rootEditPhoto = RootPanel.get("editphoto");
+		if (rootEditPhoto != null)
+		{
+			EasyAsync.Check(rootEditPhoto, new ToRun() {
+				@Override
+				public void Open()
+				{
+					rootEditPhoto.setStyleName("mainpage-content");		
+					HorizontalPanel hp = new HorizontalPanel();
+					hp.setStyleName("mainpage-content");
+					rootEditPhoto.add(hp);
+					hp.setSize("100%", "100%");
+					new EditPhoto(TestSecurity.defaultUser, new  IChooseResult<String>(){
+
+						@Override
+						public void setResult(String result)
+						{
+							// TODO Auto-generated method stub
+							
+						}
+						
+					});
 				}
 			});
 		}

@@ -93,6 +93,16 @@ public interface LangAccount extends Constants {
 	
 	@Key("myLastName")
 	String myLastName();
+
 	
+	// photo change
+	@Key("myPhoto")	
+	String myPhoto();
+	
+	@Key("changeMyPhoto")	
+	String changeMyPhoto();
+	
+	@Key("choosePhotoFile")	
+	String choosePhotoFile();
 	
 }

@@ -13,18 +13,21 @@ import com.TheJobCoach.webapp.util.client.CheckedExtendedTextField;
 import com.TheJobCoach.webapp.util.client.CheckedLabel;
 import com.TheJobCoach.webapp.util.client.CheckedTextField;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
-import com.TheJobCoach.webapp.util.client.EasyAsync;
-import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils.ReturnValue;
 import com.TheJobCoach.webapp.util.client.ContentHelper;
 import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset;
 import com.TheJobCoach.webapp.util.client.DialogBlockApplyReset.IApply;
-import com.TheJobCoach.webapp.util.client.MessageBox.ICallback;
-import com.TheJobCoach.webapp.util.client.MessageBox.TYPE;
+import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.IChanged;
+import com.TheJobCoach.webapp.util.client.IChooseResult;
 import com.TheJobCoach.webapp.util.client.IExtendedField;
 import com.TheJobCoach.webapp.util.client.LangUtil;
 import com.TheJobCoach.webapp.util.client.MessageBox;
+import com.TheJobCoach.webapp.util.client.MessageBox.ICallback;
+import com.TheJobCoach.webapp.util.client.MessageBox.TYPE;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
+import com.TheJobCoach.webapp.util.client.UserImageHelper;
+import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
@@ -35,13 +38,12 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 
 public class ContentAccount extends VerticalPanel implements IChanged, ReturnValue, IApply{
 
@@ -73,6 +75,9 @@ public class ContentAccount extends VerticalPanel implements IChanged, ReturnVal
 	CheckedExtendedTextField tfKeywords = new CheckedExtendedTextField(new TextArea(), "[a-zA-Z0-9-\\.\\n ]*");
 	CheckedLabel clKeywords = new CheckedLabel(langAccount.Text_Skills(), false, tfKeywords);
 
+	ButtonImageText btnChangePhoto = new ButtonImageText(ButtonImageText.Type.USER_IMAGE, langAccount.changeMyPhoto());
+	SimplePanel image = new SimplePanel();
+	
 	CheckedExtendedDropListField tfPublishSeeker = new CheckedExtendedDropListField(
 			UserValuesConstants.YES_NO_LIST, langUtil.yesNoMap(), "yesNoMap_");
 	CheckedLabel clPublishSeeker = new CheckedLabel(langAccount.Text_VisibleProfileSeeker(), false, tfPublishSeeker);
@@ -116,6 +121,11 @@ public class ContentAccount extends VerticalPanel implements IChanged, ReturnVal
 		}});
 	}
 	
+	public void updateImage()
+	{
+		image.setWidget(UserImageHelper.getImage(user, 256));
+	}
+	
 	public ContentAccount(UserId _user)
 	{
 		user = _user;
@@ -147,7 +157,7 @@ public class ContentAccount extends VerticalPanel implements IChanged, ReturnVal
 		
 		ContentHelper.insertSubTitlePanel(this, langAccount.Text_TitlePersonalInformation());
 
-		Grid grid1 = new Grid(3, 2);
+		Grid grid1 = new Grid(4, 2);
 		this.add(grid1);
 
 		grid1.setWidget(0,0, clTitle);
@@ -159,6 +169,22 @@ public class ContentAccount extends VerticalPanel implements IChanged, ReturnVal
 		grid1.setWidget(2,0, clKeywords);
 		grid1.setWidget(2,1, tfKeywords.getItem());
 
+		grid1.setWidget(3,0, btnChangePhoto);
+		grid1.setWidget(3,1, image);
+		updateImage();
+		btnChangePhoto.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				new EditPhoto(user, new IChooseResult<String>()	{
+					@Override
+					public void setResult(String result)
+					{
+						updateImage();
+					}});
+			}			
+		});
+		
 		fields.put(UserValuesConstantsAccount.ACCOUNT_TITLE, tfTitle);
 		fields.put(UserValuesConstantsAccount.ACCOUNT_STATUS, tfStatus);
 		fields.put(UserValuesConstantsAccount.ACCOUNT_KEYWORDS, tfKeywords);
