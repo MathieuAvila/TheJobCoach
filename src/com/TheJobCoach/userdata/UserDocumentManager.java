@@ -21,6 +21,7 @@ public class UserDocumentManager implements IUserDataManager {
 	final static String COLUMN_FAMILY_NAME_LIST = "documentlist";
 	final static String COLUMN_FAMILY_NAME_DATA = "documentdata";
 	final static String COLUMN_FAMILY_NAME_CONTENT = "documentcontent";
+	public static final long MAX_SIZE_DOCUMENT = 1024*1024*5;
 
 	static ColumnFamilyDefinition cfDefList = null;
 	static ColumnFamilyDefinition cfDefData = null;

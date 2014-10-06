@@ -1,6 +1,7 @@
 package com.TheJobCoach.webapp.userpage.server;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.*;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
@@ -25,6 +28,14 @@ public class UploadFileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -2947803123194402987L;
 	private static Logger logger = LoggerFactory.getLogger(UploadFileServlet.class);
+	
+	static byte[] OK;
+	static byte[] ERROR;
+	
+	static {
+		OK = "OK".getBytes(Charset.forName("UTF-8"));
+		ERROR = "ERROR".getBytes(Charset.forName("UTF-8"));
+	}
 
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
@@ -87,6 +98,13 @@ public class UploadFileServlet extends HttpServlet {
 			if (slash != -1) { 
 				fileName = fileName.substring(slash + 1);
 			}
+			if (item.getSize() > UserDocumentManager.MAX_SIZE_DOCUMENT)
+			{
+				logger.error("Size too big : " + item.getSize() + " max is: " + UserDocumentManager.MAX_SIZE_DOCUMENT);
+				response.setStatus(200);
+				response.getOutputStream().write(ERROR);
+				return;
+			}
 			try {
 				logger.info("Upload FILE : "+ fileName + " size " + item.getSize());
 				cm.setUserDocumentContent(userId, docId, fileName, item.get());
@@ -96,5 +114,7 @@ public class UploadFileServlet extends HttpServlet {
 			}
 		}
 
+		response.getOutputStream().write(OK);
+		response.setStatus(200);
 	}
 }

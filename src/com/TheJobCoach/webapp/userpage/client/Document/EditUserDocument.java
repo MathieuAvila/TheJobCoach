@@ -149,6 +149,10 @@ public class EditUserDocument implements EntryPoint {
 				mb.close();
 				resultInterface.setResult(ud);				
 				dBox.hide();
+				if (event.getResults().contains("ERROR"))
+				{
+					MessageBox.messageBox(MessageBox.TYPE.ERROR, lang.checkSizeError());
+				}
 			}
 		});
 		form.submit();

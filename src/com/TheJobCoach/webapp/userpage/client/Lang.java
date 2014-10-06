@@ -283,4 +283,10 @@ public interface Lang extends Constants {
 	@Key("yes_no_map")
 	Map<String, String> yes_no_map();
 
+	
+	// upload error
+	@Key("checkSizeError")
+	String checkSizeError();	
+
+	
 }
