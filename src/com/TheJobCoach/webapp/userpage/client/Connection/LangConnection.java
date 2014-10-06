@@ -9,7 +9,10 @@ public interface LangConnection extends Constants {
 
 	@Key("lastname")
 	String _TextLastName();
-
+	
+	@Key("nameSearch")
+	String nameSearch();
+	
 	@Key("newConnection")
 	String newConnection();
 

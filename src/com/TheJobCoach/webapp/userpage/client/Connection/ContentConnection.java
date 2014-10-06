@@ -31,6 +31,8 @@ import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -59,6 +61,10 @@ public class ContentConnection extends VerticalPanel {
 	final static Lang lang = GWT.create(Lang.class);
 	final static LangConnection langConnection = GWT.create(LangConnection.class);
 	final static LangExternalContact langExternalContact = GWT.create(LangExternalContact.class);
+
+	// Cannot go under this search limit for last name.
+	protected static final int MIN_SEARCH_SIZE = 3;
+	
 	ButtonImageText buttonRunSearch;
 	final TextBox textBoxLastName = new TextBox();
 	final TextBox textBoxFirstName = new TextBox();
@@ -480,11 +486,20 @@ public class ContentConnection extends VerticalPanel {
 		ContentHelper.insertSubTitlePanel(this, langConnection.searchSubtitle());
 
 		HorizontalPanel horizontalPanelSearch = new HorizontalPanel();
-		insertMiddle(horizontalPanelSearch, new Label(langConnection._TextLastName()));
+		insertMiddle(horizontalPanelSearch, new Label(langConnection.nameSearch()));
 		insertMiddle(horizontalPanelSearch, textBoxLastName);
+		textBoxLastName.addKeyUpHandler(new KeyUpHandler(){
+			@Override
+			public void onKeyUp(KeyUpEvent event)
+			{
+				// check text field size
+				buttonRunSearch.setEnabled(textBoxLastName.getText().length() >= MIN_SEARCH_SIZE);
+			}
+		});
 		insertMiddle(horizontalPanelSearch, new Label(langConnection._TextFirstName()));
 		insertMiddle(horizontalPanelSearch, textBoxFirstName);
 		buttonRunSearch = new ButtonImageText(ButtonImageText.Type.NEW, langConnection.runSearch());
+		buttonRunSearch.setEnabled(false);
 		insertMiddle(horizontalPanelSearch, buttonRunSearch);
 		RunSearchHandler runSearchHandler = new RunSearchHandler();
 		buttonRunSearch.addClickHandler(runSearchHandler);
