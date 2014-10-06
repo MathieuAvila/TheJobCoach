@@ -164,7 +164,7 @@ public class EditUserDocument implements EntryPoint {
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		GridHelper grid = new GridHelper(rootPanel);
+		GridHelper grid = new GridHelper();
 
 		grid.addLine(0, new Label(langDocument._TextTitle()), txtbxTitle);
 		

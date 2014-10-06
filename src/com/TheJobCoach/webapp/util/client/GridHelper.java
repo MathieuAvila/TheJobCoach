@@ -1,7 +1,6 @@
 package com.TheJobCoach.webapp.util.client;
 
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GridHelper extends Grid
@@ -9,34 +8,34 @@ public class GridHelper extends Grid
 	String defaultCol1Size = "30%";
 	String defaultCol2Size = "70%";
 	
-	void init(Panel root, int w, int h)
+	void init(int w, int h)
 	{
 		super.setBorderWidth(0);
 		super.setSize("100%", "100%");
 	}
 
-	public GridHelper(Panel root, int w, int h)
+	public GridHelper(int w, int h)
 	{
 		super(w, h);
-		init(root, w, h);
+		init( w, h);
 	}
 
-	public GridHelper(Panel root, int h)
+	public GridHelper(int h)
 	{
 		super(0, h);
-		init(root, 0, h);
+		init(0, h);
 	}
 	
-	public GridHelper(Panel root)
+	public GridHelper()
 	{
 		super(0, 0);
-		init(root, 0, 0);
+		init(0, 0);
 	}
 
-	public GridHelper(Panel root, String s1, String s2)
+	public GridHelper(String s1, String s2)
 	{
 		super(0, 0);
-		init(root, 0, 0);
+		init(0, 0);
 		defaultCol1Size = s1;
 		defaultCol2Size = s2;
 	}

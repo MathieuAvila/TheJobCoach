@@ -62,7 +62,7 @@ public class EditPassword implements IChanged {
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		GridHelper grid = new GridHelper(RootPanel.get(), "70%", "30%");
+		GridHelper grid = new GridHelper("70%", "30%");
 
 		grid.addLine(1, lblTypePassword, textBoxPassword);		
 		grid.addLine(2, lblRetypePassword, textBoxRetypePassword);

@@ -103,7 +103,7 @@ public class EditUserSite implements EntryPoint, IChanged, IEditDialogModel<User
 		dBox.setGlassEnabled(true);
 		dBox.setAnimationEnabled(true);
 
-		GridHelper grid = new GridHelper(rootPanel);
+		GridHelper grid = new GridHelper();
 
 		VerticalPanel vp = new VerticalPanel();
 		dBox.setWidget(vp);		
