@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -233,5 +234,31 @@ public class MessageBox implements EntryPoint {
 	public static void messageBoxException(Panel rootPanel, Exception exception)
 	{
 		messageBoxException(rootPanel, exception.toString());		
+	}
+
+
+	public static MessageBox messageBox(TYPE type, String title, String message)
+	{
+		return messageBox(RootPanel.get(), type, title, message);
+	}
+
+	public static MessageBox messageBox(TYPE type, String message)
+	{
+		return messageBox(RootPanel.get(), type, message);
+	}
+
+	public static void messageBoxException(String exception)
+	{
+		messageBoxException(RootPanel.get(), exception);
+	}
+
+	public static void messageBoxException(Throwable exception)
+	{
+		messageBoxException(RootPanel.get(), exception);
+	}
+
+	public static void messageBoxException(Exception exception)
+	{
+		messageBoxException(RootPanel.get(), exception.toString());		
 	}
 }
