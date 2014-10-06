@@ -151,11 +151,11 @@ public class AutoTestContentConnectionDetail extends GwtTest {
 				);
 	}
 
-	static final int COLUMN_STATUS        = 0;
-	static final int COLUMN_MESSAGE       = 1;
-	static final int COLUMN_SHARES        = 2;
-	static final int COLUMN_NAME          = 3;
-	static final int COLUMN_TODETAIL      = 4;
+	static final int COLUMN_STATUS        = 1;
+	static final int COLUMN_MESSAGE       = 2;
+	static final int COLUMN_SHARES        = 3;
+	static final int COLUMN_NAME          = 4;
+	static final int COLUMN_TODETAIL      = 5;
 
 	class SendMessageTest implements ISendMessage
 	{
@@ -176,9 +176,9 @@ public class AutoTestContentConnectionDetail extends GwtTest {
 		}
 	}
 
-	static int COLUMN_SEARCH_NAME = 0;
-	static int COLUMN_SEARCH_JOB = 1;
-	static int COLUMN_SEARCH_ADD = 2;
+	static int COLUMN_SEARCH_NAME = 1;
+	static int COLUMN_SEARCH_JOB = 2;
+	static int COLUMN_SEARCH_ADD = 3;
 
 	CatcherMessageBoxTriState mbTriStateCatcher = new CatcherMessageBoxTriState();
 	ErrorCatcherMessageBox mbCatcher = new ErrorCatcherMessageBox();
@@ -258,7 +258,7 @@ public class AutoTestContentConnectionDetail extends GwtTest {
 
 		// Column name
 
-		assertEquals(5, cud.cellTable.getColumnCount());
+		assertEquals(6, cud.cellTable.getColumnCount());
 		assertEquals("lastName1 firstName1",           cud.cellTable.getColumn(COLUMN_NAME).getValue(ci1));
 
 		// Column shares
@@ -332,7 +332,7 @@ public class AutoTestContentConnectionDetail extends GwtTest {
 		// Check clicking triggers a message box info
 		assertTrue(c0.getIcons.isClickable(ci3));
 
-		ContentConnection.FieldUpdaterContactInformation fuCI = (ContentConnection.FieldUpdaterContactInformation)cud.cellTable.getColumn(0).getFieldUpdater();
+		ContentConnection.FieldUpdaterContactInformation fuCI = (ContentConnection.FieldUpdaterContactInformation)cud.cellTable.getColumn(COLUMN_STATUS).getFieldUpdater();
 		fuCI.update(0, ci2, ci2);
 
 		// C1 = message
@@ -383,7 +383,7 @@ public class AutoTestContentConnectionDetail extends GwtTest {
 		assertEquals(1, userService.callsSearch);
 		assertTrue(cud.cellTableSearchResult.isVisible());
 
-		assertEquals(searchResultEntries.size(), cud.cellTableSearchResult.getColumnCount());
+		assertEquals(searchResultEntries.size(), cud.cellTableSearchResult.getRowCount());
 		for (int i=0; i != searchResultEntries.size(); i++)
 		{
 			assertEquals(searchResultEntries.get(i), cud.cellTableSearchResult.getVisibleItem(i));

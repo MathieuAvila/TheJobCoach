@@ -151,11 +151,12 @@ public class AutoTestContentConnection extends GwtTest {
 				);
 	}
 
-	static final int COLUMN_STATUS        = 0;
-	static final int COLUMN_MESSAGE       = 1;
-	static final int COLUMN_SHARES        = 2;
-	static final int COLUMN_NAME          = 3;
-	static final int COLUMN_TODETAIL      = 4;
+	static final int COLUMN_IMAGE         = 0;
+	static final int COLUMN_STATUS        = 1;
+	static final int COLUMN_MESSAGE       = 2;
+	static final int COLUMN_SHARES        = 3;
+	static final int COLUMN_NAME          = 4;
+	static final int COLUMN_TODETAIL      = 5;
 
 	class SendMessageTest implements ISendMessage
 	{
@@ -176,9 +177,10 @@ public class AutoTestContentConnection extends GwtTest {
 		}
 	}
 
-	static int COLUMN_SEARCH_NAME = 0;
-	static int COLUMN_SEARCH_JOB = 1;
-	static int COLUMN_SEARCH_ADD = 2;
+	static int COLUMN_SEARCH_NAME = 1;
+	static int COLUMN_SEARCH_JOB = 2;
+	static int COLUMN_SEARCH_ADD = 3;
+	static int COLUMN_SEARCH_MAX = 4;
 
 	CatcherMessageBoxTriState mbTriStateCatcher = new CatcherMessageBoxTriState();
 	ErrorCatcherMessageBox mbCatcher = new ErrorCatcherMessageBox();
@@ -258,7 +260,7 @@ public class AutoTestContentConnection extends GwtTest {
 
 		// Column name
 
-		assertEquals(5, cud.cellTable.getColumnCount());
+		assertEquals(6, cud.cellTable.getColumnCount());
 		assertEquals("lastName1 firstName1",           cud.cellTable.getColumn(COLUMN_NAME).getValue(ci1));
 
 		// Column shares
