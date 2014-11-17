@@ -1,24 +1,28 @@
 package com.TheJobCoach.webapp.mainpage.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.AccountManager;
 import com.TheJobCoach.userdata.EvaluationAccountManager;
+import com.TheJobCoach.util.MailerFactory;
+import com.TheJobCoach.util.MailerInterface;
 import com.TheJobCoach.webapp.mainpage.client.LoginService;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
 import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnLogin;
 import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
+import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
-
-import javax.servlet.http.HttpSession;
 
 /**
  * The server side implementation of the RPC service.
@@ -37,7 +41,15 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 			UserInformation info,
 			String locale)
 			throws IllegalArgumentException, CassandraException {
-		logger.info("Create account request for: '" + id.userName + "' with EMail:'" + info.email + "' with locale '" + locale +"'");		
+		logger.info("Create account request for: '" + id.userName + "' with EMail:'" + info.email + "' with locale '" + locale +"'");	
+		
+		Map<String, MailerInterface.Attachment> parts = new HashMap<String, MailerInterface.Attachment>();
+
+		MailerFactory.getMailer().sendEmail("mathieu.avila@laposte.net", 
+				"creation de compte de " + info.email, 
+				"username:" + id.userName +"<br/>\n" + "mail: " + info.email,
+				"noreply@www.thejobcoach.fr", parts);
+
 		return account.createAccount(id, info, locale);
 	}
 
