@@ -686,7 +686,11 @@ public class AccountManager implements AccountInterface, ValueCallback {
 		byte[] resultReq = CassandraAccessor.getColumnByte(COLUMN_FAMILY_IMG, id.userName, s);
 		if (resultReq == null)
 		{
-			return ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman.jpg");
+			if (s.equals("256"))
+				return ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman_256.jpg");
+			if (s.equals("48"))
+				return ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman_48.jpg");
+			return ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman_32.jpg");
 		}
 		return resultReq;
 	}

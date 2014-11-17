@@ -723,17 +723,19 @@ public class TestAccountManager
 		UserId id = new UserId("imagename", "tokenimagename", UserId.UserType.USER_TYPE_SEEKER);
 		CoachTestUtils.createOneAccount(id);
 		
-		byte[] none = ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman.jpg");
+		byte[] none256 = ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman_256.jpg");
+		byte[] none48 = ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman_48.jpg");
+		byte[] none32 = ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman_32.jpg");
 
 		// check get std image on void account
-		assertEquals(none, account.getUserImage(id, "256"));
+		assertEquals(none256, account.getUserImage(id, "256"));
 		
 		// check set image in error + get return fake one.
 		account.setUserImage(id, null);
-		assertEquals(none, account.getUserImage(id, "256"));
+		assertEquals(none48, account.getUserImage(id, "48"));
 		
 		account.setUserImage(id, new byte[100]);
-		assertEquals(none, account.getUserImage(id, "256"));
+		assertEquals(none32, account.getUserImage(id, "32"));
 
 		// set final user image and check result
 		byte[] imgSrc = ByteResourceCache.getByteResource("/com/TheJobCoach/util/test/test1_97x140.png");
@@ -745,12 +747,12 @@ public class TestAccountManager
 			
 		// delete account. Check there is no more account image.
 		account.markUserAccountDeleted(id);
-		assertEquals(none, account.getUserImage(id, "256"));
+		assertEquals(none256, account.getUserImage(id, "256"));
 
 		// complete deletion.
 		account.setUserImage(id, imgSrc);
 		assertTrue(Arrays.equals(account.getUserImage(id, "256"), imgSrc256));
 		account.deleteAccount(id.userName);
-		assertEquals(none, account.getUserImage(id, "256"));
+		assertEquals(none48, account.getUserImage(id, "48"));
 	}
 }
