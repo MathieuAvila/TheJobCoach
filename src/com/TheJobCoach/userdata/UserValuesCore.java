@@ -13,6 +13,7 @@ import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachMessages;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsCoachSettings;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsMyGoals;
+import com.TheJobCoach.webapp.util.shared.UserValuesConstantsPreferences;
 
 public class UserValuesCore {
 
@@ -182,5 +183,7 @@ public class UserValuesCore {
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_POST_IT_CONTACT, MAX_OPTION_LENGTH_INT, false, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_POST_IT_JOB_SITE, MAX_OPTION_LENGTH_INT, false, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_USER_ACTION_LOG, MAX_OPTION_LENGTH_INT, false, "0"));
+		
+		addField(new FieldDefinition(UserValuesConstantsPreferences.PREF_COACH_SQUEEZE, YES_NO_LENGTH, true, UserValuesConstants.NO));
 	}
 }

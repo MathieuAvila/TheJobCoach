@@ -160,4 +160,10 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("content-log-disabled-24.png")
 	ImageResource userLogContent_disabled();
+	
+	@Source("max_24.png")
+	ImageResource max_24();
+
+	@Source("min_24.png")
+	ImageResource min_24();
 }
