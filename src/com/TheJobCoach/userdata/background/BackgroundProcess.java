@@ -49,12 +49,12 @@ public class BackgroundProcess
 		int goal = 0;
 		try {
 			goal = Integer.parseInt(goalStr);
-			status = (result - goal) <= 0 ? 1:-1;
+			status = ((result - goal) >= 0) ? 1:-1;
 		} catch (Exception e){};
 
 		//orig = orig.replace(key, text);
 
-		logger.info( key );
+		logger.info( " KEY: " + key + " goal: '" + goalStr + "' result:" + result + " status:" + status + " goal:" + goal);
 		logger.info("_" + key + "_IMG_" + goalStr + "   " + (status == 0 ? "nostatuslogo" : (status < 0 ? "failurelogo":"successlogo")));
 		orig = orig.replace("_" + key + "_IMG_", status == 0 ? "nostatuslogo" : (status < 0 ? "failurelogo":"successlogo"));
 

@@ -117,8 +117,8 @@ public class TestBackgroundProcess
 		mockMail.reset();
 		bp.sendReportMail(user, periodStart, periodEnd, vals, reportInformation);
 		assertNotNull(mockMail.lastDst);
-		assertEquals(mockMail.lastBody,
-				"N  firstNameuserbackground lastNameuserbackground DATE 1 janv. 2014 2 janv. 2014.A 101 3 failurelogo B 102 3 failurelogo C 103 3 failurelogo D 104 4 failurelogo E 105 5 failurelogo F 106 6 failurelogo G 107 7 failurelogo H 108 800 successlogo ");
+		assertEquals("N  firstNameuserbackground lastNameuserbackground DATE 1 janv. 2014 2 janv. 2014.A 101 3 successlogo B 102 3 successlogo C 103 3 successlogo D 104 4 successlogo E 105 5 successlogo F 106 6 successlogo G 107 7 successlogo H 108 800 failurelogo ",
+				mockMail.lastBody);
 
 		// check reported values in case goal is not set.
 		vals.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY,      "");
@@ -134,6 +134,26 @@ public class TestBackgroundProcess
 		assertEquals(mockMail.lastBody, 
 				"D   nostatuslogo E  garbage nostatuslogo ");
 		assertEquals("[TheJobCoach] Votre rapport de performance.", mockMail.lastSubject);
+		
+		// check near value results
+		reportInformation.succeedStartDay = 0;
+		reportInformation.succeedEndDay = 0;
+		reportInformation.connectedDays = 0;
+		reportInformation.newOpportunities = 0;
+		vals.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_RATIO,          "1");
+		vals.put(UserValuesConstantsMyGoals.PERFORMANCE_CREATEOPPORTUNITY,      "1");
+		StringResourceCache.getInstance().setStringResource(
+				"/com/TheJobCoach/userdata/data/mail_performance_report_fr.html",
+				""
+						+ "A _ARRIVAL_RESULT_ _ARRIVAL_GOAL_ _ARRIVAL_IMG_ "
+						+ "B _DEPARTURE_RESULT_ _DEPARTURE_GOAL_ _DEPARTURE_IMG_ "
+						+ "C _CONNECTED_RESULT_ _CONNECTED_GOAL_ _DEPARTURE_IMG_ "
+						+ "D _OPP_RESULT_ _OPP_GOAL_ _OPP_IMG_");
+		mockMail.reset();
+		bp.sendReportMail(user, periodStart, periodEnd, vals, reportInformation);
+		assertNotNull(mockMail.lastDst);
+		assertEquals("A 0 1 failurelogo B 0 1 failurelogo C 0 1 failurelogo D 0 1 failurelogo", mockMail.lastBody);
+
 	}	
 	
 	// disconnected to avoid sending real mails.
