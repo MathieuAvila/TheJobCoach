@@ -197,13 +197,13 @@ public class CassandraAccessor {
 		mutator.execute();
 		mutator.discardPendingMutations();		
 	}
-
-	static public Map<String, String> getColumnRange(String CF, String row, String keyFirst, String keyLast, int number) throws CassandraException
+	
+	static private Map<String, String> getColumnRangeInternal(String CF, String row, String keyFirst, String keyLast, int number, boolean reverse) throws CassandraException
 	{
 		MultigetSliceQuery<String, String, String> q = createMultigetSliceQuery(getKeyspace(), se, se, se);
 		q.setColumnFamily(CF);
 		q.setKeys(row);
-		q.setRange(keyFirst, keyLast, false, number);
+		q.setRange(keyFirst, keyLast, reverse, number);
 		QueryResult<Rows<String, String, String>> r = q.execute();
 		if (r == null) throw new CassandraException();
 		Rows<String, String, String> rows = r.get();
@@ -217,6 +217,16 @@ public class CassandraAccessor {
 			result.put(column.getName(), column.getValue());	        
 		}
 		return result;
+	}
+	
+	static public Map<String, String> getColumnRange(String CF, String row, String keyFirst, String keyLast, int number) throws CassandraException
+	{
+		return getColumnRangeInternal(CF, row, keyFirst, keyLast, number, false);
+	}
+	
+	static public Map<String, String> getColumnRangeReversed(String CF, String row, String keyFirst, String keyLast, int number) throws CassandraException
+	{
+		return getColumnRangeInternal(CF, row, keyFirst, keyLast, number, true);
 	}
 
 	public static boolean deleteColumnFamily(String columnFamily)

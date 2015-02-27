@@ -2,6 +2,7 @@ package com.TheJobCoach.util;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -189,5 +190,49 @@ public class TestCassandraAccessor {
 			assertFalse(fullRange.contains("myobject3"));
 			assertFalse(fullRange.contains("myobject5"));
 		}
+	}
+	
+	@Test
+	public void test_getColumnRange() throws CassandraException
+	{
+		ColumnFamilyDefinition cfDef = null;
+		String COLUMN_FAMILY_NAME = "testcolumnrange";
+		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME, cfDef);
+		Map<String, String> result = new HashMap<String, String>();
+		
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME, "myobject");
+		
+		// create 50 strings, NAME matters, hence starting from 10 and not 0
+		for (int i = 10 ; i != 50; i++)
+			CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME, "myobject", 
+					(new ShortMap())
+					.add("checker" + i, "myobject" + i).get());	
+
+		// get in increasing order in the middle
+		result = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME, "myobject", "checker20", "checker40", 10);
+		assertEquals(10, result.size());
+		assertEquals("myobject20", result.get("checker20"));
+		assertEquals("myobject29", result.get("checker29"));
+
+		// get in increasing order from the start with limit
+		result = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME, "myobject", "", "checker15", 10);
+		System.out.println(result);
+		assertEquals(6, result.size());
+		assertEquals("myobject10", result.get("checker10"));
+		assertEquals("myobject15", result.get("checker15"));
+		
+		// get in decreasing order
+		result = CassandraAccessor.getColumnRangeReversed(COLUMN_FAMILY_NAME, "myobject", "checker40", "checker20", 10);
+		System.out.println(result);
+		assertEquals(10, result.size());
+		assertEquals("myobject40", result.get("checker40"));
+		assertEquals("myobject31", result.get("checker31"));
+	
+		// get in decreasing order from the end with limit
+		result = CassandraAccessor.getColumnRangeReversed(COLUMN_FAMILY_NAME, "myobject", "checker40", "checker35", 10);
+		System.out.println(result);
+		assertEquals(6, result.size());
+		assertEquals("myobject40", result.get("checker40"));
+		assertEquals("myobject35", result.get("checker35"));
 	}
 }
