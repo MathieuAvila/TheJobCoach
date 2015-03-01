@@ -15,6 +15,7 @@ import com.TheJobCoach.userdata.AccountManager;
 import com.TheJobCoach.userdata.AccountInterface;
 import com.TheJobCoach.userdata.ContactManager;
 import com.TheJobCoach.userdata.TodoList;
+import com.TheJobCoach.userdata.UserChatManager;
 import com.TheJobCoach.userdata.UserDocumentManager;
 import com.TheJobCoach.userdata.UserExternalContactManager;
 import com.TheJobCoach.userdata.UserJobSiteManager;
@@ -40,6 +41,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.server.CoachSecurityCheck;
 import com.TheJobCoach.webapp.util.server.ServletSecurityCheck;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.ChatInfo;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -379,6 +381,44 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 	{
 		account.toggleAccountDeletion(getUserId(), delete);
 		return delete;
+	}
+	
+	UserChatManager getUserChatManager() throws CoachSecurityException
+	{
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+
+		UserChatManager result = (UserChatManager)session.getAttribute("UserChatManager");
+		if (result != null) return result;
+		result = new UserChatManager(getUserId());
+		session.setAttribute("UserChatManager", result);
+		return result;
+		
+	}
+
+	@Override
+	public Vector<ChatInfo> getLastMsgFromUser(String fromUser,
+			int maxCount) throws CassandraException, SystemException,
+			CoachSecurityException
+	{
+		UserChatManager userChatManager = getUserChatManager();
+		return userChatManager.getLastMsgFromUser(fromUser, new Date(), maxCount);
+	}
+
+	@Override
+	public void addChatMsg(String dst, String msg)
+			throws CassandraException, SystemException, CoachSecurityException
+	{
+		UserChatManager userChatManager = getUserChatManager();
+		userChatManager.addChatMsg(dst, new Date(), msg);
+	}
+
+	@Override
+	public void isTypingTo(String dst) throws CassandraException,
+			SystemException, CoachSecurityException
+	{
+		UserChatManager userChatManager = getUserChatManager();
+		userChatManager.isTypingTo(dst, new Date());
 	}
 
 	

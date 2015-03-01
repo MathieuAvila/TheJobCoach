@@ -15,6 +15,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.ChatInfo;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -71,4 +72,8 @@ public interface UserService extends RemoteService
 	public ContactInformation.ContactStatus updateContactRequest(UserId userContact, boolean ok) throws SystemException, CassandraException, CoachSecurityException;
 	public Vector<ContactInformation> getContactList() throws CassandraException, SystemException, CoachSecurityException;
 	Boolean sendJobMail(UserId userContact, String message) throws CassandraException, SystemException, CoachSecurityException;
+	
+	public Vector<ChatInfo> getLastMsgFromUser(String fromUser, int maxCount) throws CassandraException, SystemException, CoachSecurityException;
+	public void addChatMsg(String dst, String msg) throws CassandraException, SystemException, CoachSecurityException;
+	public void isTypingTo(String dst) throws CassandraException, SystemException, CoachSecurityException;
 }

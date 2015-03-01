@@ -15,6 +15,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.ChatInfo;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -69,5 +70,9 @@ public interface UserServiceAsync {
 	public void updateShares(String userName, ContactInformation.Visibility contact, AsyncCallback<Void> callback);
 	public void getContactList(AsyncCallback<Vector<ContactInformation>> callback);
 	public void sendJobMail(UserId userContact, String message, AsyncCallback<Boolean> callback);
+	
+	public void getLastMsgFromUser(String fromUser, int maxCount, AsyncCallback<Vector<ChatInfo>> callback) throws CassandraException, SystemException, CoachSecurityException;
+	public void addChatMsg(String dst, String msg, AsyncCallback<Void> callback) throws CassandraException, SystemException, CoachSecurityException;
+	public void isTypingTo(String dst, AsyncCallback<Void> callback) throws CassandraException, SystemException, CoachSecurityException;
 
 }

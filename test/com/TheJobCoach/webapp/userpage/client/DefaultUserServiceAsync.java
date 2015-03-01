@@ -20,6 +20,7 @@ import com.TheJobCoach.webapp.userpage.shared.UserJobSite;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.ChatInfo;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
@@ -219,5 +220,24 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 			CoachSecurityException, SystemException
 	{
 		logger.info("toggleDeleteAccount " + delete);
+	}
+	@Override
+	public void getLastMsgFromUser(String fromUser, int maxCount,
+			AsyncCallback<Vector<ChatInfo>> callback)
+			throws CassandraException, SystemException, CoachSecurityException
+	{
+		logger.info("getLastMsgFromUser " + fromUser);
+	}
+	@Override
+	public void addChatMsg(String dst, String msg, AsyncCallback<Void> callback)
+			throws CassandraException, SystemException, CoachSecurityException
+	{
+		logger.info("addChatMsg " + dst);
+	}
+	@Override
+	public void isTypingTo(String dst, AsyncCallback<Void> callback)
+			throws CassandraException, SystemException, CoachSecurityException
+	{
+		logger.info("isTypingTo " + dst);
 	}
 };
