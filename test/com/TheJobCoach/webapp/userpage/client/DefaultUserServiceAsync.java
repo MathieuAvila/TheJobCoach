@@ -228,12 +228,14 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 	{
 		logger.info("getLastMsgFromUser " + fromUser);
 	}
+
 	@Override
 	public void addChatMsg(String dst, String msg, AsyncCallback<Void> callback)
 			throws CassandraException, SystemException, CoachSecurityException
 	{
 		logger.info("addChatMsg " + dst);
 	}
+
 	@Override
 	public void isTypingTo(String dst, AsyncCallback<Void> callback)
 			throws CassandraException, SystemException, CoachSecurityException
