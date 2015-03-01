@@ -26,6 +26,21 @@ public class CoachTestUtils
 		result.setYear(year - 1900);
 		return result;
 	}
+	
+	@SuppressWarnings("deprecation")
+	public static Date getDate(int year, int month, int day, int hours, int minutes, int seconds, int ms)
+	{
+		Date result = new Date();
+		result.setTime(0);
+		result.setDate(day);
+		result.setMonth(month - 1);
+		result.setYear(year - 1900);
+		result.setHours(hours);
+		result.setMinutes(minutes);
+		result.setSeconds(seconds);
+		result.setTime(result.getTime() + ms);
+		return result;
+	}
 
 	@SuppressWarnings("deprecation")
 	public static boolean isDateEqualForDay(Date d1, Date d2)
