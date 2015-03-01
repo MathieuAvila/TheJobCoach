@@ -327,6 +327,8 @@ public class AutoTestContentConnection extends GwtTest {
 		mbTriStateCatcher.currentBox.clickChoice(-1); // cancel
 		assertEquals(0, userService.callsUpdate);
 		assertEquals(0, userService.callsGet); // updated with result
+		userService.reset();
+		mbTriStateCatcher.closeBox();
 
 		v0 = c0.getIcons.getIcons(ci3);
 		assertEquals(1, v0.size());
@@ -334,7 +336,7 @@ public class AutoTestContentConnection extends GwtTest {
 		// Check clicking triggers a message box info
 		assertTrue(c0.getIcons.isClickable(ci3));
 
-		ContentConnection.FieldUpdaterContactInformation fuCI = (ContentConnection.FieldUpdaterContactInformation)cud.cellTable.getColumn(0).getFieldUpdater();
+		ContentConnection.FieldUpdaterContactInformation fuCI = (ContentConnection.FieldUpdaterContactInformation)cud.cellTable.getColumn(COLUMN_STATUS).getFieldUpdater();
 		fuCI.update(0, ci2, ci2);
 
 		// C1 = message
@@ -385,7 +387,7 @@ public class AutoTestContentConnection extends GwtTest {
 		assertEquals(1, userService.callsSearch);
 		assertTrue(cud.cellTableSearchResult.isVisible());
 
-		assertEquals(searchResultEntries.size(), cud.cellTableSearchResult.getColumnCount());
+		assertEquals(searchResultEntries.size(), cud.cellTableSearchResult.getRowCount());
 		for (int i=0; i != searchResultEntries.size(); i++)
 		{
 			assertEquals(searchResultEntries.get(i), cud.cellTableSearchResult.getVisibleItem(i));
@@ -411,6 +413,7 @@ public class AutoTestContentConnection extends GwtTest {
 		assertEquals(true, c_add.getIcons.isClickable(s_new));
 
 		// Add new user. Please do. I will have a message box, service is called and refreshed with new user, and search results are hidden.
+		mbTriStateCatcher.closeBox();
 		userService.reset();
 		contactList.add(ci_new);
 		cud.cellTableSearchResult.getColumn(COLUMN_SEARCH_ADD).onBrowserEvent(new Cell.Context(1, COLUMN_SEARCH_ADD, s_new), cud.cellTableSearchResult.getElement(), s_new, event);

@@ -28,6 +28,15 @@ public class CatcherMessageBoxTriState implements MessageBoxTriState.Catcher
 	{
 		if (currentBox != null) currentBox.close();
 		currentBox = null;
+		try // work-around box closing animation...
+		{
+			Thread.sleep(100);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public MessageBoxTriState getCurrentMessageBox()
