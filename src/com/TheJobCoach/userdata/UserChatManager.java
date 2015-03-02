@@ -91,10 +91,13 @@ public class UserChatManager implements IUserDataManager {
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_CHAT_LOG, dst, map);
 	}
 	
+	/**  Tell user "dst" that my new status is status */
 	public void hasChangedStatus(String dst, Date d, ChatInfo.UserStatus status) throws CassandraException
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put(Convertor.toString(d) + "#" + typeToString.get(ChatInfo.MsgType.STATUS_CHANGE) + "#" + current.userName, statusToString.get(status));	
+		String key = Convertor.toString(d) + "#" + typeToString.get(ChatInfo.MsgType.STATUS_CHANGE) + "#" + current.userName;
+		String value = statusToString.get(status);
+		map.put(key, value);
 		CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_CHAT_LOG, dst, map);
 	}
 	
