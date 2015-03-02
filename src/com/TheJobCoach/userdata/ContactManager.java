@@ -1,5 +1,6 @@
 package com.TheJobCoach.userdata;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -19,6 +20,7 @@ import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.ChatInfo;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
@@ -29,9 +31,11 @@ public class ContactManager implements IUserDataManager, UserValues.ValueCallbac
 
 	static ColumnFamilyDefinition cfDef = null;
 	static ColumnFamilyDefinition cfDefDataName = null;
+	static ColumnFamilyDefinition cfDefStatus = null;
 
 	final static String COLUMN_FAMILY_NAME_CONTACTLIST = "contactlist";
 	final static String COLUMN_FAMILY_NAME_CONTACTNAME = "contactname";
+	final static String COLUMN_FAMILY_NAME_CONTACTSTATUS = "contactstatus";
 
 	UserId user;
 	UserValues userValues;
@@ -41,6 +45,7 @@ public class ContactManager implements IUserDataManager, UserValues.ValueCallbac
 	{
 		cfDef = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_CONTACTLIST, cfDef);
 		cfDefDataName = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_CONTACTNAME, cfDefDataName);
+		cfDefStatus = CassandraAccessor.checkColumnFamilyAscii(COLUMN_FAMILY_NAME_CONTACTSTATUS, cfDefStatus);
 		this.user = user;
 		userValues = new UserValues();
 		accountManager = new AccountManager();
@@ -283,6 +288,8 @@ public class ContactManager implements IUserDataManager, UserValues.ValueCallbac
 		Vector<ContactInformation> result = new Vector<ContactInformation>();
 		Map<String, String> contactTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName);
 		Map<String, String> contactNameTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTNAME, user.userName);
+		Map<String, String> contactNameStatus = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTSTATUS, user.userName);
+
 		if ((contactTable == null) || (contactNameTable == null)) return result;
 		for (String contactUsername: contactTable.keySet())
 		{
@@ -290,6 +297,13 @@ public class ContactManager implements IUserDataManager, UserValues.ValueCallbac
 			contact.userName = contactUsername;
 			contact.firstName = contactNameTable.get("f#" + contactUsername);
 			contact.lastName = contactNameTable.get("l#" + contactUsername);
+			if (contactNameStatus != null)
+			{
+				System.out.println("from " + user.userName + " status for:" + contactUsername +  " = " + contactNameStatus.get(contactUsername));
+				String st = contactNameStatus.get(contactUsername);
+				if (st != null)
+					contact.online = ("i".equals(st));
+			}
 			result.add(contact);
 		}
 		return result;
@@ -305,6 +319,7 @@ public class ContactManager implements IUserDataManager, UserValues.ValueCallbac
 		Vector<ContactInformation> result = new Vector<ContactInformation>();
 		Map<String, String> contactTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName);
 		Map<String, String> contactNameTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTNAME, user.userName);
+		
 		if ((contactTable == null) || (contactNameTable == null)) return result;
 		for (String contactUsername: contactTable.keySet())
 		{
@@ -448,6 +463,7 @@ public class ContactManager implements IUserDataManager, UserValues.ValueCallbac
 	{
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName);
 		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONTACTNAME, user.userName);
+		CassandraAccessor.deleteKey(COLUMN_FAMILY_NAME_CONTACTSTATUS, user.userName);
 		// XXX: delete associated accounts.
 	}
 
@@ -499,6 +515,27 @@ public class ContactManager implements IUserDataManager, UserValues.ValueCallbac
 				logger.info("changed user key " + colkey + " to "  + value + " from user " + id.userName + " when updating "+ contactUsername);
 			}
 		}
+	}
 
+	public void changeConnectStatus(boolean connected)
+	{
+		UserChatManager cm = new UserChatManager(user);
+		try
+		{
+			Map<String, String> contactTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_CONTACTLIST, user.userName);
+			if (contactTable == null) return;
+			Date d = new Date();
+			for (String contactUsername: contactTable.keySet())
+			{
+				cm.hasChangedStatus(contactUsername, d, connected ? ChatInfo.UserStatus.ONLINE : ChatInfo.UserStatus.OFFLINE);
+				CassandraAccessor.updateColumn(COLUMN_FAMILY_NAME_CONTACTSTATUS, contactUsername, 
+						(new ShortMap())
+						.add(user.userName, connected ? "i":"o").get());
+			}
+		}
+		catch (CassandraException e)
+		{
+			logger.error(e.toString());
+		}
 	}
 }
