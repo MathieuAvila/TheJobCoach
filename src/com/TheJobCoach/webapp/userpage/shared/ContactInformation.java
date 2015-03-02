@@ -62,6 +62,8 @@ public class ContactInformation implements Serializable {
 	public Visibility myVisibility;
 	public Visibility hisVisibility;
 
+	public boolean online;
+
 	public ContactInformation(ContactStatus status, String userName,
 			String firstName, String lastName, Visibility myVisibility,
 			Visibility hisVisibility)
