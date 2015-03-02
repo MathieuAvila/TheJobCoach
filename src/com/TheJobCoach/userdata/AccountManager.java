@@ -304,6 +304,11 @@ public class AccountManager implements AccountInterface, ValueCallback {
 			logger.warn("Login refused: bad password with salt: " + userName);
 			return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_PASSWORD);
 		}
+
+		// Send message as logged-in.
+		ContactManager cm = new ContactManager(id);
+		cm.changeConnectStatus(true);
+
 		return new MainPageReturnLogin(LoginStatus.CONNECT_STATUS_OK, id);
 	}
 
@@ -693,5 +698,12 @@ public class AccountManager implements AccountInterface, ValueCallback {
 			return ByteResourceCache.getByteResource("/com/TheJobCoach/userdata/data/noman_32.jpg");
 		}
 		return resultReq;
+	}
+
+	public void disconnect(UserId user)
+	{
+		// Send message as logged-out.
+		ContactManager cm = new ContactManager(user);
+		cm.changeConnectStatus(false);
 	}
 }
