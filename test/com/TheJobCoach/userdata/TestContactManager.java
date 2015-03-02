@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.Vector;
 
 import org.junit.Test;
@@ -19,6 +20,8 @@ import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
+import com.TheJobCoach.webapp.util.shared.ChatInfo;
+import com.TheJobCoach.webapp.util.shared.ChatInfo.UserStatus;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
@@ -407,5 +410,64 @@ public class TestContactManager
 		assertEquals(1, ci.size());
 		assertEquals("new_first", ci.get(0).firstName); 
 		assertEquals("new_last", ci.get(0).lastName);
+	}
+	
+	@Test
+	public void test_statuses()  throws CassandraException, SystemException
+	{
+		Vector<ContactInformation> ci;
+		
+		setTest();		
+		
+		// connect id and contact_id_1 and contact_id_2
+		contactManager.updateContactRequest(contact_id_1, true);
+		contactManager1.updateContactRequest(id, true);
+		contactManager.updateContactRequest(contact_id_2, true);
+		contactManager2.updateContactRequest(id, true);
+		
+		// check everyone's off-line.
+		ci = contactManager.getContactList();
+		assertEquals(2, ci.size());
+		assertEquals("firstNameuser1", ci.get(0).firstName);
+		assertEquals("firstNameuser2", ci.get(1).firstName);
+		assertEquals(false, ci.get(0).online);
+		assertEquals(false, ci.get(1).online);
+
+		// now update user1/2's status to off-line/online
+		UserChatManager userChatManager = new UserChatManager(id);
+		Date d = new Date();
+		for (int s1 = 0; s1 != 2; s1 ++)
+		{
+			for (int s2 = 0; s2 != 2; s2++)
+			{
+				//System.out.println("s1:" + s1 + " s2:" + s2);
+				contactManager1.changeConnectStatus(s1!=0);
+				contactManager2.changeConnectStatus(s2!=0);
+				ci = contactManager.getContactList();
+				assertEquals(2, ci.size());
+				assertEquals(s1!=0, ci.get(0).online);
+				assertEquals(s2!=0, ci.get(1).online);
+				
+				// check log info
+				Vector<ChatInfo> messages = userChatManager.getLastInfos(d);
+				assertEquals(2, messages.size());
+				ChatInfo info0 = messages.get(0);
+				ChatInfo info1 = messages.get(1);
+				assertEquals(ChatInfo.MsgType.STATUS_CHANGE, info0.type);
+				assertEquals(ChatInfo.MsgType.STATUS_CHANGE, info1.type);
+				assertEquals("user1", info0.dst);
+				assertEquals("user2", info1.dst);
+				assertEquals((s1 != 0) ? UserStatus.ONLINE : UserStatus.OFFLINE, info0.status);
+				assertEquals((s2 != 0) ? UserStatus.ONLINE : UserStatus.OFFLINE, info1.status);
+				d = new Date();
+				
+				ci = contactManager.getContactList();
+				assertEquals(2, ci.size());
+				assertEquals("firstNameuser1", ci.get(0).firstName);
+				assertEquals("firstNameuser2", ci.get(1).firstName);
+				assertEquals(s1 != 0, ci.get(0).online);
+				assertEquals(s2 != 0, ci.get(1).online);
+			}
+		}
 	}
 }

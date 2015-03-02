@@ -1,10 +1,6 @@
 package com.TheJobCoach.userdata;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Date;
 import java.util.Vector;
 
 import org.junit.Before;
@@ -15,16 +11,9 @@ import org.slf4j.LoggerFactory;
 import com.TheJobCoach.CoachTestUtils;
 import com.TheJobCoach.util.MailerFactory;
 import com.TheJobCoach.util.MockMailer;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.CreateAccountStatus;
-import com.TheJobCoach.webapp.mainpage.shared.MainPageReturnCode.ValidateAccountStatus;
-import com.TheJobCoach.webapp.mainpage.shared.UserInformation;
-import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
-import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
-import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.TheJobCoach.webapp.util.shared.UserId;
-import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
 import com.TheJobCoach.webapp.util.shared.ChatInfo;
 
 public class TestUserChatManager
