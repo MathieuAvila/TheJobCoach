@@ -106,4 +106,8 @@
 		<welcome-file>TheJobCoach.html</welcome-file>
 	</welcome-file-list>
 
+	<listener>
+		<listener-class>com.TheJobCoach.webapp.mainpage.server.DeconnectionListener</listener-class>
+	</listener>
+	
 </web-app>
