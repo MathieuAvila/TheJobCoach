@@ -130,6 +130,15 @@ public interface ClientImageBundle extends ClientBundle
 	@Source("user-send-mail-24.png")
 	ImageResource userSendMail();
 
+	@Source("chat_24.png")
+	ImageResource chat_24();
+
+	@Source("online_24.png")
+	ImageResource online_24();
+
+	@Source("offline_24.png")
+	ImageResource offline_24();
+
 	// For shares
 
 	@Source("content-documents-thawed-24.png")
