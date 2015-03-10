@@ -126,7 +126,7 @@ public class TestUserChatManager
 		checkIsMsg(changes2_all.get(4), 7, 301, contact_id_1.userName, "msg_1_2__3");
 		
 		// check messages for 1
-		Vector<ChatInfo> messages1_all = userChatManager1.getLastMsgFromUser(contact_id_2.userName, CoachTestUtils.getDate(2010, 1, 1, 1, 2, 3, 0), 100);
+		Vector<ChatInfo> messages1_all = userChatManager1.getLastMsgFromUser(contact_id_2.userName, CoachTestUtils.getDate(2010, 1, 1, 1, 2, 7, 352), 100);
 		assertEquals(6, messages1_all.size());
 		checkIsMsgLog(messages1_all.get(0), 4, 200, ChatInfo.MsgType.MSG_TO,     contact_id_2.userName, "msg_1_2__1");
 		checkIsMsgLog(messages1_all.get(1), 4, 250, ChatInfo.MsgType.MSG_FROM,   contact_id_2.userName, "msg_2_1__1");
@@ -136,7 +136,7 @@ public class TestUserChatManager
 		checkIsMsgLog(messages1_all.get(5), 7, 351, ChatInfo.MsgType.MSG_FROM,   contact_id_2.userName,   "msg_2_2__3");
 
 		// check messages for 2
-		Vector<ChatInfo> messages2_all = userChatManager2.getLastMsgFromUser(contact_id_1.userName, CoachTestUtils.getDate(2010, 1, 1, 1, 2, 3, 0), 100);
+		Vector<ChatInfo> messages2_all = userChatManager2.getLastMsgFromUser(contact_id_1.userName, CoachTestUtils.getDate(2010, 1, 1, 1, 2, 7, 352), 100);
 		assertEquals(6, messages2_all.size());
 		checkIsMsgLog(messages2_all.get(0), 4, 200, ChatInfo.MsgType.MSG_FROM,     contact_id_1.userName, "msg_1_2__1");
 		checkIsMsgLog(messages2_all.get(1), 4, 250, ChatInfo.MsgType.MSG_TO,       contact_id_1.userName, "msg_2_1__1");
@@ -146,14 +146,13 @@ public class TestUserChatManager
 		checkIsMsgLog(messages2_all.get(5), 7, 351, ChatInfo.MsgType.MSG_TO,       contact_id_1.userName,   "msg_2_2__3");
 		
 		// check sub_list of messages for 1
-		Vector<ChatInfo> messages1_sub = userChatManager1.getLastMsgFromUser(contact_id_2.userName, CoachTestUtils.getDate(2010, 1, 1, 1, 2, 5, 250), 100);
-		assertEquals(3, messages1_sub.size());
-		checkIsMsgLog(messages1_sub.get(0), 5, 251, ChatInfo.MsgType.MSG_FROM,   contact_id_2.userName,   "msg_2_2__2");
-		checkIsMsgLog(messages1_sub.get(1), 7, 301, ChatInfo.MsgType.MSG_TO,     contact_id_2.userName,   "msg_1_2__3");
-		checkIsMsgLog(messages1_sub.get(2), 7, 351, ChatInfo.MsgType.MSG_FROM,   contact_id_2.userName,   "msg_2_2__3");
+		Vector<ChatInfo> messages1_sub = userChatManager1.getLastMsgFromUser(contact_id_2.userName, CoachTestUtils.getDate(2010, 1, 1, 1, 2, 7, 352), 2);
+		assertEquals(2, messages1_sub.size());
+		checkIsMsgLog(messages1_sub.get(0), 7, 301, ChatInfo.MsgType.MSG_TO,     contact_id_2.userName,   "msg_1_2__3");
+		checkIsMsgLog(messages1_sub.get(1), 7, 351, ChatInfo.MsgType.MSG_FROM,   contact_id_2.userName,   "msg_2_2__3");
 			
 		// check sub_list of messages for 1, before end
-		Vector<ChatInfo> messages1_cut = userChatManager1.getLastMsgFromUser(contact_id_2.userName, CoachTestUtils.getDate(2010, 1, 1, 1, 2, 3, 0), 2);
+		Vector<ChatInfo> messages1_cut = userChatManager1.getLastMsgFromUser(contact_id_2.userName, CoachTestUtils.getDate(2010, 1, 1, 1, 2, 5, 200), 2);
 		assertEquals(2, messages1_cut.size());
 		checkIsMsgLog(messages1_cut.get(0), 4, 200, ChatInfo.MsgType.MSG_TO,     contact_id_2.userName, "msg_1_2__1");
 		checkIsMsgLog(messages1_cut.get(1), 4, 250, ChatInfo.MsgType.MSG_FROM,   contact_id_2.userName, "msg_2_1__1");

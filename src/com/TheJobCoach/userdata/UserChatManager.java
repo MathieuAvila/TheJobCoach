@@ -133,10 +133,14 @@ public class UserChatManager implements IUserDataManager {
 	public Vector<ChatInfo> getLastMsgFromUser(String fromUser, Date from, int maxCount) throws CassandraException
 	{
 		Vector<ChatInfo> result = new Vector<ChatInfo>();
-		Map<String, String> events = CassandraAccessor.getColumnRange(COLUMN_FAMILY_NAME_CHAT_DETAIL, 
+		
+		System.out.println(fromUser + "#" + Convertor.toString(from));
+		System.out.println(fromUser + "#0000000000000");
+		
+		Map<String, String> events = CassandraAccessor.getColumnRangeReversed(COLUMN_FAMILY_NAME_CHAT_DETAIL, 
 				current.userName, 
 				fromUser + "#" + Convertor.toString(from), 
-				fromUser + "#99999999999999999999999",
+				fromUser + "#000000000000",
 				maxCount);
 		Vector<String> evList = new Vector<String>(events.keySet());
 		Collections.sort(evList);
