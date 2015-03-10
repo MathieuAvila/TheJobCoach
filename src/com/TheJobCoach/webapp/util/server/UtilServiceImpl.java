@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.ConnectionLog;
 import com.TheJobCoach.userdata.ContactManager;
+import com.TheJobCoach.userdata.UserChatManager;
 import com.TheJobCoach.userdata.UserValues;
 import com.TheJobCoach.webapp.userpage.server.UserServiceImpl;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
@@ -83,6 +84,19 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 		userValues.setValues(id, map, true);	
 		return "";
 	}
+	
+	UserChatManager getUserChatManager() throws CoachSecurityException
+	{
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+
+		UserChatManager result = (UserChatManager)session.getAttribute("UserChatManager");
+		if (result != null) return result;
+		result = new UserChatManager(getUserId());
+		session.setAttribute("UserChatManager", result);
+		return result;
+		
+	}
 
 	@Override
 	public UpdateResponse sendUpdateList(UserId id, UpdateRequest request) 	throws CassandraException, SystemException, CoachSecurityException
@@ -93,7 +107,8 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 				id.userName, 
 				request.from, 
 				request.seconds);
-		UpdateResponse response = new UpdateResponse(userValues.getUpdatedValues(id));
+		
+		UpdateResponse response = new UpdateResponse(userValues.getUpdatedValues(id), getUserChatManager().getLastInfos(request.from));
 		if (request.getFirstTime)
 			response.totalDayTime = logManager.getLogTimeDay(id.userName, request.from);
 		return response;

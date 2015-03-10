@@ -101,6 +101,17 @@
 		<url-pattern>/thejobcoach/UploadImage</url-pattern>
 	</servlet-mapping>
 	
+	<!--  for test purposes -->
+  <servlet>
+    <servlet-name>testServlet</servlet-name>
+    <servlet-class>com.TheJobCoach.webapp.userpage.server.TestServiceImpl</servlet-class>
+  </servlet>
+	
+	<servlet-mapping>
+		<servlet-name>testServlet</servlet-name>
+		<url-pattern>/thejobcoach/TestServlet</url-pattern>
+	</servlet-mapping>
+	
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>TheJobCoach.html</welcome-file>

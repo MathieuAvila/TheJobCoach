@@ -180,4 +180,9 @@ public class FormatUtil
 	{
 		return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_MEDIUM).format(current);
 	}
+	
+	public static String getFormattedTime(Date current)
+	{
+		return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.TIME_SHORT).format(current);
+	}
 }

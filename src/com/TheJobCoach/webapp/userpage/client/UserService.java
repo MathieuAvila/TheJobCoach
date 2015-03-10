@@ -73,7 +73,7 @@ public interface UserService extends RemoteService
 	public Vector<ContactInformation> getContactList() throws CassandraException, SystemException, CoachSecurityException;
 	Boolean sendJobMail(UserId userContact, String message) throws CassandraException, SystemException, CoachSecurityException;
 	
-	public Vector<ChatInfo> getLastMsgFromUser(String fromUser, int maxCount) throws CassandraException, SystemException, CoachSecurityException;
+	public Vector<ChatInfo> getLastMsgFromUser(String fromUser, int maxCount, Date d) throws CassandraException, SystemException, CoachSecurityException;
 	public void addChatMsg(String dst, String msg) throws CassandraException, SystemException, CoachSecurityException;
 	public void isTypingTo(String dst) throws CassandraException, SystemException, CoachSecurityException;
 }

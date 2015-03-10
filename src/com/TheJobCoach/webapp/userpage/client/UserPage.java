@@ -8,6 +8,8 @@ import com.TheJobCoach.webapp.userpage.client.Account.ContentAccount;
 import com.TheJobCoach.webapp.userpage.client.Coach.PanelCoach;
 import com.TheJobCoach.webapp.userpage.client.CoachSettings.ContentCoachSettings;
 import com.TheJobCoach.webapp.userpage.client.Connection.ConnectionToDetail;
+import com.TheJobCoach.webapp.userpage.client.Connection.Chat.ChatContainer;
+import com.TheJobCoach.webapp.userpage.client.Connection.Chat.ChatServiceImpl;
 import com.TheJobCoach.webapp.userpage.client.Document.ContentUserDocument;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.ContentExternalContact;
 import com.TheJobCoach.webapp.userpage.client.Library.ContentSiteLibrary;
@@ -22,6 +24,7 @@ import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
 import com.TheJobCoach.webapp.util.client.RoundedPanel;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
+import com.TheJobCoach.webapp.util.client.TestSecurity;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
@@ -60,6 +63,8 @@ public class UserPage implements EntryPoint {
 	Label selectedMenu = null;
 
 	UserId userId = null;
+	
+	ChatContainer chatContainer = null;
 
 	public void setUser(UserId _userId)
 	{
@@ -209,7 +214,7 @@ public class UserPage implements EntryPoint {
 				public void Open()
 				{
 					simplePanelContent.clear();
-					simplePanelContent.add(new ConnectionToDetail(userId));
+					simplePanelContent.add(new ConnectionToDetail(userId, chatContainer));
 				}	
 			});
 		}
@@ -440,5 +445,7 @@ public class UserPage implements EntryPoint {
 		footerPanel.onModuleLoad();
 
 		changeMenu("news");
+		
+		chatContainer = new ChatContainer(new ChatServiceImpl(TestSecurity.defaultUser));
 	}
 }

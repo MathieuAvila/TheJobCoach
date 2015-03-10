@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.DefaultUtilServiceAsync;
+import com.TheJobCoach.webapp.util.shared.ChatInfo;
 import com.TheJobCoach.webapp.util.shared.FormatUtil;
 import com.TheJobCoach.webapp.util.shared.UpdateRequest;
 import com.TheJobCoach.webapp.util.shared.UpdateResponse;
@@ -83,7 +85,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 				AsyncCallback<UpdateResponse> callback)
 		{
 			logger.info("sendUpdateList " + time);
-			UpdateResponse response = new UpdateResponse(updatedValues);
+			UpdateResponse response = new UpdateResponse(updatedValues, new Vector<ChatInfo>());
 			response.totalDayTime = time;
 			callback.onSuccess(response);
 		}

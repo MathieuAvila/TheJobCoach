@@ -71,7 +71,7 @@ public interface UserServiceAsync {
 	public void getContactList(AsyncCallback<Vector<ContactInformation>> callback);
 	public void sendJobMail(UserId userContact, String message, AsyncCallback<Boolean> callback);
 	
-	public void getLastMsgFromUser(String fromUser, int maxCount, AsyncCallback<Vector<ChatInfo>> callback) throws CassandraException, SystemException, CoachSecurityException;
+	public void getLastMsgFromUser(String fromUser, int maxCount, Date d, AsyncCallback<Vector<ChatInfo>> callback) throws CassandraException, SystemException, CoachSecurityException;
 	public void addChatMsg(String dst, String msg, AsyncCallback<Void> callback) throws CassandraException, SystemException, CoachSecurityException;
 	public void isTypingTo(String dst, AsyncCallback<Void> callback) throws CassandraException, SystemException, CoachSecurityException;
 

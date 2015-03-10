@@ -390,6 +390,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
 		UserChatManager result = (UserChatManager)session.getAttribute("UserChatManager");
 		if (result != null) return result;
+		
 		result = new UserChatManager(getUserId());
 		session.setAttribute("UserChatManager", result);
 		return result;
@@ -398,11 +399,11 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
 	@Override
 	public Vector<ChatInfo> getLastMsgFromUser(String fromUser,
-			int maxCount) throws CassandraException, SystemException,
+			int maxCount, Date d) throws CassandraException, SystemException,
 			CoachSecurityException
 	{
 		UserChatManager userChatManager = getUserChatManager();
-		return userChatManager.getLastMsgFromUser(fromUser, new Date(), maxCount);
+		return userChatManager.getLastMsgFromUser(fromUser, d, maxCount);
 	}
 
 	@Override

@@ -15,11 +15,12 @@ import com.google.gwt.user.client.ui.RootPanel;
  */
 public class TestSecurity implements EntryPoint {
 
-	public static UserId defaultUser = new UserId("user2", "mytoken2", UserId.UserType.USER_TYPE_SEEKER);
-	//public static UserId defaultUser = new UserId("user1", "mytoken1", UserId.UserType.USER_TYPE_SEEKER);
+	//public static UserId defaultUser = new UserId("user2", "mytoken2", UserId.UserType.USER_TYPE_SEEKER);
+	public static UserId defaultUser = new UserId("user1", "mytoken1", UserId.UserType.USER_TYPE_SEEKER);
 	//public static UserId defaultUser = new UserId("test_user", "test_token", UserId.UserType.USER_TYPE_SEEKER, true);
 
-	public static UserId defaultUserConnection = new UserId("user1", "mytoken1", UserId.UserType.USER_TYPE_SEEKER);
+	//public static UserId defaultUserConnection = new UserId("user1", "mytoken1", UserId.UserType.USER_TYPE_SEEKER);
+	public static UserId defaultUserConnection = new UserId("user2", "mytoken2", UserId.UserType.USER_TYPE_SEEKER);
 
 	/**
 	 * This is the entry point method.

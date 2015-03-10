@@ -248,7 +248,7 @@ public class AutoTestContentConnection extends GwtTest {
 		// create click event for further use.
 		Event event = EventBuilder.create(Event.ONCLICK).build();
 
-		ContentConnection cud = new ContentConnection(userId, sendMessage, toDetail, editShares);
+		ContentConnection cud = new ContentConnection(userId, sendMessage, toDetail, editShares, null);
 		assertEquals(1, userService.callsGet);
 		assertEquals(3, cud.cellTable.getRowCount());
 
@@ -439,7 +439,7 @@ public class AutoTestContentConnection extends GwtTest {
 		// create click event for further use.
 		Event event = EventBuilder.create(Event.ONCLICK).build();
 
-		ContentConnection cud = new ContentConnection(userIdTest, sendMessage, new ConnectionToDetailTest(), new TestEditShares());
+		ContentConnection cud = new ContentConnection(userIdTest, sendMessage, new ConnectionToDetailTest(), new TestEditShares(), null);
 
 		// make a search, click on first result.
 		// Search engine
@@ -464,7 +464,7 @@ public class AutoTestContentConnection extends GwtTest {
 	@Test
 	public void testSharesIcons()
 	{
-		ContentConnection cud = new ContentConnection(userIdTest, null, null, null);
+		ContentConnection cud = new ContentConnection(userIdTest, null, null, null, null);
 		ContentConnection.GetShares getShares = cud.new GetShares();
 		List<Boolean> bArray = Arrays.asList(true, false);
 		for (ContactStatus s : ContactStatus.values())

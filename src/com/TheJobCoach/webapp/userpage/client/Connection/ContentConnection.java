@@ -10,6 +10,7 @@ import com.TheJobCoach.webapp.adminpage.shared.UserSearchResult;
 import com.TheJobCoach.webapp.userpage.client.Lang;
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.client.Connection.Chat.IChatContainer;
 import com.TheJobCoach.webapp.userpage.client.ExternalContact.LangExternalContact;
 import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
@@ -90,6 +91,9 @@ public class ContentConnection extends VerticalPanel {
 	static ImageResource logIconDisabled = wpImageBundle.userLogContent_disabled();
 
 	static ImageResource messageIcon = wpImageBundle.userSendMail();
+	static ImageResource chatIcon = wpImageBundle.chat_24();
+	static ImageResource onlineIcon = wpImageBundle.online_24();
+	static ImageResource offlineIcon = wpImageBundle.offline_24();
 	
 	static ImageResource rightIcon = wpUtilImageBundle.nextIcon();
 	
@@ -104,7 +108,8 @@ public class ContentConnection extends VerticalPanel {
 	ISendMessage sendMessage;
 	IConnectionToDetail connectionToDetail;
 	IEditDialogModel<ContactInformation> editShares = null;
-	
+	IChatContainer chatContainer;
+
 	HorizontalPanel detailContainer = new HorizontalPanel();
 	
 	void init(UserId _user)
@@ -113,12 +118,18 @@ public class ContentConnection extends VerticalPanel {
 		rootPanel = RootPanel.get();
 	}
 
-	public ContentConnection(UserId _user, ISendMessage sendMessage, IConnectionToDetail connectionToDetail, IEditDialogModel<ContactInformation> editShares)
+	public ContentConnection(
+			UserId _user, 
+			ISendMessage sendMessage, 
+			IConnectionToDetail connectionToDetail, 
+			IEditDialogModel<ContactInformation> editShares,
+			IChatContainer chatContainer)
 	{
 		init(_user);
 		this.sendMessage = sendMessage;
 		this.connectionToDetail = connectionToDetail;
 		this.editShares = editShares;
+		this.chatContainer = chatContainer;
 		onModuleLoad();
 	}
 
@@ -294,6 +305,46 @@ public class ContentConnection extends VerticalPanel {
 		}
 	}
 
+	class GetIconsChat implements IGetIcons<ContactInformation>
+	{
+		@Override
+		public Vector<ImageResource> getIcons(ContactInformation element)
+		{
+			Vector<ImageResource> result = new Vector<ImageResource>();
+			if (element.status == ContactStatus.CONTACT_OK)
+			{
+				result.add(chatIcon);
+			}
+			return result;
+		}
+
+		@Override
+		public boolean isClickable(ContactInformation element)
+		{
+			return element.status == ContactStatus.CONTACT_OK;
+		}
+	}
+
+	class GetIconsOnlineOffline implements IGetIcons<ContactInformation>
+	{
+		@Override
+		public Vector<ImageResource> getIcons(ContactInformation element)
+		{
+			Vector<ImageResource> result = new Vector<ImageResource>();
+			if (element.status == ContactStatus.CONTACT_OK)
+			{
+				result.add(element.online ? onlineIcon : offlineIcon);
+			}
+			return result;
+		}
+
+		@Override
+		public boolean isClickable(ContactInformation element)
+		{
+			return false;
+		}
+	}
+
 	class FieldUpdaterSendMessage implements FieldUpdater<ContactInformation, ContactInformation>
 	{
 		@Override
@@ -303,6 +354,26 @@ public class ContentConnection extends VerticalPanel {
 			{
 				message(object);
 			}
+		}
+	}	
+
+	class FieldUpdaterChat implements FieldUpdater<ContactInformation, ContactInformation>
+	{
+		@Override
+		public void update(int index, ContactInformation object, ContactInformation value)
+		{
+			if ((object.status == ContactStatus.CONTACT_OK)/*&&(object.online)*/)
+			{
+				chatContainer.getChatFromUser(object); // praise auto-focus
+			}
+		}
+	}	
+
+	class FieldUpdaterOnlineOffline implements FieldUpdater<ContactInformation, ContactInformation>
+	{
+		@Override
+		public void update(int index, ContactInformation object, ContactInformation value)
+		{
 		}
 	}	
 
@@ -421,7 +492,21 @@ public class ContentConnection extends VerticalPanel {
 		ContentHelper.insertTitlePanel(this, lang.connectionTitle(), ClientImageBundle.INSTANCE.userConnectionContent());
 
 		ContentHelper.insertSubTitlePanel(this, langConnection.connectionsSubtitle());
-		
+
+		// Create online/offline column.
+		cellTable.addClickableIconsColumn(
+				new GetIconsOnlineOffline(), 
+				new FieldUpdaterOnlineOffline(), 
+				"", "3em", 
+				null);
+
+		// Create chat column.
+		cellTable.addClickableIconsColumn(
+				new GetIconsChat(), 
+				new FieldUpdaterChat(), 
+				"", "3em", 
+				null);
+
 		// create image column
 		cellTable.addColumnHtml(new FieldUpdater<ContactInformation, String>(){
 

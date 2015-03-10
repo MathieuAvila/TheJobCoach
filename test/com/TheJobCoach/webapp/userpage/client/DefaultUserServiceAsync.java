@@ -221,13 +221,6 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 	{
 		logger.info("toggleDeleteAccount " + delete);
 	}
-	@Override
-	public void getLastMsgFromUser(String fromUser, int maxCount,
-			AsyncCallback<Vector<ChatInfo>> callback)
-			throws CassandraException, SystemException, CoachSecurityException
-	{
-		logger.info("getLastMsgFromUser " + fromUser);
-	}
 
 	@Override
 	public void addChatMsg(String dst, String msg, AsyncCallback<Void> callback)
@@ -241,5 +234,12 @@ public class DefaultUserServiceAsync implements UserServiceAsync
 			throws CassandraException, SystemException, CoachSecurityException
 	{
 		logger.info("isTypingTo " + dst);
+	}
+	@Override
+	public void getLastMsgFromUser(String fromUser, int maxCount, Date d,
+			AsyncCallback<Vector<ChatInfo>> callback)
+			throws CassandraException, SystemException, CoachSecurityException
+	{
+		logger.info("getLastMsgFromUser " + fromUser);
 	}
 };

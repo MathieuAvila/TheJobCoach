@@ -88,6 +88,17 @@ public class ContactInformation implements Serializable {
 		this.userName = "";
 	}
 
+	public ContactInformation(String userName, String firstName, String lastName)
+	{
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.myVisibility = new Visibility();
+		this.hisVisibility = new Visibility();
+		this.status = ContactStatus.CONTACT_NONE;
+		this.userName = userName;
+	}
+
 	public ContactInformation()
 	{
 		this.myVisibility = new Visibility();

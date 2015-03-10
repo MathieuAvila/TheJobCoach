@@ -105,4 +105,17 @@ public interface LangConnection extends Constants {
 	
 	@Key("jobTitleDetail")
 	String jobTitleDetail();
+	
+	// chat
+	
+	@Key("isTyping")
+	String isTyping();
+
+	@Key("isOnline")
+	String isOnline();
+	
+	@Key("isOffline")
+	String isOffline();
+	
+	
 }

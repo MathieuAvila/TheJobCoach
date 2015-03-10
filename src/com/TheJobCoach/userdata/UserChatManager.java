@@ -148,7 +148,10 @@ public class UserChatManager implements IUserDataManager {
 		{
 			String[] rest = event.split("#");
 			String[] restRes = events.get(event).split("#");
-			result.add(new ChatInfo(Convertor.toDate(rest[1]), rest[0], stringToType.get(restRes[0]), restRes[1]));
+			String message = "";
+			if (restRes.length == 2) message = restRes[1];
+			System.out.println("event: " + event + " value:" + events.get(event));
+			result.add(new ChatInfo(Convertor.toDate(rest[1]), rest[0], stringToType.get(restRes[0]), message));
 			System.out.println("get msg from : " + rest[0] + " ");
 		}
 		return result;

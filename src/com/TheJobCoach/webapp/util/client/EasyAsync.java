@@ -5,8 +5,10 @@ import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
 import com.TheJobCoach.webapp.util.shared.SystemException;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
 
 public class EasyAsync
 {
@@ -35,6 +37,11 @@ public class EasyAsync
 				run.Open();
 			}
 		});
+	}
+	
+	public static void serverCall(ServerCallRun toRun)
+	{
+		serverCall(RootPanel.get(), toRun);
 	}
 	
 	public static void serverCall(Panel rootPanel, ServerCallRun toRun)
