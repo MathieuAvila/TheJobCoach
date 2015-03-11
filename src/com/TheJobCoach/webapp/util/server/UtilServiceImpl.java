@@ -108,7 +108,7 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 				request.from, 
 				request.seconds);
 		
-		UpdateResponse response = new UpdateResponse(userValues.getUpdatedValues(id), getUserChatManager().getLastInfos(request.from));
+		UpdateResponse response = new UpdateResponse(userValues.getUpdatedValues(id), getUserChatManager().getLastInfos(request.lastRequest));
 		if (request.getFirstTime)
 			response.totalDayTime = logManager.getLogTimeDay(id.userName, request.from);
 		return response;

@@ -3,6 +3,7 @@ package com.TheJobCoach.webapp.userpage.client;
 import java.util.Date;
 import java.util.Vector;
 
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.ChatInfo;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
@@ -27,4 +28,6 @@ public interface TestService extends RemoteService
 	public void logInOut(String myUser, String myPassword, boolean in) throws CassandraException, SystemException, CoachSecurityException;
 	
 	public UpdateResponse sendUpdateList(UserId defaultUser, UpdateRequest request) throws CassandraException, CoachSecurityException;
+
+	public Vector<ContactInformation> getContactList(String userName) throws CassandraException, CoachSecurityException;
 }

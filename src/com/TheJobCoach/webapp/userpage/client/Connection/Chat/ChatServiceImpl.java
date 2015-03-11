@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.client.UserService;
 import com.TheJobCoach.webapp.userpage.client.UserServiceAsync;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ServerCallRun;
@@ -73,6 +74,25 @@ public class ChatServiceImpl implements IChatService
 					public void onSuccess(Vector<ChatInfo> v)
 					{
 						onResult.Run(v);
+					}});
+			}});
+	}
+
+	@Override
+	public void getInformation(final String from, final GetChatInformationResult onResult)
+	{
+		EasyAsync.serverCall(new ServerCallRun(){
+			@Override
+			public void Run() throws CassandraException,
+					CoachSecurityException, SystemException
+			{
+				userService.getContactList(new ServerCallHelper<Vector<ContactInformation>>(RootPanel.get()) {
+					@Override
+					public void onSuccess(Vector<ContactInformation> v)
+					{
+						for (ContactInformation ci : v)
+							if (ci.userName.equals(from))
+								onResult.Run(ci);
 					}});
 			}});
 	}

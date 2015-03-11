@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import com.TheJobCoach.webapp.userpage.client.Coach.GoalSignal;
 import com.TheJobCoach.webapp.userpage.client.Coach.MessagePipe;
+import com.TheJobCoach.webapp.userpage.client.Connection.Chat.IChatContainer;
 import com.TheJobCoach.webapp.userpage.shared.GoalReportInformation;
 import com.TheJobCoach.webapp.userpage.shared.UserLogEntry.LogEntryType;
 import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
@@ -61,6 +62,8 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 	// Start checking results after this time is elapsed. Doing so lowers the calls to server during the first seconds after logged in.
 	static final int START_CHECK_GOAL_RESULT = 120;
 	
+	IChatContainer chatContainer;
+
 	// Simple check list
 	class SimpleCheckList
 	{
@@ -218,6 +221,8 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		values.callbackServerSetValues(response.updatedValues);
 	}
 	
+	Date lastRequest = new Date();
+	
 	public void fireTimer()
 	{
 		// Wait for next run.
@@ -229,7 +234,8 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				((h != 0) ? (String.valueOf(h) + "h ") : new String()) + 
 				((m != 0)  ? (String.valueOf(m) + "mn ") : new String()) + 
 				String.valueOf(s) + "s");
-		UpdateRequest request = new UpdateRequest(today, connectSec, firstTime);
+		UpdateRequest request = new UpdateRequest(today, connectSec, firstTime, lastRequest);
+		lastRequest = new Date();
 
 		ServerCallHelper<UpdateResponse> callback =  new ServerCallHelper<UpdateResponse>(rootPanel){
 			@Override
@@ -237,6 +243,9 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 			{
 				result.totalDayTime += connectSec;
 				checkTime(result);
+				System.out.println("update list " + result.chatInfo.size() +  chatContainer);
+				if (chatContainer != null)
+					chatContainer.updateInfo(result.chatInfo);
 			}
 		};	
 		utilService.sendUpdateList(userId, request, callback);
@@ -251,11 +260,12 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		};
 	};
 
-	public PanelUpdate(Panel rootPanel, UserId userId, Label connectionTime) 
+	public PanelUpdate(Panel rootPanel, UserId userId, Label connectionTime, IChatContainer chatContainer) 
 	{
 		this.connectionTime = connectionTime;
 		this.rootPanel = rootPanel;
 		this.userId = userId;
+		this.chatContainer = chatContainer;
 		message = MessagePipe.getMessagePipe(userId, rootPanel);
 		// Get time goals.
 		values = ClientUserValuesUtils.getInstance(userId);

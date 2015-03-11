@@ -342,7 +342,6 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 		result = new ContactManager(getUserId());
 		session.setAttribute("contactmanager", result);
 		return result;
-		
 	}
 	
 	@Override

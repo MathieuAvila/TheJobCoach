@@ -142,7 +142,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 
 		// first update must trigger a few updates and message WELCOME.
 		reset();
-		cul = new PanelUpdate(p, userId, connectionTime);
+		cul = new PanelUpdate(p, userId, connectionTime, null);
 		cul.onModuleLoad();
 		cul.fireTimer();
 		assertEquals(msg.getMessage(), "COACH_WELCOME");
@@ -150,7 +150,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		
 		// Second connection says HELLO.
 		reset();
-		cul = new PanelUpdate(p, userId, connectionTime);
+		cul = new PanelUpdate(p, userId, connectionTime, null);
 		cul.onModuleLoad();
 		cul.fireTimer();
 		assertEquals(msg.getMessage(), "COACH_HELLO");
@@ -159,7 +159,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		// Third connection on the same day
 		reset();
 		utilService.time = 10;
-		cul = new PanelUpdate(p, userId, connectionTime);
+		cul = new PanelUpdate(p, userId, connectionTime, null);
 		cul.onModuleLoad();
 		cul.fireTimer();
 		assertEquals(msg.getMessage(), "COACH_HELLO_AGAIN");
@@ -172,7 +172,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		utilService.time = 0;
 		utilService.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
 				String.valueOf(currentTimeSec - 60*31*1000));
-		cul = new PanelUpdate(p, userId, connectionTime);
+		cul = new PanelUpdate(p, userId, connectionTime, null);
 		cul.onModuleLoad();
 		cul.fireTimer();
 		assertEquals(msg.getMessage(), "COACH_HELLO");
@@ -184,7 +184,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		utilService.time = 0;
 		utilService.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
 				String.valueOf(currentTimeSec - 10*1000));
-		cul = new PanelUpdate(p, userId, connectionTime);
+		cul = new PanelUpdate(p, userId, connectionTime, null);
 		cul.onModuleLoad();
 		cul.fireTimer();
 		assertEquals(msg.getMessage(), "COACH_HELLO");
@@ -196,7 +196,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 		utilService.time = 0;
 		utilService.values.put(UserValuesConstantsMyGoals.PERFORMANCE_CONNECT_BEFORE_HOUR, 
 				String.valueOf(currentTimeSec + 10*1000));
-		cul = new PanelUpdate(p, userId, connectionTime);
+		cul = new PanelUpdate(p, userId, connectionTime, null);
 		cul.onModuleLoad();
 		cul.fireTimer();
 		assertEquals(msg.getMessage(), "COACH_HELLO");
@@ -237,7 +237,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 			}
 		};
 		
-		cul = new PanelUpdate(p, userId, new Label());
+		cul = new PanelUpdate(p, userId, new Label(), null);
 		
 		// this will trigger a call to UserValues.
 		cul.onModuleLoad();

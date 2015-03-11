@@ -8,6 +8,7 @@ import sun.java2d.Surface;
 
 import com.TheJobCoach.webapp.userpage.client.Connection.LangConnection;
 import com.TheJobCoach.webapp.userpage.client.Connection.Chat.IChatService.GetChatHistoryResult;
+import com.TheJobCoach.webapp.userpage.client.Connection.Chat.IChatService.GetChatInformationResult;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.ChatInfo;
@@ -143,7 +144,22 @@ public class ChatContainer extends FlowPanel implements IChatContainer {
 
 			titleElement = titlePanel.getElement().appendChild(Document.get().createDivElement());
 			titleElement.setClassName("ChatWindow-title");
-			titleElement.setInnerHTML(info.userName + " (" + info.firstName + " " + info.lastName + ")");
+			if (info.firstName.equals("") || info.lastName.equals(""))
+			{
+				titleElement.setInnerHTML(info.userName);
+				chatService.getInformation(info.userName, new GetChatInformationResult()
+				{
+					@Override
+					public void Run(ContactInformation info)
+					{
+						titleElement.setInnerHTML(info.userName + " (" + info.firstName + " " + info.lastName + ")");
+					}
+				});
+			}
+			else
+			{
+				titleElement.setInnerHTML(info.userName + " (" + info.firstName + " " + info.lastName + ")");
+			}
 			
 			content.setStyleName("ChatWindow-typeZone");
 			content.addValueChangeHandler(this);
@@ -279,6 +295,7 @@ public class ChatContainer extends FlowPanel implements IChatContainer {
 				chatEvent.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 				chatZonePanel.setCellHorizontalAlignment(chatEvent, HasHorizontalAlignment.ALIGN_LEFT);
 				chatEvent.setStyleName("ChatWindow-status");
+				scroll.setVerticalScrollPosition(scroll.getMaximumVerticalScrollPosition());
 				break;
 			default:
 				break;
@@ -423,13 +440,15 @@ public class ChatContainer extends FlowPanel implements IChatContainer {
 	private IChatService chatService;
 
 	@Override
-	public IChatInfoHandler getChatFromUser(ContactInformation info)
+	public IChatInfoHandler getChatFromUser(ContactInformation info, boolean create)
 	{
 		ChatEventView handler = null;
 		if (content.containsKey(info.userName))
 			handler = content.get(info.userName);
 		else
 		{
+			if (!create)
+				return null;
 			handler = new ChatEventView(info, this, chatService);
 			add(handler);
 			content.put(info.userName, handler);
@@ -466,8 +485,9 @@ public class ChatContainer extends FlowPanel implements IChatContainer {
 		for (ChatInfo ci: chatInfo)
 		{
 			System.out.println("received message from: " + ci.dst + " msg: " + ci.msg + " type "+ ci.type);
-			IChatInfoHandler handler = getChatFromUser(new ContactInformation(ci.dst, "",""));
-			handler.receiveChatInfo(ci, false);
+			IChatInfoHandler handler = getChatFromUser(new ContactInformation(ci.dst, "",""), ci.type == MsgType.MSG_FROM);
+			if (handler != null)
+				handler.receiveChatInfo(ci, false);
 		}
 	}
 

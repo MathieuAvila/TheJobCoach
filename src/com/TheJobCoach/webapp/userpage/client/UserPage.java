@@ -24,7 +24,6 @@ import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
 import com.TheJobCoach.webapp.util.client.RoundedPanel;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
-import com.TheJobCoach.webapp.util.client.TestSecurity;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.google.gwt.core.client.EntryPoint;
@@ -338,8 +337,11 @@ public class UserPage implements EntryPoint {
 		HTML image= new HTML("<img src=\"" + imgURL + "\" style=\"display: block; max-width:32px; max-height:32px; width: auto; height: auto;\"/>");
 		connectionTextPanel.add(panelConnectedAs);
 		connectionTextPanel.add(panelConnectionTime);
+		
+		chatContainer = new ChatContainer(new ChatServiceImpl(userId));
+		rootPanel.add(chatContainer);
 
-		PanelUpdate panelUpdate = new PanelUpdate(panelConnectedAs, userId, connectionTime);
+		PanelUpdate panelUpdate = new PanelUpdate(panelConnectedAs, userId, connectionTime, chatContainer);
 		panelConnectedAs.add(panelUpdate);
 
 		panelConnectionInfo.add(image);
@@ -445,7 +447,5 @@ public class UserPage implements EntryPoint {
 		footerPanel.onModuleLoad();
 
 		changeMenu("news");
-		
-		chatContainer = new ChatContainer(new ChatServiceImpl(TestSecurity.defaultUser));
 	}
 }

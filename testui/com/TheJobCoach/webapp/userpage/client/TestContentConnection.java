@@ -11,12 +11,12 @@ import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.ContactStatus;
 import com.TheJobCoach.webapp.userpage.shared.ContactInformation.Visibility;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
-import com.TheJobCoach.webapp.util.client.ServerCallHelper;
-import com.TheJobCoach.webapp.util.client.UtilService;
-import com.TheJobCoach.webapp.util.client.UtilServiceAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ServerCallRun;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
+import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.TestSecurity;
+import com.TheJobCoach.webapp.util.client.UtilService;
+import com.TheJobCoach.webapp.util.client.UtilServiceAsync;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.ChatInfo;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
@@ -115,6 +115,25 @@ public class TestContentConnection implements EntryPoint {
 			
 		}
 
+		@Override
+		public void getInformation(final String from, final GetChatInformationResult onResult)
+		{
+			EasyAsync.serverCall(new ServerCallRun(){
+				@Override
+				public void Run() throws CassandraException,
+						CoachSecurityException, SystemException
+				{
+					testService.getContactList(user.userName, new ServerCallHelper<Vector<ContactInformation>>(RootPanel.get()) {
+						@Override
+						public void onSuccess(Vector<ContactInformation> v)
+						{
+							for (ContactInformation ci : v)
+								if (ci.userName.equals(from))
+									onResult.Run(ci);
+						}});
+				}});
+		}
+
 	}
 	
 	static Date lastTime = new Date();
@@ -191,10 +210,10 @@ public class TestContentConnection implements EntryPoint {
 						final TestServiceAsync testService = GWT.create(TestService.class);
 
 						final ChatContainer chat = new ChatContainer(new ChatServiceImpl(TestSecurity.defaultUser));
-						chat.getChatFromUser(new ContactInformation(TestSecurity.defaultUserConnection.userName, "first2", "last2"));
+						chat.getChatFromUser(new ContactInformation(TestSecurity.defaultUserConnection.userName, "first2", "last2"), true);
 						
 						final ChatContainer remoteChat = new ChatContainer(new ChatServiceFake(TestSecurity.defaultUserConnection));
-						remoteChat.getChatFromUser(new ContactInformation(TestSecurity.defaultUser.userName, "first", "last"));
+						remoteChat.getChatFromUser(new ContactInformation(TestSecurity.defaultUser.userName, "first", "last"), true);
 
 						VerticalPanel vp = new VerticalPanel();
 						Button logIn = new Button("LogIn");
@@ -232,7 +251,7 @@ public class TestContentConnection implements EntryPoint {
 
 								//System.out.println("update on alam");
 								schedule(1000);
-								UpdateRequest request = new UpdateRequest(lastTime, 1, false);
+								UpdateRequest request = new UpdateRequest(lastTime, 1, false, lastTime);
 								ServerCallHelper<UpdateResponse> callback =  new ServerCallHelper<UpdateResponse>(root){
 									@Override
 									public void onSuccess(UpdateResponse result)

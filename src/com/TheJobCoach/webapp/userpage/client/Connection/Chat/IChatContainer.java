@@ -7,6 +7,6 @@ import com.TheJobCoach.webapp.util.shared.ChatInfo;
 
 public interface IChatContainer
 {
-	IChatInfoHandler getChatFromUser(ContactInformation info);
+	IChatInfoHandler getChatFromUser(ContactInformation info, boolean create);
 	void updateInfo(Vector<ChatInfo> chatInfo);
 }

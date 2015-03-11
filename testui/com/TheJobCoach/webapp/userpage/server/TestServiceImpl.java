@@ -8,8 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.userdata.AccountManager;
+import com.TheJobCoach.userdata.ContactManager;
 import com.TheJobCoach.userdata.UserChatManager;
 import com.TheJobCoach.webapp.userpage.client.TestService;
+import com.TheJobCoach.webapp.userpage.shared.ContactInformation;
 import com.TheJobCoach.webapp.util.shared.CassandraException;
 import com.TheJobCoach.webapp.util.shared.ChatInfo;
 import com.TheJobCoach.webapp.util.shared.CoachSecurityException;
@@ -77,6 +79,15 @@ public class TestServiceImpl extends RemoteServiceServlet implements TestService
 				new HashMap<String, String>(), 
 				getUserChatManager(defaultUser.userName).getLastInfos(request.from));
 		return response;
+	}
+
+	@Override
+	public Vector<ContactInformation> getContactList(String userName)
+			throws CassandraException, CoachSecurityException
+	{
+		ContactManager contact =  new ContactManager(new UserId(userName));
+		Vector<ContactInformation> result = contact.getContactList();
+		return result;
 	}
 
 	

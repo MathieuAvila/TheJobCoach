@@ -364,7 +364,7 @@ public class ContentConnection extends VerticalPanel {
 		{
 			if ((object.status == ContactStatus.CONTACT_OK)/*&&(object.online)*/)
 			{
-				chatContainer.getChatFromUser(object); // praise auto-focus
+				chatContainer.getChatFromUser(object, true); // praise auto-focus
 			}
 		}
 	}	
