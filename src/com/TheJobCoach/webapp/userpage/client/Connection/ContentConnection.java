@@ -508,7 +508,7 @@ public class ContentConnection extends VerticalPanel {
 				null);
 
 		// create image column
-		cellTable.addColumnHtml(new FieldUpdater<ContactInformation, String>(){
+		cellTable.addColumnHtmlWidth(new FieldUpdater<ContactInformation, String>(){
 
 			@Override
 			public void update(int index, ContactInformation object,
@@ -519,7 +519,7 @@ public class ContentConnection extends VerticalPanel {
 			{
 				return UserImageHelper.getImage(user, element.userName, 32, true).getHTML();
 			}}, 
-			"");
+			"", "32px");
 
 		// Create status column.
 		cellTable.addClickableIconsColumn(
@@ -604,7 +604,7 @@ public class ContentConnection extends VerticalPanel {
 			@Override
 			public String getValue(UserSearchEntry element)
 			{
-				return UserImageHelper.getImage(user, element.userName, 32, true).getHTML();
+				return UserImageHelper.getImage(user, element.userName, 32, false).getHTML();
 			}}, 
 			"");
 

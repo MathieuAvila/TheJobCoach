@@ -306,6 +306,11 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 
 	public void addColumnHtml(FieldUpdater<DocType, String> fieldUpdater, final GetValue<String, DocType> getter, String cName)
 	{
+		addColumnHtmlWidth(fieldUpdater, getter, cName, "");
+	}
+
+	public void addColumnHtmlWidth(FieldUpdater<DocType, String> fieldUpdater, final GetValue<String, DocType> getter, String cName, String width)
+	{
 		ClickableTextCell anchorcolumn = new ClickableTextCell()
 		{
 			@SuppressWarnings("unchecked")
@@ -321,6 +326,7 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 				getter,
 				fieldUpdater);
 		addColumn(column, cName);
+		setColumnWidth(column, width);
 	}
 
 	private void init()
@@ -354,5 +360,10 @@ public class ExtendedCellTable<DocType> extends CellTable<DocType> {
 		this.list = list;
 		dataProvider.addDataDisplay(this);
 		init();
+	}
+	
+	public void setLastColumnWidth(String val)
+	{
+		this.setColumnWidth(this.getColumn(this.getColumnCount() - 1), val);
 	}
 }
