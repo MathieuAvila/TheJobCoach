@@ -22,6 +22,7 @@ import com.TheJobCoach.webapp.userpage.client.images.ClientImageBundle;
 import com.TheJobCoach.webapp.util.client.EasyAsync;
 import com.TheJobCoach.webapp.util.client.EasyAsync.ToRun;
 import com.TheJobCoach.webapp.util.client.HorizontalSpacer;
+import com.TheJobCoach.webapp.util.client.MessageBox;
 import com.TheJobCoach.webapp.util.client.RoundedPanel;
 import com.TheJobCoach.webapp.util.client.ServerCallHelper;
 import com.TheJobCoach.webapp.util.client.VerticalSpacer;
@@ -217,6 +218,18 @@ public class UserPage implements EntryPoint {
 				}	
 			});
 		}
+		if (menu.equals("help"))
+		{
+			EasyAsync.Check(simplePanelContent, new ToRun() {
+				@Override
+				public void Open()
+				{
+					MessageBox mb = new MessageBox(RootPanel.get(), true, false, MessageBox.TYPE.NONE, lang.content_help(),
+							"<iframe style=\"width:500px; height:500px;\" src=\"static/howto/howto.html\"></iframe>", null);
+					mb.onModuleLoad();
+				}	
+			});
+		}
 	}
 
 	private void setLabelMenu(final Label label, final String menu)
@@ -401,6 +414,7 @@ public class UserPage implements EntryPoint {
 
 		Panel contentAccount = addRoundedPanelWithTitle(verticalPanel_2, lang._TextAccount());
 		addLabelMenuWithImage(contentAccount, lang._TextMyAccount(), "account", ClientImageBundle.INSTANCE.parametersContent_menu());
+		addLabelMenuWithImage(contentAccount, lang.content_help(), "help", ClientImageBundle.INSTANCE.content_help_24());
 
 		Panel contentMyApplication = addRoundedPanelWithTitle(verticalPanel_2, lang._TextMySearch());
 		addLabelMenuWithImage(contentMyApplication, lang._TextTodo(), "todo", ClientImageBundle.INSTANCE.todoContent_menu());

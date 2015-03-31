@@ -175,4 +175,10 @@ public interface ClientImageBundle extends ClientBundle
 
 	@Source("min_24.png")
 	ImageResource min_24();
+	
+	
+	@Source("content_help_24.png")
+	ImageResource content_help_24();
+
+
 }

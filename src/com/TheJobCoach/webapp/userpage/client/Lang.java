@@ -103,6 +103,9 @@ public interface Lang extends Constants {
 	@Key("sitelibrary")
 	String _TextSiteLibrary();
 
+	@Key("content_help")
+	String content_help();
+
 	@Key("connectionTitle")
 	String connectionTitle();
 
