@@ -270,6 +270,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 		// Get time goals.
 		values = ClientUserValuesUtils.getInstance(userId);
 		values.preloadValueList("PERFORMANCE", this);
+		values.preloadValueList(UserValuesConstantsCoachMessages.COACH_HOWTO, this);
 	}
 
 	int lastGoalSignal = 0;
@@ -373,6 +374,15 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				if (currentTime.after(departureTimeMore30minutes)) timePhase = 3;
 			}
 		}
+		else if (key.equals(UserValuesConstantsCoachMessages.COACH_HOWTO))
+		{
+			if ((value != null)&&("0".equals(value)))
+			{ 
+				values.setValue(UserValuesConstantsCoachMessages.COACH_HOWTO, "1");
+				HowtoWindow.popUp();
+			}
+		}
+			
 		// If results are already received and we have a change, then user has changed his preferences, so that they are invalid now.
 		// => flush all results, now and previous. Next call will trigger a server call to retrieve new performance results.
 		if ((currentResult != null) && (receivedPerformanceKeys) && performanceKeys.contains(key))

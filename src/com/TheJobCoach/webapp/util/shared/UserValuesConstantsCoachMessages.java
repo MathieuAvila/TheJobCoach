@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class UserValuesConstantsCoachMessages 
 {	
 	public final static String COACH_ROOT                     = "COACH_";
+	public final static String COACH_HOWTO                    = "COACH_HOWTO";
 	public final static String COACH_WELCOME                  = "COACH_WELCOME";
 	public final static String COACH_PRESENTING               = "COACH_PRESENTING";
 	public final static String COACH_HELLO                    = "COACH_HELLO";

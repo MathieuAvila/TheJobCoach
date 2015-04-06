@@ -150,6 +150,7 @@ public class UserValuesCore {
 		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_INTERVIEW, MAX_OPTION_LENGTH, true, "3"));
 		addField(new FieldDefinition(UserValuesConstantsCoachSettings.COACHSETTINGS_TODO_EVENT, MAX_OPTION_LENGTH, true, "3"));	
 		
+		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_HOWTO, MAX_OPTION_LENGTH_INT, true, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_WELCOME, MAX_OPTION_LENGTH_INT, true, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_HELLO, MAX_OPTION_LENGTH_INT, true, "0"));
 		addField(new FieldDefinition(UserValuesConstantsCoachMessages.COACH_HELLO_AGAIN, MAX_OPTION_LENGTH_INT, true, "0"));
