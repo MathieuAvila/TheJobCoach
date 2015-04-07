@@ -151,12 +151,14 @@ public class AutoTestContentConnection extends GwtTest {
 				);
 	}
 
-	static final int COLUMN_IMAGE         = 0;
-	static final int COLUMN_STATUS        = 1;
-	static final int COLUMN_MESSAGE       = 2;
-	static final int COLUMN_SHARES        = 3;
-	static final int COLUMN_NAME          = 4;
-	static final int COLUMN_TODETAIL      = 5;
+	static final int COLUMN_ONLINE        = 0;
+	static final int COLUMN_CHAT          = 1;
+	static final int COLUMN_IMAGE         = 2;
+	static final int COLUMN_STATUS        = 3;
+	static final int COLUMN_MESSAGE       = 4;
+	static final int COLUMN_SHARES        = 5;
+	static final int COLUMN_NAME          = 6;
+	static final int COLUMN_TODETAIL      = 7;
 
 	class SendMessageTest implements ISendMessage
 	{
@@ -260,7 +262,7 @@ public class AutoTestContentConnection extends GwtTest {
 
 		// Column name
 
-		assertEquals(6, cud.cellTable.getColumnCount());
+		assertEquals(8, cud.cellTable.getColumnCount());
 		assertEquals("lastName1 firstName1",           cud.cellTable.getColumn(COLUMN_NAME).getValue(ci1));
 
 		// Column shares
