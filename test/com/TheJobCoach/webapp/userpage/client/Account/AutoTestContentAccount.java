@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.TheJobCoach.webapp.userpage.client.DefaultUserServiceAsync;
+import com.TheJobCoach.webapp.util.client.ClientUserValuesUtils;
 import com.TheJobCoach.webapp.util.client.DefaultUtilServiceAsync;
 import com.TheJobCoach.webapp.util.shared.UserId;
 import com.TheJobCoach.webapp.util.shared.UserValuesConstantsAccount;
@@ -68,6 +69,8 @@ public class AutoTestContentAccount extends GwtTest {
 	@Test
 	public void testNames() throws InterruptedException
 	{
+		ClientUserValuesUtils.instance = null;
+		utilService.values.clear();
 		utilService.values.put(UserValuesConstantsAccount.ACCOUNT_FIRSTNAME, "firstname");
 		utilService.values.put(UserValuesConstantsAccount.ACCOUNT_LASTNAME, "lastname");
 		ContentAccount ca = new ContentAccount(userId);
