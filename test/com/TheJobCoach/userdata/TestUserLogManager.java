@@ -195,35 +195,26 @@ public class TestUserLogManager
 		manager.setUserLogEntry(id, userLog1);
 		opp1 = manager.getLogEntryLong(id, userLog1.ID);
 		checkUserLogEntry(opp1, userLog1, true);
-	}
-			
-	@Test
-	public void testDeleteLogEntry() throws CassandraException {
+		
+		// testDeleteLogEntry()
 		manager.deleteUserLogEntry(id, "log1");
 		Vector<UserLogEntry> result = manager.getLogList(id, "opp1");
 		assertEquals(1, result.size());
 		assertEquals(result.get(0).ID, "log2");
-	}
-
-	@Test
-	public void testDeleteUserOpportunity() throws CassandraException {
-		manager.deleteOpportunityLogList(id, "opp1");
-		Vector<UserLogEntry> result = manager.getLogList(id, "opp1");
-		assertEquals(0, result.size());
-	}
 	
-	@Test
-	public void testDeletedContact() throws CassandraException, SystemException {
+		// testDeleteUserOpportunity()
+		manager.deleteOpportunityLogList(id, "opp1");
+		result = manager.getLogList(id, "opp1");
+		assertEquals(0, result.size());
+
+		// testDeletedContact()
 		manager.setUserLogEntry(id, userLog1);
 		contactManager.deleteExternalContact(id, external_contact2.ID);
 		UserLogEntry log1 = manager.getLogEntryLong(id, userLog1.ID);
 		checkUserLogEntry(log1, userLog1, false);
 		checkContactList(log1.linkedExternalContact, externalContactList_Filtered);	
-	}
 	
-	@Test
-	public void testStatusChange() throws CassandraException, SystemException 
-	{
+		// testStatusChange()
 		UserLogEntry userLog_timeA = new UserLogEntry("opp_timeA", "log_opp1_timeA", "title", "description", 
 				CoachTestUtils.getDate(2100, 2, 10),
 				LogEntryType.INFO, externalContactList_void, docIdListVoid, "note2", false);
@@ -258,50 +249,51 @@ public class TestUserLogManager
 		Date last_date = CoachTestUtils.getDate(2100, 7, 5);
 		
 		// Get all
-		Vector<String> result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
-		assertEquals(2, result.size());
-		assertEquals(userLog_timeB.ID, result.get(0));
-		assertEquals(userLog_timeC.ID, result.get(1));
+		Vector<String> resultPeriod = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		assertEquals(2, resultPeriod.size());
+		assertEquals(userLog_timeB.ID, resultPeriod.get(0));
+		assertEquals(userLog_timeC.ID, resultPeriod.get(1));
 		
 		// Delete one log
 		manager.deleteUserLogEntry(id_tmp, userLog_timeB.ID);
-		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
-		assertEquals(1, result.size());
-		assertEquals(userLog_timeC.ID, result.get(0));
+		resultPeriod = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		assertEquals(1, resultPeriod.size());
+		assertEquals(userLog_timeC.ID, resultPeriod.get(0));
 		
 		// Set back deleted log
 		manager.setUserLogEntry(id_tmp, userLog_timeB);
-		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
-		assertEquals(2, result.size());
-		assertEquals(userLog_timeB.ID, result.get(0));
-		assertEquals(userLog_timeC.ID, result.get(1));
+		resultPeriod = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		assertEquals(2, resultPeriod.size());
+		assertEquals(userLog_timeB.ID, resultPeriod.get(0));
+		assertEquals(userLog_timeC.ID, resultPeriod.get(1));
 		
 		// Delete the whole opportunity
 		manager.deleteOpportunityLogList(id_tmp, userLog_timeC.opportunityId);
-		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
-		assertEquals(1, result.size());
-		assertEquals(userLog_timeB.ID, result.get(0));
+		resultPeriod = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		assertEquals(1, resultPeriod.size());
+		assertEquals(userLog_timeB.ID, resultPeriod.get(0));
 		
 		// Set back deleted log, replace with another one, expect date change
 		manager.setUserLogEntry(id_tmp, userLog_timeC);
 		manager.setUserLogEntry(id_tmp, userLog_timeC_replaced);
-		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
+		resultPeriod = manager.getPeriodUserOppStatusChange(id_tmp, start, end);
 		// First call in previous period: only B
-		assertEquals(1, result.size());
-		assertEquals(userLog_timeB.ID, result.get(0));
+		assertEquals(1, resultPeriod.size());
+		assertEquals(userLog_timeB.ID, resultPeriod.get(0));
 		// Second call in new period: B and new C
-		result = manager.getPeriodUserOppStatusChange(id_tmp, start, end_replaced);
-		assertEquals(userLog_timeB.ID, result.get(0));
-		assertEquals(userLog_timeC_replaced.ID, result.get(1));
+		resultPeriod = manager.getPeriodUserOppStatusChange(id_tmp, start, end_replaced);
+		assertEquals(userLog_timeB.ID, resultPeriod.get(0));
+		assertEquals(userLog_timeC_replaced.ID, resultPeriod.get(1));
 		
 		// check all.
-		result = manager.getPeriodUserOppStatusChange(id_tmp, first_date, last_date);
-		assertEquals(4, result.size());
+		resultPeriod = manager.getPeriodUserOppStatusChange(id_tmp, first_date, last_date);
+		assertEquals(4, resultPeriod.size());
 		
 		// Delete the whole user
 		manager.deleteUser(id_tmp);
-		result = manager.getPeriodUserOppStatusChange(id_tmp, first_date, last_date);
-		assertEquals(0, result.size());
+		resultPeriod = manager.getPeriodUserOppStatusChange(id_tmp, first_date, last_date);
+		assertEquals(0, resultPeriod.size());
+
 	}
 
 	static class TestTodoList implements ITodoList
