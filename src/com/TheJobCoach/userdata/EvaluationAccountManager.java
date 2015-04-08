@@ -75,7 +75,7 @@ public class EvaluationAccountManager
 			time = SiteUUID.getDateUuid();
 			if (testAccountList.get(time) == null)
 			{
-				userName = "test#" + new Random().nextInt(1000);
+				userName = "test_" + new Random().nextInt(1000);
 				if (!accountManager.existsAccount(userName))
 				{
 					exist = false;
