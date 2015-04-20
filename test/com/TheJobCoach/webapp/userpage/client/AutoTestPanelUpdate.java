@@ -85,7 +85,7 @@ public class AutoTestPanelUpdate extends GwtTest {
 				AsyncCallback<UpdateResponse> callback)
 		{
 			logger.info("sendUpdateList " + time);
-			UpdateResponse response = new UpdateResponse(updatedValues, new Vector<ChatInfo>());
+			UpdateResponse response = new UpdateResponse(updatedValues, new Vector<ChatInfo>(), new Date());
 			response.totalDayTime = time;
 			callback.onSuccess(response);
 		}

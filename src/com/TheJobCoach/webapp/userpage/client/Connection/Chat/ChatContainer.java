@@ -85,6 +85,8 @@ public class ChatContainer extends FlowPanel implements IChatContainer {
 		private ScrollPanel scroll = new ScrollPanel();
 
 		private Date firstDate = new Date();
+		private Date lastDate = new Date(0);
+		private Date firstMessage = new Date();
 		
 		private void insertNewHistory(final boolean goDown)
 		{
@@ -270,6 +272,24 @@ public class ChatContainer extends FlowPanel implements IChatContainer {
 		@Override
 		public void receiveChatInfo(ChatInfo event, boolean history)
 		{	
+			if (history)
+			{
+				// we don't want messages BEFORE the ones from history
+				if (event.eventTime.after(lastDate))
+					lastDate = event.eventTime;
+				// we don't want HISTORY messages AFTER the active ones.
+				if (event.eventTime.after(firstMessage) || event.eventTime.equals(firstMessage))
+					return;
+			}
+			if (!history)
+			{
+				// we don't want messages BEFORE the ones from history
+				if (lastDate.after(event.eventTime))
+					return;
+				if (event.eventTime.before(firstMessage))
+					firstMessage = event.eventTime;
+			}
+
 			// TODO Auto-generated method stub
 			switch (event.type)
 			{

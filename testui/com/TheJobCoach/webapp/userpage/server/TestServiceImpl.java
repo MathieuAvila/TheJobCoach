@@ -77,7 +77,8 @@ public class TestServiceImpl extends RemoteServiceServlet implements TestService
 	{
 		UpdateResponse response = new UpdateResponse(
 				new HashMap<String, String>(), 
-				getUserChatManager(defaultUser.userName).getLastInfos(request.from));
+				getUserChatManager(defaultUser.userName).getLastInfos(request.from),
+				new Date());
 		return response;
 	}
 

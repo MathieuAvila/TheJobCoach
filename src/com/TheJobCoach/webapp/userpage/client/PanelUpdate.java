@@ -235,7 +235,6 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				((m != 0)  ? (String.valueOf(m) + "mn ") : new String()) + 
 				String.valueOf(s) + "s");
 		UpdateRequest request = new UpdateRequest(today, connectSec, firstTime, lastRequest);
-		lastRequest = new Date();
 
 		ServerCallHelper<UpdateResponse> callback =  new ServerCallHelper<UpdateResponse>(rootPanel){
 			@Override
@@ -246,6 +245,7 @@ public class PanelUpdate  extends SimplePanel implements EntryPoint, ReturnValue
 				System.out.println("update list " + result.chatInfo.size() +  chatContainer);
 				if (chatContainer != null)
 					chatContainer.updateInfo(result.chatInfo);
+				lastRequest = result.responseDate;
 			}
 		};	
 		utilService.sendUpdateList(userId, request, callback);

@@ -1,5 +1,6 @@
 package com.TheJobCoach.webapp.util.server;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -107,8 +108,8 @@ public class UtilServiceImpl extends RemoteServiceServlet implements UtilService
 				id.userName, 
 				request.from, 
 				request.seconds);
-		
-		UpdateResponse response = new UpdateResponse(userValues.getUpdatedValues(id), getUserChatManager().getLastInfos(request.lastRequest));
+		Date nDate = new Date();
+		UpdateResponse response = new UpdateResponse(userValues.getUpdatedValues(id), getUserChatManager().getLastInfos(request.lastRequest), nDate);
 		if (request.getFirstTime)
 			response.totalDayTime = logManager.getLogTimeDay(id.userName, request.from);
 		return response;
