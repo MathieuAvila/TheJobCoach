@@ -4,74 +4,85 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity;
 import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
 
+import org.stringtree.json.JSONReader;
+
 public class Apec extends JobBoard
 {
-	static Pattern patternRef = Pattern.compile("'_([0-9A-Z-]*?)____");
-	static Pattern patternLieu = Pattern.compile("<th>Lieu :</th>..[ ]*<td>([^<]*)</td>", Pattern.DOTALL);
-	static Pattern patternSalaireFull = Pattern.compile("<th>Salaire :</th>(.*)Exp.rience :", Pattern.DOTALL);
-	static Pattern patternCompany = Pattern.compile("Soci.t. :</th>(.*)Voir toutes les offres", Pattern.DOTALL);
-	static Pattern patternStatus = Pattern.compile("Statut : </th>(.*)<th>Lieu :</th>", Pattern.DOTALL);
-	static Pattern patternStatusContract = Pattern.compile("Nombre de postes : </th>(.*)<th>Statut : ", Pattern.DOTALL);
 	
-	static Pattern patternPublication = Pattern.compile("Date de publication :</th>(.*)Soci.t. :", Pattern.DOTALL);
-	static Pattern patternDescription = Pattern.compile("Signaler cette offre(.*)Postuler . cette offre</a></div>", Pattern.DOTALL);
-	static Pattern patternDescriptionPrefix = Pattern.compile("<div class=\"boxContentInside\">(.*)<div class=\"spacer\">", Pattern.DOTALL);
-	static Pattern patternReference = Pattern.compile("<th>R.f.rence Apec :</th>(.*)Date de publication :</th>", Pattern.DOTALL);
-	static Pattern patternTitle = Pattern.compile("<h1 class=\"detailOffre\">D.tail de l'offre : (.*)");
-			
+	static Pattern patternRef = Pattern.compile("numIdOffre=([0-9_A-Z]*)&.*");
+
+	String getOrVoid(HashMap<String, Object> hash, String key)
+	{
+		String result = (String) hash.get(key);
+		if (result == null)
+			return "";
+		return result;
+	}
+	
 	@Override
 	public UserOpportunity getOpportunityFromText(byte[] textSrc, String url)
 	{
 		String text = "";
 		try
 		{
-			text = new String(textSrc, "ISO-8859-1");
+			text = new String(textSrc, "UTF-8");
 		}
-		catch (UnsupportedEncodingException e3){}
-		String iD = removeHtml(extractPattern(patternReference, text, "")); 
-		iD = removeHtml(iD.replaceAll("R.f.rence soci.t.*", "")); 
-		if (iD.equals("")) return null;
-		Date pubDate = new Date(); 
+		catch (UnsupportedEncodingException e3)
+		{
+			logger.error("Unsupported encoding " + e3.getMessage());
+		}
+		logger.info("offre :\n" + text);
+
+		JSONReader reader = new JSONReader();
+		Object result = reader.read(text);
+		if (result == null)
+			return null;
+		HashMap<String, Object> resultHash = (HashMap<String, Object>)result;
+		for (String key: (Set<String>)resultHash.keySet())
+		{
+			logger.info("key: " + key + "       " + resultHash.get(key));
+		}
+		String iD = getOrVoid(resultHash, "numeroOffre");
+		String title = getOrVoid(resultHash, "intitule");
+		String description = getOrVoid(resultHash, "texteHtml");
+		String salaryFull = getOrVoid(resultHash, "salaireTexte");
+		String location = getOrVoid(resultHash, "lieuTexte");
 		Date lastUpdate = new Date(); 
-		String title = removeHtml(extractPattern(patternTitle, text, ""));
-		String description = extractPattern(patternDescription, text, "");
-		description = extractPattern(patternDescriptionPrefix, description, "");
-		String companyId = removeHtml(extractPattern(patternCompany, text, ""));
-		companyId = removeHtml(companyId.replace("Voir plus d'infos sur la société", ""));
-		String contractType = removeHtml(extractPattern(patternStatus, text, ""));
-		String contractType2 = removeHtml(extractPattern(patternStatusContract, text, "").replace("1 en ", ""));
-		contractType = contractType2 +" - " + contractType;
-		String pubDateStr = removeHtml(extractPattern(patternPublication, text, ""));
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		String companyId = getOrVoid(resultHash, "nomCompteEtablissement");
+		
+		String pubDateStr = getOrVoid(resultHash, "datePublication");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date pubDate = new Date(); 
 		try
 		{
 			pubDate = sdf.parse(pubDateStr);
 		}
 		catch (ParseException e1){}
 		
-		String salaryFull = removeHtml(extractPattern(patternSalaireFull, text, ""));
-		Date startDate = null;
-		Date endDate = null;
-		String location = removeHtml(extractPattern(patternLieu, text, ""));
 		ApplicationStatus status = ApplicationStatus.DISCOVERED;
 
 		return new UserOpportunity(iD, pubDate, lastUpdate,
 				title,  description,  companyId,
-				contractType,  salaryFull,  startDate,  endDate,
+				"",  salaryFull,  null,  null,
 				false, "apec#" + iD, url, location,
 				status, "");
+		//return null;
 	}
 
 	@Override
 	public String getOpportunityUrl(String ref)
 	{
-		if (ref.contains("http://")) return ref;
-		return "http://candidat.pole-emploi.fr/candidat/rechercheoffres/detail/" + ref;
+		String realRef = ref;
+		if (ref.contains("http")) 
+			realRef = extractPattern(patternRef, ref, "");
+		return "https://cadres.apec.fr/cms/webservices/offre/public?numeroOffre=" + realRef ;
 	}
 
 }
