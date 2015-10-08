@@ -24,4 +24,12 @@ public class TestPoleEmploi
 		assertEquals("poleemploi#032NRFB", poleemploi_2_opp.source);
 		assertEquals("06 - Alpes Maritimes", poleemploi_2_opp.location);
 	}
+	
+	@Test
+	public void test_getOpportunityFromText_LocationGeoloc()
+	{
+		byte[] poleemploi_3 = fileLoader.get_file("poleemploi_3.txt");
+		UserOpportunity poleemploi_3_opp = poleemploi.getOpportunityFromText(poleemploi_3, "myurl");
+		assertEquals("LE BOURGET DU LAC", poleemploi_3_opp.location);
+	}
 }

@@ -55,7 +55,7 @@ public class PoleEmploi extends JobBoard
 		
 		Date startDate = null;
 		Date endDate = null;
-		String location = removeHtml(extractPattern(patternLieu, text, ""));
+		String location = removeHtml(extractPattern(patternLieu, text, "")).replace("Localiser avec", "");
 		ApplicationStatus status = ApplicationStatus.DISCOVERED;
 
 		return new UserOpportunity(iD, pubDate, lastUpdate,
