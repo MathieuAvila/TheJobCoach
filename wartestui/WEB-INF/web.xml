@@ -101,6 +101,11 @@
 		<url-pattern>/thejobcoach/UploadImage</url-pattern>
 	</servlet-mapping>
 	
+	<servlet-mapping>
+  		<servlet-name>downloadReport</servlet-name>
+  		<url-pattern>/thejobcoach/ReportServlet</url-pattern>
+	</servlet-mapping>
+	
 	<!--  for test purposes -->
   <servlet>
     <servlet-name>testServlet</servlet-name>
