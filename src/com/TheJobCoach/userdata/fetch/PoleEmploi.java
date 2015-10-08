@@ -14,19 +14,16 @@ import com.TheJobCoach.webapp.userpage.shared.UserOpportunity.ApplicationStatus;
 
 public class PoleEmploi extends JobBoard
 {
-	static Pattern patternRef = Pattern.compile(".*detail/(.*)");
-	static Pattern patternLieu = Pattern.compile("Lieu de travail</span></div>(.*)</li><li class=\"link-geolocation\">", Pattern.DOTALL);
-	static Pattern patternSalaire = Pattern.compile("Salaire indicatif</span></div>(.*)Dur.e hebdomadaire de travail", Pattern.DOTALL);
-	static Pattern patternCompany = Pattern.compile("<p class=\"title\" itemprop=\"hiringOrganization\" itemscope=\"\" itemtype=\"http://schema.org/Organization\">(.*)</span>.*<!-- Détail de l'offre -->", Pattern.DOTALL);
-	
+	static Pattern patternReference = Pattern.compile("Numéro de l'offre</span></div><div class=\"value\"><span>(.*)</span></div></li></ul></div><!-- primary --><div class=\"secondary\"><ul><li><div class=\"label\"><span>Offre actualisée le", Pattern.DOTALL);
+	static Pattern patternLieu = Pattern.compile("Lieu de travail</span></dt><dd itemtype=\"http://schema.org/Place\" itemscope=\"\" itemprop=\"jobLocation\" class=\"value\"><ul><li itemprop=\"addressRegion\">(.*)</li></ul></dd><dt class=\"label\"><span>Type ", Pattern.DOTALL);
+	static Pattern patternSalaire = Pattern.compile("Salaire indicatif</span></dt><dd class=\"value\"><span itemprop=\"baseSalary\">(.*).</span></dd><dt class=\"label\"><span>Compl", Pattern.DOTALL);
+	static Pattern patternCompany = Pattern.compile("<div class=\"vcard\"><h4 class=\"block-subtitle\"><span>Entreprise</span></h4><p>(.*)</p><!-- appel au format hCard -->", Pattern.DOTALL);
 	static Pattern patternStatus = Pattern.compile("<span itemprop=\"employmentType\">(.*)Nature d'offre", Pattern.DOTALL);
 	static Pattern patternPublication = Pattern.compile("<span itemprop=\"datePosted\">(.*)</span></div></li><!-- /secondary -->", Pattern.DOTALL);
 	static Pattern patternDescription = Pattern.compile("!-- Description de l'offre -->.*itemprop=\"description\">(.*)<!-- Entreprise -->", Pattern.DOTALL);
-	static Pattern patternReference = Pattern.compile("t:ac=([0-9A-Za-z-_]*)\">.*Offre suivante", Pattern.DOTALL);
-	static Pattern patternTitle = Pattern.compile("</span></div></li><!-- /secondary --></ul><h4 class=\"small-title\" itemprop=\"title\">(.*)</h4><p class=\"first\" itemprop=\"occupationalCategory\">", Pattern.DOTALL);
-	
+	static Pattern patternTitle = Pattern.compile("<h4 itemprop=\"title\" class=\"small-title\">(.*)</h4>.*<p itemprop=\"occupationalCategory\"", Pattern.DOTALL);
 	static Logger logger = LoggerFactory.getLogger(PoleEmploi.class);
-		
+
 	@Override
 	public UserOpportunity getOpportunityFromText(byte[] textSrc, String url)
 	{
