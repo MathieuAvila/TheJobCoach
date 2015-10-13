@@ -36,5 +36,6 @@
 	<classpathentry kind="lib" path="test/lib/slf4j-simple-1.7.2.jar"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (3)"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/stringtree-json-2.0.9.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
