@@ -114,9 +114,11 @@ public class TestAccountManager
 		assertEquals(true, mail.contains("demandé")); // encoding
 		assertEquals(1, mockMail.lastParts.size()); // image header
 		String sb1 = mail.substring(mail.indexOf("token=") + new String("token=").length());
-		//System.out.println("OUTPUT BODY :"+mail);
+		System.out.println("OUTPUT BODY :"+mail);
 		//System.out.println("OUTPUT BODY SB :"+sb1);
-		token = sb1.substring(0, sb1.indexOf("</a>"));
+		String tokenText = sb1.substring(0, sb1.indexOf("</a>"));
+		assertEquals("mytoken'>Cliquez sur ce lien pour activer votre compte.", tokenText);
+		token = sb1.substring(0, tokenText.indexOf("'"));
 		assertEquals("mytoken", token);
 		// Check data manager is called.
 		assertEquals(1, fakeManager.createDefaultCount);

@@ -58,6 +58,7 @@ public class Lang
 		String body = StringResourceCache.getStringResource("/com/TheJobCoach/userdata/data/mail_account_new.html");
 		String URL= site + "/TheJobCoach.html?action=validate&username=" +userName + "&token=" + key;
 		body = body.replace("_URL_", URL);
+		body = body.replace("_CLICK_LINK_", getLangProp(lang).getProperty("click_link"));
 		body = body.replace("_FIRSTNAME_", firstName);
 		body = body.replace("_NAME_", name);
 		body = body.replace("_HELLO_", getLangProp(lang).getProperty("hello"));
