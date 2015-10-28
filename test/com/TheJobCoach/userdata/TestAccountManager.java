@@ -717,6 +717,11 @@ public class TestAccountManager
 		assertTrue(res);
 		assertEquals("new_first", info.firstName);
 		assertEquals("new_last", info.name);
+		
+		// check getUserReport as well
+		UserReport report = account.getUserReport(id);
+		assertEquals("new_first", report.firstName);
+		assertEquals("new_last", report.lastName);			
 	}
 	
 	@Test

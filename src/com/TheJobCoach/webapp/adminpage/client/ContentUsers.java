@@ -69,15 +69,32 @@ public class ContentUsers implements EntryPoint {
 		simplePanelCenter.setSize("100%", "100%");
 		rootPanel.add(simplePanelCenter);
 
-		// Create name column.
-
+		// Create login column.
 		cellTable.specialAddColumnSortableString(new GetValue<String, UserReport>() {
 			@Override
 			public String getValue(UserReport report)
 			{
 				return report.userName;
 			}			
+		},  "Login");
+
+		// Create name column.
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserReport>() {
+			@Override
+			public String getValue(UserReport report)
+			{
+				return report.firstName;
+			}			
 		},  "Name");
+		
+		// Create last name column.
+		cellTable.specialAddColumnSortableString(new GetValue<String, UserReport>() {
+			@Override
+			public String getValue(UserReport report)
+			{
+				return report.lastName;
+			}			
+		},  "First name");
 
 		// Create password column.
 		TextColumn<UserReport> passwordColumn = new TextColumn<UserReport>() 	{

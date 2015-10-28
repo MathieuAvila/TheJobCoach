@@ -346,7 +346,7 @@ public class AccountManager implements AccountInterface, ValueCallback {
 			deletion = UserValuesConstants.YES.equals(userValues.getValue(id, UserValuesConstantsAccount.ACCOUNT_DELETION)); 
 			deleteDate = FormatUtil.getStringDate(userValues.getValue(id, UserValuesConstantsAccount.ACCOUNT_DELETION_DATE));
 		} catch (SystemException e) {}
-		return new UserReport(				
+		UserReport ur = new UserReport(				
 				id.userName, 
 				result.get("password"),
 				result.get("email"),
@@ -359,6 +359,13 @@ public class AccountManager implements AccountInterface, ValueCallback {
 				deletion,
 				deleteDate
 				);
+		Map<String, String> accountTable = CassandraAccessor.getRow(COLUMN_FAMILY_NAME_ACCOUNT, id.userName);
+		if (accountTable != null)
+		{
+			ur.lastName = accountTable.get("name");
+			ur.firstName = accountTable.get("firstname");
+		}
+		return ur;
 	}
 
 	public List<UserReport> getUserReportList() throws CassandraException

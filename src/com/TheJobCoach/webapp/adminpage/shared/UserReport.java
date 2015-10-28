@@ -23,6 +23,10 @@ public class UserReport implements Serializable {
 	public boolean toggleDelete;
 	public Date deletionDate;
 	
+	// Additional optional fields
+	public String firstName;
+	public String lastName;
+	
 	public UserReport(String _userName, String _password, 
 			String _mail,  String _token, UserType _type, Date _creationDate, Date _lastLogin,
 			boolean _validated, 
