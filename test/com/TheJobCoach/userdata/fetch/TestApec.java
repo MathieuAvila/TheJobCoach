@@ -28,12 +28,12 @@ public class TestApec
 		return content;
 	}
 
-	//@Test
+	@Test
 	public void test_getOpportunityFromText()
 	{
 		byte[] apec_0 = get_file("apec_0.txt");
 
-		UserOpportunity apec_0_opp = apec.getOpportunityFromText(apec_0, "myurl");
+		UserOpportunity apec_0_opp = apec.getOpportunityFromText(apec_0, "https://cadres.apec.fr/cms/webservices/offre/public?numeroOffre=myref");
 
 		assertEquals("Conducteur de travaux principal TCE H/F", apec_0_opp.title);
 		assertEquals("Île-de-France", apec_0_opp.location);
@@ -42,7 +42,7 @@ public class TestApec
 		assertEquals("apec#161059483W", apec_0_opp.source);
 		assertTrue(apec_0_opp.description.contains("nous recherchons une personne"));
 		assertEquals("50000EUR - 55000EUR an", apec_0_opp.salary);
-		assertEquals("myurl", apec_0_opp.url);
+		assertEquals("https://cadres.apec.fr/home/mes-offres/recherche-des-offres-demploi/liste-des-offres-demploi/detail-de-loffre-demploi.html?numIdOffre=myref", apec_0_opp.url);
 		assertTrue(CoachTestUtils.isDateEqualForDay(CoachTestUtils.getDate(2015, 9, 26), apec_0_opp.pubDate));
 	}
 
@@ -56,8 +56,6 @@ public class TestApec
 		url = "161077852W";
 		computedUrl = apec.getOpportunityUrl(url);
 		assertEquals(computedUrl, "https://cadres.apec.fr/cms/webservices/offre/public?numeroOffre=161077852W");
-		
-		
 	}
 	
 	//@Test

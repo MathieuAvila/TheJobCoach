@@ -16,7 +16,8 @@ import org.stringtree.json.JSONReader;
 public class Apec extends JobBoard
 {
 	
-	static Pattern patternRef = Pattern.compile("numIdOffre=([0-9_A-Z]*)&.*");
+	static Pattern patternRef = Pattern.compile("Offre=([0-9_A-Z]*)&.*");
+	static Pattern patternRefFromInfo = Pattern.compile("Offre=([a-z0-9_A-Z]*)");
 
 	String getOrVoid(HashMap<String, Object> hash, String key)
 	{
@@ -67,11 +68,16 @@ public class Apec extends JobBoard
 		catch (ParseException e1){}
 		
 		ApplicationStatus status = ApplicationStatus.DISCOVERED;
-
+		
+		String realRef = extractPattern(patternRefFromInfo, url, "");
+		String expectUrl = "https://cadres.apec.fr/home/mes-offres/recherche-des-offres-demploi/liste-des-offres-demploi/detail-de-loffre-demploi.html?numIdOffre="
+				+ realRef;
+			
+		
 		return new UserOpportunity(iD, pubDate, lastUpdate,
 				title,  description,  companyId,
 				"",  salaryFull,  null,  null,
-				false, "apec#" + iD, url, location,
+				false, "apec#" + iD, expectUrl, location,
 				status, "");
 		//return null;
 	}
