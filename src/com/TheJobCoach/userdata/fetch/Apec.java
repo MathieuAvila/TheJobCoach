@@ -16,7 +16,7 @@ import org.stringtree.json.JSONReader;
 public class Apec extends JobBoard
 {
 	
-	static Pattern patternRef = Pattern.compile("Offre=([0-9_A-Z]*)&.*");
+	static Pattern patternRef = Pattern.compile("Offre=([0-9_A-Z]*)");
 	static Pattern patternRefFromInfo = Pattern.compile("Offre=([a-z0-9_A-Z]*)");
 
 	String getOrVoid(HashMap<String, Object> hash, String key)
